@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 // Load hierarchy data
-const hierarchyData = JSON.parse(fs.readFileSync(path.join(__dirname, '../hierarchy.json'), 'utf8'));
+const hierarchyData = JSON.parse(fs.readFileSync(path.join(__dirname, '../quizsources/10th.json'), 'utf8'));
 
 // Helper function to find a resource by ID
 function findResourceById(data, id) {

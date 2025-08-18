@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the JSON file
-const hierarchyData = JSON.parse(fs.readFileSync(path.join(__dirname, '../hierarchy.json'), 'utf8'));
+const hierarchyData = JSON.parse(fs.readFileSync(path.join(__dirname, '../quizsources/10th.json'), 'utf8'));
 
 // Create/connect to the database
 const db = new sqlite3.Database('quizbank.db');
