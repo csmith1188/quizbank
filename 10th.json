@@ -1,0 +1,1740 @@
+{
+    "id": 1,
+    "name": "Computer Programming",
+    "sections": [
+        {
+            "id": 2,
+            "name": "Python Basics",
+            "description": "An introduction to fundamental coding concepts of programming in Python.",
+            "units": [
+                {
+                    "id": 1,
+                    "name": "Variables and Data Types",
+                    "description": "Understanding how to use variables and different data types in Python.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "Documetation",
+                            "description": "Student can demonstrate writing effective comments in code and using self-documenting naming conventions.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "Text in the program that is meant for programmers to read and ignored by the program itself.",
+                                    "correctAnswer": "comment",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "syntax",
+                                        "variable",
+                                        "comment",
+                                        "literal"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A way of writing names without using spaces that is easily readable.",
+                                    "correctAnswer": "camelCase",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "constant",
+                                        "camelCase",
+                                        "string",
+                                        "float"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A set of common rules that programmers share to help each other understand one another's code.",
+                                    "correctAnswer": "convention",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "convention",
+                                        "expression",
+                                        "assignment",
+                                        "keyword"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "A way of naming objects in code that is easy for humans to read.",
+                                    "correctAnswer": "self-documenting",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "boolean",
+                                        "comment",
+                                        "datatype",
+                                        "self-documenting"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": true,
+                                    "prompt": "Why might a programmer include a comment above a complex calculation in their code?",
+                                    "correctAnswer": "To explain the purpose or logic of the calculation",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "To explain the purpose or logic of the calculation",
+                                        "To make the program run faster",
+                                        "To change the syntax of the code",
+                                        "To store values for later use"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": true,
+                                    "prompt": "Which of these is an example of a self-documenting variable name?",
+                                    "correctAnswer": "totalScore",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "x1",
+                                        "a",
+                                        "totalScore",
+                                        "val"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": true,
+                                    "prompt": "If a variable is named 'temp', what is a better self-documenting alternative if it stores a user's age?",
+                                    "correctAnswer": "userAge",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "t",
+                                        "userAge",
+                                        "data",
+                                        "number"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": true,
+                                    "prompt": "What is the main benefit of using self-documenting names instead of comments for simple values?",
+                                    "correctAnswer": "It reduces the need for extra comments and makes code easier to read",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "It makes the program run faster",
+                                        "It allows multiple programmers to edit at once",
+                                        "It replaces all debugging tools",
+                                        "It reduces the need for extra comments and makes code easier to read"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": true,
+                                    "prompt": "Where is the best place to put a comment explaining a function’s purpose?",
+                                    "correctAnswer": "Directly above the function definition",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Directly above the function definition",
+                                        "Randomly in the middle of the code",
+                                        "After the closing brace of the function",
+                                        "In a separate text file"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": true,
+                                    "prompt": "Which type of comment is most useful for reminding yourself or others of a TODO item in code?",
+                                    "correctAnswer": "Inline comment with a clear marker like TODO",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "A multiline comment explaining every line",
+                                        "Inline comment with a clear marker like TODO",
+                                        "No comment is needed for TODO items",
+                                        "A comment at the end of the program"
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "ai": true,
+                                    "prompt": "Which symbol is used to create a single-line comment in Python?",
+                                    "correctAnswer": "#",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "#",
+                                        "//",
+                                        "/* */",
+                                        "--"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": true,
+                                    "prompt": "How can you create a multi-line comment in Python?",
+                                    "correctAnswer": "Use triple quotes (''' or \"\"\") around the comment text",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Use multiple # symbols on each line",
+                                        "Use triple quotes (''' or \"\"\") around the comment text",
+                                        "Use /* and */ like in C",
+                                        "Use // at the beginning and end of the block"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "name": "Datatypes",
+                            "description": "Students can identify literal values where they appear, and differentiate between boolean, integer, float, and sting values.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A categorization of data that differentiates it from other data (numbers/letters/etc.).",
+                                    "correctAnswer": "datatype",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "expression",
+                                        "datatype",
+                                        "boolean",
+                                        "arithmetic operator"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A value that is a basic data type, and not a complex object.",
+                                    "correctAnswer": "primitive",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "primitive",
+                                        "assignment",
+                                        "camelCase",
+                                        "statement"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A data type with a whole number, positive or negative.",
+                                    "correctAnswer": "integer",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "float",
+                                        "constant",
+                                        "integer",
+                                        "string"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "A data type with a decimal place, positive or negative.",
+                                    "correctAnswer": "float",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "float",
+                                        "expression",
+                                        "boolean",
+                                        "character"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "A data type with a 'true' or 'false' value.",
+                                    "correctAnswer": "boolean",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "integer",
+                                        "statement",
+                                        "referential",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "A data type that is a single character, such as 'a' or '1'.",
+                                    "correctAnswer": "character",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "character",
+                                        "string",
+                                        "boolean",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "A datatype that contains one or more human-readable characters, always encapsulated in quotation marks.",
+                                    "correctAnswer": "string",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "assignment",
+                                        "string",
+                                        "camelCase",
+                                        "float"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": false,
+                                    "prompt": "A value that is written directly in the code, such as a number or string.",
+                                    "correctAnswer": "literal",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "identifier",
+                                        "value",
+                                        "constant",
+                                        "literal"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": false,
+                                    "prompt": "Changing a value of a certain data type to a different data type.",
+                                    "correctAnswer": "conversion",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "constant",
+                                        "conversion",
+                                        "nesting",
+                                        "datatype"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": true,
+                                    "prompt": "Which of the following is a literal integer value in Python?",
+                                    "correctAnswer": "42",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "\"42\"",
+                                        "3.14",
+                                        "42",
+                                        "True"
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "ai": true,
+                                    "prompt": "Which of the following is a boolean literal?",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "0",
+                                        "False",
+                                        "\"False\"",
+                                        "3.0"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": true,
+                                    "prompt": "What data type would the value 3.0 belong to?",
+                                    "correctAnswer": "float",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "float",
+                                        "integer",
+                                        "string",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 13,
+                                    "ai": true,
+                                    "prompt": "What is the type of the literal 'Hello, world!'?",
+                                    "correctAnswer": "string",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "integer",
+                                        "float",
+                                        "boolean",
+                                        "string"
+                                    ]
+                                },
+                                {
+                                    "id": 14,
+                                    "ai": true,
+                                    "prompt": "Which of the following values is a character literal in Python?",
+                                    "correctAnswer": "'a'",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "'a'",
+                                        "\"abc\"",
+                                        "True",
+                                        "5"
+                                    ]
+                                },
+                                {
+                                    "id": 15,
+                                    "ai": true,
+                                    "prompt": "If you perform conversion on the integer 5 to a string, what will the new value look like?",
+                                    "correctAnswer": "\"5\"",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "5",
+                                        "\"5\"",
+                                        "5.0",
+                                        "True"
+                                    ]
+                                },
+                                {
+                                    "id": 16,
+                                    "ai": true,
+                                    "prompt": "Which literal would be stored in a variable declared as a float?",
+                                    "correctAnswer": "3.14",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "42",
+                                        "True",
+                                        "3.14",
+                                        "'a'"
+                                    ]
+                                },
+                                {
+                                    "id": 17,
+                                    "ai": true,
+                                    "prompt": "Which of the following is NOT a primitive datatype in Python?",
+                                    "correctAnswer": "list",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "list",
+                                        "integer",
+                                        "boolean",
+                                        "float"
+                                    ]
+                                },
+                                {
+                                    "id": 18,
+                                    "ai": true,
+                                    "prompt": "How does Python treat the literal '0' in quotation marks?",
+                                    "correctAnswer": "string",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "integer",
+                                        "string",
+                                        "boolean",
+                                        "float"
+                                    ]
+                                },
+                                {
+                                    "id": 19,
+                                    "ai": true,
+                                    "prompt": "Which of these is a valid boolean expression in Python?",
+                                    "correctAnswer": "3 > 2",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "\"True\"",
+                                        "0",
+                                        "3 > 2",
+                                        "'False'"
+                                    ]
+                                },
+                                {
+                                    "id": 20,
+                                    "ai": true,
+                                    "prompt": "What will be the datatype of the result when you divide 5 by 2 in Python 3?",
+                                    "correctAnswer": "float",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "float",
+                                        "integer",
+                                        "string",
+                                        "boolean"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "name": "Assignment",
+                            "description": "Students can store values into memory (variables) with a variety of assignment operators.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A value that is stored in memory and can be changed.",
+                                    "correctAnswer": "variable",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "constant",
+                                        "primitive",
+                                        "string",
+                                        "variable"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A value that is stored in memory and can be used in expressions.",
+                                    "correctAnswer": "identifier",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "identifier",
+                                        "constant",
+                                        "variable",
+                                        "primitive"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A piece of data that can be stored in a variable or used in an expression.",
+                                    "correctAnswer": "value",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "identifier",
+                                        "value",
+                                        "constant",
+                                        "variable"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "Replacing an expression, object or variable name with the associated value.",
+                                    "correctAnswer": "substitution",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "statement",
+                                        "substitution",
+                                        "syntax",
+                                        "keyword"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "Associating a value with a name to create a variable or object.",
+                                    "correctAnswer": "assignment",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "assignment",
+                                        "primitive",
+                                        "string",
+                                        "datatype"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "A symbol in code used for assignment.",
+                                    "correctAnswer": "assignment operator",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "constant",
+                                        "float",
+                                        "assignment operator",
+                                        "camelCase"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "A value that is referring to a different value.",
+                                    "correctAnswer": "referential",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "comment",
+                                        "referential",
+                                        "assignment operator",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": false,
+                                    "prompt": "A value that is not changed after it is set.",
+                                    "correctAnswer": "constant",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "constant",
+                                        "variable",
+                                        "primitive",
+                                        "string"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": true,
+                                    "prompt": "Which assignment operator will add 2 to the current value of y and store the result back in y?",
+                                    "correctAnswer": "+=",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "=",
+                                        "+=",
+                                        "-=",
+                                        "*="
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": true,
+                                    "prompt": "If you want to copy the value of variable a into variable b, which operator would you use?",
+                                    "correctAnswer": "=",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "=",
+                                        "+=",
+                                        "==",
+                                        "*="
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": true,
+                                    "prompt": "What happens when you try to change a constant value in Python?",
+                                    "correctAnswer": "It will cause an error if reassignment is attempted",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "It silently updates the value",
+                                        "It converts the constant to a variable",
+                                        "It will cause an error if reassignment is attempted",
+                                        "It doubles the value"
+                                    ]
+                                },
+                                {
+                                    "id": 13,
+                                    "ai": true,
+                                    "prompt": "Which of the following is an example of a referential assignment in Python?",
+                                    "correctAnswer": "b = a",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "b = a",
+                                        "b = 5",
+                                        "a += b",
+                                        "b == a"
+                                    ]
+                                },
+                                {
+                                    "id": 14,
+                                    "ai": true,
+                                    "prompt": "What will be the value of x after this code? x = 10; x -= 4",
+                                    "correctAnswer": "6",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "10",
+                                        "6",
+                                        "4",
+                                        "14"
+                                    ]
+                                },
+                                {
+                                    "id": 15,
+                                    "ai": true,
+                                    "prompt": "Which of the following is a valid use of the multiplication assignment operator in Python?",
+                                    "correctAnswer": "x *= 3",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "*x = 3",
+                                        "x =* 3",
+                                        "x *= 3",
+                                        "x = 3*"
+                                    ]
+                                },
+                                {
+                                    "id": 16,
+                                    "ai": true,
+                                    "prompt": "Which of the following assignments will store a float value in variable x?",
+                                    "correctAnswer": "x = 3.14",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "x = 3.14",
+                                        "x = '3.14'",
+                                        "x = True",
+                                        "x = 3"
+                                    ]
+                                },
+                                {
+                                    "id": 17,
+                                    "ai": true,
+                                    "prompt": "What is the difference between '=' and '==' in Python?",
+                                    "correctAnswer": "'=' assigns a value, '==' checks for equality",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "'=' assigns a value, '==' checks for equality",
+                                        "They are the same",
+                                        "'=' compares values, '==' assigns",
+                                        "'=' multiplies values, '==' divides"
+                                    ]
+                                },
+                                {
+                                    "id": 18,
+                                    "ai": true,
+                                    "prompt": "If you write x = y = 10 in Python, what is happening?",
+                                    "correctAnswer": "Both x and y are assigned the value 10",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "x is assigned y's old value",
+                                        "y is assigned x's old value",
+                                        "Both x and y are assigned the value 10",
+                                        "Only x is assigned 10"
+                                    ]
+                                },
+                                {
+                                    "id": 19,
+                                    "ai": true,
+                                    "prompt": "If you assign the value of one variable to another, what happens when the first variable changes later?",
+                                    "correctAnswer": "The second variable keeps its value unless explicitly reassigned",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "The second variable automatically updates to match",
+                                        "The second variable keeps its value unless explicitly reassigned",
+                                        "Both variables are deleted",
+                                        "The program throws an error"
+                                    ]
+                                },
+                                {
+                                    "id": 20,
+                                    "ai": true,
+                                    "prompt": "What happens if you try to assign a value to a variable that hasn't been declared in Python?",
+                                    "correctAnswer": "Python automatically creates the variable and assigns the value",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Python automatically creates the variable and assigns the value",
+                                        "Python throws an error",
+                                        "The value is ignored",
+                                        "The program stops running"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "name": "Expressions",
+                            "description": "Students can write expressions that use substitution, comparisons, and arithmetic operators.",
+                            "questions": [
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A piece of code that completes a small task in the program.",
+                                    "correctAnswer": "statement",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "identifier",
+                                        "arithmetic operator",
+                                        "literal",
+                                        "statement"
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "An 'equation' in code that must be resolved before continuing the program by using substitution, comparisons, and arithmetic.",
+                                    "correctAnswer": "expression",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "expression",
+                                        "value",
+                                        "boolean",
+                                        "referential"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A symbol in code used to perform math equations in an expression.",
+                                    "correctAnswer": "arithmetic operator",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "camelCase",
+                                        "integer",
+                                        "arithmetic operator",
+                                        "syntax"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": true,
+                                    "prompt": "What is the value of x after this code runs? x = 5; x = x + 3",
+                                    "correctAnswer": "8",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "8",
+                                        "5",
+                                        "3",
+                                        "x+3"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": true,
+                                    "prompt": "What will be the value of x after this code? x = 2; x = x ** 3",
+                                    "correctAnswer": "8",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "8",
+                                        "6",
+                                        "9",
+                                        "x**3"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": true,
+                                    "prompt": "What will be the value of x after this code runs? x = 7; x = x * 2",
+                                    "correctAnswer": "14",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "14",
+                                        "7",
+                                        "2",
+                                        "x*2"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": true,
+                                    "prompt": "If x = 4 and y = 2, what is the value of x // y in Python?",
+                                    "correctAnswer": "2",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "2.0",
+                                        "4",
+                                        "2",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": true,
+                                    "prompt": "What is the result of the expression 10 % 3 in Python?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "1",
+                                        "3",
+                                        "0",
+                                        "10"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "name": "Error Messages",
+                            "description": "Student can use error messages to identify errors in their code, as well as differentiate between run-time, syntax, and logical errors.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the program is running, often due to invalid operations or data.",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the code does not follow the language's syntax rules.",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the code runs without crashing but produces incorrect results.",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": true,
+                                    "prompt": "What type of error will occur if you try to divide a number by zero in Python?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": true,
+                                    "prompt": "What type of error is caused by missing a colon at the end of a Python if statement?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": true,
+                                    "prompt": "If a program calculates 2 + 2 and returns 5, what type of error is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": true,
+                                    "prompt": "What error type occurs if you try to add a number and a string in Python?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": true,
+                                    "prompt": "What kind of error would you see if you misspell a function name in your code?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs when parentheses are not properly closed in Python?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": true,
+                                    "prompt": "A program is supposed to calculate the area of a rectangle but accidentally multiplies length by 2 instead of length × width. What error type is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "ai": true,
+                                    "prompt": "What kind of error occurs if you forget the quotation marks around a string in Python?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": true,
+                                    "prompt": "What kind of error will Python produce for this line: x = (5 + 3",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "syntax error",
+                                        "run-time error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "Comparisons and Conditions",
+                    "description": "Understanding how to use variables and different data types in Python.",
+                    "tasks": [
+                        {
+                            "id": 5,
+                            "name": "Comparisons and Conditions",
+                            "description": "Student can demonstrate how conditions resolve by using a boolean value or and expression using a comparsion operator.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A symbol used to compare two values, such as 'greater than' or 'equal to'.",
+                                    "correctAnswer": "comparison operator",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "comparison operator",
+                                        "assignment operator",
+                                        "arithmetic operator",
+                                        "logical operator"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A statement that evaluates to true or false, often used in control flow.",
+                                    "correctAnswer": "condition",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "condition",
+                                        "expression",
+                                        "statement",
+                                        "literal"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A section of code that has been segregated and can only be run by some other part of the code.",
+                                    "correctAnswer": "code block",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "code block",
+                                        "conditional statement",
+                                        "expression",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "A code block that is run when a given condition resolves as 'true' or 'not false'.",
+                                    "correctAnswer": "conditional statement",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "conversion",
+                                        "if",
+                                        "statement",
+                                        "conditional statement"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "Putting one type of code block or value inside a similar code block or value.",
+                                    "correctAnswer": "nesting",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "literal",
+                                        "statement",
+                                        "nesting",
+                                        "datatype"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "The most common conditional statement that runs if the condition resolves as 'true' or 'not false'.",
+                                    "correctAnswer": "if",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "substitution",
+                                        "character",
+                                        "conversion",
+                                        "if"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "Very common conditional statement that runs if its condition is 'true' or 'not false' and the previous if statement's condition is 'false'.",
+                                    "correctAnswer": "else if",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "assignment",
+                                        "else if",
+                                        "value",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": false,
+                                    "prompt": "Very common conditional statement that runs if all previous if and else if statements' conditions are 'false'.",
+                                    "correctAnswer": "else",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "float",
+                                        "camelCase",
+                                        "else",
+                                        "primitive"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "name": "Conditional Loops",
+                            "description": "Student can differentiate between while and for loops, and demonstrate the use of both.",
+                            "questions": [
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A code block that repeats for as long as a given condition resolves as 'true' or 'not false'.",
+                                    "correctAnswer": "conditional loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "conditional loop",
+                                        "boolean",
+                                        "else",
+                                        "camelCase"
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A loop that continues until a condition is no longer true.",
+                                    "correctAnswer": "while loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "while loop",
+                                        "for loop",
+                                        "conditional loop",
+                                        "do-while loop"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "name": "Logical Operators",
+                            "description": "Students can demonstrate the use of logical operators to combine boolean expressions.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "An operator that combines two boolean expressions to return true if both are true.",
+                                    "correctAnswer": "and",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "and",
+                                        "or",
+                                        "not",
+                                        "xor"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "An operator that combines two boolean expressions to return true if at least one is true.",
+                                    "correctAnswer": "or",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "and",
+                                        "or",
+                                        "not",
+                                        "xor"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "An operator that negates a boolean expression.",
+                                    "correctAnswer": "not",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "and",
+                                        "or",
+                                        "not",
+                                        "xor"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "Functions",
+                    "description": "",
+                    "tasks": [
+                        {
+                            "id": 9,
+                            "name": "Debuggers",
+                            "description": "Student can use debugger stepping, watchpoints, and memory watchers to diagnose the operation of their code.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A tool that can stop and step through a program to examine how it functions.",
+                                    "correctAnswer": "debugger",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "comment",
+                                        "expression",
+                                        "debugger",
+                                        "substitution"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "Using console output to quickly check data in the program while it runs.",
+                                    "correctAnswer": "log point",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "log point",
+                                        "watcher",
+                                        "breakpoint",
+                                        "literal"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "Telling a debugger to run a statement without pausing.",
+                                    "correctAnswer": "step-over",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "assignment operator",
+                                        "step-over",
+                                        "else",
+                                        "conversion"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "Telling a debugger to break a statement or code block into smaller steps and step through them.",
+                                    "correctAnswer": "step-into",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "if",
+                                        "character",
+                                        "boolean",
+                                        "step-into"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "Telling a debugger to stop stepping through smaller parts of a statement or code block and continue to the next statement.",
+                                    "correctAnswer": "step-out",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "step-out",
+                                        "float",
+                                        "constant",
+                                        "camelCase"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "Telling a debugger to stop stepping through the program and run normally.",
+                                    "correctAnswer": "continue",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "nesting",
+                                        "else if",
+                                        "continue",
+                                        "syntax"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "Marks a variable or object for tracking while debugging.",
+                                    "correctAnswer": "watcher",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "string",
+                                        "watcher",
+                                        "datatype",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": false,
+                                    "prompt": "Marks a variable or object for tracking while debugging.",
+                                    "correctAnswer": "watcher",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "string",
+                                        "watcher",
+                                        "datatype",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": false,
+                                    "prompt": "Tells a debugger to stop at a specified line of code.",
+                                    "correctAnswer": "watchpoint",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "assignment",
+                                        "logical operator",
+                                        "conversion",
+                                        "watchpoint"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": false,
+                                    "prompt": "Start the debugger if the program reaches this point.",
+                                    "correctAnswer": "breakpoint",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "assignment",
+                                        "watchpoint",
+                                        "conversion",
+                                        "breakpoint"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 10,
+                            "name": "Procedures",
+                            "description": "Students can write subroutines that have arguments/parameters and return values, and can substitute a procedure call with its return value.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A repeatable code block that the program can jump to that can take arguments (inputs) and return values (outputs).",
+                                    "correctAnswer": "function",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "expression",
+                                        "function",
+                                        "statement",
+                                        "code block"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A partition of program memory that segregates different variables and objects.",
+                                    "correctAnswer": "scope",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "scope",
+                                        "constant",
+                                        "character",
+                                        "conversion"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "The identifier of a value you can pass to a function to use it in that function's scope.",
+                                    "correctAnswer": "parameter",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "parameter",
+                                        "argument",
+                                        "variable",
+                                        "constant"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "The value you passed to a function identified by its parameter name.",
+                                    "correctAnswer": "argument",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "boolean",
+                                        "assignment",
+                                        "literal",
+                                        "argument"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "Ends a function, and if given a value, substitutes the function call with the value.",
+                                    "correctAnswer": "return statement",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "datatype",
+                                        "if",
+                                        "return statement",
+                                        "substitution"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "The value a function call is replaced with when the function reaches a return statement.",
+                                    "correctAnswer": "return value",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "comment",
+                                        "return value",
+                                        "else",
+                                        "camelCase"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "Lists and Loops",
+                    "description": "",
+                    "tasks": [
+                        {
+                            "id": 11,
+                            "name": "Ordered Collections",
+                            "description": "Student can create, add, remove, and sort elements in an array/list, and substitute specific element's values in an expression.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A variable that holds many individual values in a specified order.",
+                                    "correctAnswer": "ordered collection",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "scope",
+                                        "float",
+                                        "ordered collection",
+                                        "statement"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "An ordered collection that has a list of values, identified by their index.",
+                                    "correctAnswer": "list",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "boolean",
+                                        "list",
+                                        "expression",
+                                        "datatype"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A single value in a list.",
+                                    "correctAnswer": "element",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "string",
+                                        "statement",
+                                        "conversion",
+                                        "element"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "The number that is used to identify an element in a list.",
+                                    "correctAnswer": "index",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "index",
+                                        "arithmetic operator",
+                                        "else if",
+                                        "substitution"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 14,
+                            "name": "Iterative Loops",
+                            "description": "Students can use for..in/for..of loops to iterate through elements in an array/list or object/dictionary.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A loop that runs for each element or key in a given list or dictionary, changing its focus to the next item each time it loops.",
+                                    "correctAnswer": "iterative loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "conditional statement",
+                                        "iterative loop",
+                                        "scope",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "The variable in an iterative loop that represents the current element or key the loop is currently using.",
+                                    "correctAnswer": "iterator",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "float",
+                                        "assignment",
+                                        "keyword",
+                                        "iterator"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "The value of the current iterator when looping through a list.",
+                                    "correctAnswer": "iterator value",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "float",
+                                        "assignment",
+                                        "keyword",
+                                        "iterator"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "The index of the current iterator in the list when looping through that list.",
+                                    "correctAnswer": "iterator index",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "iterator index",
+                                        "constant",
+                                        "return value",
+                                        "conversion"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "A loop that iterates a specific number of times, often used with a counter.",
+                                    "correctAnswer": "for loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "while loop",
+                                        "for loop",
+                                        "conditional loop",
+                                        "do-while loop"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 13,
+                            "name": "Nested Collections",
+                            "description": "Students can utilize multi-dimensional arrays, and store complex datatypes in arrays or objects.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "Providing multiple indices to find an element in a list that is itself an element in another list.",
+                                    "correctAnswer": "multi-dimensional",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "multi-dimensional",
+                                        "constant",
+                                        "return value",
+                                        "conversion"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "Dictionaries and Objects",
+                    "description": "",
+                    "tasks": [
+                        {
+                            "id": 12,
+                            "name": "Unordered Collections",
+                            "description": "Student can create, add, remove, and sort elements in a dictionary/map, and substitute specific element's values in an expression.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A variable that holds many individual values in no particular order, because each value has its own key.",
+                                    "correctAnswer": "unordered collection",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "unordered collection",
+                                        "argument",
+                                        "literal",
+                                        "camelCase"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "An unordered collection that has a series of values with their own identifying keys.",
+                                    "correctAnswer": "dictionary",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "list",
+                                        "scope",
+                                        "dictionary",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 58,
+                                    "ai": false,
+                                    "prompt": "A word that represents a value in an unordered collection, or the value of a property.",
+                                    "correctAnswer": "key",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "key",
+                                        "assignment",
+                                        "index",
+                                        "datatype"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "Classes and Modules",
+                    "description": "",
+                    "tasks": [
+                        {
+                            "id": 15,
+                            "name": "Modules",
+                            "description": "Students can import and use modules, and can create their own modules to be used in other programs.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A file containing pre-made code that can be imported into other programs for easy use.",
+                                    "correctAnswer": "module",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "module",
+                                        "library",
+                                        "class",
+                                        "object"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "Loading a module into your program for use.",
+                                    "correctAnswer": "import",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "module",
+                                        "import",
+                                        "constructor",
+                                        "inheritance"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 16,
+                            "name": "Classes",
+                            "description": "Students can define classes, demonstrate inheritance, and create instances of classes.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "ai": false,
+                                    "prompt": "A collection of data and functions bundled together, often representing a real-world concept.",
+                                    "correctAnswer": "object",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "object",
+                                        "property",
+                                        "method",
+                                        "class"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "ai": false,
+                                    "prompt": "A value or characteristic that belongs to an object.",
+                                    "correctAnswer": "property",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "method",
+                                        "property",
+                                        "constructor",
+                                        "inheritance"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A function that belongs to an object and can perform actions on the object or its data.",
+                                    "correctAnswer": "method",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "object",
+                                        "class",
+                                        "method",
+                                        "constructor"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "A blueprint used to create objects with similar structure and behavior.",
+                                    "correctAnswer": "class",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "property",
+                                        "method",
+                                        "inheritance",
+                                        "class"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "A special method used to initialize a new object when it is created.",
+                                    "correctAnswer": "constructor",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "constructor",
+                                        "method",
+                                        "property",
+                                        "class"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "A mechanism that allows one class to use the properties and methods of another class.",
+                                    "correctAnswer": "inheritance",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "object",
+                                        "inheritance",
+                                        "constructor",
+                                        "method"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
