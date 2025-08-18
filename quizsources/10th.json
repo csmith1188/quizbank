@@ -1272,7 +1272,7 @@
                                     "id": 94,
                                     "ai": false,
                                     "prompt": "How many \"elif\"s does an if statement have?",
-                                    "correctAnswer": "One or none",
+                                    "correctAnswer": "One for each condition to check after the first",
                                     "correctIndex": 0,
                                     "answers": [
                                         "One for each condition to check after the first",
@@ -1285,7 +1285,7 @@
                                     "id": 95,
                                     "ai": false,
                                     "prompt": "\"elif\"s always goes...?",
-                                    "correctAnswer": "One or none",
+                                    "correctAnswer": "In between the if and else statements",
                                     "correctIndex": 2,
                                     "answers": [
                                         "At the beginning of an if statement",
@@ -1430,7 +1430,7 @@
                                     "ai": false,
                                     "prompt": "An operator that combines two boolean expressions to return True if at least one is True.",
                                     "correctAnswer": "or",
-                                    "correctIndex": 0,
+                                    "correctIndex": 1,
                                     "answers": [
                                         "and",
                                         "or",
@@ -1443,7 +1443,7 @@
                                     "ai": false,
                                     "prompt": "An operator that negates a boolean expression.",
                                     "correctAnswer": "not",
-                                    "correctIndex": 0,
+                                    "correctIndex": 2,
                                     "answers": [
                                         "and",
                                         "or",
@@ -1939,7 +1939,7 @@
                                     "id": 141,
                                     "ai": false,
                                     "prompt": "The value of the current iterator when looping through a list.",
-                                    "correctAnswer": "iterator value",
+                                    "correctAnswer": "iterator",
                                     "correctIndex": 3,
                                     "answers": [
                                         "float",
