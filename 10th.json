@@ -235,7 +235,7 @@
                                 {
                                     "id": 5,
                                     "ai": false,
-                                    "prompt": "A data type with a 'true' or 'false' value.",
+                                    "prompt": "A data type with a 'True' or 'False' value.",
                                     "correctAnswer": "boolean",
                                     "correctIndex": 3,
                                     "answers": [
@@ -998,7 +998,7 @@
                                 {
                                     "id": 2,
                                     "ai": false,
-                                    "prompt": "A statement that evaluates to true or false, often used in control flow.",
+                                    "prompt": "A statement that evaluates to True or False, often used in control flow.",
                                     "correctAnswer": "condition",
                                     "correctIndex": 0,
                                     "answers": [
@@ -1024,7 +1024,7 @@
                                 {
                                     "id": 4,
                                     "ai": false,
-                                    "prompt": "A code block that is run when a given condition resolves as 'true' or 'not false'.",
+                                    "prompt": "A code block that is run when a given condition resolves as 'True' or 'not False'.",
                                     "correctAnswer": "conditional statement",
                                     "correctIndex": 3,
                                     "answers": [
@@ -1050,7 +1050,7 @@
                                 {
                                     "id": 6,
                                     "ai": false,
-                                    "prompt": "The most common conditional statement that runs if the condition resolves as 'true' or 'not false'.",
+                                    "prompt": "The most common conditional statement that runs if the condition resolves as 'True' or 'not False'.",
                                     "correctAnswer": "if",
                                     "correctIndex": 3,
                                     "answers": [
@@ -1063,7 +1063,7 @@
                                 {
                                     "id": 7,
                                     "ai": false,
-                                    "prompt": "Very common conditional statement that runs if its condition is 'true' or 'not false' and the previous if statement's condition is 'false'.",
+                                    "prompt": "Very common conditional statement that runs if its condition is 'True' or 'not False' and the previous if statement's condition is 'False'.",
                                     "correctAnswer": "else if",
                                     "correctIndex": 1,
                                     "answers": [
@@ -1076,7 +1076,7 @@
                                 {
                                     "id": 8,
                                     "ai": false,
-                                    "prompt": "Very common conditional statement that runs if all previous if and else if statements' conditions are 'false'.",
+                                    "prompt": "Very common conditional statement that runs if all previous if and else if statements' conditions are 'False'.",
                                     "correctAnswer": "else",
                                     "correctIndex": 2,
                                     "answers": [
@@ -1084,6 +1084,227 @@
                                         "camelCase",
                                         "else",
                                         "primitive"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": true,
+                                    "prompt": "What is the result of the expression: 7 > 3?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "7",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": true,
+                                    "prompt": "Which comparison operator checks if two values are NOT equal?",
+                                    "correctAnswer": "!=",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "!=",
+                                        "==",
+                                        ">=",
+                                        "<="
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "ai": true,
+                                    "prompt": "What will the condition (10 == 5) evaluate to?",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "10",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": true,
+                                    "prompt": "Which keyword is used to add an alternative path with no condition when an 'if' condition is False?",
+                                    "correctAnswer": "else",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "else",
+                                        "elif",
+                                        "then",
+                                        "unless"
+                                    ]
+                                },
+                                {
+                                    "id": 13,
+                                    "ai": true,
+                                    "prompt": "What does the condition (x < 0) check for?",
+                                    "correctAnswer": "x is less than zero",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "x is greater than zero",
+                                        "x is less than zero",
+                                        "x equals zero",
+                                        "x is a positive number"
+                                    ]
+                                },
+                                {
+                                    "id": 14,
+                                    "ai": true,
+                                    "prompt": "Which of these is a valid comparison operator?",
+                                    "correctAnswer": "<=",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "++",
+                                        "<<",
+                                        "<=",
+                                        "=<"
+                                    ]
+                                },
+                                {
+                                    "id": 15,
+                                    "ai": true,
+                                    "prompt": "What does an 'else if' (or 'elif') condition allow you to do?",
+                                    "correctAnswer": "Check another condition if the previous one is False",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Check another condition if the previous one is False",
+                                        "Repeat code forever",
+                                        "Compare two strings",
+                                        "Stop the program"
+                                    ]
+                                },
+                                {
+                                    "id": 16,
+                                    "ai": true,
+                                    "prompt": "What is the boolean result of (4 <= 4)?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "error",
+                                        "undefined"
+                                    ]
+                                },
+                                {
+                                    "id": 17,
+                                    "ai": true,
+                                    "prompt": "Which of these conditions checks if x is both greater than 0 and less than 10?",
+                                    "correctAnswer": "x > 0 and x < 10",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "x > 0 or x < 10",
+                                        "x > 0 and x < 10",
+                                        "x == 0 and x == 10",
+                                        "x >= 0 or x <= 10"
+                                    ]
+                                },
+                                {
+                                    "id": 18,
+                                    "ai": true,
+                                    "prompt": "In most programming languages, what value does a condition produce?",
+                                    "correctAnswer": "True or False",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "a number",
+                                        "a string",
+                                        "True or False",
+                                        "a variable"
+                                    ]
+                                },
+                                {
+                                    "id": 19,
+                                    "ai": true,
+                                    "prompt": "If (x == 10) is True, which branch will run in an if/else statement?",
+                                    "correctAnswer": "the 'if' branch",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "the 'if' branch",
+                                        "the 'else' branch",
+                                        "both branches",
+                                        "neither branch"
+                                    ]
+                                },
+                                {
+                                    "id": 20,
+                                    "ai": true,
+                                    "prompt": "Which of these is an example of a logical error in conditions?",
+                                    "correctAnswer": "Using x > 10 instead of x >= 10",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Forgetting a colon after 'if'",
+                                        "Using x > 10 instead of x >= 10",
+                                        "Leaving out parentheses",
+                                        "Misspelling the keyword 'else'"
+                                    ]
+                                },
+                                {
+                                    "id": 21,
+                                    "ai": false,
+                                    "prompt": "How many \"if\"s does an if statement have?",
+                                    "correctAnswer": "Only one",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "One for each condition you want to check",
+                                        "Only one",
+                                        "As many as you need",
+                                        "At least two"
+                                    ]
+                                },
+                                {
+                                    "id": 22,
+                                    "ai": false,
+                                    "prompt": "How many \"else\"s does an if statement have?",
+                                    "correctAnswer": "One or none",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "One for each condition you want to check",
+                                        "Only one",
+                                        "As many as you need",
+                                        "One or none"
+                                    ]
+                                },
+                                {
+                                    "id": 23,
+                                    "ai": false,
+                                    "prompt": "How many \"elif\"s does an if statement have?",
+                                    "correctAnswer": "One or none",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "One for each condition to check after the first",
+                                        "Only one",
+                                        "One for each condition you want to check",
+                                        "One for each \"else\" in the if statement"
+                                    ]
+                                },
+                                {
+                                    "id": 24,
+                                    "ai": false,
+                                    "prompt": "\"elif\"s always goes...?",
+                                    "correctAnswer": "One or none",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "At the beginning of an if statement",
+                                        "At the end of an if statement",
+                                        "In between the if and else statements",
+                                        "At the beginning of an else statement"
+                                    ]
+                                },
+                                {
+                                    "id": 25,
+                                    "ai": false,
+                                    "prompt": "An \"else\"s will never have a ...?",
+                                    "correctAnswer": "condition",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "An \"elif\"",
+                                        "A colon",
+                                        "A code block",
+                                        "condition"
                                     ]
                                 }
                             ]
@@ -1094,9 +1315,9 @@
                             "description": "Student can differentiate between while and for loops, and demonstrate the use of both.",
                             "questions": [
                                 {
-                                    "id": 2,
+                                    "id": 1,
                                     "ai": false,
-                                    "prompt": "A code block that repeats for as long as a given condition resolves as 'true' or 'not false'.",
+                                    "prompt": "A code block that repeats for as long as a given condition resolves as 'True' or 'not False'.",
                                     "correctAnswer": "conditional loop",
                                     "correctIndex": 0,
                                     "answers": [
@@ -1107,15 +1328,80 @@
                                     ]
                                 },
                                 {
-                                    "id": 1,
+                                    "id": 2,
                                     "ai": false,
-                                    "prompt": "A loop that continues until a condition is no longer true.",
+                                    "prompt": "A loop that continues until a condition is no longer True.",
                                     "correctAnswer": "while loop",
                                     "correctIndex": 0,
                                     "answers": [
                                         "while loop",
                                         "for loop",
                                         "conditional loop",
+                                        "do-while loop"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "ai": false,
+                                    "prompt": "A loop that never ends because its condition always evaluates to True.",
+                                    "correctAnswer": "infinite loop",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "while loop",
+                                        "for loop",
+                                        "infinite loop",
+                                        "nested loop"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "A loop inside another loop.",
+                                    "correctAnswer": "nested loop",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "conditional loop",
+                                        "iterator",
+                                        "infinite loop",
+                                        "nested loop"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "A keyword used to immediately end a loop, even if its condition is still True.",
+                                    "correctAnswer": "break",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "break",
+                                        "continue",
+                                        "exit",
+                                        "stop"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "A keyword that skips the rest of the current loop iteration and continues with the next one.",
+                                    "correctAnswer": "continue",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "break",
+                                        "continue",
+                                        "return",
+                                        "skip"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "A loop that executes its code block at least once before checking the condition.",
+                                    "correctAnswer": "do-while loop",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "for loop",
+                                        "while loop",
+                                        "nested loop",
                                         "do-while loop"
                                     ]
                                 }
@@ -1129,7 +1415,7 @@
                                 {
                                     "id": 1,
                                     "ai": false,
-                                    "prompt": "An operator that combines two boolean expressions to return true if both are true.",
+                                    "prompt": "An operator that combines two boolean expressions to return True if both are True.",
                                     "correctAnswer": "and",
                                     "correctIndex": 0,
                                     "answers": [
@@ -1142,7 +1428,7 @@
                                 {
                                     "id": 2,
                                     "ai": false,
-                                    "prompt": "An operator that combines two boolean expressions to return true if at least one is true.",
+                                    "prompt": "An operator that combines two boolean expressions to return True if at least one is True.",
                                     "correctAnswer": "or",
                                     "correctIndex": 0,
                                     "answers": [
@@ -1163,6 +1449,162 @@
                                         "or",
                                         "not",
                                         "xor"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "ai": false,
+                                    "prompt": "What is the result of 'True and False'?",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "True",
+                                        "error",
+                                        "False",
+                                        "undefined"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "ai": false,
+                                    "prompt": "What is the result of 'True or False'?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "error",
+                                        "undefined"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "ai": false,
+                                    "prompt": "What is the result of 'not True'?",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "error",
+                                        "undefined"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "ai": false,
+                                    "prompt": "Which logical operator is often used to check multiple conditions that all must be True?",
+                                    "correctAnswer": "and",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "and",
+                                        "or",
+                                        "not",
+                                        "xor"
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "ai": false,
+                                    "prompt": "Which logical operator is often used when only one of several conditions needs to be True?",
+                                    "correctAnswer": "or",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "and",
+                                        "or",
+                                        "not",
+                                        "xor"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "ai": false,
+                                    "prompt": "Logical operators are used to combine or modify what type of values?",
+                                    "correctAnswer": "boolean values",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "boolean values",
+                                        "strings",
+                                        "integers",
+                                        "characters"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "ai": false,
+                                    "prompt": "In Python, what does the expression '5 and 0' return?",
+                                    "correctAnswer": "0",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "True",
+                                        "5",
+                                        "0",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "ai": false,
+                                    "prompt": "In Python, what does the expression '0 or 10' return?",
+                                    "correctAnswer": "10",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "0",
+                                        "True",
+                                        "False",
+                                        "10"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "ai": false,
+                                    "prompt": "In Python, applying 'not' to a non-empty string like 'hello' will return:",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "hello",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "id": 13,
+                                    "ai": false,
+                                    "prompt": "In Python, what is the result of True + True?",
+                                    "correctAnswer": "2",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "True",
+                                        "2",
+                                        "1",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "id": 14,
+                                    "ai": false,
+                                    "prompt": "In Python, what is the result of 5 * False?",
+                                    "correctAnswer": "0",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "False",
+                                        "5",
+                                        "0",
+                                        "error"
+                                    ]
+                                },
+                                {
+                                    "id": 15,
+                                    "ai": false,
+                                    "prompt": "In Python, what is the result of True * True?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "True",
+                                        "1",
+                                        "error",
+                                        "False"
                                     ]
                                 }
                             ]
