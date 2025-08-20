@@ -16,6 +16,7 @@
                             "id": 1,
                             "name": "Documetation",
                             "description": "Student can demonstrate writing effective comments in code and using self-documenting naming conventions.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about writing effective comments in Python code and using self-documenting naming conventions. Focus on documentation practices, naming strategies, and how comments help programmers understand code.",
                             "questions": [
                                 {
                                     "id": 1,
@@ -179,6 +180,7 @@
                             "id": 2,
                             "name": "Datatypes",
                             "description": "Students can identify literal values where they appear, and differentiate between boolean, integer, float, and sting values.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about identifying and understanding different data types in Python, including boolean, integer, float, string, and character types. Focus on their definitions, examples, and how they are used in programming.",
                             "questions": [
                                 {
                                     "id": 13,
@@ -446,6 +448,7 @@
                             "id": 3,
                             "name": "Assignment",
                             "description": "Students can store values into memory (variables) with a variety of assignment operators.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about storing values in memory using variables and assignment operators in Python. Focus on variable assignment, different types of assignment operators, and how they are used in programming.",
                             "questions": [
                                 {
                                     "id": 33,
@@ -700,6 +703,7 @@
                             "id": 4,
                             "name": "Expressions",
                             "description": "Students can write expressions that use substitution, comparisons, and arithmetic operators.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about writing expressions in Python that involve substitution and arithmetic operators. Focus on how expressions are formed, evaluated, and their role in programming. Do not generate questions about comparisons.",
                             "questions": [
                                 {
                                     "id": 52,
@@ -811,6 +815,7 @@
                             "id": 8,
                             "name": "Error Messages",
                             "description": "Student can use error messages to identify errors in their code, as well as differentiate between run-time, syntax, and logical errors.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about understanding different types of errors in Python, including run-time errors, syntax errors, and logical errors. Focus on how to identify these errors and their implications in programming.",
                             "questions": [
                                 {
                                     "id": 60,
