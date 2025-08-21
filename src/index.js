@@ -117,13 +117,48 @@ function getAllQuestionsFromResource(resource) {
     return questions;
 }
 
+// Helper function to get a resource with limited depth (only immediate children)
+function getResourceWithLimitedDepth(resource) {
+    const limitedResource = { ...resource };
+    
+    // Remove deeper nested data, keeping only immediate children
+    if (limitedResource.sections) {
+        limitedResource.sections = limitedResource.sections.map(section => ({
+            id: section.id,
+            name: section.name,
+            description: section.description
+        }));
+    }
+    
+    if (limitedResource.units) {
+        limitedResource.units = limitedResource.units.map(unit => ({
+            id: unit.id,
+            name: unit.name,
+            description: unit.description
+        }));
+    }
+    
+    if (limitedResource.tasks) {
+        limitedResource.tasks = limitedResource.tasks.map(task => ({
+            id: task.id,
+            name: task.name,
+            description: task.description
+        }));
+    }
+    
+    // Remove questions from detail endpoints (they should only be accessed via pick endpoints)
+    delete limitedResource.questions;
+    
+    return limitedResource;
+}
+
 // Course endpoints
 app.get('/course/:courseId', (req, res) => {
     const course = findResourceById(hierarchyData, parseInt(req.params.courseId));
     if (!course) {
         return res.status(404).json({ error: 'Course not found' });
     }
-    res.json(course);
+    res.json(getResourceWithLimitedDepth(course));
 });
 
 // Pick questions from course
@@ -152,7 +187,7 @@ app.get('/course/:courseId/section/:sectionId', (req, res) => {
         return res.status(404).json({ error: 'Section not found' });
     }
     
-    res.json(section);
+    res.json(getResourceWithLimitedDepth(section));
 });
 
 // Pick questions from section
@@ -186,12 +221,31 @@ app.get('/course/:courseId/section/:sectionId/unit/:unitId', (req, res) => {
         return res.status(404).json({ error: 'Section not found' });
     }
     
-    const unit = section.units.find(u => u.id === parseInt(req.params.unitId));
-    if (!unit) {
-        return res.status(404).json({ error: 'Unit not found' });
+    // Parse multiple unit IDs separated by +
+    const unitIds = req.params.unitId.split('+').map(id => parseInt(id.trim()));
+    const units = [];
+    
+    for (const unitId of unitIds) {
+        const unit = section.units.find(u => u.id === parseInt(unitId));
+        if (!unit) {
+            return res.status(404).json({ error: `Unit ${unitId} not found` });
+        }
+        units.push(unit);
     }
     
-    res.json(unit);
+    // If only one unit, return it with limited depth
+    if (units.length === 1) {
+        return res.json(getResourceWithLimitedDepth(units[0]));
+    }
+    
+    // If multiple units, return combined data with limited depth
+    const combinedUnits = {
+        id: unitIds.join('+'),
+        name: `Combined Units: ${units.map(u => u.name).join(', ')}`,
+        units: units.map(unit => getResourceWithLimitedDepth(unit))
+    };
+    
+    res.json(combinedUnits);
 });
 
 // Pick questions from unit
@@ -206,12 +260,25 @@ app.get('/course/:courseId/section/:sectionId/unit/:unitId/pick/:number', (req, 
         return res.status(404).json({ error: 'Section not found' });
     }
     
-    const unit = section.units.find(u => u.id === parseInt(req.params.unitId));
-    if (!unit) {
-        return res.status(404).json({ error: 'Unit not found' });
+    // Parse multiple unit IDs separated by +
+    const unitIds = req.params.unitId.split('+').map(id => parseInt(id.trim()));
+    const units = [];
+    
+    for (const unitId of unitIds) {
+        const unit = section.units.find(u => u.id === unitId);
+        if (!unit) {
+            return res.status(404).json({ error: `Unit ${unitId} not found` });
+        }
+        units.push(unit);
     }
     
-    const allQuestions = getAllQuestionsFromResource(unit);
+    // Collect all questions from all specified units
+    let allQuestions = [];
+    for (const unit of units) {
+        const unitQuestions = getAllQuestionsFromResource(unit);
+        allQuestions = allQuestions.concat(unitQuestions);
+    }
+    
     const count = parseInt(req.params.number);
     const selectedQuestions = getRandomItems(allQuestions, count);
     
@@ -235,14 +302,45 @@ app.get('/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId', (req, 
         return res.status(404).json({ error: 'Unit not found' });
     }
     
-    const task = unit.tasks.find(t => t.id === parseInt(req.params.taskId));
-    if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
+    // Parse multiple task IDs separated by +
+    const taskIds = req.params.taskId.split('+').map(id => parseInt(id.trim()));
+    const tasks = [];
+    
+    for (const taskId of taskIds) {
+        const task = unit.tasks.find(t => t.id === taskId);
+        if (!task) {
+            return res.status(404).json({ error: `Task ${taskId} not found` });
+        }
+        tasks.push(task);
     }
     
-    // Add hierarchy information to the task
-    const taskWithHierarchy = {
-        ...task,
+    // If only one task, return it with hierarchy and limited depth
+    if (tasks.length === 1) {
+        const taskWithHierarchy = {
+            ...getResourceWithLimitedDepth(tasks[0]),
+            hierarchy: {
+                course: {
+                    id: course.id,
+                    name: course.name
+                },
+                section: {
+                    id: section.id,
+                    name: section.name
+                },
+                unit: {
+                    id: unit.id,
+                    name: unit.name
+                }
+            }
+        };
+        return res.json(taskWithHierarchy);
+    }
+    
+    // If multiple tasks, return combined data with limited depth
+    const combinedTasks = {
+        id: taskIds.join('+'),
+        name: `Combined Tasks: ${tasks.map(t => t.name).join(', ')}`,
+        tasks: tasks.map(task => getResourceWithLimitedDepth(task)),
         hierarchy: {
             course: {
                 id: course.id,
@@ -259,7 +357,49 @@ app.get('/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId', (req, 
         }
     };
     
-    res.json(taskWithHierarchy);
+    res.json(combinedTasks);
+});
+
+// Pick questions from task
+app.get('/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId/pick/:number', (req, res) => {
+    const course = findResourceById(hierarchyData, parseInt(req.params.courseId));
+    if (!course) {
+        return res.status(404).json({ error: 'Course not found' });
+    }
+    
+    const section = course.sections.find(s => s.id === parseInt(req.params.sectionId));
+    if (!section) {
+        return res.status(404).json({ error: 'Section not found' });
+    }
+    
+    const unit = section.units.find(u => u.id === parseInt(req.params.unitId));
+    if (!unit) {
+        return res.status(404).json({ error: 'Unit not found' });
+    }
+    
+    // Parse multiple task IDs separated by +
+    const taskIds = req.params.taskId.split('+').map(id => parseInt(id.trim()));
+    const tasks = [];
+    
+    for (const taskId of taskIds) {
+        const task = unit.tasks.find(t => t.id === taskId);
+        if (!task) {
+            return res.status(404).json({ error: `Task ${taskId} not found` });
+        }
+        tasks.push(task);
+    }
+    
+    // Collect all questions from all specified tasks
+    let allQuestions = [];
+    for (const task of tasks) {
+        const taskQuestions = getAllQuestionsFromResource(task);
+        allQuestions = allQuestions.concat(taskQuestions);
+    }
+    
+    const count = parseInt(req.params.number);
+    const selectedQuestions = getRandomItems(allQuestions, count);
+    
+    res.json(selectedQuestions);
 });
 
 // List children endpoints
