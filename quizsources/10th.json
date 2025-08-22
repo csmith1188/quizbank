@@ -34,7 +34,7 @@
                                 {
                                     "id": 2,
                                     "ai": false,
-                                    "prompt": "A way of writing names without using spaces that is easily readable.",
+                                    "prompt": "A way of writing identifiers without using spaces that is easily readable.",
                                     "correctAnswer": "camelCase",
                                     "correctIndex": 1,
                                     "answers": [
@@ -505,7 +505,7 @@
                                 {
                                     "id": 37,
                                     "ai": false,
-                                    "prompt": "Associating a value with a name to create a variable or object.",
+                                    "prompt": "Associating a value with an identifier to create a variable or object.",
                                     "correctAnswer": "assignment",
                                     "correctIndex": 0,
                                     "answers": [
