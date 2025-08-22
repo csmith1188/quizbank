@@ -808,169 +808,122 @@
                                         "0",
                                         "10"
                                     ]
-                                }
-                            ]
-                        },
-                        {
-                            "id": 8,
-                            "name": "Error Messages",
-                            "description": "Student can use error messages to identify errors in their code, as well as differentiate between run-time, syntax, and logical errors.",
-                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about understanding different types of errors in Python, including run-time errors, syntax errors, and logical errors. Focus on how to identify these errors and their implications in programming.",
-                            "questions": [
+                                },
                                 {
                                     "id": 60,
-                                    "ai": false,
-                                    "prompt": "An error that occurs when the program is running, often due to invalid operations or data.",
-                                    "correctAnswer": "run-time error",
-                                    "correctIndex": 0,
+                                    "ai": true,
+                                    "prompt": "If a = 6 and b = 4, what is the value of a - b * 2?",
+                                    "correctAnswer": "-2",
+                                    "correctIndex": 1,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "4",
+                                        "-2",
+                                        "2",
+                                        "8"
                                     ]
                                 },
                                 {
                                     "id": 61,
-                                    "ai": false,
-                                    "prompt": "An error that occurs when the code does not follow the language's syntax rules.",
-                                    "correctAnswer": "syntax error",
-                                    "correctIndex": 1,
+                                    "ai": true,
+                                    "prompt": "What is the result of the expression (5 + 3) * 2 in Python?",
+                                    "correctAnswer": "16",
+                                    "correctIndex": 0,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "16",
+                                        "13",
+                                        "11",
+                                        "10"
                                     ]
                                 },
                                 {
                                     "id": 62,
-                                    "ai": false,
-                                    "prompt": "An error that occurs when the code runs without crashing but produces incorrect results.",
-                                    "correctAnswer": "logical error",
+                                    "ai": true,
+                                    "prompt": "If x = 10 and y = 3, what is the value of x / y in Python?",
+                                    "correctAnswer": "3.333...",
                                     "correctIndex": 2,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "3",
+                                        "3.0",
+                                        "3.333...",
+                                        "3.33"
                                     ]
                                 },
                                 {
                                     "id": 63,
                                     "ai": true,
-                                    "prompt": "What type of error will occur if you try to divide a number by zero in Python?",
-                                    "correctAnswer": "run-time error",
-                                    "correctIndex": 0,
+                                    "prompt": "What will be the value of z after this code? z = 15; z = z // 4",
+                                    "correctAnswer": "3",
+                                    "correctIndex": 1,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "3.75",
+                                        "3",
+                                        "4",
+                                        "15"
                                     ]
                                 },
                                 {
                                     "id": 64,
                                     "ai": true,
-                                    "prompt": "What type of error is caused by missing a colon at the end of a Python if statement?",
-                                    "correctAnswer": "syntax error",
-                                    "correctIndex": 1,
+                                    "prompt": "What is the result of the expression 2 ** 4 + 1 in Python?",
+                                    "correctAnswer": "17",
+                                    "correctIndex": 0,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "17",
+                                        "16",
+                                        "18",
+                                        "32"
                                     ]
                                 },
                                 {
                                     "id": 65,
                                     "ai": true,
-                                    "prompt": "If a program calculates 2 + 2 and returns 5, what type of error is this?",
-                                    "correctAnswer": "logical error",
-                                    "correctIndex": 2,
+                                    "prompt": "What is the result of the expression 8 / 2 * 3 in Python?",
+                                    "correctAnswer": "12",
+                                    "correctIndex": 1,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "4",
+                                        "12",
+                                        "8",
+                                        "6"
                                     ]
                                 },
                                 {
                                     "id": 66,
                                     "ai": true,
-                                    "prompt": "What error type occurs if you try to add a number and a string in Python?",
-                                    "correctAnswer": "run-time error",
-                                    "correctIndex": 0,
+                                    "prompt": "What is the result of the expression 10 - 3 + 2 * 4 in Python?",
+                                    "correctAnswer": "15",
+                                    "correctIndex": 2,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "36",
+                                        "9",
+                                        "15",
+                                        "24"
                                     ]
                                 },
                                 {
                                     "id": 67,
                                     "ai": true,
-                                    "prompt": "What kind of error would you see if you misspell a function name in your code?",
-                                    "correctAnswer": "run-time error",
+                                    "prompt": "In Python, which operator has the highest precedence: multiplication (*), addition (+), or parentheses ()?",
+                                    "correctAnswer": "parentheses ()",
                                     "correctIndex": 0,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
+                                        "parentheses ()",
+                                        "multiplication (*)",
+                                        "addition (+)",
+                                        "They all have equal precedence"
                                     ]
                                 },
                                 {
                                     "id": 68,
                                     "ai": true,
-                                    "prompt": "What type of error occurs when parentheses are not properly closed in Python?",
-                                    "correctAnswer": "syntax error",
+                                    "prompt": "When Python evaluates an expression with multiple operators of equal precedence, what rule does it follow?",
+                                    "correctAnswer": "Left to right evaluation",
                                     "correctIndex": 1,
                                     "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
-                                    ]
-                                },
-                                {
-                                    "id": 69,
-                                    "ai": true,
-                                    "prompt": "A program is supposed to calculate the area of a rectangle but accidentally multiplies length by 2 instead of length × width. What error type is this?",
-                                    "correctAnswer": "logical error",
-                                    "correctIndex": 2,
-                                    "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
-                                    ]
-                                },
-                                {
-                                    "id": 70,
-                                    "ai": true,
-                                    "prompt": "What kind of error occurs if you forget the quotation marks around a string in Python?",
-                                    "correctAnswer": "syntax error",
-                                    "correctIndex": 1,
-                                    "answers": [
-                                        "run-time error",
-                                        "syntax error",
-                                        "logical error",
-                                        "type error"
-                                    ]
-                                },
-                                {
-                                    "id": 71,
-                                    "ai": true,
-                                    "prompt": "What kind of error will Python produce for this line: x = (5 + 3",
-                                    "correctAnswer": "syntax error",
-                                    "correctIndex": 0,
-                                    "answers": [
-                                        "syntax error",
-                                        "run-time error",
-                                        "logical error",
-                                        "type error"
+                                        "Right to left evaluation",
+                                        "Left to right evaluation",
+                                        "Random evaluation",
+                                        "Parentheses first, then random"
                                     ]
                                 }
                             ]
@@ -1610,6 +1563,170 @@
                                         "1",
                                         "error",
                                         "False"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "name": "Error Messages",
+                            "description": "Student can use error messages to identify errors in their code, as well as differentiate between run-time, syntax, and logical errors.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about understanding different types of errors in Python, including run-time errors, syntax errors, and logical errors. Focus on how to identify these errors and their implications in programming.",
+                            "questions": [
+                                {
+                                    "id": 60,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the program is running, often due to invalid operations or data.",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 61,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the code does not follow the language's syntax rules.",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 62,
+                                    "ai": false,
+                                    "prompt": "An error that occurs when the code runs without crashing but produces incorrect results.",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 63,
+                                    "ai": true,
+                                    "prompt": "What type of error will occur if you try to divide a number by zero in Python?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 64,
+                                    "ai": true,
+                                    "prompt": "What type of error is caused by missing a colon at the end of a Python if statement?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 65,
+                                    "ai": true,
+                                    "prompt": "If a program calculates 2 + 2 and returns 5, what type of error is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 66,
+                                    "ai": true,
+                                    "prompt": "What error type occurs if you try to add a number and a string in Python?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 67,
+                                    "ai": true,
+                                    "prompt": "What kind of error would you see if you misspell a function name in your code?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 68,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs when parentheses are not properly closed in Python?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 69,
+                                    "ai": true,
+                                    "prompt": "A program is supposed to calculate the area of a rectangle but accidentally multiplies length by 2 instead of length × width. What error type is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 70,
+                                    "ai": true,
+                                    "prompt": "What kind of error occurs if you forget the quotation marks around a string in Python?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 71,
+                                    "ai": true,
+                                    "prompt": "What kind of error will Python produce for this line: x = (5 + 3",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "syntax error",
+                                        "run-time error",
+                                        "logical error",
+                                        "type error"
                                     ]
                                 }
                             ]
