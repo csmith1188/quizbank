@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<POOL>
+  <COURSEID value="IMPORT" />
+  <TITLE value="Test69" />
+  <DESCRIPTION>
+    <TEXT>Created by the Blackboard Quiz Generator</TEXT>
+  </DESCRIPTION>
+  <DATES>
+    <CREATED value="2025-08-20 17:06:26Z" />
+    <UPDATED value="2025-08-20 17:06:26Z" />
+  </DATES>
+  <QUESTIONLIST>
+    <QUESTION id="q1" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="q2" class="QUESTION_MULTIPLECHOICE" />
+  </QUESTIONLIST>
+  <QUESTION_MULTIPLECHOICE id="q1">
+    <DATES>
+      <CREATED value="2025-08-20 17:06:26Z" />
+      <UPDATED value="2025-08-20 17:06:26Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is a prime number?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="q1_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="q1_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>5</TEXT>
+    </ANSWER>
+    <ANSWER id="q1_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>6</TEXT>
+    </ANSWER>
+    <ANSWER id="q1_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>69</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Good work</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="q1_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="q2">
+    <DATES>
+      <CREATED value="2025-08-20 17:06:26Z" />
+      <UPDATED value="2025-08-20 17:06:26Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is a prime number?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="q2_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="q2_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>5</TEXT>
+    </ANSWER>
+    <ANSWER id="q2_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>6</TEXT>
+    </ANSWER>
+    <ANSWER id="q2_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-20 17:06:26Z" />
+        <UPDATED value="2025-08-20 17:06:26Z" />
+      </DATES>
+      <TEXT>420</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Good work</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="q2_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+</POOL>

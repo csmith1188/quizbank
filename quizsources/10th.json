@@ -466,7 +466,7 @@
                                 {
                                     "id": 34,
                                     "ai": false,
-                                    "prompt": "A value that is stored in memory and can be used in expressions.",
+                                    "prompt": "A name of a variable that can be used in expressions.",
                                     "correctAnswer": "identifier",
                                     "correctIndex": 0,
                                     "answers": [
@@ -936,7 +936,7 @@
                     "description": "Understanding how to use variables and different data types in Python.",
                     "tasks": [
                         {
-                            "id": 5,
+                            "id": 1,
                             "name": "Comparisons and Conditions",
                             "description": "Student can demonstrate how conditions resolve by using a boolean value or and expression using a comparsion operator.",
                             "questions": [
@@ -1268,9 +1268,9 @@
                             ]
                         },
                         {
-                            "id": 6,
+                            "id": 2,
                             "name": "Conditional Loops",
-                            "description": "Student can differentiate between while and for loops, and demonstrate the use of both.",
+                            "description": "Student can demostrate the purpose of conditional loops.",
                             "questions": [
                                 {
                                     "id": 97,
@@ -1362,11 +1362,180 @@
                                         "nested loop",
                                         "do-while loop"
                                     ]
+                                },
+                                {
+                                    "id": 104,
+                                    "ai": true,
+                                    "prompt": "In Python, which loop is generally used when the number of iterations is known ahead of time?",
+                                    "correctAnswer": "for loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "for loop",
+                                        "while loop",
+                                        "infinite loop",
+                                        "nested loop"
+                                    ]
+                                },
+                                {
+                                    "id": 105,
+                                    "ai": true,
+                                    "prompt": "In Python, which loop is generally used when the number of iterations is not known and depends on a condition?",
+                                    "correctAnswer": "while loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "for loop",
+                                        "while loop",
+                                        "do-while loop",
+                                        "nested loop"
+                                    ]
+                                },
+                                {
+                                    "id": 107,
+                                    "ai": true,
+                                    "prompt": "In Python, what will happen if a 'break' statement is executed inside a nested loop?",
+                                    "correctAnswer": "Only the current loop will terminate",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Only the current loop will terminate",
+                                        "All loops terminate",
+                                        "The program crashes",
+                                        "The loop resets"
+                                    ]
+                                },
+                                {
+                                    "id": 108,
+                                    "ai": true,
+                                    "prompt": "In Python, what will the 'continue' statement do inside a loop?",
+                                    "correctAnswer": "Skip the rest of the current iteration and continue with the next one",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Skip the rest of the current iteration and continue with the next one",
+                                        "Terminate the loop completely",
+                                        "Pause the program",
+                                        "Restart the loop from the first iteration"
+                                    ]
+                                },
+                                {
+                                    "id": 109,
+                                    "ai": true,
+                                    "prompt": "What is the difference between a 'while' loop and a 'do-while' loop in terms of execution?",
+                                    "correctAnswer": "A do-while loop executes at least once before checking the condition",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "A do-while loop executes at least once before checking the condition",
+                                        "A while loop executes at least once before checking the condition",
+                                        "Both execute the same way",
+                                        "Only for loops can check conditions first"
+                                    ]
+                                },
+                                {
+                                    "id": 110,
+                                    "ai": true,
+                                    "prompt": "Which of the following is an example of an infinite loop in Python?",
+                                    "correctAnswer": "while True:",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "for i in range(5):",
+                                        "while True:",
+                                        "for i in range(10):",
+                                        "if True:"
+                                    ]
+                                },
+                                {
+                                    "id": 113,
+                                    "ai": true,
+                                    "prompt": "In Python, what happens if the loop condition is false at the start of a 'while' loop?",
+                                    "correctAnswer": "The loop body will not execute",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "The loop body will not execute",
+                                        "The loop executes once anyway",
+                                        "The loop executes infinitely",
+                                        "Python throws an error"
+                                    ]
+                                },
+                                {
+                                    "id": 114,
+                                    "ai": true,
+                                    "prompt": "Which of these statements is true about nested loops?",
+                                    "correctAnswer": "The inner loop completes all iterations for each iteration of the outer loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "The inner loop completes all iterations for each iteration of the outer loop",
+                                        "The outer loop stops when the inner loop starts",
+                                        "Nested loops are only allowed with for loops",
+                                        "Break statements do not work inside nested loops"
+                                    ]
+                                },
+                                {
+                                    "id": 118,
+                                    "ai": true,
+                                    "prompt": "Which statement will immediately exit a while loop regardless of the condition?",
+                                    "correctAnswer": "break",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "break",
+                                        "continue",
+                                        "pass",
+                                        "exit"
+                                    ]
+                                },
+                                {
+                                    "id": 119,
+                                    "ai": true,
+                                    "prompt": "Which statement will skip the current iteration of a while loop and move to the next evaluation of the condition?",
+                                    "correctAnswer": "continue",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "break",
+                                        "continue",
+                                        "pass",
+                                        "stop"
+                                    ]
+                                },
+                                {
+                                    "id": 120,
+                                    "ai": true,
+                                    "prompt": "What is a common risk of using a while loop without modifying the variables involved in the condition?",
+                                    "correctAnswer": "Creating an infinite loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Creating an infinite loop",
+                                        "Skipping loop iterations",
+                                        "Breaking the loop early",
+                                        "Executing the loop once"
+                                    ]
+                                },
+                                {
+                                    "id": 121,
+                                    "ai": true,
+                                    "prompt": "If a while loop contains another while loop inside it, what is the correct term for this structure?",
+                                    "correctAnswer": "nested loop",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "infinite loop",
+                                        "conditional loop",
+                                        "nested loop",
+                                        "iterative loop"
+                                    ]
+                                },
+                                {
+                                    "id": 122,
+                                    "ai": true,
+                                    "prompt": "In Python, what happens if a while loop's condition never becomes False and there is no break statement?",
+                                    "correctAnswer": "The loop runs infinitely",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "The loop runs infinitely",
+                                        "The loop executes once",
+                                        "The program throws an error",
+                                        "The loop skips all iterations"
+                                    ]
                                 }
                             ]
                         },
                         {
-                            "id": 7,
+                            "id": 3,
                             "name": "Logical Operators",
                             "description": "Students can demonstrate the use of logical operators to combine boolean expressions.",
                             "questions": [
@@ -1564,11 +1733,141 @@
                                         "error",
                                         "False"
                                     ]
+                                },
+                                {
+                                    "id": 119,
+                                    "ai": true,
+                                    "prompt": "In Python, what is the result of '[] or 5'?",
+                                    "correctAnswer": "5",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "5",
+                                        "[]",
+                                        "True",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 120,
+                                    "ai": true,
+                                    "prompt": "In Python, what is the result of '{}' and 10?",
+                                    "correctAnswer": "{}",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "10",
+                                        "True",
+                                        "{}",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 121,
+                                    "ai": true,
+                                    "prompt": "In Python, what does the expression 'not []' evaluate to?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "[]",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 122,
+                                    "ai": true,
+                                    "prompt": "In Python, what is the result of '0 and 10'?",
+                                    "correctAnswer": "0",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "10",
+                                        "0",
+                                        "True",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 123,
+                                    "ai": true,
+                                    "prompt": "What is the result of 'None or \"hello\"' in Python?",
+                                    "correctAnswer": "\"hello\"",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "\"hello\"",
+                                        "None",
+                                        "True",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 124,
+                                    "ai": true,
+                                    "prompt": "In Python, what is the result of 'not \"\"'?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "\"\"",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 125,
+                                    "ai": true,
+                                    "prompt": "In Python, what is the result of '5 or 0'?",
+                                    "correctAnswer": "5",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "5",
+                                        "0",
+                                        "True",
+                                        "False"
+                                    ]
+                                },
+                                {
+                                    "id": 126,
+                                    "ai": true,
+                                    "prompt": "In Python, combining 'not True and False' evaluates to:",
+                                    "correctAnswer": "False",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "False",
+                                        "True",
+                                        "0",
+                                        "1"
+                                    ]
+                                },
+                                {
+                                    "id": 127,
+                                    "ai": true,
+                                    "prompt": "What is the result of 'not None or True' in Python?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "True",
+                                        "False",
+                                        "None",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 128,
+                                    "ai": true,
+                                    "prompt": "In Python, what does the expression '[] and 100' return?",
+                                    "correctAnswer": "[]",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "[]",
+                                        "100",
+                                        "True",
+                                        "False"
+                                    ]
                                 }
                             ]
                         },
                         {
-                            "id": 8,
+                            "id": 4,
                             "name": "Error Messages",
                             "description": "Student can use error messages to identify errors in their code, as well as differentiate between run-time, syntax, and logical errors.",
                             "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about understanding different types of errors in Python, including run-time errors, syntax errors, and logical errors. Focus on how to identify these errors and their implications in programming.",
@@ -1725,6 +2024,123 @@
                                     "answers": [
                                         "syntax error",
                                         "run-time error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 72,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs if you try to access an index that is out of range in a list?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 73,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs if you forget to indent a line after a colon in Python?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 74,
+                                    "ai": true,
+                                    "prompt": "If a program sorts a list but the output is in the wrong order due to a wrong comparison, what type of error is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 75,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs if you call a function with the wrong number of arguments?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 76,
+                                    "ai": true,
+                                    "prompt": "What kind of error will Python produce if you write 'if x = 5:' instead of 'if x == 5:'?",
+                                    "correctAnswer": "syntax error",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 77,
+                                    "ai": true,
+                                    "prompt": "A program is supposed to calculate the sum of numbers but uses subtraction instead. What type of error is this?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 78,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs if you try to concatenate a string with an integer without converting the integer?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 79,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs when a variable is used before it has been assigned a value?",
+                                    "correctAnswer": "run-time error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
+                                        "logical error",
+                                        "type error"
+                                    ]
+                                },
+                                {
+                                    "id": 80,
+                                    "ai": true,
+                                    "prompt": "What type of error occurs if you accidentally use the wrong operator in a calculation, producing incorrect results?",
+                                    "correctAnswer": "logical error",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "run-time error",
+                                        "syntax error",
                                         "logical error",
                                         "type error"
                                     ]

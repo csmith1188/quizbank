@@ -1,0 +1,3210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<POOL>
+  <COURSEID value="IMPORT" />
+  <TITLE value="Variables and Data Types - Complete Unit Quiz" />
+  <DESCRIPTION>
+    <TEXT>Understanding how to use variables and different data types in Python. - All questions from all tasks in this unit.</TEXT>
+  </DESCRIPTION>
+  <DATES>
+    <CREATED value="2025-08-25 12:20:01.822Z" />
+    <UPDATED value="2025-08-25 12:20:01.822Z" />
+  </DATES>
+  <QUESTIONLIST>
+    <QUESTION id="task1_q1" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q2" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q3" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q4" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q5" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q6" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q7" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q8" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q9" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q10" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q11" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task1_q12" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q13" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q14" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q15" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q16" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q17" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q18" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q19" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q20" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q21" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q22" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q23" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q24" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q25" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q26" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q27" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q28" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q29" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q30" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q31" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task2_q32" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q33" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q34" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q35" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q36" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q37" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q38" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q39" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q40" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q41" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q42" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q43" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q44" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q45" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q46" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q47" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q48" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q49" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q50" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task3_q51" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q52" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q53" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q54" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q55" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q56" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q57" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q58" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q59" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q60" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q61" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q62" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q63" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q64" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q65" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q66" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q67" class="QUESTION_MULTIPLECHOICE" />
+    <QUESTION id="task4_q68" class="QUESTION_MULTIPLECHOICE" />
+  </QUESTIONLIST>
+  <QUESTION_MULTIPLECHOICE id="task1_q1">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Text in the program that is meant for programmers to read and ignored by the program itself.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q1_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>syntax</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q1_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>variable</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q1_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>comment</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q1_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>literal</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q1_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q2">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A way of writing identifiers without using spaces that is easily readable.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q2_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q2_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>camelCase</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q2_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q2_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q2_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q3">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A set of common rules that programmers share to help each other understand one another&apos;s code.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q3_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>convention</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q3_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>expression</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q3_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>assignment</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q3_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>keyword</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q3_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q4">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A way of naming objects in code that is easy for humans to read.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q4_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q4_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>comment</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q4_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>datatype</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q4_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>self-documenting</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q4_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q5">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Why might a programmer include a comment above a complex calculation in their code?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q5_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>To explain the purpose or logic of the calculation</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q5_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>To make the program run faster</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q5_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>To change the syntax of the code</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q5_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>To store values for later use</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q5_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q6">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.820Z" />
+      <UPDATED value="2025-08-25 12:20:01.820Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of these is an example of a self-documenting variable name?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q6_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>x1</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q6_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>a</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q6_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>totalScore</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q6_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>val</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q6_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q7">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If a variable is named &apos;temp&apos;, what is a better self-documenting alternative if it stores a user&apos;s age?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q7_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>t</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q7_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.820Z" />
+        <UPDATED value="2025-08-25 12:20:01.820Z" />
+      </DATES>
+      <TEXT>userAge</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q7_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>data</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q7_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>number</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q7_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q8">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the main benefit of using self-documenting names instead of comments for simple values?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q8_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It makes the program run faster</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q8_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It allows multiple programmers to edit at once</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q8_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It replaces all debugging tools</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q8_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It reduces the need for extra comments and makes code easier to read</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q8_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q9">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Where is the best place to put a comment explaining a function’s purpose?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q9_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Directly above the function definition</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q9_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Randomly in the middle of the code</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q9_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>After the closing brace of the function</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q9_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>In a separate text file</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q9_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q10">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which type of comment is most useful for reminding yourself or others of a TODO item in code?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q10_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>A multiline comment explaining every line</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q10_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Inline comment with a clear marker like TODO</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q10_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>No comment is needed for TODO items</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q10_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>A comment at the end of the program</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q10_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q11">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which symbol is used to create a single-line comment in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q11_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>#</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q11_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>//</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q11_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>/* */</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q11_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>--</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q11_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task1_q12">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>How can you create a multi-line comment in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task1_q12_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Use multiple # symbols on each line</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q12_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Use triple quotes (&apos;&apos;&apos; or &quot;&quot;&quot;) around the comment text</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q12_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Use /* and */ like in C</TEXT>
+    </ANSWER>
+    <ANSWER id="task1_q12_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Use // at the beginning and end of the block</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task1_q12_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q13">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A categorization of data that differentiates it from other data (numbers/letters/etc.).</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q13_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>expression</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q13_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>datatype</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q13_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q13_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>arithmetic operator</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q13_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q14">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is a basic data type, and not a complex object.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q14_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>primitive</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q14_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>assignment</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q14_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>camelCase</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q14_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>statement</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q14_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q15">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A data type with a whole number, positive or negative.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q15_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q15_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q15_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q15_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q15_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q16">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A data type with a decimal place, positive or negative.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q16_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q16_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>expression</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q16_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q16_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>character</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q16_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q17">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A data type with a &apos;True&apos; or &apos;False&apos; value.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q17_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q17_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>statement</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q17_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>referential</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q17_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q17_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q18">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A data type that is a single character, such as &apos;a&apos; or &apos;1&apos;.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q18_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>character</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q18_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q18_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q18_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q18_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q19">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A datatype that contains one or more human-readable characters, always encapsulated in quotation marks.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q19_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>assignment</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q19_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q19_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>camelCase</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q19_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q19_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q20">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is written directly in the code, such as a number or string.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q20_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>identifier</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q20_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>value</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q20_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q20_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>literal</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q20_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q21">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Changing a value of a certain data type to a different data type.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q21_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q21_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>conversion</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q21_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>nesting</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q21_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>datatype</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q21_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q22">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is a literal integer value in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q22_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&quot;42&quot;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q22_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>3.14</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q22_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>42</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q22_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>True</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q22_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q23">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is a boolean literal?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q23_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>0</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q23_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>False</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q23_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&quot;False&quot;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q23_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>3.0</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q23_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q24">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What data type would the value 3.0 belong to?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q24_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q24_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q24_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q24_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q24_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q25">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the type of the literal &apos;Hello, world!&apos;?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q25_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q25_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q25_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q25_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q25_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q26">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following values is a character literal in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q26_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;a&apos;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q26_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&quot;abc&quot;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q26_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>True</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q26_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>5</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q26_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q27">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If you perform conversion on the integer 5 to a string, what will the new value look like?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q27_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>5</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q27_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&quot;5&quot;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q27_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>5.0</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q27_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>True</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q27_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q28">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which literal would be stored in a variable declared as a float?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q28_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>42</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q28_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>True</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q28_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>3.14</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q28_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;a&apos;</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q28_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q29">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is NOT a primitive datatype in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q29_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>list</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q29_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q29_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q29_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q29_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q30">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>How does Python treat the literal &apos;0&apos; in quotation marks?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q30_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q30_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q30_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q30_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q30_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q31">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of these is a valid boolean expression in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q31_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&quot;True&quot;</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q31_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>0</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q31_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>3 &gt; 2</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q31_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;False&apos;</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q31_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task2_q32">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What will be the datatype of the result when you divide 5 by 2 in Python 3?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task2_q32_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q32_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q32_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task2_q32_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task2_q32_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q33">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is stored in memory and can be changed.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q33_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q33_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>primitive</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q33_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q33_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>variable</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q33_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q34">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is stored in memory and can be used in expressions.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q34_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>identifier</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q34_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q34_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>variable</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q34_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>primitive</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q34_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q35">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A piece of data that can be stored in a variable or used in an expression.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q35_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>identifier</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q35_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>value</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q35_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q35_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>variable</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q35_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q36">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Replacing an expression, object or variable name with the associated value.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q36_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>statement</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q36_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>substitution</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q36_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>syntax</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q36_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>keyword</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q36_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q37">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Associating a value with an identifier to create a variable or object.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q37_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>assignment</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q37_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>primitive</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q37_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q37_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>datatype</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q37_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q38">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A symbol in code used for assignment.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q38_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q38_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>float</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q38_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>assignment operator</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q38_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>camelCase</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q38_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q39">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is referring to a different value.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q39_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>comment</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q39_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>referential</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q39_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>assignment operator</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q39_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q39_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q40">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A value that is not changed after it is set.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q40_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>constant</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q40_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>variable</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q40_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>primitive</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q40_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>string</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q40_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q41">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which assignment operator will add 2 to the current value of y and store the result back in y?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q41_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>=</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q41_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>+=</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q41_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>-=</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q41_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>*=</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q41_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q42">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If you want to copy the value of variable a into variable b, which operator would you use?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q42_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>=</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q42_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>+=</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q42_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>==</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q42_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>*=</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q42_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q43">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What happens when you try to change a constant value in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q43_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It silently updates the value</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q43_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It converts the constant to a variable</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q43_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It will cause an error if reassignment is attempted</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q43_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>It doubles the value</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q43_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q44">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is an example of a referential assignment in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q44_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>b = a</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q44_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>b = 5</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q44_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>a += b</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q44_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>b == a</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q44_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q45">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What will be the value of x after this code? x = 10; x -= 4</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q45_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>10</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q45_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>6</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q45_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q45_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>14</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q45_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q46">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following is a valid use of the multiplication assignment operator in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q46_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>*x = 3</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q46_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x =* 3</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q46_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x *= 3</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q46_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x = 3*</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q46_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q47">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>Which of the following assignments will store a float value in variable x?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q47_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x = 3.14</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q47_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x = &apos;3.14&apos;</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q47_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x = True</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q47_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x = 3</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q47_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q48">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the difference between &apos;=&apos; and &apos;==&apos; in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q48_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;=&apos; assigns a value, &apos;==&apos; checks for equality</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q48_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>They are the same</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q48_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;=&apos; compares values, &apos;==&apos; assigns</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q48_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>&apos;=&apos; multiplies values, &apos;==&apos; divides</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q48_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q49">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If you write x = y = 10 in Python, what is happening?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q49_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>x is assigned y&apos;s old value</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q49_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>y is assigned x&apos;s old value</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q49_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Both x and y are assigned the value 10</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q49_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Only x is assigned 10</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q49_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q50">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If you assign the value of one variable to another, what happens when the first variable changes later?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q50_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>The second variable automatically updates to match</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q50_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>The second variable keeps its value unless explicitly reassigned</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q50_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Both variables are deleted</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q50_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>The program throws an error</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q50_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task3_q51">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What happens if you try to assign a value to a variable that hasn&apos;t been declared in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task3_q51_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Python automatically creates the variable and assigns the value</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q51_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>Python throws an error</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q51_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>The value is ignored</TEXT>
+    </ANSWER>
+    <ANSWER id="task3_q51_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>The program stops running</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task3_q51_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q52">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.821Z" />
+      <UPDATED value="2025-08-25 12:20:01.821Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A piece of code that completes a small task in the program.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q52_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>identifier</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q52_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>arithmetic operator</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q52_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>literal</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q52_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>statement</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q52_a4" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q53">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>An &apos;equation&apos; in code that must be resolved before continuing the program by using substitution, comparisons, and arithmetic.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q53_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>expression</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q53_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>value</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q53_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>boolean</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q53_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.821Z" />
+        <UPDATED value="2025-08-25 12:20:01.821Z" />
+      </DATES>
+      <TEXT>referential</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q53_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q54">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>A symbol in code used to perform math equations in an expression.</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q54_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>camelCase</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q54_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>integer</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q54_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>arithmetic operator</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q54_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>syntax</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q54_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q55">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the value of x after this code runs? x = 5; x = x + 3</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q55_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>8</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q55_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>5</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q55_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q55_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>x+3</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q55_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q56">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What will be the value of x after this code? x = 2; x = x ** 3</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q56_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>8</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q56_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>6</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q56_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>9</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q56_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>x**3</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q56_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q57">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What will be the value of x after this code runs? x = 7; x = x * 2</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q57_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>14</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q57_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>7</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q57_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>2</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q57_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>x*2</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q57_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q58">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If x = 4 and y = 2, what is the value of x // y in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q58_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>2.0</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q58_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q58_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>2</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q58_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>0</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q58_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q59">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the result of the expression 10 % 3 in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q59_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>1</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q59_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q59_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>0</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q59_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>10</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q59_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q60">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If a = 6 and b = 4, what is the value of a - b * 2?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q60_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q60_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>-2</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q60_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>2</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q60_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>8</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q60_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q61">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the result of the expression (5 + 3) * 2 in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q61_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>16</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q61_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>13</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q61_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>11</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q61_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>10</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q61_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q62">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>If x = 10 and y = 3, what is the value of x / y in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q62_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q62_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3.0</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q62_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3.333...</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q62_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3.33</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q62_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q63">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What will be the value of z after this code? z = 15; z = z // 4</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q63_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3.75</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q63_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>3</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q63_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q63_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>15</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q63_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q64">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the result of the expression 2 ** 4 + 1 in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q64_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>17</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q64_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>16</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q64_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>18</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q64_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>32</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q64_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q65">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the result of the expression 8 / 2 * 3 in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q65_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>4</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q65_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>12</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q65_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>8</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q65_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>6</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q65_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q66">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>What is the result of the expression 10 - 3 + 2 * 4 in Python?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q66_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>36</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q66_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>9</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q66_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>15</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q66_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>24</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q66_a3" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q67">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>In Python, which operator has the highest precedence: multiplication (*), addition (+), or parentheses ()?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q67_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>parentheses ()</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q67_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>multiplication (*)</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q67_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>addition (+)</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q67_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>They all have equal precedence</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q67_a1" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+  <QUESTION_MULTIPLECHOICE id="task4_q68">
+    <DATES>
+      <CREATED value="2025-08-25 12:20:01.822Z" />
+      <UPDATED value="2025-08-25 12:20:01.822Z" />
+    </DATES>
+    <BODY>
+      <TEXT>When Python evaluates an expression with multiple operators of equal precedence, what rule does it follow?</TEXT>
+      <FLAGS value="true">
+        <ISHTML value="true" />
+        <ISNEWLINELITERAL />
+      </FLAGS>
+    </BODY>
+    <ANSWER id="task4_q68_a1" position="1">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>Right to left evaluation</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q68_a2" position="2">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>Left to right evaluation</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q68_a3" position="3">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>Random evaluation</TEXT>
+    </ANSWER>
+    <ANSWER id="task4_q68_a4" position="4">
+      <DATES>
+        <CREATED value="2025-08-25 12:20:01.822Z" />
+        <UPDATED value="2025-08-25 12:20:01.822Z" />
+      </DATES>
+      <TEXT>Parentheses first, then random</TEXT>
+    </ANSWER>
+    <GRADABLE>
+      <FEEDBACK_WHEN_CORRECT>Correct! Well done.</FEEDBACK_WHEN_CORRECT>
+      <FEEDBACK_WHEN_INCORRECT>That's not correct. Please review the material and try again.</FEEDBACK_WHEN_INCORRECT>
+      <CORRECTANSWER answer_id="task4_q68_a2" />
+    </GRADABLE>
+  </QUESTION_MULTIPLECHOICE>
+</POOL>
