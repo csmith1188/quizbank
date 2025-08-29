@@ -1351,19 +1351,6 @@
                                     ]
                                 },
                                 {
-                                    "id": 103,
-                                    "ai": false,
-                                    "prompt": "A loop that executes its code block at least once before checking the condition.",
-                                    "correctAnswer": "do-while loop",
-                                    "correctIndex": 3,
-                                    "answers": [
-                                        "for loop",
-                                        "while loop",
-                                        "nested loop",
-                                        "do-while loop"
-                                    ]
-                                },
-                                {
                                     "id": 104,
                                     "ai": true,
                                     "prompt": "In Python, which loop is generally used when the number of iterations is known ahead of time?",
@@ -1413,19 +1400,6 @@
                                         "Terminate the loop completely",
                                         "Pause the program",
                                         "Restart the loop from the first iteration"
-                                    ]
-                                },
-                                {
-                                    "id": 109,
-                                    "ai": true,
-                                    "prompt": "What is the difference between a 'while' loop and a 'do-while' loop in terms of execution?",
-                                    "correctAnswer": "A do-while loop executes at least once before checking the condition",
-                                    "correctIndex": 0,
-                                    "answers": [
-                                        "A do-while loop executes at least once before checking the condition",
-                                        "A while loop executes at least once before checking the condition",
-                                        "Both execute the same way",
-                                        "Only for loops can check conditions first"
                                     ]
                                 },
                                 {
@@ -2024,19 +1998,6 @@
                                     "answers": [
                                         "syntax error",
                                         "run-time error",
-                                        "logical error",
-                                        "type error"
-                                    ]
-                                },
-                                {
-                                    "id": 72,
-                                    "ai": true,
-                                    "prompt": "What type of error occurs if you try to access an index that is out of range in a list?",
-                                    "correctAnswer": "run-time error",
-                                    "correctIndex": 0,
-                                    "answers": [
-                                        "run-time error",
-                                        "syntax error",
                                         "logical error",
                                         "type error"
                                     ]
