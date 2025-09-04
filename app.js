@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 
+const {readDirPaths} = require('./util/file-helpers');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -23,7 +25,22 @@ app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
+const prefixes = new Set();
+const controllers = readDirPaths('./controllers');
 
+controllers.forEach(controllerPath => {
+    const pathPieces = controllerPath.split('/');
+    const prefix = '/' + pathPieces.slice(0, -1).join('/');
+    const router = express.Router();
+    const register = require('./controllers/' + controllerPath);
+
+    console.log(register);
+
+    //register(router);
+
+    console.log(router);
+    
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
