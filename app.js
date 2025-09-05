@@ -28,17 +28,19 @@ app.use(express.json());
 const prefixes = new Set();
 const controllers = readDirPaths('./controllers');
 
+// register controllers dynamically
+// folder structure defines the route prefix
 controllers.forEach(controllerPath => {
     const pathPieces = controllerPath.split('/');
     const prefix = '/' + pathPieces.slice(0, -1).join('/');
+    const filename = pathPieces[pathPieces.length - 1];
     const router = express.Router();
     const register = require('./controllers/' + controllerPath);
 
-    console.log(register);
-
-    //register(router);
-
-    console.log(router);
+    if (typeof register === 'function') {
+        register(router);
+        app.use(prefix, router);
+    }
     
 })
 
