@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
+const resourceResolver = require('./middleware/resourceResolver');
 
 const {readDirPaths} = require('./util/file-helpers');
 
@@ -41,7 +42,9 @@ controllers.forEach(controllerPath => {
         app.use(prefix, router);
     }
     
-})
+});
+
+app.use('/api', resourceResolver);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
