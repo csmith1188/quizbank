@@ -25,7 +25,6 @@ app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
-const prefixes = new Set();
 const controllers = readDirPaths('./controllers');
 
 // register controllers dynamically
