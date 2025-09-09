@@ -1,10 +1,8 @@
 // limit all the requested JSON data to be only the shallow children of the parent data and not the deep children
-
 const fs = require("fs");
 const data = JSON.parse(fs.readFileSync("./quizsources/10th.json", "utf-8"));
 
 function getEntity(path) {
-    // JSON data
     let JSONdata = data;
 
     // For each part of the path, go through the JSON data

@@ -1,19 +1,16 @@
-const { getEntity, shallow } = require("../../util/scope-limit");
+const { shallow } = require("../../util/scope-limit");
+const data = require("../../quizsources/10th.json");
 
 module.exports = (router) => {
     router.get('/course/:courseId', (req, res) => {
         const courseId = Number(req.params.courseId);
 
-        // Top-level course object
-        const course = getEntity(["id", courseId]);
-
-        if (!course) {
+        // If the root object matches the courseId, return it
+        if (data.id !== courseId) {
             return res.status(404).json({ error: "Course not found" });
         }
 
-        // Limit to shallow children (only id + name)
-        const limitedCourse = shallow(course);
-
+        const limitedCourse = shallow(data);
         res.json(limitedCourse);
     });
 };
