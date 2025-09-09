@@ -1,5 +1,12 @@
 const testData = require("./quizsources/10th.json");
+const depthMap = new Map([
+    ["course", 0],
+    ["section", 1],
+    ["unit", 2],
+    ["task", 3],
+    ["question", 4]
+]);
 
-odule.exports = (req, res, next) => {
-    res.send("six seven");
+module.exports = (req, res, next) => {
+    let pieces = req.path.split('/').filter(p => p);
 }
