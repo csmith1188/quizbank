@@ -3,7 +3,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
-const resourceResolver = require('./middleware/resourceResolver');
+const resourceResolver = require('./middleware/resource-resolver');
+const errorHandler = require('./middleware/error-handler');
 
 const {readDirPaths} = require('./util/file-helpers');
 
@@ -44,7 +45,10 @@ controllers.forEach(controllerPath => {
     
 });
 
-app.use('/api', resourceResolver);
+app.use('/api/resource', resourceResolver);
+
+// must be last middleware
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
