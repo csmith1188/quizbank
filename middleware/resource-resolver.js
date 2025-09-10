@@ -14,10 +14,6 @@ module.exports = (req, res, next) => {
 
         let pieces = req.path.split('/').filter(p => p);
 
-        if (pieces.length % 2 !== 0) {
-            throw new Error('Invalid path structure');
-        }
-
         let data = testData;
         let currentDepth = -1;
 
@@ -32,8 +28,14 @@ module.exports = (req, res, next) => {
                 throw new Error(`Invalid resource type: ${resourceType} at depth ${currentDepth}`);
             }
 
-            data = data[resourceType + 's'];
+            data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
+
+            // if no id is supplied, list all in the collection
+            if (!resourceId) {
+                break;
+            }
             
+            // find the entity with the given id
             let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
 
             if (entityIndex === -1) {
