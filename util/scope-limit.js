@@ -50,6 +50,13 @@ function shallow(JSONdata, depth = 2) {
 
         // Only include answers if they exist
         if (JSONdata?.answers) {
+            let parseAnswers = false;
+            if (Array.isArray(JSONdata.answers)) {
+                // Check if answers are objects or strings
+                parseAnswers = typeof JSONdata.answers[0] === 'object';
+            } else if (typeof JSONdata.answers === 'object') {
+                parseAnswers = true;
+            }
             copy.answers = JSONdata.answers.map(v => shallow(v, depth - 1));
         }
 
