@@ -1,7 +1,7 @@
 module.exports = (router) => {
 
     router.get('/', (req, res) => {
-        res.send(`Quizbank`);
+        res.render('pages/index', { title: 'Home' });
     });
 
 };

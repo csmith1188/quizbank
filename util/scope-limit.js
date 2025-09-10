@@ -45,7 +45,7 @@ function shallow(JSONdata, depth = 2) {
             ai: JSONdata?.ai, 
             prompt: JSONdata?.prompt,
             correctAnswer: JSONdata?.correctAnswer, 
-            correctIndex: JSONdata?.correctIndex 
+            correctIndex: JSONdata?.correctIndex
         };
 
         // Only include answers if they exist and convert them to strings
