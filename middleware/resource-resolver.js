@@ -14,10 +14,6 @@ module.exports = (req, res, next) => {
 
         let pieces = req.path.split('/').filter(p => p);
 
-        if (pieces.length % 2 !== 0) {
-            throw new Error('Invalid path structure');
-        }
-
         let data = testData;
         let currentDepth = -1;
 
@@ -33,6 +29,11 @@ module.exports = (req, res, next) => {
             }
 
             data = data[resourceType + 's'];
+
+            // if no id is supplied, list all
+            if (!resourceId) {
+                return res.send(data);
+            }
             
             let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
 
