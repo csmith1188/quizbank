@@ -1,4 +1,4 @@
-const testData = require("../quizsources/10th.json");
+const testData = require("../quizsources/courses.json");
 const {shallow} = require("../util/scope-limit");
 
 const resourceDepthMap = new Map([

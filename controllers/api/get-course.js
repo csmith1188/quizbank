@@ -1,5 +1,5 @@
 const { shallow } = require("../../util/scope-limit");
-const data = require("../../quizsources/10th.json");
+const data = require("../../quizsources/courses.json");
 
 module.exports = (router) => {
     router.get('/course/:courseId', (req, res) => {

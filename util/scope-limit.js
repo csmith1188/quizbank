@@ -1,6 +1,6 @@
 // limit all the requested JSON data to be only the shallow children of the parent data and not the deep children
 const fs = require("fs");
-const data = JSON.parse(fs.readFileSync("./quizsources/10th.json", "utf-8"));
+const data = JSON.parse(fs.readFileSync("./quizsources/courses.json", "utf-8"));
 
 function getEntity(path) {
     let JSONdata = data;
@@ -29,26 +29,28 @@ function getEntity(path) {
 }
 
 // Give a shallow copy of the data that only including id and name of children nothing deeper
-function shallow(JSONdata) {
+function shallow(JSONdata, depth = 2) {
+    if (depth < 1 || !JSONdata) return null;
 
-    // If it's an array return array of shallow copies
+    // If it's an array, return array of shallow copies
     if (Array.isArray(JSONdata)) {
-        return JSONdata.map(n => ({ id: n.id, name: n.name }));
+        return JSONdata.map(n => shallow(n, depth - 1));
     }
 
-    // If it's an object return shallow copy of it
-    if (JSONdata && typeof JSONdata === "object") {
-        // Make a copy with only id and name
+    // If it's an object, return shallow copy of it
+    if (typeof JSONdata === "object") {
         const copy = { id: JSONdata.id, name: JSONdata.name };
 
-        // For each key in the object then if it's an array, make a shallow copy of it
-        for (const [key, value] of Object.entries(JSONdata)) {
-            if (Array.isArray(value)) {
-                copy[key] = value.map(v => ({ id: v.id, name: v.name }));
+        if (depth > 1) {
+            for (const [key, value] of Object.entries(JSONdata)) {
+                if (Array.isArray(value)) {
+                    copy[key] = value.map(v => shallow(v, depth - 1));
+                }
             }
         }
         return copy;
     }
+
     return JSONdata;
 }
 
