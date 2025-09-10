@@ -28,13 +28,14 @@ module.exports = (req, res, next) => {
                 throw new Error(`Invalid resource type: ${resourceType} at depth ${currentDepth}`);
             }
 
-            data = data[resourceType + 's'];
+            data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
 
-            // if no id is supplied, list all
+            // if no id is supplied, list all in the collection
             if (!resourceId) {
-                return res.send(data);
+                break;
             }
             
+            // find the entity with the given id
             let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
 
             if (entityIndex === -1) {
