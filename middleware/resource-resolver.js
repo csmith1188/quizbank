@@ -1,6 +1,6 @@
 const testData = require("../quizsources/hierarchy.json");
-const {shallow} = require("../util/scope-limit");
-const {getRandomItems} = require('../util/misc');
+const { shallow } = require("../util/scope-limit");
+const { getRandomItems } = require('../util/misc');
 
 const resourceDepthMap = new Map([
     ["course", 0],
@@ -35,7 +35,7 @@ module.exports = (req, res, next) => {
         let pickAmount = null;
 
         // handle picking random questions
-        if (lastResourceType === 'pick'){
+        if (lastResourceType === 'pick') {
 
             if (pieces.length < 3) {
                 throw new Error(`Invalid pick request: ${req.path}`);
@@ -68,25 +68,24 @@ module.exports = (req, res, next) => {
 
             data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
 
-            // find the entity with the given id
-            let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
-
-            if (entityIndex === -1) {
-                throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
-            }
-
             // if picking questions AND we are at the last resource type, pick random questions from here and break
-            if (pickAmount && i+2 >= pieces.length) {
+            if (pickAmount && i + 2 >= pieces.length) {
                 // collect all questions under the current data
-                console.log(data);
                 let allQuestions = collectQuestions(data);
                 data = getRandomItems(allQuestions, pickAmount);
                 break;
             }
 
             // if no id is supplied, list all in the collection. Breaking prevents further traversal.
-            if (!resourceId) {
+            if (!resourceId && !pickAmount) {
                 break;
+            }
+
+            // find the entity with the given id
+            let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
+
+            if (entityIndex === -1) {
+                throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
             }
 
             // next layer
