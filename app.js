@@ -45,6 +45,7 @@ controllers.forEach(controllerPath => {
     
 });
 
+// Resource resolver middleware
 app.use('/api/resource', resourceResolver);
 
 // must be last middleware

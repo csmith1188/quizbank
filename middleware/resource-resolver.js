@@ -1,4 +1,4 @@
-const testData = require("../quizsources/courses.json");
+const testData = require("../quizsources/hierarchy.json");
 const {shallow} = require("../util/scope-limit");
 const {getRandomItems} = require('../util/misc');
 
@@ -68,11 +68,17 @@ module.exports = (req, res, next) => {
 
             data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
 
+            // find the entity with the given id
+            let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
+
+            if (entityIndex === -1) {
+                throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
+            }
 
             // if picking questions AND we are at the last resource type, pick random questions from here and break
             if (pickAmount && i+2 >= pieces.length) {
-                console.log(`Picking ${pickAmount} questions from ${resourceType} ID ${resourceId}`);
                 // collect all questions under the current data
+                console.log(data);
                 let allQuestions = collectQuestions(data);
                 data = getRandomItems(allQuestions, pickAmount);
                 break;
@@ -81,13 +87,6 @@ module.exports = (req, res, next) => {
             // if no id is supplied, list all in the collection. Breaking prevents further traversal.
             if (!resourceId) {
                 break;
-            }
-            
-            // find the entity with the given id
-            let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
-
-            if (entityIndex === -1) {
-                throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
             }
 
             // next layer
