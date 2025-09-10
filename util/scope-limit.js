@@ -39,12 +39,24 @@ function shallow(JSONdata, depth = 2) {
 
     // If it's an object return shallow copy of it
     if (typeof JSONdata === "object") {
-        const copy = { id: JSONdata.id, name: JSONdata.name };
+        const copy = { 
+            id: JSONdata?.id, 
+            name: JSONdata?.name, 
+            ai: JSONdata?.ai, 
+            prompt: JSONdata?.prompt,
+            correctAnswer: JSONdata?.correctAnswer, 
+            correctIndex: JSONdata?.correctIndex 
+        };
+
+        // Only include answers if they exist
+        if (JSONdata?.answers) {
+            copy.answers = JSONdata.answers.map(v => shallow(v, depth - 1));
+        }
 
         if (depth > 1) {
             // For every key inside the object and if its an array shallow copy them
             for (const [key, value] of Object.entries(JSONdata)) {
-                if (Array.isArray(value)) {
+                if (Array.isArray(value) && key !== 'answers') {
                     copy[key] = value.map(v => shallow(v, depth - 1));
                 }
             }
