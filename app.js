@@ -11,6 +11,9 @@ const {readDirPaths} = require('./util/file-helpers');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // Rate limiter configuration
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 15 minutes
