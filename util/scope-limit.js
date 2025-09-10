@@ -32,16 +32,17 @@ function getEntity(path) {
 function shallow(JSONdata, depth = 2) {
     if (depth < 1 || !JSONdata) return null;
 
-    // If it's an array, return array of shallow copies
+    // If it's an array return array of shallow copies
     if (Array.isArray(JSONdata)) {
         return JSONdata.map(n => shallow(n, depth - 1));
     }
 
-    // If it's an object, return shallow copy of it
+    // If it's an object return shallow copy of it
     if (typeof JSONdata === "object") {
         const copy = { id: JSONdata.id, name: JSONdata.name };
 
         if (depth > 1) {
+            // For every key inside the object and if its an array shallow copy them
             for (const [key, value] of Object.entries(JSONdata)) {
                 if (Array.isArray(value)) {
                     copy[key] = value.map(v => shallow(v, depth - 1));
