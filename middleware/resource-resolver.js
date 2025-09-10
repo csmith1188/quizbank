@@ -78,7 +78,7 @@ module.exports = (req, res, next) => {
                 break;
             }
 
-            // if no id is supplied, list all in the collection
+            // if no id is supplied, list all in the collection. Breaking prevents further traversal.
             if (!resourceId) {
                 break;
             }
@@ -90,6 +90,7 @@ module.exports = (req, res, next) => {
                 throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
             }
 
+            // next layer
             data = data[entityIndex];
 
         }
