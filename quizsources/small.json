@@ -1,0 +1,32 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "Course 1",
+            "sections": [
+                {
+                    "id": 1,
+                    "name": "Section 1",
+                    "units": [
+                        {
+                            "id": 1,
+                            "name": "Unit 1",
+                            "tasks": [
+                                {
+                                    "id": 1,
+                                    "name": "Task 1",
+                                    "questions": [
+                                        {
+                                            "id": 1
+                                            
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-const testData = require("../quizsources/hierarchy.json");
+const testData = require("../quizsources/courses.json");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
@@ -51,6 +51,7 @@ module.exports = (req, res, next) => {
 
         }
 
+        console.log(`we are picking ${pickAmount} questions`);
 
         let data = testData;
         let currentDepth = -1;
@@ -59,6 +60,9 @@ module.exports = (req, res, next) => {
 
             const resourceType = pieces[i];
             const resourceId = pieces[i + 1];
+            
+            let pickingSoon = Boolean(pickAmount);
+            let pickingNow = (i + 2 >= pieces.length) && pickAmount;
 
             currentDepth++;
 
@@ -67,29 +71,33 @@ module.exports = (req, res, next) => {
             }
 
             data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
+            console.log(`next layer: ${resourceType}s`);
 
-            // if picking questions AND we are at the last resource type, pick random questions from here and break
-            if (pickAmount && i + 2 >= pieces.length) {
+            // if no id is supplied, list all in the collection. Breaking prevents further traversal.
+            if (!resourceId && !pickingSoon) {
+                break;
+            }
+
+            // if picking questions AND we are at the last resource type in the path, pick random questions from here and break
+            if (pickingNow) {
+                console.log('picking now');
+                console.log(data);
                 // collect all questions under the current data
                 let allQuestions = collectQuestions(data);
                 data = getRandomItems(allQuestions, pickAmount);
                 break;
             }
 
-            // if no id is supplied, list all in the collection. Breaking prevents further traversal.
-            if (!resourceId && !pickAmount) {
-                break;
-            }
-
             // find the entity with the given id
             let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
 
-            if (entityIndex === -1) {
+            if (entityIndex !== -1) {
+                // next layer
+                data = data[entityIndex];
+                console.log(`found data with id: ${resourceId}, next layer`);
+            } else {
                 throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
             }
-
-            // next layer
-            data = data[entityIndex];
 
         }
 
