@@ -2334,6 +2334,253 @@
                                         "else",
                                         "camelCase"
                                     ]
+                                },
+                                {
+                                    "id": 135,
+                                    "ai": true,
+                                    "prompt": "A function that does not include a return statement will return what by default in Python?",
+                                    "correctAnswer": "None",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "0",
+                                        "False",
+                                        "None",
+                                        "Error"
+                                    ]
+                                },
+                                {
+                                    "id": 136,
+                                    "ai": true,
+                                    "prompt": "What is it called when you provide actual values to a function's parameters?",
+                                    "correctAnswer": "passing arguments",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "defining parameters",
+                                        "returning values",
+                                        "variable assignment",
+                                        "passing arguments"
+                                    ]
+                                },
+                                {
+                                    "id": 137,
+                                    "ai": true,
+                                    "prompt": "What keyword is used in Python to define a new function?",
+                                    "correctAnswer": "def",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "def",
+                                        "function",
+                                        "define",
+                                        "proc"
+                                    ]
+                                },
+                                {
+                                    "id": 138,
+                                    "ai": true,
+                                    "prompt": "Which of these is an advantage of using functions in a program?",
+                                    "correctAnswer": "Code reuse",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "More errors",
+                                        "Code reuse",
+                                        "Slower execution",
+                                        "Larger memory use"
+                                    ]
+                                },
+                                {
+                                    "id": 139,
+                                    "ai": true,
+                                    "prompt": "What is the name given to a variable defined inside a function, only accessible in that function?",
+                                    "correctAnswer": "local variable",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "local variable",
+                                        "global variable",
+                                        "constant",
+                                        "argument"
+                                    ]
+                                },
+                                {
+                                    "id": 140,
+                                    "ai": true,
+                                    "prompt": "What is the name given to a variable defined outside of any function, accessible throughout the program?",
+                                    "correctAnswer": "global variable",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "local variable",
+                                        "global variable",
+                                        "constant",
+                                        "parameter"
+                                    ]
+                                },
+                                {
+                                    "id": 141,
+                                    "ai": true,
+                                    "prompt": "Which of the following best describes a return value?",
+                                    "correctAnswer": "The output of a function call",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "The input to a function",
+                                        "The code inside a function",
+                                        "The output of a function call",
+                                        "The name of a function"
+                                    ]
+                                },
+                                {
+                                    "id": 142,
+                                    "ai": true,
+                                    "prompt": "What happens if a function has multiple return statements?",
+                                    "correctAnswer": "The first return reached will end the function",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "The first return reached will end the function",
+                                        "All return statements are executed",
+                                        "The last return always overrides the others",
+                                        "It causes an error"
+                                    ]
+                                },
+                                {
+                                    "id": 143,
+                                    "ai": true,
+                                    "prompt": "What is the term for providing a default value to a parameter in a function definition?",
+                                    "correctAnswer": "default parameter",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "return value",
+                                        "default parameter",
+                                        "local variable",
+                                        "optional scope"
+                                    ]
+                                },
+                                {
+                                    "id": 144,
+                                    "ai": true,
+                                    "prompt": "Which of these is a correct way to call a function named 'greet' with one argument 'Alice'?",
+                                    "correctAnswer": "greet('Alice')",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "greet = 'Alice'",
+                                        "greet{'Alice'}",
+                                        "greet['Alice']",
+                                        "greet('Alice')"
+                                    ]
+                                },
+                                {
+                                    "id": 136,
+                                    "ai": true,
+                                    "prompt": "What happens if a function does not have a return statement in Python?",
+                                    "correctAnswer": "It returns None",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "It causes an error",
+                                        "It returns None",
+                                        "It returns 0",
+                                        "It repeats the function"
+                                    ]
+                                },
+                                {
+                                    "id": 137,
+                                    "ai": true,
+                                    "prompt": "What is the term for giving a parameter a value inside the function call?",
+                                    "correctAnswer": "passing an argument",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "declaring a variable",
+                                        "returning a value",
+                                        "passing an argument",
+                                        "defining a scope"
+                                    ]
+                                },
+                                {
+                                    "id": 138,
+                                    "ai": true,
+                                    "prompt": "What is the purpose of using functions in programming?",
+                                    "correctAnswer": "To organize code into reusable blocks",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "To make code run faster",
+                                        "To increase memory usage",
+                                        "To create global variables",
+                                        "To organize code into reusable blocks"
+                                    ]
+                                },
+                                {
+                                    "id": 139,
+                                    "ai": true,
+                                    "prompt": "What allows you to reuse code by calling the same block multiple times with different arguments?",
+                                    "correctAnswer": "functions",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "functions",
+                                        "variables",
+                                        "loops",
+                                        "constants"
+                                    ]
+                                },
+                                {
+                                    "id": 140,
+                                    "ai": true,
+                                    "prompt": "What type of parameter has a predefined value if no argument is passed?",
+                                    "correctAnswer": "default parameter",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "scope parameter",
+                                        "default parameter",
+                                        "return parameter",
+                                        "local parameter"
+                                    ]
+                                },
+                                {
+                                    "id": 141,
+                                    "ai": true,
+                                    "prompt": "What is it called when a function calls itself?",
+                                    "correctAnswer": "recursion",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "looping",
+                                        "iteration",
+                                        "recursion",
+                                        "nesting"
+                                    ]
+                                },
+                                {
+                                    "id": 142,
+                                    "ai": true,
+                                    "prompt": "Variables declared inside a function are known as:",
+                                    "correctAnswer": "local variables",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "local variables",
+                                        "global variables",
+                                        "constants",
+                                        "parameters"
+                                    ]
+                                },
+                                {
+                                    "id": 143,
+                                    "ai": true,
+                                    "prompt": "What kind of variable can be accessed both inside and outside of functions if declared properly?",
+                                    "correctAnswer": "global variable",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "local variable",
+                                        "global variable",
+                                        "parameter",
+                                        "return value"
+                                    ]
+                                },
+                                {
+                                    "id": 144,
+                                    "ai": true,
+                                    "prompt": "What happens when a return statement is executed in a function?",
+                                    "correctAnswer": "The function stops and gives back a value",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "The function repeats",
+                                        "The function pauses",
+                                        "The function stops and gives back a value",
+                                        "The function deletes its parameters"
+                                    ]
                                 }
                             ]
                         }
