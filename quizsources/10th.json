@@ -2581,6 +2581,32 @@
                                         "The function stops and gives back a value",
                                         "The function deletes its parameters"
                                     ]
+                                },
+                                {
+                                    "id": 144,
+                                    "ai": true,
+                                    "prompt": "How do you return multiple values in a return statement?",
+                                    "correctAnswer": "By separating them with commas",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "By separating them with commas",
+                                        "By using global variables",
+                                        "By printing the values",
+                                        "By using separate return statements"
+                                    ]
+                                },
+                                {
+                                    "id": 145,
+                                    "ai": true,
+                                    "prompt": "Which term refers to the value that a function gives back when it finishes executing?",
+                                    "correctAnswer": "return value",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "return value",
+                                        "parameter",
+                                        "argument",
+                                        "scope"
+                                    ]
                                 }
                             ]
                         }
