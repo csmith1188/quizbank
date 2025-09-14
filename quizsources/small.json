@@ -1,32 +1,209 @@
 {
     "courses": [
-        {
+      {
+        "id": 1,
+        "name": "Course 1",
+        "sections": [
+          {
             "id": 1,
-            "name": "Course 1",
-            "sections": [
-                {
+            "name": "Section 1",
+            "units": [
+              {
+                "id": 1,
+                "name": "Unit 1",
+                "tasks": [
+                  {
                     "id": 1,
-                    "name": "Section 1",
-                    "units": [
-                        {
-                            "id": 1,
-                            "name": "Unit 1",
-                            "tasks": [
-                                {
-                                    "id": 1,
-                                    "name": "Task 1",
-                                    "questions": [
-                                        {
-                                            "id": 1
-                                            
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
+                    "name": "Task 1",
+                    "questions": [
+                      {
+                        "id": 1,
+                        "ai": false,
+                        "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 1?",
+                        "correctAnswer": "Yes",
+                        "correctIndex": 0,
+                        "answers": ["Yes", "No", "Maybe so"]
+                      },
+                      {
+                        "id": 2,
+                        "ai": false,
+                        "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 2?",
+                        "correctAnswer": "Yes",
+                        "correctIndex": 0,
+                        "answers": ["Yes", "No", "Maybe so"]
+                      },
+                      {
+                        "id": 3,
+                        "ai": false,
+                        "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 3?",
+                        "correctAnswer": "Yes",
+                        "correctIndex": 0,
+                        "answers": ["Yes", "No", "Maybe so"]
+                      }
                     ]
-                }
+                  },
+                  {
+                    "id": 2,
+                    "name": "Task 2",
+                    "questions": [
+                      {
+                        "id": 4,
+                        "ai": false,
+                        "prompt": "[Course 1 > Section 1 > Unit 1 > Task 2] What is 2 + 2?",
+                        "correctAnswer": "4",
+                        "correctIndex": 1,
+                        "answers": ["3", "4", "5"]
+                      },
+                      {
+                        "id": 5,
+                        "ai": true,
+                        "prompt": "[Course 1 > Section 1 > Unit 1 > Task 2] Explain why the sky is blue.",
+                        "correctAnswer": "Due to Rayleigh scattering.",
+                        "correctIndex": 0,
+                        "answers": [
+                          "Because of Rayleigh scattering",
+                          "Because the ocean reflects the sky",
+                          "Because space is blue"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
-        }
+          },
+          {
+            "id": 2,
+            "name": "Section 2",
+            "units": [
+              {
+                "id": 2,
+                "name": "Unit 2",
+                "tasks": [
+                  {
+                    "id": 3,
+                    "name": "Task 1",
+                    "questions": [
+                      {
+                        "id": 6,
+                        "ai": false,
+                        "prompt": "[Course 1 > Section 2 > Unit 2 > Task 1] What is the capital of France?",
+                        "correctAnswer": "Paris",
+                        "correctIndex": 0,
+                        "answers": ["Paris", "London", "Rome"]
+                      },
+                      {
+                        "id": 7,
+                        "ai": true,
+                        "prompt": "[Course 1 > Section 2 > Unit 2 > Task 1] Summarize the causes of World War I.",
+                        "correctAnswer": "Nationalism, militarism, alliances, and the assassination of Archduke Franz Ferdinand.",
+                        "correctIndex": 0,
+                        "answers": [
+                          "Nationalism, militarism, alliances, and assassination",
+                          "Economic depression and industrialization",
+                          "Colonial competition in Africa"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Course 2",
+        "sections": [
+          {
+            "id": 3,
+            "name": "Section A",
+            "units": [
+              {
+                "id": 3,
+                "name": "Unit A1",
+                "tasks": [
+                  {
+                    "id": 4,
+                    "name": "Task 1",
+                    "questions": [
+                      {
+                        "id": 8,
+                        "ai": false,
+                        "prompt": "[Course 2 > Section A > Unit A1 > Task 1] Which planet is known as the Red Planet?",
+                        "correctAnswer": "Mars",
+                        "correctIndex": 1,
+                        "answers": ["Earth", "Mars", "Venus"]
+                      },
+                      {
+                        "id": 9,
+                        "ai": false,
+                        "prompt": "[Course 2 > Section A > Unit A1 > Task 1] What is H2O commonly known as?",
+                        "correctAnswer": "Water",
+                        "correctIndex": 0,
+                        "answers": ["Water", "Oxygen", "Hydrogen"]
+                      }
+                    ]
+                  },
+                  {
+                    "id": 5,
+                    "name": "Task 2",
+                    "questions": [
+                      {
+                        "id": 10,
+                        "ai": true,
+                        "prompt": "[Course 2 > Section A > Unit A1 > Task 2] Write a short poem about the ocean.",
+                        "correctAnswer": "Varies",
+                        "correctIndex": 0,
+                        "answers": [
+                          "The ocean is vast and blue",
+                          "The ocean is made of sand",
+                          "The ocean is filled with fire"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "name": "Section B",
+            "units": [
+              {
+                "id": 4,
+                "name": "Unit B1",
+                "tasks": [
+                  {
+                    "id": 6,
+                    "name": "Task 1",
+                    "questions": [
+                      {
+                        "id": 11,
+                        "ai": false,
+                        "prompt": "[Course 2 > Section B > Unit B1 > Task 1] What is the largest mammal?",
+                        "correctAnswer": "Blue whale",
+                        "correctIndex": 2,
+                        "answers": ["Elephant", "Giraffe", "Blue whale"]
+                      },
+                      {
+                        "id": 12,
+                        "ai": false,
+                        "prompt": "[Course 2 > Section B > Unit B1 > Task 1] Which gas do humans need to breathe?",
+                        "correctAnswer": "Oxygen",
+                        "correctIndex": 1,
+                        "answers": ["Carbon Dioxide", "Oxygen", "Nitrogen"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ]
-}
+  }
+  

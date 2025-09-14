@@ -1,4 +1,4 @@
-const testData = require("../quizsources/courses.json");
+const testData = require("../quizsources/small.json");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
@@ -51,8 +51,6 @@ module.exports = (req, res, next) => {
 
         }
 
-        console.log(`we are picking ${pickAmount} questions`);
-
         let data = testData;
         let currentDepth = -1;
 
@@ -60,9 +58,9 @@ module.exports = (req, res, next) => {
 
             const resourceType = pieces[i];
             const resourceId = pieces[i + 1];
-            
+
             let pickingSoon = Boolean(pickAmount);
-            let pickingNow = (i + 2 >= pieces.length) && pickAmount;
+            let pickingNow = pickingSoon && (i + 2 >= pieces.length);
 
             currentDepth++;
 
@@ -71,20 +69,9 @@ module.exports = (req, res, next) => {
             }
 
             data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
-            console.log(`next layer: ${resourceType}s`);
 
             // if no id is supplied, list all in the collection. Breaking prevents further traversal.
             if (!resourceId && !pickingSoon) {
-                break;
-            }
-
-            // if picking questions AND we are at the last resource type in the path, pick random questions from here and break
-            if (pickingNow) {
-                console.log('picking now');
-                console.log(data);
-                // collect all questions under the current data
-                let allQuestions = collectQuestions(data);
-                data = getRandomItems(allQuestions, pickAmount);
                 break;
             }
 
@@ -92,11 +79,20 @@ module.exports = (req, res, next) => {
             let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
 
             if (entityIndex !== -1) {
+
                 // next layer
                 data = data[entityIndex];
-                console.log(`found data with id: ${resourceId}, next layer`);
-            } else {
+
+            } else if (!pickingSoon) { // Just disable the error. Problem solved. I go sleep now. Good night.
                 throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
+            }
+
+            // if picking questions AND we are at the last resource type in the path, pick random questions from here and break
+            if (pickingNow) {
+                // collect all questions under the current data
+                let allQuestions = collectQuestions(data);
+                data = getRandomItems(allQuestions, pickAmount);
+                break;
             }
 
         }
