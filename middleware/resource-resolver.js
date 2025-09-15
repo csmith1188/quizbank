@@ -83,7 +83,7 @@ module.exports = (req, res, next) => {
                 // next layer
                 data = data[entityIndex];
 
-            } else if (!pickingSoon) { // Just disable the error. Problem solved. I go sleep now. Good night.
+            } else if (!pickingNow) { // Just disable the error. Problem solved. I go sleep now. Good night.
                 throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
             }
 
