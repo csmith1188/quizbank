@@ -59,8 +59,8 @@ module.exports = (req, res, next) => {
             const resourceType = pieces[i];
             const resourceId = pieces[i + 1];
 
-            let pickingSoon = Boolean(pickAmount);
-            let pickingNow = pickingSoon && (i + 2 >= pieces.length);
+            let pickingSoon = Boolean(pickAmount); // is picking questions in the request?
+            let pickingNow = pickingSoon && (i + 2 >= pieces.length); // is picking questions in the current iteration of the loop?
 
             currentDepth++;
 
