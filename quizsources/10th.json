@@ -2249,6 +2249,188 @@
                                         "conversion",
                                         "breakpoint"
                                     ]
+                                },
+                                {
+                                    "id": 301,
+                                    "ai": false,
+                                    "prompt": "A tool built into Python editors that helps pause and check code line by line.",
+                                    "correctAnswer": "debugger",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "loop",
+                                        "debugger",
+                                        "function",
+                                        "argument"
+                                    ]
+                                },
+                                {
+                                    "id": 302,
+                                    "ai": false,
+                                    "prompt": "Prints a value to the console without stopping the program.",
+                                    "correctAnswer": "log point",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "breakpoint",
+                                        "step-into",
+                                        "log point",
+                                        "continue"
+                                    ]
+                                },
+                                {
+                                    "id": 303,
+                                    "ai": false,
+                                    "prompt": "Run one line of code but skip over any function details inside it.",
+                                    "correctAnswer": "step-over",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "step-over",
+                                        "watcher",
+                                        "resume",
+                                        "string"
+                                    ]
+                                },
+                                {
+                                    "id": 304,
+                                    "ai": false,
+                                    "prompt": "Move inside a function call so you can see it run line by line.",
+                                    "correctAnswer": "step-into",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "log point",
+                                        "continue",
+                                        "debugger",
+                                        "step-into"
+                                    ]
+                                },
+                                {
+                                    "id": 305,
+                                    "ai": false,
+                                    "prompt": "Exit the current function and return to the line of code that called it.",
+                                    "correctAnswer": "step-out",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "step-into",
+                                        "log point",
+                                        "step-out",
+                                        "loop"
+                                    ]
+                                },
+                                {
+                                    "id": 306,
+                                    "ai": false,
+                                    "prompt": "Keeps the program running until another breakpoint is reached.",
+                                    "correctAnswer": "continue",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "watcher",
+                                        "continue",
+                                        "debugger",
+                                        "boolean"
+                                    ]
+                                },
+                                {
+                                    "id": 308,
+                                    "ai": false,
+                                    "prompt": "Stops when a chosen variable’s value changes.",
+                                    "correctAnswer": "watchpoint",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "loop",
+                                        "continue",
+                                        "watchpoint",
+                                        "comment"
+                                    ]
+                                },
+                                {
+                                    "id": 309,
+                                    "ai": false,
+                                    "prompt": "A marker in the code where the debugger will pause automatically.",
+                                    "correctAnswer": "breakpoint",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "watcher",
+                                        "breakpoint",
+                                        "step-over",
+                                        "tuple"
+                                    ]
+                                },
+                                {
+                                    "id": 310,
+                                    "ai": false,
+                                    "prompt": "Shows how the program moves from one line of code to the next.",
+                                    "correctAnswer": "stepping",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "integer",
+                                        "loop",
+                                        "debugger",
+                                        "stepping"
+                                    ]
+                                },
+                                {
+                                    "id": 311,
+                                    "ai": false,
+                                    "prompt": "The action of pausing the program at a set line to check values.",
+                                    "correctAnswer": "breakpoint",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "breakpoint",
+                                        "comment",
+                                        "list",
+                                        "integer"
+                                    ]
+                                },
+                                {
+                                    "id": 312,
+                                    "ai": false,
+                                    "prompt": "A command that continues running code until the next stop point.",
+                                    "correctAnswer": "resume",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "step-into",
+                                        "log point",
+                                        "resume",
+                                        "tuple"
+                                    ]
+                                },
+                                {
+                                    "id": 313,
+                                    "ai": false,
+                                    "prompt": "When a debugger moves through code one line at a time.",
+                                    "correctAnswer": "stepping",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "loop",
+                                        "stepping",
+                                        "watchpoint",
+                                        "variable"
+                                    ]
+                                },
+                                {
+                                    "id": 314,
+                                    "ai": false,
+                                    "prompt": "Used to follow the changing value of a variable while paused.",
+                                    "correctAnswer": "watcher",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "function",
+                                        "comment",
+                                        "log point",
+                                        "watcher"
+                                    ]
+                                },
+                                {
+                                    "id": 315,
+                                    "ai": false,
+                                    "prompt": "Runs code until it enters a function, then lets you explore inside it.",
+                                    "correctAnswer": "step-into",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "step-into",
+                                        "step-out",
+                                        "resume",
+                                        "boolean"
+                                    ]
                                 }
                             ]
                         },
