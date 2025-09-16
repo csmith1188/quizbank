@@ -36,7 +36,6 @@ module.exports = (req, res, next) => {
 
         // handle picking random questions
         if (lastResourceType === 'pick') {
-
             if (pieces.length < 3) {
                 throw new Error(`Invalid pick request: ${req.path}`);
             }
@@ -48,14 +47,12 @@ module.exports = (req, res, next) => {
             }
 
             pieces = pieces.slice(0, -2); // remove the last two pieces
-
         }
 
         let data = testData;
         let currentDepth = -1;
 
         for (let i = 0; i < pieces.length; i += 2) {
-
             const resourceType = pieces[i];
             const resourceId = pieces[i + 1];
 
@@ -68,33 +65,37 @@ module.exports = (req, res, next) => {
                 throw new Error(`Invalid resource type: ${resourceType} at depth ${currentDepth}`);
             }
 
-            data = data[resourceType + 's']; // pluralize the resource type to match the key in the data
+            data = data[resourceType + 's']; // pluralize to get the collection
 
             // if no id is supplied, list all in the collection. Breaking prevents further traversal.
             if (!resourceId && !pickingSoon) {
                 break;
             }
 
-            // find the entity with the given id
-            let entityIndex = data.findIndex(entity => entity.id === parseInt(resourceId));
+            // --- NEW: handle multiple IDs ---
+            const ids = resourceId ? resourceId.split('+').map(id => parseInt(id)) : [];
 
-            if (entityIndex !== -1) {
+            if (ids.length > 0) {
+                let matchedEntities = data.filter(entity => ids.includes(entity.id));
 
-                // next layer
-                data = data[entityIndex];
-
-            } else if (!pickingNow) { // Just disable the error. Problem solved. I go sleep now. Good night.
-                throw new Error(`Resource not found: ${resourceType} with ID ${resourceId}`);
+                if (matchedEntities.length > 0) {
+                    // If only one ID, keep as object (backward compatible)
+                    if (matchedEntities.length === 1) {
+                        data = matchedEntities[0];
+                    } else {
+                        data = matchedEntities;
+                    }
+                } else if (!pickingNow) {
+                    throw new Error(`Resource(s) not found: ${resourceType} with ID(s) ${resourceId}`);
+                }
             }
 
-            // if picking questions AND we are at the last resource type in the path, pick random questions from here and break
+            // if picking questions AND we are at the last resource type in the path
             if (pickingNow) {
-                // collect all questions under the current data
                 let allQuestions = collectQuestions(data);
                 data = getRandomItems(allQuestions, pickAmount);
                 break;
             }
-
         }
 
         res.send(shallow(data));
