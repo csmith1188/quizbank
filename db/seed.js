@@ -1,4 +1,3 @@
-// seed.js
 const fs = require("fs");
 const path = require("path");
 const { sequelize, Course, Section, Unit, Task, Question } = require("./models");
@@ -58,3 +57,4 @@ async function seed() {
 }
 
 seed();
+// Run "db/seed.js" to seed the database with initial data.

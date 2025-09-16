@@ -1,14 +1,26 @@
 module.exports = (sequelize, DataTypes) => {
     const Task = sequelize.define("Task", {
-        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        unit_id: { type: DataTypes.INTEGER, allowNull: false },
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         name: { type: DataTypes.TEXT, allowNull: false },
     });
 
     Task.associate = models => {
-        Task.belongsTo(models.Unit, { foreignKey: "unit_id", as: "unit" });
-        Task.hasMany(models.Question, { foreignKey: "task_id", as: "questions" });
+        Task.belongsTo(models.Unit, {
+            foreignKey: { name: "unit_id", allowNull: false },
+            as: "unit",
+            onDelete: "CASCADE",
+        });
+
+        Task.hasMany(models.Question, {
+            foreignKey: { name: "task_id", allowNull: false },
+            as: "questions",
+            onDelete: "CASCADE",
+        });
     };
 
     return Task;
-};
+};  

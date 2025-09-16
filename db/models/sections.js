@@ -1,14 +1,26 @@
 module.exports = (sequelize, DataTypes) => {
     const Section = sequelize.define("Section", {
-        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        course_id: { type: DataTypes.INTEGER, allowNull: false },
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         name: { type: DataTypes.TEXT, allowNull: false },
     });
 
     Section.associate = models => {
-        Section.belongsTo(models.Course, { foreignKey: "course_id", as: "course" });
-        Section.hasMany(models.Unit, { foreignKey: "section_id", as: "units" });
+        Section.belongsTo(models.Course, {
+            foreignKey: { name: "course_id", allowNull: false },
+            as: "course",
+            onDelete: "CASCADE",
+        });
+
+        Section.hasMany(models.Unit, {
+            foreignKey: { name: "section_id", allowNull: false },
+            as: "units",
+            onDelete: "CASCADE",
+        });
     };
 
     return Section;
-};
+};  
