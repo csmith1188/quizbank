@@ -2,17 +2,29 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+
 const rateLimit = require('express-rate-limit');
 const resourceResolver = require('./middleware/resource-resolver');
 const errorHandler = require('./middleware/error-handler');
-
-const {readDirPaths} = require('./util/file-helpers');
+const db = require("./db/models");
+const { readDirPaths } = require('./util/file-helpers');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.urlencoded({ extended: true }));
+
+async function init() {
+    try {
+        // creates tables if they don't exist
+        await db.sequelize.sync({ force: false });
+    } catch (err) {
+        console.error("Error syncing database:", err);
+    }
+}
 
 // Rate limiter configuration
 const limiter = rateLimit({
@@ -45,7 +57,7 @@ controllers.forEach(controllerPath => {
         register(router);
         app.use(prefix, router);
     }
-    
+
 });
 
 app.use('/api/resource', resourceResolver);
@@ -54,5 +66,6 @@ app.use('/api/resource', resourceResolver);
 app.use(errorHandler);
 
 app.listen(port, () => {
+    init();
     console.log(`Server is running on port ${port}`);
 }); 

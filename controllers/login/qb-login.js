@@ -5,7 +5,6 @@ module.exports = (router) => {
     });
 
     router.post('/native', (req, res) => {
-        // Testing
         const { username, password } = req.body;
         console.log(`Username: ${username}, Password: ${password}`);
         res.redirect('/');
