@@ -37,11 +37,11 @@ The database consists of the following models:
 
 ### Relationships
 
-- A `Course` has many [`Sections`] "Go to definition".
-- A [`Section`] belongs to a [`Course`] "Go to definition" and has many [`Units`] "Go to definition".
-- A [`Unit`] "Go to definition" belongs to a [`Section`] "Go to definition" and has many [`Tasks`] "Go to definition".
-- A [`Task`] "Go to definition" belongs to a [`Unit`] "Go to definition" and has many [`Questions`] "Go to definition".
-- A [`Question`] "Go to definition" belongs to a [`Task`] "Go to definition".
+- A `Course` has many `Sections` "Go to definition".
+- A `Section` belongs to a `Course` "Go to definition" and has many `Units` "Go to definition".
+- A `Unit` "Go to definition" belongs to a `Section` "Go to definition" and has many `Tasks` "Go to definition".
+- A `Task` "Go to definition" belongs to a `Unit` "Go to definition" and has many `Questions` "Go to definition".
+- A `Question` "Go to definition" belongs to a `Task` "Go to definition".
 
 ## Seeding System
 
@@ -49,7 +49,7 @@ The seeding system is designed to populate the database with initial data for co
 
 ### Seeding Process
 
-1. **Define Seed Data**: The seed data is defined in a JSON file located at [`quizsources/courses.json`]. This file contains the hierarchy of courses, sections, units, tasks, and questions.
+1. **Define Seed Data**: The seed data is defined in a JSON file located at `quizsources/courses.json`. This file contains the hierarchy of courses, sections, units, tasks, and questions.
 
 2. **Run Seeder**: Use the following command to seed the database:
    ```bash
@@ -58,9 +58,9 @@ The seeding system is designed to populate the database with initial data for co
 
    This will:
    - Recreate the database tables.
-   - Populate the database with the data from [`quizsources/courses.json`].
+   - Populate the database with the data from `quizsources/courses.json`.
 
-3. **Example Seed Data**: Below is an example structure of the [`courses.json`] file:
+3. **Example Seed Data**: Below is an example structure of the `courses.json` file:
    ```json
    {
      "courses": [
