@@ -31,7 +31,7 @@ module.exports = (req, res, next) => {
         let pieces = req.path.split('/').filter(p => p);
 
         let lastResourceType = pieces[pieces.length - 2];
-        let lastResourceId = pieces[pieces.length - 1];
+        let lastResourceNumber = pieces[pieces.length - 1];
         let pickAmount = null;
 
         // handle picking random questions
@@ -40,10 +40,10 @@ module.exports = (req, res, next) => {
                 throw new Error(`Invalid pick request: ${req.path}`);
             }
 
-            pickAmount = parseInt(lastResourceId);
+            pickAmount = parseInt(lastResourceNumber);
 
             if (isNaN(pickAmount) || pickAmount <= 0) {
-                throw new Error(`Invalid pick amount: ${lastResourceId}`);
+                throw new Error(`Invalid pick amount: ${lastResourceNumber}`);
             }
 
             pieces = pieces.slice(0, -2); // remove the last two pieces
