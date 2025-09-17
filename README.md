@@ -37,7 +37,7 @@ The database consists of the following models:
 
 ### Relationships
 
-- A [`Course`] has many [`Sections`] "Go to definition".
+- A `Course` has many [`Sections`] "Go to definition".
 - A [`Section`] belongs to a [`Course`] "Go to definition" and has many [`Units`] "Go to definition".
 - A [`Unit`] "Go to definition" belongs to a [`Section`] "Go to definition" and has many [`Tasks`] "Go to definition".
 - A [`Task`] "Go to definition" belongs to a [`Unit`] "Go to definition" and has many [`Questions`] "Go to definition".
