@@ -2492,7 +2492,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 133,
+                                    "id": 132,
                                     "ai": false,
                                     "prompt": "Ends a function, and if given a value, substitutes the function call with the value.",
                                     "correctAnswer": "return statement",
@@ -2505,7 +2505,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 134,
+                                    "id": 133,
                                     "ai": false,
                                     "prompt": "The value a function call is replaced with when the function reaches a return statement.",
                                     "correctAnswer": "return value",
@@ -2518,7 +2518,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 135,
+                                    "id": 134,
                                     "ai": true,
                                     "prompt": "A function that does not include a return statement will return what by default in Python?",
                                     "correctAnswer": "None",
@@ -2544,7 +2544,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 137,
+                                    "id": 135,
                                     "ai": true,
                                     "prompt": "What keyword is used in Python to define a new function?",
                                     "correctAnswer": "def",
@@ -2557,7 +2557,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 138,
+                                    "id": 136,
                                     "ai": true,
                                     "prompt": "Which of these is an advantage of using functions in a program?",
                                     "correctAnswer": "Code reuse",
@@ -2570,7 +2570,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 139,
+                                    "id": 137,
                                     "ai": true,
                                     "prompt": "What is the name given to a variable defined inside a function, only accessible in that function?",
                                     "correctAnswer": "local variable",
@@ -2583,7 +2583,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 140,
+                                    "id": 138,
                                     "ai": true,
                                     "prompt": "What is the name given to a variable defined outside of any function, accessible throughout the program?",
                                     "correctAnswer": "global variable",
@@ -2596,20 +2596,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 141,
-                                    "ai": true,
-                                    "prompt": "Which of the following best describes a return value?",
-                                    "correctAnswer": "The output of a function call",
-                                    "correctIndex": 2,
-                                    "answers": [
-                                        "The input to a function",
-                                        "The code inside a function",
-                                        "The output of a function call",
-                                        "The name of a function"
-                                    ]
-                                },
-                                {
-                                    "id": 142,
+                                    "id": 139,
                                     "ai": true,
                                     "prompt": "What happens if a function has multiple return statements?",
                                     "correctAnswer": "The first return reached will end the function",
@@ -2622,7 +2609,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 143,
+                                    "id": 140,
                                     "ai": true,
                                     "prompt": "What is the term for providing a default value to a parameter in a function definition?",
                                     "correctAnswer": "default parameter",
@@ -2635,7 +2622,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 144,
+                                    "id": 141,
                                     "ai": true,
                                     "prompt": "Which of these is a correct way to call a function named 'greet' with one argument 'Alice'?",
                                     "correctAnswer": "greet('Alice')",
@@ -2648,72 +2635,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 136,
-                                    "ai": true,
-                                    "prompt": "What happens if a function does not have a return statement in Python?",
-                                    "correctAnswer": "It returns None",
-                                    "correctIndex": 1,
-                                    "answers": [
-                                        "It causes an error",
-                                        "It returns None",
-                                        "It returns 0",
-                                        "It repeats the function"
-                                    ]
-                                },
-                                {
-                                    "id": 137,
-                                    "ai": true,
-                                    "prompt": "What is the term for giving a parameter a value inside the function call?",
-                                    "correctAnswer": "passing an argument",
-                                    "correctIndex": 2,
-                                    "answers": [
-                                        "declaring a variable",
-                                        "returning a value",
-                                        "passing an argument",
-                                        "defining a scope"
-                                    ]
-                                },
-                                {
-                                    "id": 138,
-                                    "ai": true,
-                                    "prompt": "What is the purpose of using functions in programming?",
-                                    "correctAnswer": "To organize code into reusable blocks",
-                                    "correctIndex": 3,
-                                    "answers": [
-                                        "To make code run faster",
-                                        "To increase memory usage",
-                                        "To create global variables",
-                                        "To organize code into reusable blocks"
-                                    ]
-                                },
-                                {
-                                    "id": 139,
-                                    "ai": true,
-                                    "prompt": "What allows you to reuse code by calling the same block multiple times with different arguments?",
-                                    "correctAnswer": "functions",
-                                    "correctIndex": 0,
-                                    "answers": [
-                                        "functions",
-                                        "variables",
-                                        "loops",
-                                        "constants"
-                                    ]
-                                },
-                                {
-                                    "id": 140,
-                                    "ai": true,
-                                    "prompt": "What type of parameter has a predefined value if no argument is passed?",
-                                    "correctAnswer": "default parameter",
-                                    "correctIndex": 1,
-                                    "answers": [
-                                        "scope parameter",
-                                        "default parameter",
-                                        "return parameter",
-                                        "local parameter"
-                                    ]
-                                },
-                                {
-                                    "id": 141,
+                                    "id": 142,
                                     "ai": true,
                                     "prompt": "What is it called when a function calls itself?",
                                     "correctAnswer": "recursion",
@@ -2726,33 +2648,7 @@
                                     ]
                                 },
                                 {
-                                    "id": 142,
-                                    "ai": true,
-                                    "prompt": "Variables declared inside a function are known as:",
-                                    "correctAnswer": "local variables",
-                                    "correctIndex": 0,
-                                    "answers": [
-                                        "local variables",
-                                        "global variables",
-                                        "constants",
-                                        "parameters"
-                                    ]
-                                },
-                                {
                                     "id": 143,
-                                    "ai": true,
-                                    "prompt": "What kind of variable can be accessed both inside and outside of functions if declared properly?",
-                                    "correctAnswer": "global variable",
-                                    "correctIndex": 1,
-                                    "answers": [
-                                        "local variable",
-                                        "global variable",
-                                        "parameter",
-                                        "return value"
-                                    ]
-                                },
-                                {
-                                    "id": 144,
                                     "ai": true,
                                     "prompt": "What happens when a return statement is executed in a function?",
                                     "correctAnswer": "The function stops and gives back a value",
@@ -2780,16 +2676,247 @@
                                 {
                                     "id": 145,
                                     "ai": true,
-                                    "prompt": "Which term refers to the value that a function gives back when it finishes executing?",
-                                    "correctAnswer": "return value",
+                                    "prompt": "Given def greet(name, times=1): which call uses a keyword argument for 'name'?",
+                                    "correctAnswer": "greet(name='Ava', times=3)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "greet('Ava', 3)",
+                                        "greet(name='Ava', times=3)",
+                                        "greet('Ava')",
+                                        "greet(times=3, 'Ava')"
+                                    ]
+                                },
+                                {
+                                    "id": 146,
+                                    "ai": true,
+                                    "prompt": "Given def add(a, b): which call raises a TypeError for the wrong number of arguments?",
+                                    "correctAnswer": "add(1)",
                                     "correctIndex": 0,
                                     "answers": [
-                                        "return value",
-                                        "parameter",
-                                        "argument",
-                                        "scope"
+                                        "add(1)",
+                                        "add(1, 2)",
+                                        "add(a=1, b=2)",
+                                        "add(b=2, a=1)"
                                     ]
-                                }
+                                },
+                                {
+                                    "id": 147,
+                                    "ai": true,
+                                    "prompt": "Given def paint(color, size): which call uses only positional arguments?",
+                                    "correctAnswer": "paint('red', 5)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "paint('red', 5)",
+                                        "paint(color='red', size=5)",
+                                        "paint('red', size=5)",
+                                        "paint(size=5, 'red')"
+                                    ]
+                                },
+                                {
+                                    "id": 148,
+                                    "ai": true,
+                                    "prompt": "In def show(*items): what does *items collect?",
+                                    "correctAnswer": "All extra positional arguments as a tuple",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "All extra positional arguments as a tuple",
+                                        "All keyword arguments as a dict",
+                                        "Only the first argument",
+                                        "Nothing; * makes it optional only"
+                                    ]
+                                },
+                                {
+                                    "id": 149,
+                                    "ai": true,
+                                    "prompt": "Given def area(w, h=2): which call correctly sets only h to 3 using a keyword?",
+                                    "correctAnswer": "area(5, h=3)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "area(h=3)",
+                                        "area(5, h=3)",
+                                        "area(w=5, 3)",
+                                        "area(5, 3, h=3)"
+                                    ]
+                                },
+                                {
+                                    "id": 150,
+                                    "ai": true,
+                                    "prompt": "Given def power(base, exp=2): which call uses the default for exp?",
+                                    "correctAnswer": "power(5)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "power(5)",
+                                        "power(base=5, exp=2)",
+                                        "power(5, 3)",
+                                        "power(exp=2)"
+                                    ]
+                                },
+                                {
+                                    "id": 151,
+                                    "ai": true,
+                                    "prompt": "Given def mix(a, b, c): which call sets a=3, b=1, c=2?",
+                                    "correctAnswer": "mix(3, 1, 2)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "mix(3, 1, 2)",
+                                        "mix(a=1, b=2, c=3)",
+                                        "mix(b=1, a=2, c=3)",
+                                        "mix(1, 2, 3)"
+                                    ]
+                                },
+                                {
+                                    "id": 152,
+                                    "ai": true,
+                                    "prompt": "Given def draw(x, y): which call is invalid because a positional argument follows a keyword argument?",
+                                    "correctAnswer": "draw(x=1, 2)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "draw(x=1, 2)",
+                                        "draw(1, y=2)",
+                                        "draw(x=1, y=2)",
+                                        "draw(1, 2)"
+                                    ]
+                                },
+                                {
+                                    "id": 153,
+                                    "ai": true,
+                                    "prompt": "In def build(a, b=0, c=1): how many parameters are defined?",
+                                    "correctAnswer": "3",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 154,
+                                    "ai": true,
+                                    "prompt": "Given def cook(temp, mode): which call raises a TypeError for giving multiple values for the same parameter?",
+                                    "correctAnswer": "cook(350, temp=400)",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "cook(temp=350, mode='bake')",
+                                        "cook(350, 'bake')",
+                                        "cook(350, temp=400)",
+                                        "cook(mode='bake', temp=350)"
+                                    ]
+                                },
+                                {
+                                    "id": 155,
+                                    "ai": true,
+                                    "prompt": "Given def add(a,b): print(a+b); result = add(2,3); what is stored in result?",
+                                    "correctAnswer": "None",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "None",
+                                        "5",
+                                        "TypeError",
+                                        "add"
+                                    ]
+                                },
+                                {
+                                    "id": 156,
+                                    "ai": true,
+                                    "prompt": "Given def f(): return 7; x = f() * 2; what is x?",
+                                    "correctAnswer": "14",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "14",
+                                        "9",
+                                        "None",
+                                        "TypeError"
+                                    ]
+                                },
+                                {
+                                    "id": 157,
+                                    "ai": true,
+                                    "prompt": "Given def g(): return; y = g(); what is y?",
+                                    "correctAnswer": "None",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "None",
+                                        "0",
+                                        "''",
+                                        "TypeError"
+                                    ]
+                                },
+                                {
+                                    "id": 158,
+                                    "ai": true,
+                                    "prompt": "Given def pair(): return 2, 3; t = pair(); which option best describes t?",
+                                    "correctAnswer": "A tuple containing (2, 3)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "A tuple containing (2, 3)",
+                                        "A list [2, 3]",
+                                        "Two separate return values that can't be assigned",
+                                        "An int 5"
+                                    ]
+                                },
+                                {
+                                    "id": 159,
+                                    "ai": true,
+                                    "prompt": "Assume inc adds 1 to its input and dbl multiplies its input by 2; what is dbl(inc(3))?",
+                                    "correctAnswer": "8",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "8",
+                                        "7",
+                                        "6",
+                                        "9"
+                                    ]
+                                },
+                                {
+                                    "id": 160,
+                                    "ai": true,
+                                    "prompt": "When is the code inside a function executed?",
+                                    "correctAnswer": "When the function is called",
+                                    "correctIndex": 0,
+                                    "answers": ["When the function is called", "When the function is defined with def", "When the file is saved", "When Python starts"]
+                                  },
+                                  {
+                                    "id": 161,
+                                    "ai": true,
+                                    "prompt": "Which line correctly defines a function named hello that takes no parameters?",
+                                    "correctAnswer": "def hello():",
+                                    "correctIndex": 0,
+                                    "answers": ["def hello():", "function hello:", "def hello:", "def hello[]:"]
+                                  },
+                                  {
+                                    "id": 162,
+                                    "ai": true,
+                                    "prompt": "In a function, what is the main difference between return and print?",
+                                    "correctAnswer": "return sends a value back to the caller; print just displays text",
+                                    "correctIndex": 0,
+                                    "answers": ["return sends a value back to the caller; print just displays text", "return prints text; print sends a value back", "Both do the same thing", "print stops the function; return continues it"]
+                                  },
+                                  {
+                                    "id": 163,
+                                    "ai": true,
+                                    "prompt": "Where should a function's docstring be placed?",
+                                    "correctAnswer": "As the first statement inside the function body",
+                                    "correctIndex": 0,
+                                    "answers": ["As the first statement inside the function body", "Above the def line in a comment", "At the end of the file", "In a separate .txt file"]
+                                  },
+                                  {
+                                    "id": 164,
+                                    "ai": true,
+                                    "prompt": "How many objects can a Python function return?",
+                                    "correctAnswer": "Exactly one object, but it can be a list",
+                                    "correctIndex": 0,
+                                    "answers": ["Exactly one object, but it can be a list", "At most two objects", "Unlimited objects separated by commas", "Zero only; Python functions can't return"]
+                                  },
+                                  {
+                                    "id": 165,
+                                    "ai": true,
+                                    "prompt": "Which naming style is recommended for function names in Python?",
+                                    "correctAnswer": "lowercase_with_underscores (snake_case)",
+                                    "correctIndex": 0,
+                                    "answers": ["lowercase_with_underscores (snake_case)", "camelCase", "PascalCase", "UPPERCASE"]
+                                  }
+                                  
                             ]
                         }
                     ]
