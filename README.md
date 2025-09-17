@@ -58,7 +58,7 @@ The seeding system is designed to populate the database with initial data for co
 
    This will:
    - Recreate the database tables.
-   - Populate the database with the data from `quizsources/courses.json`.
+   - Populate the database with the data from `quizsources/courses.json` or any other JSON file provided.
 
 3. **Example Seed Data**: Below is an example structure of the `courses.json` file:
    ```json
