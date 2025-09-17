@@ -54,7 +54,7 @@ module.exports = (req, res, next) => {
 
         for (let i = 0; i < pieces.length; i += 2) {
             const resourceType = pieces[i];
-            const resourceId = pieces[i + 1];
+            const resourceNumber = pieces[i + 1];
 
             let pickingSoon = Boolean(pickAmount); // is picking questions in the request?
             let pickingNow = pickingSoon && (i + 2 >= pieces.length); // is picking questions in the current iteration of the loop?
@@ -67,13 +67,13 @@ module.exports = (req, res, next) => {
 
             data = data[resourceType + 's']; // pluralize to get the collection
 
-            // if no id is supplied, list all in the collection. Breaking prevents further traversal.
-            if (!resourceId && !pickingSoon) {
+            // if no number is supplied, list all in the collection. Breaking prevents further traversal.
+            if (!resourceNumber && !pickingSoon) {
                 break;
             }
 
-            // --- NEW: handle multiple IDs ---
-            const ids = resourceId ? resourceId.split('+').map(id => parseInt(id)) : [];
+            // 
+            const ids = resourceNumber ? resourceNumber.split('+').map(id => parseInt(id)) : [];
 
             if (ids.length > 0) {
                 let matchedEntities = data.filter(entity => ids.includes(entity.id));
@@ -82,11 +82,15 @@ module.exports = (req, res, next) => {
                     // If only one ID, keep as object (backward compatible)
                     if (matchedEntities.length === 1) {
                         data = matchedEntities[0];
+                    // if it's multiple ID, build the combined object
                     } else {
-                        data = matchedEntities;
+                        data = {};
+                        data.id = ids.join('+');
+                        data.name = `Combined ${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)}s: ${matchedEntities.map(entity => entity.name).join(', ')}`;
+                        data[resourceType + 's'] = matchedEntities;
                     }
                 } else if (!pickingNow) {
-                    throw new Error(`Resource(s) not found: ${resourceType} with ID(s) ${resourceId}`);
+                    throw new Error(`Resource(s) not found: ${resourceType} with ID(s) ${resourceNumber}`);
                 }
             }
 
