@@ -5,7 +5,8 @@ const path = require("path");
 const sequelize = new Sequelize({
     dialect: "sqlite",
     // Points to db/database.sqlite
-    storage: path.join(__dirname, "..", "database.sqlite")
+    storage: path.join(__dirname, "..", "database.sqlite"),
+    logging: false,
 });
 
 // Dynamically import all models in this folder
