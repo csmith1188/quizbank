@@ -21,6 +21,85 @@ npm run dev
 
 The server will run on port 3000 by default.
 
+## Database
+
+The application uses SQLite as the database, with Sequelize as the ORM (Object-Relational Mapping) tool. The database file is located at [`db/database.sqlite`]. Sequelize provides a simple way to define models and relationships, making it easy to interact with the database.
+
+### Database Models
+
+The database consists of the following models:
+
+- **Course**: Represents a course, which contains multiple sections.
+- **Section**: Represents a section within a course, which contains multiple units.
+- **Unit**: Represents a unit within a section, which contains multiple tasks.
+- **Task**: Represents a task within a unit, which contains multiple questions.
+- **Question**: Represents a question within a task.
+
+### Relationships
+
+- A `Course` has many `Sections` "Go to definition".
+- A `Section` belongs to a `Course` "Go to definition" and has many `Units` "Go to definition".
+- A `Unit` "Go to definition" belongs to a `Section` "Go to definition" and has many `Tasks` "Go to definition".
+- A `Task` "Go to definition" belongs to a `Unit` "Go to definition" and has many `Questions` "Go to definition".
+- A `Question` "Go to definition" belongs to a `Task` "Go to definition".
+
+## Seeding System
+
+The seeding system is designed to populate the database with initial data for courses, sections, units, tasks, and questions. This allows for easier testing and development of the API.
+
+### Seeding Process
+
+1. **Define Seed Data**: The seed data is defined in a JSON file located at `quizsources/courses.json`. This file contains the hierarchy of courses, sections, units, tasks, and questions.
+
+2. **Run Seeder**: Use the following command to seed the database:
+   ```bash
+   node db/seed.js
+   ```
+
+   This will:
+   - Recreate the database tables.
+   - Populate the database with the data from `quizsources/courses.json` or any other JSON file provided.
+
+3. **Example Seed Data**: Below is an example structure of the `courses.json` file:
+   ```json
+   {
+     "courses": [
+       {
+         "name": "Course 1",
+         "sections": [
+           {
+             "name": "Section 1",
+             "units": [
+               {
+                 "name": "Unit 1",
+                 "tasks": [
+                   {
+                     "name": "Task 1",
+                     "questions": [
+                       {
+                         "prompt": "What is 2 + 2?",
+                         "correctAnswer": "4",
+                         "correctIndex": 0,
+                         "answers": ["4", "3", "5", "6"],
+                         "ai": false
+                       }
+                     ]
+                   }
+                 ]
+               }
+             ]
+           }
+         ]
+       }
+     ]
+   }
+   ```
+
+4. **Output**: After running the seeder, you should see the following message:
+   ```
+   ✅ Database seeded successfully!
+   ```
+
 ## API Endpoints
 
 ### Get Course Details
