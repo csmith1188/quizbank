@@ -5,16 +5,16 @@ const path = require("path");
 const sequelize = new Sequelize({
     dialect: "sqlite",
     // Points to db/database.sqlite
-    storage: path.join(__dirname, "..", "database.sqlite"),
+    storage: path.join(__dirname, "database.sqlite"),
     logging: false,
 });
 
 // Dynamically import all models in this folder
 const models = {};
-fs.readdirSync(__dirname)
-    .filter(file => file !== "index.js" && file.endsWith(".js"))
+fs.readdirSync(path.join(__dirname, "models"))
+    .filter(file => file.endsWith(".js"))
     .forEach(file => {
-        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+        const model = require(path.join(__dirname, "models", file))(sequelize, Sequelize.DataTypes);
         models[model.name] = model;
     });
 
