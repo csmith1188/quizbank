@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { sequelize, Course, Section, Unit, Task, Question } = require("./models");
+const { sequelize, Course, Section, Unit, Task, Question } = require("./db");
 
 async function seed() {
   try {
