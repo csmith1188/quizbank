@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UserService = require('../../services/user-service');
-const isAuthenticated = require('../../middleware/auth');
 
-const FBJS_URL = process.env.FBJS_URL || 'https://formbar.yorktechapps.com';
+const FBJS_URL = process.env.FBJS_URL || 'https://formbeta.yorktechapps.com';
 const THIS_URL = process.env.THIS_URL || 'http://localhost:3000/login/formbar';
 
 module.exports = function (router) {
@@ -18,7 +17,7 @@ module.exports = function (router) {
                 return res.status(400).send("User ID not found in token.");
             }
     
-            let user = await UserService.findUserById(userId);
+            let user = await UserService.findUserByFbId(userId);
             if (!user) {
                 user = await UserService.createUser(userId, tokenData.username, tokenData.email);
             }

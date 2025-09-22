@@ -1,6 +1,6 @@
 const { User } = require('../db/db');
 
-async function findUserById(id) {
+async function findUserByFbId(id) {
   if (typeof id === 'undefined') {
     throw new Error('id is undefined!');
   }
@@ -19,8 +19,13 @@ async function findUserByUsername(username) {
   return await User.findOne({ where: { username } });
 }
 
+async function findUserByEmail(email) {
+  return await User.findOne({ where: { email } });
+}
+
 module.exports = {
-  findUserById,
+  findUserByFbId,
   createUser,
   findUserByUsername,
+  findUserByEmail
 };
