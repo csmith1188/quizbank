@@ -9,9 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         fb_id: {
             type: DataTypes.INTEGER,
         },
+        google_id: {
+            type: DataTypes.INTEGER,
+        },
         username: {
             type: DataTypes.TEXT,
-            allowNull: false,
         },
         password: {
             type: DataTypes.TEXT,

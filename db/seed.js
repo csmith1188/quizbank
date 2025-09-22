@@ -1,14 +1,14 @@
 const fs = require("fs");
 const path = require("path");
-const { sequelize, Course, Section, Unit, Task, Question } = require("./models");
+const { sequelize, Course, Section, Unit, Task, Question } = require("./db");
 
 async function seed() {
   try {
-    const filePath = path.join(__dirname, "../quizsources/courses.json"); // your JSON file
+    const filePath = path.join(__dirname, "../quizsources/courses.json");
     const rawData = fs.readFileSync(filePath);
     const jsonData = JSON.parse(rawData);
 
-    await sequelize.sync({ force: true }); // recreate tables
+    await sequelize.sync({ force: true });
 
     for (const courseData of jsonData.courses) {
       const course = await Course.create({
@@ -57,4 +57,3 @@ async function seed() {
 }
 
 seed();
-// Run "db/seed.js" to seed the database with initial data.

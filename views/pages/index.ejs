@@ -1,5 +1,8 @@
 <%- include('../partials/header.ejs') %>
 
-<p>QUIZBANKS</p>
+<p>Welcome to the Quiz Bank Application!</p>
+<% if (user) { %>
+    <p>YOU'RE <%= user.username ? user.username : user.email %></p>
+<% } %>
 
 <%- include('../partials/footer.ejs') %>
