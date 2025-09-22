@@ -7,7 +7,7 @@ const session = require('express-session');
 const rateLimit = require('express-rate-limit');
 const resourceResolver = require('./middleware/resource-resolver');
 const errorHandler = require('./middleware/error-handler');
-const db = require("./db/models");
+const db = require("./db/db");
 const { readDirPaths } = require('./util/file-helpers');
 
 const app = express();

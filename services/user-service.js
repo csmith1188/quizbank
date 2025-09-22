@@ -1,4 +1,4 @@
-const { User } = require('../db/models');
+const { User } = require('../db/db');
 
 async function findUserById(id) {
   if (typeof id === 'undefined') {
