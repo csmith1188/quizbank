@@ -1,0 +1,64 @@
+<%- include('../../partials/header.ejs', {title: 'login' }) %>
+  <link rel="stylesheet" href="/styles/login.css">
+
+  <main class="container">
+    <div class="glass-card">
+      <div class="login-options">
+        <h2>Login Options</h2>
+        <form action="/login/native" method="POST">
+          <button class="login-btn native" type="submit">Native Login</button>
+        </form>
+        <form action="/login/formbar" method="POST">
+          <button class="login-btn formbar" type="submit">
+            <svg width="22" height="22" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="margin-right:0.7em">
+              <defs>
+                <linearGradient id="fb-gradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0647c7" />
+                  <stop offset="1" stop-color="#c900e6" />
+                </linearGradient>
+              </defs>
+              <circle cx="50" cy="50" r="48" fill="url(#fb-gradient)" />
+              <text x="50" y="70" text-anchor="middle" font-size="60" fill="#fff"
+                font-family="Arial Black, Arial, sans-serif" font-weight="bold">F</text>
+            </svg>
+            Login with Formbar
+          </button>
+        </form>
+        <form action="/login/google" method="POST">
+          <button class="login-btn google" type="submit">
+            <svg viewBox="0 0 24 24">
+              <g>
+                <path
+                  d="M21.805 12.223c0-.638-.057-1.252-.164-1.84H12v3.481h5.553a4.747 4.747 0 01-2.058 3.118v2.58h3.324c1.946-1.794 3.086-4.44 3.086-7.339z"
+                  fill="#4285F4" />
+                <path
+                  d="M12 22c2.7 0 4.964-.892 6.619-2.419l-3.324-2.58c-.921.618-2.096.983-3.295.983-2.532 0-4.678-1.71-5.441-4.015H3.13v2.522A10 10 0 0012 22z"
+                  fill="#34A853" />
+                <path
+                  d="M6.559 13.969A5.995 5.995 0 016.14 12c0-.684.118-1.35.328-1.969V7.509H3.13A9.996 9.996 0 002 12c0 1.564.372 3.042 1.13 4.491l3.429-2.522z"
+                  fill="#FBBC05" />
+                <path
+                  d="M12 6.958c1.472 0 2.786.507 3.825 1.505l2.874-2.874C16.963 3.89 14.7 3 12 3a9.99 9.99 0 00-8.87 4.509l3.43 2.522C7.322 8.669 9.468 6.958 12 6.958z"
+                  fill="#EA4335" />
+              </g>
+            </svg>
+            Login with Google
+          </button>
+        </form>
+        <form action="/login/microsoft" method="POST">
+          <button class="login-btn microsoft" type="submit">
+            <svg viewBox="0 0 24 24">
+              <rect width="10" height="10" x="2" y="2" fill="#f35325" />
+              <rect width="10" height="10" x="12" y="2" fill="#81bc06" />
+              <rect width="10" height="10" x="2" y="12" fill="#05a6f0" />
+              <rect width="10" height="10" x="12" y="12" fill="#ffba08" />
+            </svg>
+            Login with Microsoft
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../../partials/footer.ejs') %>

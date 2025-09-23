@@ -9,6 +9,7 @@ const resourceResolver = require('./middleware/resource-resolver');
 const errorHandler = require('./middleware/error-handler');
 const db = require("./db/db");
 const { readDirPaths } = require('./util/file-helpers');
+const localsmiddleware = require('./middleware/locals');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +40,9 @@ app.use(limiter);
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static('static'));
+
+app.use(localsmiddleware);
 
 const controllers = readDirPaths('./controllers');
 
