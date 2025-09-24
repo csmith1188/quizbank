@@ -53,7 +53,7 @@ The seeding system is designed to populate the database with initial data for co
 
 2. **Run Seeder**: Use the following command to seed the database:
    ```bash
-   node db/seed.js
+   node db/database-init.js
    ```
 
    This will:
