@@ -8,19 +8,5 @@ module.exports = (sequelize, DataTypes) => {
         name: { type: DataTypes.TEXT, allowNull: false },
     });
 
-    Section.associate = models => {
-        Section.belongsTo(models.Course, {
-            foreignKey: { name: "course_id", allowNull: false },
-            as: "course",
-            onDelete: "CASCADE",
-        });
-
-        Section.hasMany(models.Unit, {
-            foreignKey: { name: "section_id", allowNull: false },
-            as: "units",
-            onDelete: "CASCADE",
-        });
-    };
-
     return Section;
 };  

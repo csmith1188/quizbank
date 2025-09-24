@@ -18,12 +18,17 @@ fs.readdirSync(path.join(__dirname, "models"))
         models[model.name] = model;
     });
 
-// If you have associations between models
-Object.keys(models).forEach(modelName => {
-    if (models[modelName].associate) {
-        models[modelName].associate(models);
-    }
-});
+// associations
+models.User.hasMany(models.Course);
+models.Course.belongsTo(models.User);
+models.Course.hasMany(models.Section);
+models.Section.belongsTo(models.Course);
+models.Section.hasMany(models.Unit);
+models.Unit.belongsTo(models.Section);
+models.Unit.hasMany(models.Task);
+models.Task.belongsTo(models.Unit);
+models.Task.hasMany(models.Question);
+models.Question.belongsTo(models.Task);
 
 models.sequelize = sequelize;
 models.Sequelize = Sequelize;

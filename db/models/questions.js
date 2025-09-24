@@ -12,13 +12,5 @@ module.exports = (sequelize, DataTypes) => {
         answers: { type: DataTypes.TEXT }, // JSON string
     });
 
-    Question.associate = models => {
-        Question.belongsTo(models.Task, {
-            foreignKey: { name: "task_id", allowNull: false },
-            as: "task",
-            onDelete: "CASCADE",
-        });
-    };
-
     return Question;
 };  
