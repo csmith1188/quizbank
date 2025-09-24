@@ -1,0 +1,19 @@
+<%- include('../../partials/header.ejs', {title: 'Dashboard' }) %>
+    <link rel="stylesheet" href="/styles/teacher-home.css">
+
+        <main class="teacher-page-main">
+            <div class="teacher-dashboard-card">
+                <h1 class="teacher-dashboard-title">Teacher Dashboard</h1>
+                <p class="teacher-dashboard-info">From here, you can manage and veiw your class content.</p>
+                <div class="teacher-dashboard-buttons">
+                    <button onclick="location.href='/teacher/content'" class="teacher-btn teacher-btn-primary">View
+                        courses</button>
+                    <button onclick="location.href='/teacher/create-content'"
+                        class="teacher-btn teacher-btn-accent">Create new content</button>
+                    <button onclick="location.href='/teacher/add-content'" class="teacher-btn teacher-btn-accent">Add
+                        new content</button>
+                </div>
+            </div>
+        </main>
+
+    <%- include('../../partials/footer.ejs') %>

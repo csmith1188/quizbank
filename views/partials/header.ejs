@@ -1,44 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= typeof title !== 'undefined' ? title : 'Quizbanks' %></title>
-    <link rel="stylesheet" href="/styles/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= typeof title !== 'undefined' ? title : 'Quizbanks' %>
+  </title>
+  <link rel="stylesheet" href="/styles/index.css">
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="nav-logo">
-            <a href="/" class="nav-title">Quizbanks</a>
-        </div>
-        <div class="nav-links">
-            <% if (user) { %>
-              <a href="/logout" class="settings-btn">Logout</a>
-            <% } else { %>
-              <a href="/" class="<%= (title === 'Quizbanks Home') ? 'active' : '' %>">Home</a>
-              <a href="/login/" class="<%= (title === 'Login') ? 'active' : '' %>">Login</a>
-              <a href="/login/register" class="<%= (title === 'Register') ? 'active' : '' %>">Register</a>
-            <% } %>
-            <button id="darkModeToggle" aria-label="Toggle dark mode" class="settings-btn" title="Toggle dark mode">
-                <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm6.94-2.06a8.12 8.12 0 0 0 .06-1.44 8.12 8.12 0 0 0-.06-1.44l2.11-1.65a.5.5 0 0 0 .12-.62l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.03 7.03 0 0 0-1.25-.73l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.18-.84.4-1.25.73l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.62l2.11 1.65c-.04.47-.07.96-.07 1.44s.03.97.07 1.44l-2.11 1.65a.5.5 0 0 0-.12.62l2 3.46a.5.5 0 0 0 .6.22l2.49-1c.4.33.81.55 1.25.73l.38 2.65A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.18.84-.4 1.25-.73l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.62l-2.11-1.65z"/>
-                </svg>
-            </button>
-        </div>
-    </nav>
-    <script>
-      // Dark mode toggler
+  <nav class="navbar">
+    <div class="nav-logo">
+      <a href="/" class="nav-title">Quizbanks</a>
+    </div>
+    <div class="nav-links">
+      <button id="backBtn" class="back-btn" onclick="goBack()" title="Go back" aria-label="Go back">
+        &#8592; Back
+      </button>
+      <% if (title !== 'Quizbanks Home') { %>
+        <a href="/" class="<%= (title === 'Quizbanks Home') ? 'active' : '' %>">Home</a>
+      <% } %>
+      <% if (user) { %>
+        <% if (title !== 'Logout') { %>
+          <a href="/login/logout" class="settings-btn <%= (title === 'Logout') ? 'active' : '' %>">Logout</a>
+        <% } %>
+        <% if (title !== 'Teacher') { %>
+          <a href="/teacher" class="settings-btn <%= (title === 'Teacher') ? 'active' : '' %>">Course Dashboard</a>
+        <% } %>
+        <span class="user-info"><%= user.username %></span>
+      <% } else { %>
+        <% if (title !== 'Login') { %>
+          <a href="/login/" class="<%= (title === 'Login') ? 'active' : '' %>">Login</a>
+        <% } %>
+        <% if (title !== 'Register') { %>
+          <a href="/login/register" class="<%= (title === 'Register') ? 'active' : '' %>">Register</a>
+        <% } %>
+      <% } %>
+      <button id="darkModeToggle" aria-label="Toggle dark mode" class="settings-btn" title="Toggle dark mode">
+        <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm6.94-2.06a8.12 8.12 0 0 0 .06-1.44 8.12 8.12 0 0 0-.06-1.44l2.11-1.65a.5.5 0 0 0 .12-.62l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.03 7.03 0 0 0-1.25-.73l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.18-.84.4-1.25.73l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.62l2.11 1.65c-.04.47-.07.96-.07 1.44s.03.97.07 1.44l-2.11 1.65a.5.5 0 0 0-.12.62l2 3.46a.5.5 0 0 0 .6.22l2.49-1c.4.33.81.55 1.25.73l.38 2.65A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.18.84-.4 1.25-.73l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.62l-2.11-1.65z" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+  <script>
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const homePaths = ['/', '/home', '/index', '/index.html'];
+      const currentPath = window.location.pathname.toLowerCase();
+      const buttonsToHide = {
+        backBtn: currentPath === '/' || homePaths.includes(currentPath),
+        homeBtn: currentPath === '/' || homePaths.includes(currentPath),
+        logoutBtn: currentPath === '/login/logout',
+        teacherBtn: currentPath === '/teacher',
+        loginBtn: currentPath === '/login/',
+        registerBtn: currentPath === '/login/register'
+      };
+
+      if (buttonsToHide.backBtn) {
+        document.getElementById('backBtn').style.display = 'none';
+      }
+      if (buttonsToHide.homeBtn) {
+        let homeBtn = document.querySelector('a[href="/"]');
+        if (homeBtn) homeBtn.style.display = 'none';
+      }
+      if (buttonsToHide.logoutBtn) {
+        let logoutBtn = document.querySelector('a[href="/login/logout"]');
+        if (logoutBtn) logoutBtn.style.display = 'none';
+      }
+      if (buttonsToHide.teacherBtn) {
+        let teacherBtn = document.querySelector('a[href="/teacher"]');
+        if (teacherBtn) teacherBtn.style.display = 'none';
+      }
+      if (buttonsToHide.loginBtn) {
+        let loginBtn = document.querySelector('a[href="/login/"]');
+        if (loginBtn) loginBtn.style.display = 'none';
+      }
+      if (buttonsToHide.registerBtn) {
+        let registerBtn = document.querySelector('a[href="/login/register"]');
+        if (registerBtn) registerBtn.style.display = 'none';
+      }
       function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('quizbanks-theme', theme);
       }
-      document.addEventListener('DOMContentLoaded', function(){
-        const stored = localStorage.getItem('quizbanks-theme');
-        if (stored) setTheme(stored);
-        document.getElementById('darkModeToggle').onclick = () => {
-          const isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
-          setTheme(isLight ? 'dark' : 'light');
-        };
-      });
-    </script>
+      const stored = localStorage.getItem('quizbanks-theme');
+      if (stored) setTheme(stored);
+      document.getElementById('darkModeToggle').onclick = () => {
+        const isLight = document.documentElement.getAttribute('data-theme') !== 'dark';
+        setTheme(isLight ? 'dark' : 'light');
+      };
+    });
+  </script>
+</body>
+</html>
