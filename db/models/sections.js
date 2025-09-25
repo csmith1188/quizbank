@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Section = sequelize.define("Section", {
-        id: {
+        uid: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Task = sequelize.define("Task", {
-        id: {
+        uid: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,

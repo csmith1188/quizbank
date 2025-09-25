@@ -3,11 +3,11 @@ const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
 const resourceDepthMap = new Map([
-    ["course", 0],
-    ["section", 1],
-    ["unit", 2],
-    ["task", 3],
-    ["question", 4]
+    ["Course", 0],
+    ["Section", 1],
+    ["Unit", 2],
+    ["Task", 3],
+    ["Question", 4]
 ]);
 
 // Recursively collect all questions from the data
@@ -37,16 +37,17 @@ function parseResourcePath(path) {
     const segments = [];
     for (let i = 0; i < pieces.length; i += 2) {
         segments.push({
-            type: pieces[i],
+            type: pieces[i].charAt(0).toUpperCase() + pieces[i].slice(1),
             ids: pieces[i + 1]
-                ? pieces[i + 1].split("+").map(Number)
-                : []
+            ? pieces[i + 1].split("+").map(Number)
+            : []
         });
     }
     return { segments, pickAmount };
 }
 
 function resolveHierarchy(root, segments) {
+
     let data = root;
 
     segments.forEach(({ type, ids }) => {
@@ -70,9 +71,10 @@ function resolveHierarchy(root, segments) {
     return data;
 }
 
-module.exports.getFullCourseHierarchy = async (userId) => {
+getFullCourseHierarchy = async (userUid) => {
     const courses = await Course.findAll({
-        where: { userId: userId },
+
+        where: { UserUid: userUid },
         include: [
             {
                 model: Section,
@@ -90,11 +92,11 @@ module.exports.getFullCourseHierarchy = async (userId) => {
             }
         ],
         order: [
-            ["id", "ASC"],
-            [Section, "id", "ASC"],
-            [Section, Unit, "id", "ASC"],
-            [Section, Unit, Task, "id", "ASC"],
-            [Section, Unit, Task, Question, "id", "ASC"],
+            ["uid", "ASC"],
+            [Section, "uid", "ASC"],
+            [Section, Unit, "uid", "ASC"],
+            [Section, Unit, Task, "uid", "ASC"],
+            [Section, Unit, Task, Question, "uid", "ASC"],
         ]
     });
 
@@ -105,6 +107,8 @@ module.exports.getFullCourseHierarchy = async (userId) => {
 module.exports.getResource = (userId, path) => {
     const { segments, pickAmount } = parseResourcePath(path);
 
+    console.log(segments);
+
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
@@ -113,10 +117,11 @@ module.exports.getResource = (userId, path) => {
         throw new Error(`Path must start with a course: found ${segments[0].type}`);
     }
 
-    let data = resolveHierarchy({ courses: Course.getAll({ scope: shallow }) }, segments);
+    let data = getFullCourseHierarchy(userId);
+    let resolvedData = resolveHierarchy(data, segments);
 
     if (pickAmount) {
-        const allQuestions = collectQuestions(data);
+        const allQuestions = collectQuestions(resolvedData);
 
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
         if (pickAmount > allQuestions.length) throw new Error(`Requested ${pickAmount} questions, but only ${allQuestions.length} available`);
@@ -126,3 +131,14 @@ module.exports.getResource = (userId, path) => {
 
     return data;
 }
+
+let testing = async () => {
+    let path = "course/1/section/2/unit/3/task/4/pick/2";
+    let userId = 1;
+    module.exports.getResource(userId, path).then(data => {
+        console.log(JSON.stringify(data, null, 2));
+    }).catch(err => {
+        console.error(err);
+    });
+}
+testing();
