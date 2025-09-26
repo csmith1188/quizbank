@@ -7,4 +7,8 @@ module.exports = (router) => {
         res.render('pages/teacher/content.ejs', { title: 'Content' });
     });
 
+    router.post('/content', (req, res) => {
+        
+    })
+
 };
