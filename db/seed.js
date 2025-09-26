@@ -12,29 +12,34 @@ async function seed() {
 
     for (const courseData of jsonData.courses) {
       const course = await Course.create({
+        index: courseData.id,
         name: courseData.name,
       });
 
       for (const sectionData of courseData.sections || []) {
         const section = await Section.create({
           name: sectionData.name,
+          index: sectionData.id,
           CourseUid: course.uid,
         });
 
         for (const unitData of sectionData.units || []) {
           const unit = await Unit.create({
             name: unitData.name,
+            index: unitData.id,
             SectionUid: section.uid,
           });
 
           for (const taskData of unitData.tasks || []) {
             const task = await Task.create({
               name: taskData.name,
+              index: taskData.id,
               UnitUid: unit.uid,
             });
 
             for (const qData of taskData.questions || []) {
               await Question.create({
+                index: qData.id,
                 ai: qData.ai || false,
                 prompt: qData.prompt,
                 correct_answer: qData.correctAnswer,

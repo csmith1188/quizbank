@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.TEXT,
         }
+    }, {
+        tableName: 'users'
     });
 
     return User;
