@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Question = sequelize.define("Question", {
-        uid: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
         ai: { type: DataTypes.BOOLEAN, defaultValue: false },
         answers: { type: DataTypes.TEXT }, // JSON string
     });
+
+    Question.associate = models => {
+        Question.belongsTo(models.Task, {
+            foreignKey: { name: "task_id", allowNull: false },
+            as: "task",
+            onDelete: "CASCADE",
+        });
+    };
 
     return Question;
 };  

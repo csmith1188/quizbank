@@ -18,19 +18,19 @@ async function seed() {
       for (const sectionData of courseData.sections || []) {
         const section = await Section.create({
           name: sectionData.name,
-          CourseUid: course.uid,
+          course_id: course.id,
         });
 
         for (const unitData of sectionData.units || []) {
           const unit = await Unit.create({
             name: unitData.name,
-            SectionUid: section.uid,
+            section_id: section.id,
           });
 
           for (const taskData of unitData.tasks || []) {
             const task = await Task.create({
               name: taskData.name,
-              UnitUid: unit.uid,
+              unit_id: unit.id,
             });
 
             for (const qData of taskData.questions || []) {
@@ -40,7 +40,7 @@ async function seed() {
                 correct_answer: qData.correctAnswer,
                 correct_index: qData.correctIndex,
                 answers: JSON.stringify(qData.answers),
-                TaskUid: task.uid,
+                task_id: task.id,
               });
             }
           }
