@@ -37,11 +37,11 @@ The database consists of the following models:
 
 ### Relationships
 
-- A `Course` has many `Sections` "Go to definition".
-- A `Section` belongs to a `Course` "Go to definition" and has many `Units` "Go to definition".
-- A `Unit` "Go to definition" belongs to a `Section` "Go to definition" and has many `Tasks` "Go to definition".
-- A `Task` "Go to definition" belongs to a `Unit` "Go to definition" and has many `Questions` "Go to definition".
-- A `Question` "Go to definition" belongs to a `Task` "Go to definition".
+- A `Course` has many `Sections`.
+- A `Section` belongs to a `Course` and has many `Units`.
+- A `Unit` belongs to a `Section` and has many `Tasks`.
+- A `Task` belongs to a `Unit` and has many `Questions`.
+- A `Question` belongs to a `Task`.
 
 ## Seeding System
 
