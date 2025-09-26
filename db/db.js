@@ -19,16 +19,16 @@ fs.readdirSync(path.join(__dirname, "models"))
     });
 
 // associations
-models.User.hasMany(models.Course,   { as: "courses",   foreignKey: "userId" });
-models.Course.belongsTo(models.User, { as: "user",      foreignKey: "userId" });
-models.Course.hasMany(models.Section, { as: "sections", foreignKey: "courseId" });
-models.Section.belongsTo(models.Course,{ as: "course",  foreignKey: "courseId" });
-models.Section.hasMany(models.Unit,   { as: "units",    foreignKey: "sectionId" });
-models.Unit.belongsTo(models.Section, { as: "section",  foreignKey: "sectionId" });
-models.Unit.hasMany(models.Task,      { as: "tasks",    foreignKey: "unitId" });
-models.Task.belongsTo(models.Unit,    { as: "unit",     foreignKey: "unitId" });
-models.Task.hasMany(models.Question,  { as: "questions", foreignKey: "taskId" });
-models.Question.belongsTo(models.Task,{ as: "task",     foreignKey: "taskId" });
+models.User.hasMany(models.Course,   { as: "courses",   foreignKey: "userUid" });
+models.Course.belongsTo(models.User, { as: "user",      foreignKey: "userUid" });
+models.Course.hasMany(models.Section, { as: "sections", foreignKey: "courseUid" });
+models.Section.belongsTo(models.Course,{ as: "course",  foreignKey: "courseUid" });
+models.Section.hasMany(models.Unit,   { as: "units",    foreignKey: "sectionUid" });
+models.Unit.belongsTo(models.Section, { as: "section",  foreignKey: "sectionUid" });
+models.Unit.hasMany(models.Task,      { as: "tasks",    foreignKey: "unitUid" });
+models.Task.belongsTo(models.Unit,    { as: "unit",     foreignKey: "unitUid" });
+models.Task.hasMany(models.Question,  { as: "questions", foreignKey: "taskUid" });
+models.Question.belongsTo(models.Task,{ as: "task",     foreignKey: "taskUid" });
 
 models.sequelize = sequelize;
 models.Sequelize = Sequelize;
