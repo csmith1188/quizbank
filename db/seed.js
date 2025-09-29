@@ -1,56 +1,46 @@
 const fs = require("fs");
 const path = require("path");
-const { sequelize, User, Course, Section, Unit, Task, Question } = require("./db");
+const { sequelize, Course, Section, Unit, Task, Question } = require("./db");
 
 async function seed() {
   try {
-    const filePath = path.join(__dirname, "../quizsources/small.json");
+    const filePath = path.join(__dirname, "../quizsources/courses.json");
     const rawData = fs.readFileSync(filePath);
     const jsonData = JSON.parse(rawData);
 
     await sequelize.sync({ force: true });
 
-    await User.create({
-      username: "CoolGuy",
-    });
-
     for (const courseData of jsonData.courses) {
       const course = await Course.create({
-        index: courseData.id,
         name: courseData.name,
-        userUid: 1,
       });
 
       for (const sectionData of courseData.sections || []) {
         const section = await Section.create({
           name: sectionData.name,
-          index: sectionData.id,
-          courseUid: course.uid,
+          course_id: course.id,
         });
 
         for (const unitData of sectionData.units || []) {
           const unit = await Unit.create({
             name: unitData.name,
-            index: unitData.id,
-            sectionUid: section.uid,
+            section_id: section.id,
           });
 
           for (const taskData of unitData.tasks || []) {
             const task = await Task.create({
               name: taskData.name,
-              index: taskData.id,
-              unitUid: unit.uid,
+              unit_id: unit.id,
             });
 
             for (const qData of taskData.questions || []) {
               await Question.create({
-                index: qData.id,
                 ai: qData.ai || false,
                 prompt: qData.prompt,
                 correct_answer: qData.correctAnswer,
                 correct_index: qData.correctIndex,
                 answers: JSON.stringify(qData.answers),
-                taskUid: task.uid,
+                task_id: task.id,
               });
             }
           }

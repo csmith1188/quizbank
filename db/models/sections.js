@@ -5,12 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        index: {
-            type: DataTypes.INTEGER,
-        },
         name: { type: DataTypes.TEXT, allowNull: false },
-    }, {
-        tableName: 'sections'
     });
 
     Section.associate = models => {

@@ -23,9 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.TEXT,
-        }
+        },
     }, {
-        tableName: 'users'
+        tableName: "users",
+        timestamps: false,
     });
 
     return User;
