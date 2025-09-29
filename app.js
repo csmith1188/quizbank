@@ -5,11 +5,12 @@ const path = require('path');
 const session = require('express-session');
 
 const rateLimit = require('express-rate-limit');
-const resourceResolver = require('./middleware/resource-resolver');
+const resource = require('./middleware/resource');
 const errorHandler = require('./middleware/error-handler');
 const db = require("./db/db");
 const { readDirPaths } = require('./util/file-helpers');
 const localsmiddleware = require('./middleware/locals');
+const {isAuthenticated} = require('./middleware/auth');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -63,7 +64,7 @@ controllers.forEach(controllerPath => {
 });
 
 // Resource resolver middleware
-app.use('/api/resource', resourceResolver);
+app.use('/api/resource', isAuthenticated, resource);
 
 // must be last middleware
 app.use(errorHandler);
