@@ -3675,7 +3675,7 @@
                         {
                             "id": 12,
                             "name": "Unordered Collections",
-                            "description": "Student can create, add, remove, and sort elements in a dictionary/map, and substitute specific element's values in an expression.",
+                            "description": "Student can create and retrieve values in a dictionary/map, and substitute specific element's values in an expression.",
                             "questions": [
                                 {
                                     "id": 145,
@@ -3714,6 +3714,455 @@
                                         "assignment",
                                         "index",
                                         "datatype"
+                                    ]
+                                },
+                                {
+                                    "id": 148,
+                                    "ai": true,
+                                    "prompt": "Given d={'a':1,'b':2}; what does d['a'] evaluate to?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "1",
+                                        "'a'",
+                                        "['a']",
+                                        "KeyError"
+                                    ]
+                                },
+                                {
+                                    "id": 149,
+                                    "ai": true,
+                                    "prompt": "Given d={'x':1}; d['y']=3; what is d?",
+                                    "correctAnswer": "{'x':1,'y':3}",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "{'x':1,'y':3}",
+                                        "{'x':1}",
+                                        "{'y':3}",
+                                        "{'x':1,'y':[3]}"
+                                    ]
+                                },
+                                {
+                                    "id": 152,
+                                    "ai": true,
+                                    "prompt": "Which test checks whether 'id' is a key in d?",
+                                    "correctAnswer": "'id' in d",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "'id' in d",
+                                        "d.contains('id')",
+                                        "in d.keys('id')",
+                                        "id in d.values()"
+                                    ]
+                                },
+                                {
+                                    "id": 179,
+                                    "ai": true,
+                                    "prompt": "After d={'a':1}; d['a']=5; what is len(d)?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "0",
+                                        "2",
+                                        "1",
+                                        "5"
+                                    ]
+                                },
+                                {
+                                    "id": 194,
+                                    "ai": true,
+                                    "prompt": "What happens when you access d['z'] and 'z' is not a key?",
+                                    "correctAnswer": "Raises KeyError",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "Returns 0",
+                                        "Returns ''",
+                                        "Returns None",
+                                        "Raises KeyError"
+                                    ]
+                                },
+                                {
+                                    "id": 195,
+                                    "ai": true,
+                                    "prompt": "In {'a':1,'a':2}, what is the value of 'a'?",
+                                    "correctAnswer": "2 (the last assignment wins)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "2 (the last assignment wins)",
+                                        "1 (the first assignment wins)",
+                                        "Both 1 and 2 are stored",
+                                        "Undefined behavior"
+                                    ]
+                                },
+                                {
+                                    "id": 196,
+                                    "ai": true,
+                                    "prompt": "Which statement is true about dictionary keys?",
+                                    "correctAnswer": "Keys must be immutable types like str, int, or tuple",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "Keys must be strings",
+                                        "Keys can be lists",
+                                        "Keys must be immutable types like str, int, or tuple",
+                                        "Keys must be unique only within values"
+                                    ]
+                                },
+                                {
+                                    "id": 199,
+                                    "ai": true,
+                                    "prompt": "Given d={'0':'zero', 0:'number zero'}, what does d[0] return?",
+                                    "correctAnswer": "number zero",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "'zero'",
+                                        "KeyError",
+                                        "number zero",
+                                        "0"
+                                    ]
+                                },
+                                {
+                                    "id": 191,
+                                    "ai": true,
+                                    "prompt": "Given d={'a':1,'b':2}, what does d['a'] evaluate to?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "'a'",
+                                        "KeyError",
+                                        "1",
+                                        "['a']"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 13,
+                            "name": "Unordered Methods",
+                            "description": "Student can add, remove, and loop through key-value pairs in a dictionary/map.",
+                            "questions": [
+                                {
+                                    "id": 150,
+                                    "ai": true,
+                                    "prompt": "Given d={'k':9,'m':8}; del d['k']; what is d now?",
+                                    "correctAnswer": "{'m':8}",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "{}",
+                                        "{'m':8}",
+                                        "{'k':9}",
+                                        "{'k':9,'m':8}"
+                                    ]
+                                },
+                                {
+                                    "id": 153,
+                                    "ai": true,
+                                    "prompt": "Given d={'x':7}; what does len(d) evaluate to?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "1",
+                                        "7",
+                                        "'x'",
+                                        "KeyError"
+                                    ]
+                                },
+                                {
+                                    "id": 151,
+                                    "ai": true,
+                                    "prompt": "Which expression returns 0 if 'missing' is not a key in d?",
+                                    "correctAnswer": "d.get('missing',0)",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "d['missing'] or 0",
+                                        "d.default('missing',0)",
+                                        "d.get('missing',0)",
+                                        "0 if 'missing' not in d else d['missing']"
+                                    ]
+                                },
+                                {
+                                    "id": 153,
+                                    "ai": true,
+                                    "prompt": "What does d.items() produce?",
+                                    "correctAnswer": "An iterable of (key, value) pairs",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "A list of keys",
+                                        "An iterable of (key, value) pairs",
+                                        "A list of values",
+                                        "A copy of the dictionary"
+                                    ]
+                                },
+                                {
+                                    "id": 155,
+                                    "ai": true,
+                                    "prompt": "Which method returns a view of just the values in d?",
+                                    "correctAnswer": "d.values()",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "d.value()",
+                                        "d.items()",
+                                        "d.keys()",
+                                        "d.values()"
+                                    ]
+                                },
+                                {
+                                    "id": 157,
+                                    "ai": true,
+                                    "prompt": "Which method adds all key-value pairs from e into d, overwriting existing keys in d?",
+                                    "correctAnswer": "d.update(e)",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "d.update(e)",
+                                        "d.extend(e)",
+                                        "d.merge(e)",
+                                        "d.append(e)"
+                                    ]
+                                },
+                                {
+                                    "id": 158,
+                                    "ai": true,
+                                    "prompt": "In for k in d:, what does k represent?",
+                                    "correctAnswer": "Each key in d",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Each key in d",
+                                        "Each value in d",
+                                        "Each (key,value) pair",
+                                        "Each index position"
+                                    ]
+                                },
+                                {
+                                    "id": 159,
+                                    "ai": true,
+                                    "prompt": "Which call removes key 'x' and returns its value, or 0 if 'x' is missing?",
+                                    "correctAnswer": "d.pop('x', 0)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "d.get('x', 0)",
+                                        "d.pop('x', 0)",
+                                        "del d['x'] or 0",
+                                        "d.remove('x', 0)"
+                                    ]
+                                },
+                                {
+                                    "id": 161,
+                                    "ai": true,
+                                    "prompt": "Which method returns a value you can loop over to get keys only?",
+                                    "correctAnswer": "d.keys()",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "d.items()",
+                                        "d.values()",
+                                        "list(d)",
+                                        "d.keys()"
+                                    ]
+                                },
+                                {
+                                    "id": 164,
+                                    "ai": true,
+                                    "prompt": "Which method removes all key-value pairs from d?",
+                                    "correctAnswer": "d.clear()",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "del d",
+                                        "d.erase()",
+                                        "d.clear()",
+                                        "d.empty()"
+                                    ]
+                                },
+                                {
+                                    "id": 165,
+                                    "ai": true,
+                                    "prompt": "Given a={'x':1}; b=a.copy(); a['x']=9; what is b['x']?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "1",
+                                        "9",
+                                        "KeyError",
+                                        "None"
+                                    ]
+                                },
+                                {
+                                    "id": 166,
+                                    "ai": true,
+                                    "prompt": "Which loop goes through both key and value?",
+                                    "correctAnswer": "for k, v in d.items():",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "for k, v in d.items():",
+                                        "for v in d.values(), k in d.keys():",
+                                        "for k, v in d:",
+                                        "for pair in d.keys():"
+                                    ]
+                                },
+                                {
+                                    "id": 154,
+                                    "ai": true,
+                                    "prompt": "Which loop iterates over both keys and values of d?",
+                                    "correctAnswer": "for k, v in d.items():",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "for k, v in d.items():",
+                                        "for k, v in d:",
+                                        "for (k, v) in d.keys():",
+                                        "for k in d.keys(), v in d.values():"
+                                    ]
+                                },
+                                {
+                                    "id": 167,
+                                    "ai": true,
+                                    "prompt": "Which test checks if 'id' is a key in d?",
+                                    "correctAnswer": "'id' in d",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "id in d.values()",
+                                        "d.has('id')",
+                                        "d.keys('id')",
+                                        "'id' in d"
+                                    ]
+                                },
+                                {
+                                    "id": 168,
+                                    "ai": true,
+                                    "prompt": "Given d={'a':1}; what happens if you evaluate d['b'] when 'b' is not a key?",
+                                    "correctAnswer": "Raises KeyError",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Returns None",
+                                        "Raises KeyError",
+                                        "Returns 0",
+                                        "Creates key 'b'"
+                                    ]
+                                },
+                                {
+                                    "id": 169,
+                                    "ai": true,
+                                    "prompt": "Which expression checks if key 'user' exists in d?",
+                                    "correctAnswer": "'user' in d",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "'user' in d",
+                                        "d.contains('user')",
+                                        "'user' in d.values()",
+                                        "d.has_key('user')"
+                                    ]
+                                },
+                                {
+                                    "id": 171,
+                                    "ai": true,
+                                    "prompt": "Given d={'x':1,'y':2}; which expression produces a list of keys?",
+                                    "correctAnswer": "list(d.keys())",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "d.values()",
+                                        "d.items()",
+                                        "list(d.values())",
+                                        "list(d.keys())"
+                                    ]
+                                },
+                                {
+                                    "id": 173,
+                                    "ai": true,
+                                    "prompt": "Given d={'a':1,'b':2}; which one safely returns 0 when 'c' is not present?",
+                                    "correctAnswer": "d.get('c',0)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "d['c'] or 0",
+                                        "d.get('c',0)",
+                                        "d.value('c',0)",
+                                        "d.fetch('c',0)"
+                                    ]
+                                },
+                                {
+                                    "id": 177,
+                                    "ai": true,
+                                    "prompt": "Given d={'p':1}; e={'q':2}; which expression updates d with e in-place?",
+                                    "correctAnswer": "d.update(e)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "d.merge(e)",
+                                        "d.update(e)",
+                                        "d.append(e)",
+                                        "e.update(d) then use e"
+                                    ]
+                                },
+                                {
+                                    "id": 181,
+                                    "ai": true,
+                                    "prompt": "Given d={'b':2,'a':1}, what does sorted(d) return?",
+                                    "correctAnswer": "['a','b']",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "['a','b']",
+                                        "[1,2]",
+                                        "[('a',1),('b',2)]",
+                                        "['b','a']"
+                                    ]
+                                },
+                                {
+                                    "id": 182,
+                                    "ai": true,
+                                    "prompt": "Given d={'a':1} and e={'b':2}, which creates a new merged dict without changing d or e (Python 3.9+)?",
+                                    "correctAnswer": "d | e",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "d.update(e)",
+                                        "d | e",
+                                        "{**d, **e}",
+                                        "e.update(d) and use d"
+                                    ]
+                                },
+                                {
+                                    "id": 183,
+                                    "ai": true,
+                                    "prompt": "What does d.get('z') return when 'z' is not a key and no default is provided?",
+                                    "correctAnswer": "None",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "KeyError",
+                                        "0",
+                                        "''",
+                                        "None"
+                                    ]
+                                },
+                                {
+                                    "id": 184,
+                                    "ai": true,
+                                    "prompt": "What does d.pop('x', 0) do if 'x' is not a key in d?",
+                                    "correctAnswer": "Returns 0 and leaves d unchanged",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Returns 0 and leaves d unchanged",
+                                        "Raises KeyError",
+                                        "Adds 'x' with value 0 to d",
+                                        "Returns None and leaves d unchanged"
+                                    ]
+                                },
+                                {
+                                    "id": 184,
+                                    "ai": true,
+                                    "prompt": "Which statement removes key 'k' and raises an error if 'k' is missing?",
+                                    "correctAnswer": "del d['k']",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "del d['k']",
+                                        "d.pop('k', None)",
+                                        "d.clear('k')",
+                                        "d.discard('k')"
+                                    ]
+                                },
+                                {
+                                    "id": 177,
+                                    "ai": true,
+                                    "prompt": "Given d={'p':1}; e={'q':2}; which expression updates d with e in-place?",
+                                    "correctAnswer": "d.update(e)",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "d.merge(e)",
+                                        "d.update(e)",
+                                        "d.append(e)",
+                                        "e.update(d) then use e"
                                     ]
                                 }
                             ]
