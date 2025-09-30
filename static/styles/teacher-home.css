@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Use the same root/color variables as your main index.css for consistency */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #3730a3;
+  --accent: #14b8a6;
+  --nav-bg: #6366f1;
+  --bg1: #f1f5f9;
+  --bg2: #e0f2fe;
+  --surface: #fff;
+  --glass: rgba(255,255,255,0.85);
+  --border: #e0e7ef;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --radius: 18px;
+  --shadow: 0 8px 32px 0 rgba(99,102,241,0.13);
+  --shadow-nav: 0 3px 18px 0 rgba(99,102,241,0.10);
+  --transition: 0.5s cubic-bezier(.4,0,.2,1);
+  --header-height: 57px;
+  --footer-height: 54px;
+}
+
+[data-theme='dark'] {
+  --primary: #818cf8;
+  --primary-dark: #3730a3;
+  --accent: #2dd4bf;
+  --nav-bg: #18181b;
+  --bg1: #09090b;
+  --bg2: #232334;
+  --surface: #18181b;
+  --glass: rgba(32,32,38,0.92);
+  --border: #26263c;
+  --text: #e0e7ef;
+  --text-muted: #94a3b8;
+  --shadow: 0 6px 16px 0 rgba(32,32,38,0.44);
+  --shadow-nav: 0 2px 12px 0 rgba(32,32,38,0.25);
+}
+
+/* Panel fills the space between header and footer with the same gradient as index.css */
+.teacher-page-main {
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    height: calc(100vh - var(--header-height) - var(--footer-height));
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    /* Same gradient as index.css for light and dark */
+    background: linear-gradient(120deg, var(--bg1) 0%, var(--bg2) 100%);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.teacher-dashboard-card {
+    width: 100vw;
+    height: 100%;
+    min-height: 100%;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    border-radius: 0;
+    box-shadow: var(--shadow);
+    margin: 0;
+    padding: 2.7rem 2.1rem 2.3rem 2.1rem;
+    backdrop-filter: blur(8px) saturate(1.2);
+    -webkit-backdrop-filter: blur(8px) saturate(1.2);
+    border: none;
+    animation: fade-in 0.7s cubic-bezier(.4,0,.3,1);
+    transition: background var(--transition), box-shadow var(--transition), border var(--transition);
+    box-sizing: border-box;
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; transform: translateY(36px) scale(0.97);}
+    75% { opacity: 1; transform: translateY(-6px) scale(1.02);}
+    100% { opacity: 1; transform: translateY(0) scale(1);}
+}
+
+.teacher-dashboard-title {
+    font-size: 2.25rem;
+    color: var(--primary-dark);
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5em;
+    margin-top: 0;
+    letter-spacing: 0.01em;
+    text-shadow: 0 3px 16px #3730a34c;
+    transition: color var(--transition);
+}
+[data-theme='dark'] .teacher-dashboard-title {
+    color: var(--primary);
+}
+.teacher-dashboard-user {
+    font-size: 1.13rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5em;
+    text-align: center;
+    font-weight: 500;
+    transition: color var(--transition);
+}
+.teacher-dashboard-info {
+    color: var(--primary);
+    font-size: 1.15rem;
+    margin-bottom: 2em;
+    text-align: center;
+    transition: color var(--transition);
+}
+.teacher-dashboard-buttons {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Buttons */
+.teacher-btn,
+.teacher-btn-primary,
+.teacher-btn-accent {
+    font-family: inherit;
+    font-size: 1.13rem;
+    font-weight: 700;
+    padding: 0.85em 2.25em;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 2px 16px 0 #818cf820;
+    transition: background var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition);
+    outline: none;
+    min-width: 160px;
+    margin-bottom: 0.5em;
+    background: var(--primary);
+    color: #fff;
+}
+.teacher-btn-primary {
+    background: var(--primary);
+}
+.teacher-btn-accent {
+    background: var(--accent);
+}
+.teacher-btn:hover,
+.teacher-btn:focus,
+.teacher-btn-primary:hover,
+.teacher-btn-primary:focus,
+.teacher-btn-accent:hover,
+.teacher-btn-accent:focus {
+    background: linear-gradient(90deg, var(--primary) 10%, var(--accent) 90%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 3px 18px 0 #818cf845;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+    .teacher-dashboard-card {
+        padding: 1.4rem 0.7rem 1.2rem 0.7rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .teacher-dashboard-title { font-size: 1.7rem; }
+    .teacher-dashboard-user { font-size: 1rem; }
+    .teacher-dashboard-info { font-size: 1rem; }
+    .teacher-dashboard-buttons { gap: 0.7rem; }
+    .teacher-btn { font-size: 0.99rem; padding: 0.7em 1.1em; min-width: 0; }
+    .teacher-dashboard-card { padding: 1.2rem 0.2rem; }
+}
+
+@media (max-width: 500px) {
+    .teacher-dashboard-title { font-size: 1.18rem; }
+    .teacher-btn { font-size: 0.91rem; padding: 0.5em 0.4em; }
+    .teacher-dashboard-card { min-height: 100%; }
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    background: #e0e7ff;
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #b8cafe;
+    border-radius: 8px;
+}
