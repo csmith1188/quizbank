@@ -10,6 +10,15 @@ const resourceDepthMap = new Map([
     ["question", 4]
 ]);
 
+// Add plural to singular map
+const pluralToSingular = {
+    "courses": "course",
+    "sections": "section",
+    "units": "unit",
+    "tasks": "task",
+    "questions": "question"
+};
+
 // Recursively collect all questions from the data
 const collectQuestions = (data) => {
     if (!data) return [];
@@ -62,8 +71,11 @@ function parseResourcePath(path) {
 
     const segments = [];
     for (let i = 0; i < pieces.length; i += 2) {
+        let type = pieces[i];
+        // Normalize plural to singular
+        if (pluralToSingular[type]) type = pluralToSingular[type];
         segments.push({
-            type: pieces[i],
+            type: type,
             indexes: pieces[i + 1]
                 ? pieces[i + 1].split("+").map(Number)
                 : []

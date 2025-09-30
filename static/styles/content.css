@@ -341,3 +341,113 @@
     padding: 0.13rem 0.02rem 0.5rem 0.02rem;
   }
 }
+
+/* ---- Compact Question Detail Styles ---- */
+.question-detail {
+  background: var(--browser-surface);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+  padding: 1.2em 1.1em;
+  max-width: 450px;
+  margin: 1.2em auto 0 auto;
+  color: var(--browser-text);
+  font-size: 1.02em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  border: 1px solid var(--browser-border);
+}
+
+.question-detail h3 {
+  color: var(--browser-primary);
+  margin: 0 0 0.4em 0;
+  font-size: 1.11em;
+  font-weight: 800;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+.question-prompt {
+  font-weight: 700;
+  font-size: 1.08em;
+  color: var(--browser-text);
+  margin-bottom: 0.2em;
+}
+
+.question-meta {
+  font-size: 0.96em;
+  color: var(--browser-muted);
+  margin-bottom: 0.1em;
+}
+
+.answer-list {
+  margin: 0.5em 0 0.3em 0;
+}
+
+.answer-list ul {
+  padding: 0;
+  margin: 0.2em 0 0 0;
+  list-style: none;
+}
+
+.answer-list li {
+  padding: 0.43em 0.85em;
+  margin-bottom: 0.3em;
+  border-radius: 6px;
+  background: var(--browser-bg);
+  color: var(--browser-text);
+  font-size: 1em;
+  border: 1.2px solid transparent;
+  transition: background 0.13s, color 0.13s;
+  position: relative;
+}
+
+.answer-list li b {
+  margin-left: 0.4em;
+  color: var(--browser-accent);
+  font-weight: 700;
+  font-size: 0.97em;
+}
+
+.answer-list li[style*="color:green;"] {
+  background: var(--browser-accent);
+  color: #fff !important;
+  border-color: var(--browser-primary);
+}
+
+#questionDetailBackBtn {
+  margin-top: 0.75em;
+  align-self: flex-end;
+  background: var(--browser-primary);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 1em;
+  font-weight: 600;
+  padding: 0.45em 1.25em;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(99, 102, 241, 0.08);
+  transition: background 0.14s, color 0.14s;
+}
+
+#questionDetailBackBtn:hover,
+#questionDetailBackBtn:focus {
+  background: var(--browser-accent);
+  color: var(--browser-primary);
+}
+
+[data-theme='dark'] .question-detail {
+  background: var(--browser-surface);
+  color: var(--browser-text);
+}
+
+[data-theme='dark'] .answer-list li {
+  background: var(--browser-bg);
+  color: var(--browser-text);
+}
+
+[data-theme='dark'] .answer-list li[style*="color:green;"] {
+  background: var(--browser-accent);
+  color: #fff !important;
+  border-color: var(--browser-primary);
+}
