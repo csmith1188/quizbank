@@ -1,4 +1,4 @@
-const isAuthenticated = require('../../middleware/auth');
+const {isAuthenticated} = require('../../middleware/auth');
 
 module.exports = (router) => {
 

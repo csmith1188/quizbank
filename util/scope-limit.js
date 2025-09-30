@@ -28,44 +28,41 @@ function getEntity(path) {
     return JSONdata;
 }
 
-// Give a shallow copy of the data that only including id and name of children nothing deeper
-function shallow(JSONdata, depth = 2) {
-    if (depth < 1 || !JSONdata) return null;
-
-    // If it's an array return array of shallow copies
-    if (Array.isArray(JSONdata)) {
-        return JSONdata.map(n => shallow(n, depth - 1));
+// limit the depth of the hierarchial data
+function shallow(data, depth = 2) {
+    if (depth < 0) return null;
+  
+    // Handle arrays (e.g. top-level array of courses)
+    if (Array.isArray(data)) {
+      return data.map(item => shallow(item, depth));
     }
-
-    // If it's an object return shallow copy of it
-    if (typeof JSONdata === "object") {
-        const copy = { 
-            id: JSONdata?.id, 
-            name: JSONdata?.name, 
-            ai: JSONdata?.ai, 
-            prompt: JSONdata?.prompt,
-            correctAnswer: JSONdata?.correctAnswer, 
-            correctIndex: JSONdata?.correctIndex
-        };
-
-        // Only include answers if they exist and convert them to strings
-        if (JSONdata?.answers) {
-            copy.answers = JSONdata.answers.map(v => String(v));
+  
+    // Handle plain objects
+    if (data && typeof data === "object") {
+      const result = {};
+  
+      for (const [key, value] of Object.entries(data)) {
+        if (Array.isArray(value)) {
+          // We've found the child array (the hierarchical step)
+          result[key] = depth > 0
+            ? shallow(value, depth - 1) // descend
+            : undefined;                        // stop here
+        } else if (
+          value === null ||
+          typeof value !== "object" ||
+          value instanceof Date
+        ) {
+          // Copy only primitive fields (id, name, etc.)
+          result[key] = value;
         }
-
-        if (depth > 1) {
-            // For every key inside the object and if its an array shallow copy them
-            for (const [key, value] of Object.entries(JSONdata)) {
-                if (Array.isArray(value) && key !== 'answers') {
-                    copy[key] = value.map(v => shallow(v, depth - 1));
-                }
-            }
-        }
-        return copy;
+      }
+  
+      return result;
     }
-
-    return JSONdata;
-}
+  
+    // Base case for strings/numbers/etc.
+    return data;
+  }
 
 module.exports = { 
     getEntity, 

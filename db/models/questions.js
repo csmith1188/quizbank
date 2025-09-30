@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Question = sequelize.define("Question", {
-        id: {
+        uid: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -16,14 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         tableName: 'questions'
     });
-
-    Question.associate = models => {
-        Question.belongsTo(models.Task, {
-            foreignKey: { name: "task_id", allowNull: false },
-            as: "task",
-            onDelete: "CASCADE",
-        });
-    };
 
     return Question;
 };  

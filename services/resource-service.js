@@ -129,14 +129,3 @@ module.exports.getResource = async (userId, path) => {
 
     return resolvedData;
 }
-
-let testing = async () => {
-    let path = "course/1/section/1+2/pick/4";
-    let userId = 1;
-    module.exports.getResource(userId, path).then(data => {
-        console.log(JSON.stringify(data, null, 2));
-    }).catch(err => {
-        console.error(err);
-    });
-}
-testing();
