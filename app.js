@@ -17,6 +17,7 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use('/client-js', express.static(__dirname + '/static/client-js'));
 
 app.use(express.urlencoded({ extended: true }));
 
