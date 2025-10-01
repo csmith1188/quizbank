@@ -4,7 +4,7 @@ const { sequelize, User, Course, Section, Unit, Task, Question } = require("./db
 
 async function seed() {
   try {
-    const filePath = path.join(__dirname, "../quizsources/small.json");
+    const filePath = path.join(__dirname, "../quizsources/courses.json");
     const rawData = fs.readFileSync(filePath);
     const jsonData = JSON.parse(rawData);
 
