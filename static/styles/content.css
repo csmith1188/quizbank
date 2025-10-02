@@ -54,7 +54,7 @@
 
 .browser-title,
 .page-title {
-  font-size: 2.1rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--browser-primary, var(--primary));
   text-align: center;
@@ -65,7 +65,7 @@
   display: flex;
   width: 100%;
   max-width: 520px;
-  margin: 0 auto 1.2rem auto;
+  margin: 0 auto 1.1rem auto;
   gap: 0.5rem;
 }
 
@@ -342,7 +342,6 @@
   }
 }
 
-/* ---- Compact Question Detail Styles ---- */
 .question-detail {
   background: var(--browser-surface);
   border-radius: 12px;

@@ -1,24 +1,28 @@
 <%- include('../../partials/header.ejs', {title: 'Content' }) %>
-    <link rel="stylesheet" href="/styles/content.css">
+<link rel="stylesheet" href="/styles/index.css">
+<link rel="stylesheet" href="/styles/content.css">
 
-    <main class="course-browser-main">
-        <div class="browser-card">
-            <h2 class="browser-title">Browse Content</h2>
-            <div class="browser-search-row">
-                <input type="text" id="searchInput" class="browser-search" placeholder="Search by name or number...">
-                <button id="searchBtn" class="browser-search-btn" title="Search"><span>🔍</span></button>
-            </div>
-            <nav class="browser-tabs" id="browserTabs">
-                <button class="browser-tab active" data-view="courses"><span>Courses</span></button>
-                <button class="browser-tab" data-view="sections"><span>Sections</span></button>
-                <button class="browser-tab" data-view="units"><span>Units</span></button>
-                <button class="browser-tab" data-view="tasks"><span>Tasks</span></button>
-                <button class="browser-tab" data-view="questions"><span>Questions</span></button>
-            </nav>
-            <div class="browser-selected-path" id="browserSelectedPath"></div>
-            <div class="browser-list-area" id="browserListArea"></div>
+<main class="container">
+    <div class="glass-card">
+        <h2 class="browser-title">Browse Content</h2>
+        <div class="browser-search-row">
+            <input type="text" id="searchInput" class="browser-search" placeholder="Search by name or number...">
+            <button id="searchBtn" class="browser-search-btn" title="Search"><span>🔍</span></button>
         </div>
-    </main>
+        <nav class="browser-tabs" id="browserTabs">
+            <button class="browser-tab active" data-view="courses"><span>Courses</span></button>
+            <button class="browser-tab" data-view="sections"><span>Sections</span></button>
+            <button class="browser-tab" data-view="units"><span>Units</span></button>
+            <button class="browser-tab" data-view="tasks"><span>Tasks</span></button>
+            <button class="browser-tab" data-view="questions"><span>Questions</span></button>
+        </nav>
+        <div class="browser-selected-path" id="browserSelectedPath"></div>
+        <div class="browser-list-area" id="browserListArea"></div>
+    </div>
+</main>
 
-    <script src="/client-js/content.js"></script>
-    <%- include('../../partials/footer.ejs') %>
+<script id="all-course-data" type="application/json">
+    <%- allContentData %>
+</script>
+<script src="/client-js/content.js"></script>
+<%- include('../../partials/footer.ejs') %>
