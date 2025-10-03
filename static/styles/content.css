@@ -21,32 +21,26 @@
 }
 
 .course-browser-main,
-.course-selection {
+.course-selection,
+.browser-card,
+.glass-card {
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   width: 100vw;
-  background: var(--browser-bg, var(--bg1));
+  background: var(--browser-bg);
   padding: 0;
 }
 
 .browser-card,
 .glass-card {
-  flex: 1 1 auto;
-  min-height: 0;
   height: 100%;
-  width: 100vw;
   max-width: 100vw;
-  padding: 0 2vw 2vw 2vw;
-  /* Side padding for wide screens */
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background: var(--browser-surface, var(--surface));
+  padding: 0 2vw 2vw;
+  background: var(--browser-surface);
   border-radius: 0;
-  /* Full width, no rounded corners */
   box-shadow: none;
   margin: 0;
   overflow: hidden;
@@ -56,21 +50,21 @@
 .page-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--browser-primary, var(--primary));
+  color: var(--browser-primary);
   text-align: center;
-  margin: 2.5rem 0 1.4rem 0;
+  margin: 2.5rem 0 1.4rem;
 }
 
 .browser-search-row {
   display: flex;
   width: 100%;
   max-width: 520px;
-  margin: 0 auto 1.1rem auto;
+  margin: 0 auto 1.1rem;
   gap: 0.5rem;
 }
 
 .browser-search {
-  flex: 1 1 0;
+  flex: 1;
   font-size: 1.11rem;
   padding: 0.7em 1.1em;
   border-radius: var(--browser-radius);
@@ -110,8 +104,7 @@
   display: flex;
   gap: 0.6rem;
   justify-content: center;
-  margin-bottom: 0.7rem;
-  margin-top: 0.1rem;
+  margin: 0.1rem 0 0.7rem;
   background: var(--browser-bg);
   border-bottom: 2.5px solid var(--browser-border);
   padding: 0 0.5rem;
@@ -127,7 +120,7 @@
   color: var(--browser-muted);
   font-size: 1.18rem;
   font-weight: 700;
-  padding: 0.65em 2.1em 0.9em 2.1em;
+  padding: 0.65em 2.1em 0.9em;
   cursor: pointer;
   border-bottom: 4px solid transparent;
   border-radius: 1.5em 1.5em 0 0;
@@ -178,11 +171,7 @@
   font-size: 1.08em;
   letter-spacing: 0.01em;
   font-weight: 600;
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
   padding: 0;
-  display: block;
 }
 
 .browser-list-area,
@@ -194,13 +183,12 @@
   max-width: 100vw;
   margin: 0 auto;
   background: transparent;
-  border-radius: var(--browser-radius, 18px);
-  padding: 1.1rem 0.7rem 0.9rem 0.7rem;
+  border-radius: var(--browser-radius);
+  padding: 1.1rem 0.7rem 0.9rem;
   box-shadow: 0 1.5px 8px rgba(99, 102, 241, 0.07);
   margin-bottom: 0.2rem;
 }
 
-/* List items */
 .browser-list,
 .dropdown-list {
   list-style: none;
@@ -210,13 +198,13 @@
 
 .browser-list-item,
 .dropdown-item-btn {
-  background: var(--browser-surface, var(--surface));
+  background: var(--browser-surface);
   border: 1.2px solid transparent;
   border-radius: 14px;
   margin-bottom: 0.43em;
   padding: 1.03em 1.4em;
   font-size: 1.1em;
-  color: var(--browser-text, var(--text));
+  color: var(--browser-text);
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -230,16 +218,16 @@
 .browser-list-item:hover,
 .dropdown-item-btn:focus,
 .dropdown-item-btn:hover {
-  background: var(--browser-accent, var(--accent));
+  background: var(--browser-accent);
   color: #fff;
-  border: 1.2px solid var(--browser-primary, var(--primary));
+  border: 1.2px solid var(--browser-primary);
   box-shadow: 0 4px 24px rgba(20, 184, 166, 0.08);
 }
 
 .browser-list-item .item-number,
 .dropdown-item-btn .item-number {
-  background: var(--browser-bg, var(--bg1));
-  color: var(--browser-primary, var(--primary));
+  background: var(--browser-bg);
+  color: var(--browser-primary);
   font-size: 0.97em;
   font-weight: 700;
   padding: 0.2em 0.98em;
@@ -249,10 +237,10 @@
 
 .browser-answer,
 .question-answer {
-  background: var(--browser-bg, var(--bg1));
-  color: var(--browser-primary, var(--primary));
+  background: var(--browser-bg);
+  color: var(--browser-primary);
   border-radius: 7px;
-  margin: 0.43em 0 0.3em 0;
+  margin: 0.43em 0 0.3em;
   padding: 0.7em 1.2em;
   font-size: 1.08em;
   box-shadow: 0 1px 4px rgba(99, 102, 241, 0.07);
@@ -262,58 +250,35 @@
 
 [data-theme='dark'] .browser-answer,
 [data-theme='dark'] .question-answer {
-  background: var(--browser-primary, var(--primary));
+  background: var(--browser-primary);
   color: #fff;
 }
 
 .browser-no-results,
 .no-results {
-  color: var(--browser-muted, var(--text-muted));
+  color: var(--browser-muted);
   font-weight: 600;
   text-align: center;
-  padding: 2.1em 0 1em 0;
+  padding: 2.1em 0 1em;
   font-size: 1.18em;
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
   margin: 0;
 }
 
 @media (max-width: 900px) {
-
   .browser-card,
-  .glass-card {
-    max-width: 100vw;
-    padding: 0;
-  }
-
+  .glass-card,
   .browser-list-area,
   .dropdown-list {
     max-width: 100vw;
-    padding-left: 0.1rem;
-    padding-right: 0.1rem;
+    padding: 0;
   }
 }
 
 @media (max-width: 650px) {
-
   .browser-title,
   .page-title {
     font-size: 1.13rem;
-    margin: 1.2rem 0 1rem 0;
-  }
-
-  .browser-card,
-  .glass-card {
-    max-width: 100vw;
-    padding: 0;
-  }
-
-  .browser-list-area,
-  .dropdown-list {
-    max-width: 100vw;
-    padding-left: 0.02rem;
-    padding-right: 0.02rem;
+    margin: 1.2rem 0 1rem;
   }
 
   .browser-tabs,
@@ -324,21 +289,20 @@
   .browser-tab,
   .content-view-btn {
     font-size: 0.98rem;
-    padding: 0.52em 0.7em 0.7em 0.7em;
+    padding: 0.52em 0.7em;
   }
 }
 
 @media (max-width: 480px) {
-
   .browser-tab,
   .content-view-btn {
     font-size: 0.89rem;
-    padding: 0.4em 0.5em 0.4em 0.5em;
+    padding: 0.4em 0.5em;
   }
 
   .browser-list-area,
   .dropdown-list {
-    padding: 0.13rem 0.02rem 0.5rem 0.02rem;
+    padding: 0.13rem 0.02rem 0.5rem;
   }
 }
 
@@ -348,7 +312,7 @@
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
   padding: 1.2em 1.1em;
   max-width: 450px;
-  margin: 1.2em auto 0 auto;
+  margin: 1.2em auto 0;
   color: var(--browser-text);
   font-size: 1.02em;
   display: flex;
@@ -359,7 +323,7 @@
 
 .question-detail h3 {
   color: var(--browser-primary);
-  margin: 0 0 0.4em 0;
+  margin: 0 0 0.4em;
   font-size: 1.11em;
   font-weight: 800;
   text-align: left;
@@ -380,12 +344,12 @@
 }
 
 .answer-list {
-  margin: 0.5em 0 0.3em 0;
+  margin: 0.5em 0 0.3em;
 }
 
 .answer-list ul {
   padding: 0;
-  margin: 0.2em 0 0 0;
+  margin: 0.2em 0 0;
   list-style: none;
 }
 
