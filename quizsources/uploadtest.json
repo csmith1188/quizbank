@@ -1,0 +1,79 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "Course 1",
+            "sections": [
+                {
+                    "id": 1,
+                    "name": "Section 1",
+                    "units": [
+                        {
+                            "id": 1,
+                            "name": "Unit 1",
+                            "tasks": [
+                                {
+                                    "id": 1,
+                                    "name": "Task 1",
+                                    "questions": [
+                                        {
+                                            "id": 1,
+                                            "ai": false,
+                                            "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 1?",
+                                            "correctAnswer": "Yes",
+                                            "correctIndex": 0,
+                                            "answers": ["Yes", "No", "Maybe so"]
+                                        },
+                                        {
+                                            "id": 2,
+                                            "ai": false,
+                                            "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 2?",
+                                            "correctAnswer": "Yes",
+                                            "correctIndex": 0,
+                                            "answers": ["Yes", "No", "Maybe so"]
+                                        },
+                                        {
+                                            "id": 3,
+                                            "ai": false,
+                                            "prompt": "[Course 1 > Section 1 > Unit 1 > Task 1] Question 3?",
+                                            "correctAnswer": "Yes",
+                                            "correctIndex": 0,
+                                            "answers": ["Yes", "No", "Maybe so"]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Task 2",
+                                    "questions": [
+                                        {
+                                            "id": 4,
+                                            "ai": false,
+                                            "prompt": "[Course 1 > Section 1 > Unit 1 > Task 2] What is 2 + 2?",
+                                            "correctAnswer": "4",
+                                            "correctIndex": 1,
+                                            "answers": ["3", "4", "5"]
+                                        },
+                                        {
+                                            "id": 5,
+                                            "ai": true,
+                                            "prompt": "[Course 1 > Section 1 > Unit 1 > Task 2] Explain why the sky is blue.",
+                                            "correctAnswer": "",
+                                            "correctIndex": -1,
+                                            "answers": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "Section 2",
+                    "units": []
+                }
+            ]
+        }
+    ]
+}

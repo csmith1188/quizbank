@@ -20,8 +20,6 @@ const SHEET_HEADERS = new Map([
     ['correctIndex', 3]
 ]);
 
-
-
 function rowLetterToIndex(letter) {
     let index = 0;
     for (let i = 0; i < letter.length; i++) {
@@ -53,11 +51,15 @@ module.exports.parseQuestionSheet = (sheetData) => {
     const numCols = sheetData[0].length;
     const hasHeaderRow = sheetHasHeaderRow(sheetData);
     const firstDataRowNum = hasHeaderRow ? 1 : 0;
-    const questions = [];
+
+    // keeps track of new units and tasks to be created, prevents duplicates
+    const newUnits = new Set();
+    const newTasks = new Set();
+    const parsed = [];
 
     for (let row = firstDataRowNum; row < sheetData.length; row++) {
         // check for empty cells
-        for (let col = 0; col < numCols; col++) {
+        for (let col = 0; col < SHEET_HEADERS.size; col++) {
             const cellValue = sheetData[row][col] || '';
             if (cellValue == '') {
                 throw new Error("Empty cell at row " + (row + 1) + " column " + indexToRowLetter(col));
@@ -79,34 +81,102 @@ module.exports.parseQuestionSheet = (sheetData) => {
         }
 
         const belongsTo = {
-            course: rowData[SHEET_HEADERS.get('course')],
-            section: rowData[SHEET_HEADERS.get('section')],
-            unit: rowData[SHEET_HEADERS.get('unit')],
-            task: rowData[SHEET_HEADERS.get('task')]
+            sectionUid: null,
+            unitName: rowData[SHEET_HEADERS.get('unit')],
+            taskName: rowData[SHEET_HEADERS.get('task')]
         }
 
         const prompt = rowData[SHEET_HEADERS.get('prompt')];
         const correctIndex = rowLetterToIndex(rowData[SHEET_HEADERS.get('correctIndex')]) - SHEET_HEADERS.get('correctIndex') - 1;
-        const correctAnswer = rowData[correctIndex];
+        const correctAnswer = rowData[SHEET_HEADERS.get('correctIndex') + correctIndex + 1];
 
+        // for db
         const question = {
             index: null, // to be filled in later
             ai: false,
             prompt,
-            correctAnswer,
-            correctIndex,
+            correct_answer: correctAnswer,
+            correct_index: correctIndex,
             answers
-    };
+        };
 
-    questions.push({ belongsTo, question });
+        parsed.push({ belongsTo, question });
+
+    }
+    
+    parsed.newUnits = newUnits;
+    parsed.newTasks = newTasks;
+
+    return parsed;
 
 }
-
-return questions;
-}
-
-console.log(JSON.stringify(module.exports.parseQuestionSheet(raw_data), null, 2));
 
 module.exports.uploadQuestionSheetData = (data) => {
 
+    return sequelize.transaction(async (t) => {
+
+        for (let item of data) {
+            const {sectionUid, unitName, taskName} = item.belongsTo;
+            const question = item.question;
+
+            // find section
+            const sectionEntity = await Section.findOne({
+                where: {
+                    uid: sectionUid,
+                },
+                transaction: t
+            });
+
+            if (!sectionEntity) {
+                throw new Error(`Section not found`);
+            }
+
+            // create unit
+            const lastUnitIndex = await Unit.max('index', {
+                where: {
+                    sectionUid: sectionUid
+                },
+                transaction: t
+            });
+
+            const unitEntity = await Unit.create({
+                name: unitName,
+                index: (lastUnitIndex || 0) + 1,
+                sectionUid: sectionUid,
+            }, { transaction: t });
+
+            // create task
+            const taskEntity = await Task.create({
+                name: taskName,
+                index: 0,
+                unitId: unitEntity.uid,
+            }, { transaction: t });
+
+            // find next question index
+            const lastQuestionIndex = await Question.count({
+                where: {
+                    taskUid: taskEntity.uid
+                },
+                transaction: t
+            });
+            
+            // prepare question data for insertion
+            question.index = lastQuestionIndex + 1;
+            question.taskUid = taskEntity.uid;
+            question.answers = JSON.stringify(question.answers);
+
+            // create question
+            await Question.create(question, { transaction: t });
+
+        }
+
+    });
+
 }
+
+//console.log(JSON.stringify(module.exports.parseQuestionSheet(raw_data), null, 2));
+
+const parsedTestData = module.exports.parseQuestionSheet(raw_data);
+parsedTestData.forEach(question => question.belongsTo.sectionUid = 1);
+
+module.exports.uploadQuestionSheetData(parsedTestData);
