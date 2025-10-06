@@ -258,8 +258,26 @@ function showAvailableTasks() {
     
     console.log('\nAvailable tasks:');
     console.log('================');
+
+    const sections = quizData.courses.sections || [];
+    console.log(`Total sections: ${sections.length}`);
+    console.log(sections);
+    const courses = quizData.courses || [];
+    console.log(`Total courses: ${courses.length}`);
+    courses.forEach((course) => {
+        console.log(`Course ${course.id}: ${course.name}`);
+        course.sections.forEach((section) => {
+            console.log(`  Section ${section.id}: ${section.name}`);
+            section.units.forEach((unit) => {
+                console.log(`    Unit ${unit.id}: ${unit.name}`);
+                unit.tasks.forEach((task) => {
+                    console.log(`      Task ${task.id}: ${task.name} (${task.questions.length} questions)`);
+                });
+            });
+        });
+    });
     
-    quizData.sections.forEach((section) => {
+    sections.forEach((section) => {
         console.log(`\nSection ${section.id}: ${section.name}`);
         section.units.forEach((unit) => {
             console.log(`  Unit ${unit.id}: ${unit.name}`);
