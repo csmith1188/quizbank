@@ -1,14 +1,29 @@
 const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
+const resourceService = require('../services/resource-service');
+
+async function initialize() {
+    const allContentData = await resourceService.getResource(2, '/course');
+    console.log('hello', allContentData);
+}
+
+initialize();
 
 // Read the 10th.json file
 function loadQuizData() {
+    const filePath = path.join(__dirname, '../quizsources/courses.json');
+    if (!fs.existsSync(filePath)) {
+        console.error(`Error: File not found at path: ${filePath}`);
+        process.exit(1);
+    }
+    
     try {
-        const quizData = JSON.parse(fs.readFileSync('../quizsources/10th.json', 'utf8'));
+        const quizData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        console.log(quizData, "quizData");
         return quizData;
     } catch (error) {
-        console.error('Error reading ../quizsources/10th.json:', error.message);
+        console.error('Error reading json:', error.message);
         process.exit(1);
     }
 }
