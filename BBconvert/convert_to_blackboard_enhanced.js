@@ -1,17 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
-const resourceService = require('../services/resource-service');
-
-function DbToJson() {
-    const data = resourceService.getResource(1, '/course');
-    return JSON.stringify(data);
-};
 
 // Read the 10th.json file
 function loadQuizData() {
     try {
-        const quizData = DbToJson();
+        const quizData = JSON.parse(fs.readFileSync('../quizsources/10th.json', 'utf8'));
         return quizData;
     } catch (error) {
         console.error('Error reading ../quizsources/10th.json:', error.message);

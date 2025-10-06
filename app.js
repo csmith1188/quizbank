@@ -11,8 +11,6 @@ const { readDirPaths } = require('./util/file-helpers');
 const localsmiddleware = require('./middleware/locals');
 const {isAuthenticated} = require('./middleware/auth');
 
-const convert = require('./BBconvert/convert_to_blackboard_enhanced');
-
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -61,5 +59,4 @@ app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    convert();
 });
