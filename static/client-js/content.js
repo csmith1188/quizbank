@@ -230,6 +230,7 @@ function renderView(view, filter = "") {
             case "units":
                 if (selectedPath.unit) {
                     btn.innerHTML = `<span>${selectedPath.unit.name}</span> <button class="unselect-btn" data-unselect="unit" title="Unselect">×</button>`;
+                    btn.innerHTML += ` <button class="unselect-btn" data-edit="unit" title="Edit">✎</button>`;
                 } else {
                     btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
                 }
@@ -237,6 +238,7 @@ function renderView(view, filter = "") {
             case "tasks":
                 if (selectedPath.task) {
                     btn.innerHTML = `<span>${selectedPath.task.name}</span> <button class="unselect-btn" data-unselect="task" title="Unselect">×</button>`;
+                    btn.innerHTML += ` <button class="unselect-btn" data-edit="unit" title="Edit">✎</button>`;
                 } else {
                     btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
                 }
