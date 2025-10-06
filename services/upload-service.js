@@ -4,13 +4,9 @@ let xlsx = require("xlsx");
 let { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { col } = require("sequelize");
 
-const testFilePath = "./quizsources/testsheet.xlsx";
-let fileData = fs.readFileSync(testFilePath);
 xlsx.stream.set_readable(Readable);
-let workbook = xlsx.read(fileData, { type: "buffer" });
 
-let worksheet = workbook.Sheets[workbook.SheetNames[0]];
-const raw_data = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+const MIN_ANSWERS = 2;
 
 // template
 const SHEET_HEADERS = new Map([
@@ -40,21 +36,36 @@ function indexToRowLetter(index) {
     return letter;
 }
 
+function validateSheetData(sheetData) {
+
+    if (sheetData[0].length < SHEET_HEADERS.size + MIN_ANSWERS) {
+        throw new Error("Not enough columns in sheet. Found " + numCols + ", minimum is " + (SHEET_HEADERS.size + MIN_ANSWERS));
+    }
+}
+
+// check if the first row matches the template headers (optional)
+// just necessary to know if we should skip the first row when parsing
 function sheetHasHeaderRow(sheetData) {
     const sheetFirstCell = sheetData[0][0].toLowerCase().trim();
     const templateFirstCell = Array.from(SHEET_HEADERS)[0][0];
     return sheetFirstCell === templateFirstCell;
 }
 
+function sheetFileDataToJSON(fileData) {
+    let workbook = xlsx.read(fileData, { type: "buffer" });
+    let worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    return xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+}
 
-module.exports.parseQuestionSheet = (sheetData) => {
+
+module.exports.parseQuestionSheet = (sheetFileData) => {
+
+    const sheetData = sheetFileDataToJSON(sheetFileData);
+    validateSheetData(sheetData);
+
     const numCols = sheetData[0].length;
     const hasHeaderRow = sheetHasHeaderRow(sheetData);
     const firstDataRowNum = hasHeaderRow ? 1 : 0;
-
-    // keeps track of new units and tasks to be created, prevents duplicates
-    const newUnits = new Set();
-    const newTasks = new Set();
     const parsed = [];
 
     for (let row = firstDataRowNum; row < sheetData.length; row++) {
@@ -69,6 +80,7 @@ module.exports.parseQuestionSheet = (sheetData) => {
         const rowData = sheetData[row];
         const answers = [];
 
+        // collect answers from columns after 'correctIndex'
         for (let col = SHEET_HEADERS.get('correctIndex') + 1; col < numCols; col++) {
             const cellValue = rowData[col] || '';
             if (cellValue != '') {
@@ -76,12 +88,11 @@ module.exports.parseQuestionSheet = (sheetData) => {
             }
         }
 
-        if (answers.length < 2) {
+        if (answers.length < MIN_ANSWERS) {
             throw new Error("Not enough answers at row " + (row + 1) + ". Found " + answers.length + ", minimum is 2.");
         }
 
         const belongsTo = {
-            sectionUid: null,
             unitName: rowData[SHEET_HEADERS.get('unit')],
             taskName: rowData[SHEET_HEADERS.get('task')]
         }
@@ -92,6 +103,7 @@ module.exports.parseQuestionSheet = (sheetData) => {
 
         // for db
         const question = {
+            taskUid: null, // to be filled in later
             index: null, // to be filled in later
             ai: false,
             prompt,
@@ -100,12 +112,12 @@ module.exports.parseQuestionSheet = (sheetData) => {
             answers
         };
 
-        parsed.push({ belongsTo, question });
+        parsed.push({ 
+            belongsTo,
+            question 
+        });
 
     }
-    
-    parsed.newUnits = newUnits;
-    parsed.newTasks = newTasks;
 
     return parsed;
 
@@ -115,9 +127,18 @@ module.exports.uploadQuestionSheetData = (data) => {
 
     return sequelize.transaction(async (t) => {
 
+        // keeps track of created units and tasks to avoid duplicates
+        const newUnits = new Map(); // key: unitName, value: unitEntity
+        const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
+
         for (let item of data) {
-            const {sectionUid, unitName, taskName} = item.belongsTo;
+            const sectionUid = data.sectionUid;
+            const {unitName, taskName} = item.belongsTo;
             const question = item.question;
+
+            if (!sectionUid) {
+                throw new Error("sectionUid not specified in data");
+            }
 
             // find section
             const sectionEntity = await Section.findOne({
@@ -131,31 +152,56 @@ module.exports.uploadQuestionSheetData = (data) => {
                 throw new Error(`Section not found`);
             }
 
-            // create unit
-            const lastUnitIndex = await Unit.max('index', {
-                where: {
-                    sectionUid: sectionUid
-                },
-                transaction: t
-            });
+            let unitEntity;
 
-            const unitEntity = await Unit.create({
-                name: unitName,
-                index: (lastUnitIndex || 0) + 1,
-                sectionUid: sectionUid,
-            }, { transaction: t });
+            if (!newUnits.has(unitName)){
 
-            // create task
-            const taskEntity = await Task.create({
-                name: taskName,
-                index: 0,
-                unitId: unitEntity.uid,
-            }, { transaction: t });
+                // create unit
+                const lastUnitIndex = await Unit.max('index', {
+                    where: {
+                        sectionUid: sectionUid
+                    },
+                    transaction: t
+                });
+
+                unitEntity = await Unit.create({
+                    name: unitName,
+                    index: (lastUnitIndex || 0) + 1,
+                    sectionUid: sectionUid,
+                }, { transaction: t });
+
+                newUnits.set(unitName, unitEntity);
+            }
+
+            // keys like this are necessary because of the hierarchical relationship
+            // imagine two tasks with the same name in different units
+            // sorry if I hurty your brain
+            let taskKey = unitName + ":" + taskName;
+            let taskEntity = newTasks.get(taskKey);
+
+            if (!taskEntity){
+
+                const lastTaskIndex = await Task.max('index', {
+                    where: {
+                        unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid
+                    },
+                    transaction: t
+                });
+
+                // create task
+                taskEntity = await Task.create({
+                    name: taskName,
+                    index: (lastTaskIndex || 0) + 1,
+                    unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid, // get from map if already created
+                }, { transaction: t });
+
+                newTasks.set(taskKey, taskEntity);
+            }
 
             // find next question index
             const lastQuestionIndex = await Question.count({
                 where: {
-                    taskUid: taskEntity.uid
+                    taskUid: taskEntity ? taskEntity.uid : newTasks.get(taskName).uid
                 },
                 transaction: t
             });
@@ -174,9 +220,10 @@ module.exports.uploadQuestionSheetData = (data) => {
 
 }
 
-//console.log(JSON.stringify(module.exports.parseQuestionSheet(raw_data), null, 2));
+const testFilePath = "./quizsources/testsheet.xlsx";
+let fileData = fs.readFileSync(testFilePath);
 
-const parsedTestData = module.exports.parseQuestionSheet(raw_data);
-parsedTestData.forEach(question => question.belongsTo.sectionUid = 1);
+const parsedTestData = module.exports.parseQuestionSheet(fileData);
+parsedTestData.sectionUid = 1; // for testing
 
 module.exports.uploadQuestionSheetData(parsedTestData);
