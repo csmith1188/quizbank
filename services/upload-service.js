@@ -2,7 +2,6 @@ let fs = require("fs");
 let { Readable } = require("stream");
 let xlsx = require("xlsx");
 let { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
-const { col } = require("sequelize");
 
 xlsx.stream.set_readable(Readable);
 
@@ -57,8 +56,7 @@ function sheetFileDataToJSON(fileData) {
     return xlsx.utils.sheet_to_json(worksheet, { header: 1 });
 }
 
-
-module.exports.parseQuestionSheet = (sheetFileData) => {
+module.exports.parseSheet = (sheetFileData) => {
 
     const sheetData = sheetFileDataToJSON(sheetFileData);
     validateSheetData(sheetData);
@@ -123,7 +121,7 @@ module.exports.parseQuestionSheet = (sheetFileData) => {
 
 }
 
-module.exports.uploadQuestionSheetData = (data) => {
+module.exports.uploadSheetData = (data) => {
 
     return sequelize.transaction(async (t) => {
 
@@ -219,11 +217,3 @@ module.exports.uploadQuestionSheetData = (data) => {
     });
 
 }
-
-const testFilePath = "./quizsources/testsheet.xlsx";
-let fileData = fs.readFileSync(testFilePath);
-
-const parsedTestData = module.exports.parseQuestionSheet(fileData);
-parsedTestData.sectionUid = 1; // for testing
-
-module.exports.uploadQuestionSheetData(parsedTestData);
