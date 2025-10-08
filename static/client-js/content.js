@@ -1,4 +1,6 @@
 const allCourseDataText = document.getElementById('all-course-data').textContent;
+const uploadSection = document.getElementsByClassName('upload-section')[0];
+const uploadForm = document.getElementById('bulk-upload-form');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -209,6 +211,13 @@ function renderView(view, filter = "") {
         renderQuestionDetail(questionDetail);
         return;
     }
+
+    if (view === 'units' && selectedPath.section) {
+        uploadSection.style.display = 'block';
+    } else {
+        uploadSection.style.display = 'none';
+    }
+
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
         let v = btn.getAttribute('data-view');
@@ -385,5 +394,37 @@ window.addEventListener("DOMContentLoaded", () => {
             renderView(currentView, "");
         }
     });
+
+    uploadForm.onsubmit = function (e) {
+        e.preventDefault();
+
+        if (!selectedPath.section) {
+            alert("Please select a section to upload to.");
+            return;
+        }
+
+        if (!uploadForm.sheet.files || uploadForm.sheet.files.length === 0) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        const formData = new FormData(uploadForm);
+        formData.set('sectionUid', selectedPath.section ? selectedPath.section.uid : "");
+        fetch('/api/bulk-upload/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                uploadForm.reset();
+                ALL_COURSE_DATA = JSON.parse(data);
+                renderView('units');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Upload failed: ' + error.message);
+            });
+    };
+
     renderView(currentView);
 });

@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const { parseSheet, uploadSheetData } = require('../../../services/upload-service');
+const { getSection, getResourceOwnerUid } = require('../../../services/resource-service');
 
 const router = express.Router();
 
@@ -25,17 +26,29 @@ module.exports = (router) => {
 
     router.post('/upload', (req, res) => {
         upload.single('sheet')(req, res, async (err) => {
-            if (err) {
-                return res.status(400).json({ error: err.message });
-            }
-            if (!req.file) {
-                return res.status(400).json({ error: 'No file uploaded' });
-            }
 
             const sectionUid = req.body.sectionUid;
+
+            if (typeof sectionUid === 'undefined' || sectionUid === null) {
+                throw new Error("sectionUid not specified");
+            }
+
+            const sectionOwnerUid = await getResourceOwnerUid('section', sectionUid);
+
+            if (sectionOwnerUid !== req.user.uid) {
+                throw new Error("You do not have permission to modify this section");
+            }
+
+            if (!req.file) {
+                throw new Error("No file uploaded");
+            }
+            
             const parsedData = parseSheet(req.file.buffer);
             await uploadSheetData(parsedData, sectionUid);
-            res.send('Data uploaded successfully.')
+
+            const newSectionData = await getSection(sectionUid);
+
+            res.json(newSectionData);
         });
     });
 };

@@ -10,9 +10,9 @@ async function seed() {
 
     await sequelize.sync({ force: true });
 
-    await User.create({
+    /*await User.create({
       username: "CoolGuy",
-    });
+    });*/
 
     for (const courseData of jsonData.courses) {
       const course = await Course.create({
