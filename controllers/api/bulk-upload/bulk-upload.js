@@ -23,10 +23,8 @@ module.exports = (router) => {
         res.render('pages/teacher/upload-test');
     });
 
-    // upload and validate the Excel file, return preview of parsed data
-    router.post('/validate', (req, res) => {
-
-        upload.single('file')(req, res, async (err) => {
+    router.post('/upload', (req, res) => {
+        upload.single('sheet')(req, res, async (err) => {
             if (err) {
                 return res.status(400).json({ error: err.message });
             }
@@ -34,19 +32,10 @@ module.exports = (router) => {
                 return res.status(400).json({ error: 'No file uploaded' });
             }
 
-            try {
-                const parsedData = parseSheet(req.file.buffer);
-                // return a preview of the parsed data for confirmation
-                res.json({ preview: parsedData.slice(0, 5) }); // return first 5 rows as preview
-            } catch (parseErr) {
-                res.status(500).json({ error: 'Error parsing file: ' + parseErr.message });
-            }
+            const sectionUid = req.body.sectionUid;
+            const parsedData = parseSheet(req.file.buffer);
+            await uploadSheetData(parsedData, sectionUid);
+            res.send('Data uploaded successfully.')
         });
-        
-    });
-
-    // save the previously validated data to the database
-    router.post('/upload', (req, res) => {
-
     });
 };

@@ -28,33 +28,33 @@ async function seed() {
           courseUid: course.uid,
         });
 
-        for (const unitData of sectionData.units || []) {
-          const unit = await Unit.create({
-            name: unitData.name,
-            index: unitData.id,
-            sectionUid: section.uid,
-          });
+        // for (const unitData of sectionData.units || []) {
+        //   const unit = await Unit.create({
+        //     name: unitData.name,
+        //     index: unitData.id,
+        //     sectionUid: section.uid,
+        //   });
 
-          for (const taskData of unitData.tasks || []) {
-            const task = await Task.create({
-              name: taskData.name,
-              index: taskData.id,
-              unitUid: unit.uid,
-            });
+        //   for (const taskData of unitData.tasks || []) {
+        //     const task = await Task.create({
+        //       name: taskData.name,
+        //       index: taskData.id,
+        //       unitUid: unit.uid,
+        //     });
 
-            for (const qData of taskData.questions || []) {
-              await Question.create({
-                index: qData.id,
-                ai: qData.ai || false,
-                prompt: qData.prompt,
-                correct_answer: qData.correctAnswer,
-                correct_index: qData.correctIndex,
-                answers: JSON.stringify(qData.answers),
-                taskUid: task.uid,
-              });
-            }
-          }
-        }
+        //     for (const qData of taskData.questions || []) {
+        //       await Question.create({
+        //         index: qData.id,
+        //         ai: qData.ai || false,
+        //         prompt: qData.prompt,
+        //         correct_answer: qData.correctAnswer,
+        //         correct_index: qData.correctIndex,
+        //         answers: JSON.stringify(qData.answers),
+        //         taskUid: task.uid,
+        //       });
+        //     }
+        //   }
+        // }
       }
     }
 

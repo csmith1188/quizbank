@@ -121,7 +121,7 @@ module.exports.parseSheet = (sheetFileData) => {
 
 }
 
-module.exports.uploadSheetData = (data) => {
+module.exports.uploadSheetData = (data, sectionUid) => {
 
     return sequelize.transaction(async (t) => {
 
@@ -130,12 +130,11 @@ module.exports.uploadSheetData = (data) => {
         const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
 
         for (let item of data) {
-            const sectionUid = data.sectionUid;
             const {unitName, taskName} = item.belongsTo;
             const question = item.question;
 
             if (!sectionUid) {
-                throw new Error("sectionUid not specified in data");
+                throw new Error("sectionUid not specified");
             }
 
             // find section
