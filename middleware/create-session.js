@@ -6,9 +6,10 @@ function createSession(req, res, user, tokenData) {
         google_id: user.google_id || null,
         uid: user.uid,
         perm: user.perm || 0,
+        theme: user.theme || 'light',
     };
     req.session.token = tokenData;
-
+    
     req.session.save(() => {
         res.redirect('/');
     });

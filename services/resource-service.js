@@ -10,6 +10,15 @@ const resourceDepthMap = new Map([
     ["question", 4]
 ]);
 
+// Add plural to singular map
+const pluralToSingular = {
+    "courses": "course",
+    "sections": "section",
+    "units": "unit",
+    "tasks": "task",
+    "questions": "question"
+};
+
 // Recursively collect all questions from the data
 const collectQuestions = (data) => {
     if (!data) return [];
@@ -28,6 +37,7 @@ const collectQuestions = (data) => {
 // Fetch the full course hierarchy for a user
 getFullCourseHierarchy = async (userUid) => {
     const courses = await Course.findAll({
+        where: { userUid: userUid }, // Filter by userUid
         include: [{
             model: Section,
             as: "sections",
@@ -62,8 +72,11 @@ function parseResourcePath(path) {
 
     const segments = [];
     for (let i = 0; i < pieces.length; i += 2) {
+        let type = pieces[i];
+        // Normalize plural to singular
+        if (pluralToSingular[type]) type = pluralToSingular[type];
         segments.push({
-            type: pieces[i],
+            type: type,
             indexes: pieces[i + 1]
                 ? pieces[i + 1].split("+").map(Number)
                 : []
@@ -74,30 +87,24 @@ function parseResourcePath(path) {
 
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
-
     let data = root;
 
-    // traverse each segment of the resource path
     segments.forEach(({ type, indexes }) => {
-
-        // next layer of the hierarchy
         const collection = data[type + "s"];
         if (!collection) throw new Error(`Invalid resource type: ${type}`);
-        // if no indexes specified, return all
-        if (!indexes.length) { data = collection; return; }
 
-        // find entity matching the indexes
+        if (!indexes.length) { 
+            data = collection; 
+            return; 
+        }
+
         const matched = collection.filter(e => indexes.includes(e.index));
-
         if (!matched.length) throw new Error(`Resource not found: ${type} ${indexes}`);
 
-        // if one index, return that entity
-        // if multiple, return a combined object
         data = matched.length === 1 ? matched[0] : {
             name: `Combined ${type}s`,
             [type + "s"]: matched
         };
-
     });
 
     return data;
@@ -116,6 +123,14 @@ module.exports.getResource = async (userId, path) => {
 
     let data = await getFullCourseHierarchy(userId);
     let resolvedData = resolveHierarchy(data, segments);
+
+    if (
+        segments.length === 1 &&
+        segments[0].type === "course" &&
+        Array.isArray(resolvedData)
+    ) {
+        resolvedData = { courses: resolvedData };
+    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
