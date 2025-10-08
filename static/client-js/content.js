@@ -1,3 +1,6 @@
+// content.js (updated)
+// NOTE: replace your current content.js with this file
+
 const allCourseDataText = document.getElementById('all-course-data').textContent;
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
@@ -204,11 +207,63 @@ function updateSelectedPathDisplay() {
     pathEl.innerHTML = arr.length ? arr.join(' &rsaquo; ') : "<span>No selection</span>";
 }
 
+/**
+ * Add a dynamic browser tab if missing (for the Question Edit tab).
+ * Keeps event listeners consistent with other tabs.
+ */
+function addBrowserTabIfMissing(view, label) {
+    const tabsContainer = document.querySelector('.browser-tabs');
+    if (!tabsContainer) return;
+    if (tabsContainer.querySelector(`[data-view="${view}"]`)) return; // already exists
+
+    const btn = document.createElement('button');
+    btn.className = 'browser-tab';
+    btn.setAttribute('data-view', view);
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = `<span>${label}</span> <button class="unselect-btn" data-unselect="${view}" title="Close">×</button>`;
+
+    // main click: switch to view
+    btn.addEventListener('click', function (e) {
+        // avoid firing when close button is clicked (it will stopPropagation)
+        if (e.target && e.target.classList && e.target.classList.contains('unselect-btn')) return;
+        currentView = view;
+        renderView(currentView, document.getElementById('searchInput')?.value || "");
+    });
+
+    tabsContainer.appendChild(btn);
+    attachUnselectListeners(); // bind the close button we just created
+}
+
+/**
+ * Render the main browser view (courses/sections/units/tasks/questions/questionDetail/questionEdit)
+ */
 function renderView(view, filter = "") {
+    // special direct render for questionDetail (keeps behavior as before)
     if (view === "questionDetail" && questionDetail) {
         renderQuestionDetail(questionDetail);
         return;
     }
+
+    // special: questionEdit -> call renderQuestionEdit if available
+    if (view === "questionEdit") {
+        if (!questionDetail) {
+            // nothing to edit; go back
+            currentView = "questions";
+            view = currentView;
+        } else {
+            // render edit UI (prefer external renderQuestionEdit if loaded)
+            if (typeof renderQuestionEdit === "function") {
+                renderQuestionEdit(questionDetail);
+                return;
+            } else {
+                // fallback message until edit-question.js loads
+                const area = document.getElementById('browserListArea');
+                area.innerHTML = `<div class="browser-no-results">Edit UI not yet available.</div>`;
+                return;
+            }
+        }
+    }
+
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
         let v = btn.getAttribute('data-view');
@@ -242,12 +297,13 @@ function renderView(view, filter = "") {
                 }
                 break;
             default:
-                btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
+                // for dynamic tabs (like questionEdit) we keep their innerHTML as-is
                 break;
         }
     });
     attachUnselectListeners();
     updateSelectedPathDisplay();
+
     const area = document.getElementById('browserListArea');
     area.innerHTML = `<div class="browser-no-results">Loading...</div>`;
     let items = getScoped(view);
@@ -276,8 +332,14 @@ function renderView(view, filter = "") {
     attachDropDownListeners(view, items);
 }
 
+/**
+ * Render the question detail in the list area.
+ * This will now create an Edit button that creates a new "Question Edit" tab when clicked.
+ */
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
+    area.classList.add('question-detail-mode'); // optional visual class
+
     let answers = [];
     try {
         answers = typeof question.answers === "string" ? JSON.parse(question.answers) : question.answers;
@@ -286,10 +348,11 @@ function renderQuestionDetail(question) {
     }
     let correctIdx = (typeof question.correct_index !== "undefined" ? question.correct_index : question.correctIndex);
     let correctAns = question.correctAnswer || question.correct_answer;
+
     let html = `
     <div class="question-detail">
       <h3>Question Detail</h3>
-      <div class="question-prompt">${question.prompt || question.text}</div>
+      <div class="question-prompt">${question.prompt || question.text || ""}</div>
       <div class="question-meta">
         <strong>AI Generated:</strong> ${question.ai ? "Yes" : "No"}
       </div>
@@ -303,13 +366,28 @@ function renderQuestionDetail(question) {
     ).join("")}
         </ul>
       </div>
-      <button id="questionDetailBackBtn">Back</button>
+      <div class="question-detail-actions">
+        <button id="questionDetailEditBtn" class="edit-btn">✎ Edit</button>
+        <button id="questionDetailBackBtn" class="back-btn">Back</button>
+      </div>
     </div>
     `;
     area.innerHTML = html;
+
     document.getElementById('questionDetailBackBtn').onclick = () => {
         questionDetail = null;
         currentView = "questions";
+        renderView(currentView);
+    };
+
+    document.getElementById('questionDetailEditBtn').onclick = () => {
+        // keep questionDetail set (used by edit view)
+        questionDetail = question;
+
+        // create the tab (if it doesn't exist) and switch to it
+        addBrowserTabIfMissing('questionEdit', 'Question Edit');
+
+        currentView = 'questionEdit';
         renderView(currentView);
     };
 }
@@ -335,8 +413,14 @@ function attachDropDownListeners(view, items) {
         });
     });
 }
+
 function attachUnselectListeners() {
+    // attach close/unselect handlers for any unselect buttons
     document.querySelectorAll('.unselect-btn').forEach(btn => {
+        // avoid attaching duplicate listeners by checking a marker
+        if (btn._hasUnselectListener) return;
+        btn._hasUnselectListener = true;
+
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             let which = btn.getAttribute('data-unselect');
@@ -357,11 +441,19 @@ function attachUnselectListeners() {
                     selectedPath.task = null;
                     currentView = "tasks";
                     break;
+                case "questionEdit":
+                    const tabEl = document.querySelector(`.browser-tab[data-view="questionEdit"]`);
+                    if (tabEl) tabEl.remove();
+                    currentView = questionDetail ? "questionDetail" : "questions";
+                    break;
+                default:
+                    break;
             }
             renderView(currentView, document.getElementById('searchInput').value);
         });
     });
 }
+
 window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.addEventListener('click', function () {
