@@ -25,7 +25,7 @@ function renderQuestionEdit(question) {
       <div class="question-detail">
         <h3>Question Export / Edit</h3>
         <p style="font-size:0.95em; color:var(--browser-muted); margin-top:-0.2em;">
-          Copy the text below, edit it in your own program, then paste it back into the box to update the question.
+          Copy the text below, then paste it back into the box to update the question.
         </p>
 
         <textarea id="editExportText" rows="10" style="width:100%; font-family:monospace; font-size:1em; padding:0.8em; border-radius:8px; border:1px solid var(--browser-border); background:var(--browser-bg); color:var(--browser-text);">${formattedText}</textarea>
