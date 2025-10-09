@@ -1,4 +1,4 @@
-const { Course, Section, Unit, Task, Question } = require("../db/db");
+const { User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 

@@ -220,41 +220,12 @@ function renderView(view, filter = "") {
 
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
-        let v = btn.getAttribute('data-view');
-        switch (v) {
-            case "courses":
-                if (selectedPath.course) {
-                    btn.innerHTML = `<span>${selectedPath.course.name}</span> <button class="unselect-btn" data-unselect="course" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "sections":
-                if (selectedPath.section) {
-                    btn.innerHTML = `<span>${selectedPath.section.name}</span> <button class="unselect-btn" data-unselect="section" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "units":
-                if (selectedPath.unit) {
-                    btn.innerHTML = `<span>${selectedPath.unit.name}</span> <button class="unselect-btn" data-unselect="unit" title="Unselect">×</button>`;
-                    btn.innerHTML += ` <button class="unselect-btn" data-edit="unit" title="Edit">✎</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "tasks":
-                if (selectedPath.task) {
-                    btn.innerHTML = `<span>${selectedPath.task.name}</span> <button class="unselect-btn" data-unselect="task" title="Unselect">×</button>`;
-                    btn.innerHTML += ` <button class="unselect-btn" data-edit="unit" title="Edit">✎</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            default:
-                btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                break;
+        let v = btn.getAttribute('data-view').slice(0,-1);
+        let currentPath = selectedPath[v]; // remove 's' for plural
+        if (currentPath) {
+            btn.innerHTML = `<span>${currentPath.name}</span> <button class="unselect-btn" data-unselect="${v}" title="Unselect">×</button>`;
+        } else {
+            btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1) + 's'}</span>`;
         }
     });
     attachUnselectListeners();
@@ -416,9 +387,12 @@ window.addEventListener("DOMContentLoaded", () => {
         })
             .then(response => response.text())
             .then(data => {
-                uploadForm.reset();
-                ALL_COURSE_DATA = JSON.parse(data);
+                const updatedSection = JSON.parse(data);
+                const course = ALL_COURSE_DATA.courses.find(c => c.uid === updatedSection.courseUid);
+                course.sections[updatedSection.index - 1] = updatedSection;
+                selectedPath.section = updatedSection;
                 renderView('units');
+                uploadForm.reset();
             })
             .catch(error => {
                 console.error('Error:', error);

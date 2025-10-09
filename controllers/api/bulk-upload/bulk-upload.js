@@ -35,7 +35,7 @@ module.exports = (router) => {
 
             const sectionOwnerUid = await getResourceOwnerUid('section', sectionUid);
 
-            if (sectionOwnerUid !== req.user.uid) {
+            if (sectionOwnerUid !== req.session.user.uid) {
                 throw new Error("You do not have permission to modify this section");
             }
 
