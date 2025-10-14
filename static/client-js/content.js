@@ -207,10 +207,6 @@ function updateSelectedPathDisplay() {
     pathEl.innerHTML = arr.length ? arr.join(' &rsaquo; ') : "<span>No selection</span>";
 }
 
-/**
- * Add a dynamic browser tab if missing (for the Question Edit tab).
- * Keeps event listeners consistent with other tabs.
- */
 function addBrowserTabIfMissing(view, label) {
     const tabsContainer = document.querySelector('.browser-tabs');
     if (!tabsContainer) return;
@@ -297,7 +293,6 @@ function renderView(view, filter = "") {
                 }
                 break;
             default:
-                // for dynamic tabs (like questionEdit) we keep their innerHTML as-is
                 break;
         }
     });
@@ -478,7 +473,6 @@ function pickQuestions() {
             });
         });
     } else {
-        console.log("No specific path selected, picking from all questions.");
         questions = getAllQuestions();
     }
 
@@ -501,16 +495,17 @@ function pickQuestions() {
         let correctIdx = (typeof q.correct_index !== "undefined" ? q.correct_index : q.correctIndex);
         let correctAns = q.correctAnswer || q.correct_answer;
 
-        // Construct the path for the question
+        // Construct the path for the question (can implement if needed)
+        /*
         const paths = [
             q.parentCourse ? q.parentCourse.name : null,
             q.parentSection ? q.parentSection.name : null,
             q.parentUnit ? q.parentUnit.name : null,
             q.parentTask ? q.parentTask.name : null
         ].filter(Boolean).join(' > ');
+        */
 
         popUpContent += `<div style="margin-bottom: 20px;">
-            <strong>Path:</strong> ${paths}<br>
             <strong>Question:</strong> ${q.prompt || q.text}<br>
             <strong>Answers:</strong>
             <ul style="list-style-type: none; padding-left: 0;">
