@@ -332,10 +332,6 @@ function renderView(view, filter = "") {
     attachDropDownListeners(view, items);
 }
 
-/**
- * Render the question detail in the list area.
- * This will now create an Edit button that creates a new "Question Edit" tab when clicked.
- */
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
     area.classList.add('question-detail-mode'); // optional visual class
@@ -454,6 +450,104 @@ function attachUnselectListeners() {
     });
 }
 
+function pickQuestions() {
+    const numberToPick = parseInt(prompt("How many questions would you like to pick?", "1"), 10) || 1;
+    const path = selectedPath;
+    let questions = [];
+
+    const collectQuestions = (items) => {
+        items.forEach(item => {
+            if (item.questions) {
+                questions = questions.concat(item.questions);
+            }
+        });
+    };
+
+    if (path.task) {
+        collectQuestions([path.task]);
+    } else if (path.unit) {
+        collectQuestions(path.unit.tasks || []);
+    } else if (path.section) {
+        path.section.units.forEach(unit => {
+            collectQuestions(unit.tasks || []);
+        });
+    } else if (path.course) {
+        path.course.sections.forEach(section => {
+            section.units.forEach(unit => {
+                collectQuestions(unit.tasks || []);
+            });
+        });
+    } else {
+        console.log("No specific path selected, picking from all questions.");
+        questions = getAllQuestions();
+    }
+
+    // Remove duplicates
+    questions = Array.from(new Set(questions.map(q => JSON.stringify(q)))).map(q => JSON.parse(q));
+
+    questions = questions.sort(() => Math.random() - 0.5);
+    const pickedQuestions = questions.slice(0, Math.max(numberToPick, 0));
+
+    // Create a pop-up
+    let popUpContent = "<h3>Picked Questions</h3>";
+
+    pickedQuestions.forEach(q => {
+        let answers = [];
+        try {
+            answers = typeof q.answers === "string" ? JSON.parse(q.answers) : q.answers;
+        } catch {
+            answers = q.answers || [];
+        }
+        let correctIdx = (typeof q.correct_index !== "undefined" ? q.correct_index : q.correctIndex);
+        let correctAns = q.correctAnswer || q.correct_answer;
+
+        // Construct the path for the question
+        const paths = [
+            q.parentCourse ? q.parentCourse.name : null,
+            q.parentSection ? q.parentSection.name : null,
+            q.parentUnit ? q.parentUnit.name : null,
+            q.parentTask ? q.parentTask.name : null
+        ].filter(Boolean).join(' > ');
+
+        popUpContent += `<div style="margin-bottom: 20px;">
+            <strong>Path:</strong> ${paths}<br>
+            <strong>Question:</strong> ${q.prompt || q.text}<br>
+            <strong>Answers:</strong>
+            <ul style="list-style-type: none; padding-left: 0;">
+            ${answers.map((ans, idx) => `
+            <li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
+             ${correctIdx === idx || ans === correctAns ? '*' : ''} ${ans}${(correctIdx === idx || ans === correctAns)}
+            </li>`).join('')}
+            </ul>
+        </div>`;
+    });
+
+    // Display the pop-up
+    const popUp = document.createElement('div');
+    popUp.style.position = 'fixed';
+    popUp.style.top = '50%';
+    popUp.style.left = '50%';
+    popUp.style.transform = 'translate(-50%, -50%)';
+    popUp.style.backgroundColor = 'black';
+    popUp.style.border = '2px solid #333';
+    popUp.style.borderRadius = '8px';
+    popUp.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    popUp.style.padding = '20px';
+    popUp.style.zIndex = '1000';
+    popUp.style.maxWidth = '90%';
+    popUp.style.maxHeight = '80%';
+    popUp.style.overflowY = 'auto';
+    popUp.innerHTML = popUpContent + '<button id="closePopUp" style="margin-top: 10px;">Close</button>';
+    document.body.appendChild(popUp);
+
+    const closeButton = document.getElementById('closePopUp');
+    closeButton.onclick = () => {
+        document.body.removeChild(popUp);
+    };
+
+    return pickedQuestions;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -475,5 +569,6 @@ window.addEventListener("DOMContentLoaded", () => {
             renderView(currentView, "");
         }
     });
+    
     renderView(currentView);
 });
