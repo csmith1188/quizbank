@@ -6,7 +6,7 @@ const { getSection, getResourceOwnerUid } = require('../../../services/resource-
 
 const router = express.Router();
 
-// store files in memory (you can also store to disk if preferred)
+// store files in memory
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
