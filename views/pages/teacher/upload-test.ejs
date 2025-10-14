@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/api/bulk-upload/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="sheet" accept=".xlsx,.xls" required>
+        <input type="number" name="sectionUid" placeholder="Section UID" required>
+        <button type="submit">Upload Test</button>
+    </form>
+</body>
+</html>

@@ -1,4 +1,4 @@
-const { Course, Section, Unit, Task, Question } = require("../db/db");
+const { User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
@@ -35,7 +35,7 @@ const collectQuestions = (data) => {
 };
 
 // Fetch the full course hierarchy for a user
-getFullCourseHierarchy = async (userUid) => {
+module.exports.getFullCourseHierarchy = async (userUid) => {
     const courses = await Course.findAll({
         where: { userUid: userUid }, // Filter by userUid
         include: [{
@@ -58,6 +58,50 @@ getFullCourseHierarchy = async (userUid) => {
         courses: courses.map(c => c.toJSON())
     };
     return json;
+}
+
+module.exports.getSection = async (sectionUid) => {
+    const section = await Section.findOne({
+        where: { uid: sectionUid },
+        include: [{
+            model: Unit,
+            as: "units",
+            include: [{
+                model: Task,
+                as: "tasks",
+                include: [{ model: Question, as: "questions" }]
+            }]
+        }]
+    });
+    if (!section) throw new Error("Section not found");
+    return section.toJSON();
+}
+
+module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
+    let model;
+    switch (resourceType) {
+        case "course": model = Course; break;
+        case "section": model = Section; break;
+        case "unit": model = Unit; break;
+        case "task": model = Task; break;
+        case "question": model = Question; break;
+        default: throw new Error(`Invalid resource type: ${resourceType}`);
+    }
+
+    const resource = await model.findOne({
+        where: { uid: resourceUid },
+        include: [{
+            model: Course,
+            as: "course",
+            attributes: ["uid", "userUid"],
+            include: [{ model: User, as: "user", attributes: ["uid", "username"] }]
+        }],
+        attributes: ["uid"]
+    });
+
+    if (!resource) throw new Error(`${resourceType} not found`);
+
+    return resource.course.userUid;
 }
 
 // Parse the resource path into segments and pick amount
@@ -121,7 +165,7 @@ module.exports.getResource = async (userId, path) => {
         throw new Error(`Path must start with a course: found ${segments[0].type}`);
     }
 
-    let data = await getFullCourseHierarchy(userId);
+    let data = await module.exports.getFullCourseHierarchy(userId);
     let resolvedData = resolveHierarchy(data, segments);
 
     if (
