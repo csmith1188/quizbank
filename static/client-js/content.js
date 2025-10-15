@@ -478,18 +478,17 @@ function pickQuestions() {
         let correctIdx = (typeof q.correct_index !== "undefined" ? q.correct_index : q.correctIndex);
         let correctAns = q.correctAnswer || q.correct_answer;
 
-        // Construct the path for the question (can implement if needed)
-        /*
+        // Construct the path for the question
         const paths = [
             q.parentCourse ? q.parentCourse.name : null,
             q.parentSection ? q.parentSection.name : null,
             q.parentUnit ? q.parentUnit.name : null,
             q.parentTask ? q.parentTask.name : null
         ].filter(Boolean).join(' > ');
-        */
 
         popUpContent += `<div style="margin-bottom: 20px;">
             <strong>Question:</strong> ${q.prompt || q.text}<br>
+            ${paths ? `<div style="font-size: 0.9em; color: #ccc; margin-bottom: 5px;">${paths}</div>` : ''}
             <strong>Answers:</strong>
             <ul style="list-style-type: none; padding-left: 0;">
             ${answers.map((ans, idx) => `
@@ -499,6 +498,10 @@ function pickQuestions() {
             </ul>
         </div>`;
     });
+
+    if (pickedQuestions.length === 0) {
+        popUpContent += "<p>No questions available in the current selection.</p>";
+    }
 
     // Display the pop-up
     const popUp = document.createElement('div');
