@@ -1,10 +1,6 @@
-const express = require('express');
 const multer = require('multer');
-const path = require('path');
 const { parseSheet, uploadSheetData } = require('../../../services/upload-service');
 const { getSection, getResourceOwnerUid } = require('../../../services/resource-service');
-
-const router = express.Router();
 
 // store files in memory
 const upload = multer({
@@ -19,11 +15,6 @@ const upload = multer({
 });
 
 module.exports = (router) => {
-
-    router.get('/', (req, res) => {
-        res.render('pages/teacher/upload-test');
-    });
-
     router.post('/upload', (req, res) => {
         upload.single('sheet')(req, res, async (err) => {
 
