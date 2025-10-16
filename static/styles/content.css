@@ -527,3 +527,196 @@
   background: var(--browser-primary);
   color: #fff;
 }
+
+/* ===== Upload Section Styling ===== */
+.upload-section {
+  background: var(--browser-surface);
+  color: var(--browser-text);
+  border-radius: var(--browser-radius);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  margin: 1.5rem auto;
+  max-width: 480px;
+  text-align: center;
+  border: 1px solid var(--browser-border);
+}
+
+.upload-section h3 {
+  color: var(--browser-primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.upload-section form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.upload-section input[type="file"] {
+  background: var(--browser-bg);
+  color: var(--browser-text);
+  border: 1px solid var(--browser-border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+  transition: border 0.2s, background 0.2s;
+}
+
+.upload-section input[type="file"]:hover {
+  border-color: var(--browser-primary);
+  background: var(--browser-surface);
+}
+
+.upload-section button[type="submit"] {
+  background: var(--browser-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.1s;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+}
+
+.upload-section button[type="submit"]:hover {
+  background: var(--browser-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .upload-section {
+  background: var(--browser-surface);
+  border-color: var(--browser-border);
+}
+
+[data-theme="dark"] .upload-section input[type="file"] {
+  background: var(--browser-bg);
+  color: var(--browser-text);
+}
+
+[data-theme="dark"] .upload-section button[type="submit"] {
+  background: var(--browser-primary);
+  color: #fff;
+}
+
+#openCourseModalBtn {
+  background: var(--browser-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--browser-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+  transition: background 0.2s, transform 0.1s;
+}
+
+#openCourseModalBtn:hover,
+#openCourseModalBtn:focus {
+  background: var(--browser-accent);
+  transform: translateY(-1px);
+}
+
+.course-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.course-modal.hidden {
+  display: none;
+}
+
+.course-modal-content {
+  background: var(--browser-surface);
+  border-radius: var(--browser-radius);
+  padding: 1rem 1.2rem;
+  width: 90%;
+  max-width: 360px;
+  max-height: 220px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.course-modal-content h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--browser-primary);
+  margin: 0;
+  text-align: center;
+}
+
+#courseNameInput {
+  padding: 0.4em 0.6em;
+  font-size: 0.95rem;
+  border: 1.2px solid var(--browser-border);
+  border-radius: var(--browser-radius);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#courseNameInput:focus {
+  border-color: var(--browser-accent);
+  box-shadow: 0 0 4px rgba(20, 184, 166, 0.3);
+}
+
+.course-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.modal-btn {
+  padding: 0.35em 0.8em;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--browser-radius);
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.modal-btn:hover {
+  transform: translateY(-1px);
+}
+
+.modal-btn.cancel {
+  background: var(--browser-muted);
+  color: #fff;
+}
+
+.modal-btn.cancel:hover {
+  background: var(--browser-primary);
+}
+
+.modal-btn:not(.cancel) {
+  background: var(--browser-accent);
+  color: #fff;
+}
+
+.modal-btn:not(.cancel):hover {
+  background: var(--browser-primary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

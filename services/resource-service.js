@@ -77,6 +77,65 @@ module.exports.getSection = async (sectionUid) => {
     return section.toJSON();
 }
 
+module.exports.getSectionsForUser = async (userUid) => {
+    const sections = await Section.findAll({
+        include: [{
+            model: Course,
+            as: "course",
+            where: { userUid: userUid },
+            attributes: []
+        }],
+        attributes: ["uid", "name", "index", "createdAt", "updatedAt"],
+    });
+    if (!sections) throw new Error("No sections found for user");
+    return sections.map(s => s.toJSON());
+}
+
+module.exports.getCoursesForUser = async (userUid) => {
+    const courses = await Course.findAll({
+        where: { userUid: userUid },
+        attributes: ["uid", "name", "index", "createdAt", "updatedAt"],
+    });
+    if (!courses) throw new Error("No courses found for user");
+    return courses.map(c => c.toJSON());
+}
+
+module.exports.createCourseForUser = async (userUid, courseName) => {
+    if (!courseName || !courseName.trim()) {
+        throw new Error("Course name is required.");
+    }
+
+    const count = await Course.count({ where: { userUid } });
+
+    const course = await Course.create({
+        userUid,
+        name: courseName.trim(),
+        index: count + 1
+    });
+
+    return course.toJSON();
+};
+
+module.exports.createSectionForUser = async (userUid, sectionName) => {
+    if (!sectionName || !sectionName.trim()) {
+        throw new Error("Section name is required.");
+    }
+
+    const courses = await Course.findAll({
+        where: { userUid },
+        attributes: ["uid"]
+    });
+
+    const courseUid = courses[0].uid;
+    const count = await Section.count({ where: { courseUid } });
+    const section = await Section.create({
+        courseUid,
+        name: sectionName.trim(),
+        index: count + 1
+    });
+    return section.toJSON();
+};
+
 module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
     let model;
     switch (resourceType) {
