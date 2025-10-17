@@ -1,9 +1,9 @@
 {
-    "id": 2,
+    "id": 1,
     "name": "Computer Programming",
     "sections": [
         {
-            "id": 2,
+            "id": 1,
             "name": "Python Basics",
             "description": "An introduction to fundamental coding concepts of programming in Python.",
             "units": [
@@ -3289,8 +3289,8 @@
                                     "id": 165,
                                     "ai": true,
                                     "prompt": "What does the expression [3,1,4].sort() return?",
-                                    "correctAnswer": "None",
-                                    "correctIndex": 0,
+                                    "correctAnswer": "[1,3,4]",
+                                    "correctIndex": 1,
                                     "answers": [
                                         "None",
                                         "[1,3,4]",
@@ -3627,7 +3627,7 @@
                                         "c t (each on its own line)",
                                         "cat (on one line)",
                                         "c a t (each on its own line)",
-                                        ""
+                                        "Nothing."
                                     ]
                                 },
                                 {

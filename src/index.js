@@ -5,7 +5,7 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3123;
 
 // Rate limiter configuration
 const limiter = rateLimit({

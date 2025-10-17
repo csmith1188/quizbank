@@ -1,9 +1,9 @@
 {
-    "id": 2,
+    "id": 1,
     "name": "Computer Programming",
     "sections": [
         {
-            "id": 2,
+            "id": 3,
             "name": "NodeJS",
             "description": "An introduction to fundamental coding concepts of programming in NodeJS.",
             "units": [
@@ -500,6 +500,469 @@
                                 }
                             ]
                         }
+                    ]
+                },
+				                {
+                    "id": 2,
+                    "name": "NodeJS, Express, EJS",
+                    "description": "An overview of using NodeJS with Express and EJS for web development.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "HTTP Server",
+                            "description": "Creating a simple HTTP server using Node.js.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about creating a simple HTTP server using Node.js. Focus on server creation, request handling, and response management.",
+                            "questions": []
+						}
+                    ]
+                },
+				                {
+                    "id": 3,
+                    "name": "Formbar App Boilerplate",
+                    "description": "Setting up a template to quickly start new Formbar application projects.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "Base Boilerplate",
+                            "description": "Creating a simple HTTP server using Node.js.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format.",
+                            "questions": [
+							
+    {
+        "id": 1,
+        "prompt": "What is the primary purpose of Express.js in this project?",
+        "correctAnswer": "To create a web server and handle routes",
+        "correctIndex": 1,
+        "answers": [
+            "To store data in a database",
+            "To create a web server and handle routes",
+            "To connect to WebSockets",
+            "To render EJS templates"
+        ]
+    },
+    {
+        "id": 2,
+        "prompt": "What does the EJS package do in this project?",
+        "correctAnswer": "Renders dynamic HTML pages",
+        "correctIndex": 1,
+        "answers": [
+            "Handles JSON requests",
+            "Renders dynamic HTML pages",
+            "Compiles JavaScript files",
+            "Manages database migrations"
+        ]
+    },
+    {
+        "id": 3,
+        "prompt": "Why do we use .env files?",
+        "correctAnswer": "To keep secret configuration values",
+        "correctIndex": 2,
+        "answers": [
+            "To store HTML templates",
+            "To track Git changes",
+            "To keep secret configuration values",
+            "To initialize the database"
+        ]
+    },
+    {
+        "id": 4,
+        "prompt": "Which command runs the database initialization script?",
+        "correctAnswer": "npm run init-db",
+        "correctIndex": 2,
+        "answers": [
+            "npm run db",
+            "npm install",
+            "npm run init-db",
+            "sqlite3 db/init.sql"
+        ]
+    },
+    {
+        "id": 5,
+        "prompt": "What does connect-sqlite3 provide?",
+        "correctAnswer": "Persistent session storage",
+        "correctIndex": 1,
+        "answers": [
+            "A user authentication system",
+            "Persistent session storage",
+            "File upload support",
+            "EJS rendering"
+        ]
+    },
+    {
+        "id": 6,
+        "prompt": "What is the role of express-session?",
+        "correctAnswer": "To manage login sessions",
+        "correctIndex": 1,
+        "answers": [
+            "To connect to SQLite",
+            "To manage login sessions",
+            "To serve static files",
+            "To store environment variables"
+        ]
+    },
+    {
+        "id": 7,
+        "prompt": "In this app, what is stored inside a session?",
+        "correctAnswer": "User data like name and token",
+        "correctIndex": 1,
+        "answers": [
+            "HTML templates",
+            "User data like name and token",
+            "Database schema",
+            "API routes"
+        ]
+    },
+    {
+        "id": 8,
+        "prompt": "What is the function of jsonwebtoken in the Formbar login?",
+        "correctAnswer": "It encodes and decodes user tokens",
+        "correctIndex": 1,
+        "answers": [
+            "It generates random passwords",
+            "It encodes and decodes user tokens",
+            "It connects to WebSockets",
+            "It serves HTML pages"
+        ]
+    },
+    {
+        "id": 11,
+        "prompt": "What command starts the server?",
+        "correctAnswer": "npm start",
+        "correctIndex": 1,
+        "answers": [
+            "npm run app",
+            "npm start",
+            "npm server",
+            "node init-db.js"
+        ]
+    },
+    {
+        "id": 12,
+        "prompt": "What file defines the SQL tables used in the app?",
+        "correctAnswer": "db/init.sql",
+        "correctIndex": 2,
+        "answers": [
+            "app.js",
+            ".env",
+            "db/init.sql",
+            "scripts/init-db.js"
+        ]
+    },
+    {
+        "id": 13,
+        "prompt": "What does scripts/init-db.js do?",
+        "correctAnswer": "Reads and executes db/init.sql",
+        "correctIndex": 1,
+        "answers": [
+            "Creates EJS templates",
+            "Reads and executes db/init.sql",
+            "Fetches Formbar user data",
+            "Renders the login page"
+        ]
+    },
+    {
+        "id": 15,
+        "prompt": "What is the purpose of socket.io-client in this project?",
+        "correctAnswer": "To connect to the Formbar WebSocket",
+        "correctIndex": 1,
+        "answers": [
+            "To send HTTP requests",
+            "To connect to the Formbar WebSocket",
+            "To compress static files",
+            "To compile JavaScript"
+        ]
+    },
+    {
+        "id": 16,
+        "prompt": "Where are the EJS view files stored?",
+        "correctAnswer": "/views",
+        "correctIndex": 1,
+        "answers": [
+            "/db",
+            "/views",
+            "/scripts",
+            "/public"
+        ]
+    },
+    {
+        "id": 17,
+        "prompt": "What should be included in .gitignore?",
+        "correctAnswer": ".env and db/*.db",
+        "correctIndex": 1,
+        "answers": [
+            "The views folder",
+            ".env and db/*.db",
+            "app.js",
+            "package.json"
+        ]
+    },
+    {
+        "id": 18,
+        "prompt": "What does require('dotenv').config() do?",
+        "correctAnswer": "Loads variables from .env into process.env",
+        "correctIndex": 0,
+        "answers": [
+            "Loads variables from .env into process.env",
+            "Deletes environment variables",
+            "Starts a WebSocket connection",
+            "Initializes the database"
+        ]
+    },
+    {
+        "id": 19,
+        "prompt": "What is the purpose of making the GitHub repo a Template Repository?",
+        "correctAnswer": "To generate new projects easily",
+        "correctIndex": 1,
+        "answers": [
+            "To allow others to edit the main repo directly",
+            "To generate new projects easily",
+            "To hide the repo from search results",
+            "To enable branch protection"
+        ]
+    },
+    {
+        "id": 21,
+        "prompt": "What does Node.js allow developers to do?",
+        "correctAnswer": "Run JavaScript on the server side",
+        "correctIndex": 1,
+        "answers": [
+            "Compile TypeScript to JavaScript",
+            "Run JavaScript on the server side",
+            "Design user interfaces in HTML",
+            "Store static assets in the browser"
+        ]
+    },
+    {
+        "id": 22,
+        "prompt": "Which command installs a package and saves it as a project dependency?",
+        "correctAnswer": "npm install package-name",
+        "correctIndex": 2,
+        "answers": [
+            "npm start package-name",
+            "npm create package-name",
+            "npm install package-name",
+            "npm new package-name"
+        ]
+    },
+    {
+        "id": 23,
+        "prompt": "What is the purpose of package.json?",
+        "correctAnswer": "To define project metadata and dependencies",
+        "correctIndex": 1,
+        "answers": [
+            "To store HTML templates",
+            "To define project metadata and dependencies",
+            "To contain SQL scripts",
+            "To hold environment variables"
+        ]
+    },
+    {
+        "id": 24,
+        "prompt": "What does the res.send() function do in Express?",
+        "correctAnswer": "Sends a response back to the client",
+        "correctIndex": 1,
+        "answers": [
+            "Starts the Express server",
+            "Sends a response back to the client",
+            "Closes all database connections",
+            "Logs output to the console"
+        ]
+    },
+    {
+        "id": 25,
+        "prompt": "What is middleware in Express?",
+        "correctAnswer": "A function that runs between a request and response",
+        "correctIndex": 2,
+        "answers": [
+            "A route handler for POST requests",
+            "An environment variable handler",
+            "A function that runs between a request and response",
+            "A type of database connection"
+        ]
+    },
+    {
+        "id": 26,
+        "prompt": "What is the default HTTP port for most web servers?",
+        "correctAnswer": "80",
+        "correctIndex": 0,
+        "answers": [
+            "80",
+            "3000",
+            "443",
+            "22"
+        ]
+    },
+    {
+        "id": 27,
+        "prompt": "What does app.use(express.static('public')) do?",
+        "correctAnswer": "Serves static files like images or CSS from the public folder",
+        "correctIndex": 2,
+        "answers": [
+            "Registers all dynamic routes",
+            "Compiles templates automatically",
+            "Serves static files like images or CSS from the public folder",
+            "Starts the main Express app"
+        ]
+    },
+    {
+        "id": 28,
+        "prompt": "Which command runs a Node.js script named app.js?",
+        "correctAnswer": "node app.js",
+        "correctIndex": 1,
+        "answers": [
+            "npm app.js",
+            "node app.js",
+            "npm start app.js",
+            "run app.js"
+        ]
+    },
+    {
+        "id": 29,
+        "prompt": "What kind of database is SQLite?",
+        "correctAnswer": "A lightweight file-based relational database",
+        "correctIndex": 1,
+        "answers": [
+            "A cloud-based NoSQL database",
+            "A lightweight file-based relational database",
+            "A distributed database system",
+            "An in-memory key-value store"
+        ]
+    },
+    {
+        "id": 30,
+        "prompt": "What SQL keyword is used to add new data into a table?",
+        "correctAnswer": "INSERT",
+        "correctIndex": 0,
+        "answers": [
+            "INSERT",
+            "UPDATE",
+            "SELECT",
+            "DELETE"
+        ]
+    },
+    {
+        "id": 31,
+        "prompt": "What is a primary key in a SQL table?",
+        "correctAnswer": "A unique identifier for each row",
+        "correctIndex": 1,
+        "answers": [
+            "A reference to another table",
+            "A unique identifier for each row",
+            "A field that stores all text values",
+            "A type of foreign constraint"
+        ]
+    },
+    {
+        "id": 32,
+        "prompt": "What does the SELECT statement do in SQL?",
+        "correctAnswer": "Retrieves data from a table",
+        "correctIndex": 1,
+        "answers": [
+            "Deletes data from a table",
+            "Retrieves data from a table",
+            "Creates a new table",
+            "Updates table columns"
+        ]
+    },
+    {
+        "id": 33,
+        "prompt": "What is the main benefit of using sessions in a web app?",
+        "correctAnswer": "They allow the server to remember users between requests",
+        "correctIndex": 1,
+        "answers": [
+            "They store files on the client computer",
+            "They allow the server to remember users between requests",
+            "They encrypt database queries",
+            "They automatically refresh HTML pages"
+        ]
+    },
+    {
+        "id": 34,
+        "prompt": "What does req.body contain in an Express POST route?",
+        "correctAnswer": "Data sent by the client in the request body",
+        "correctIndex": 2,
+        "answers": [
+            "The session data",
+            "Headers from the client request",
+            "Data sent by the client in the request body",
+            "Static file paths"
+        ]
+    },
+    {
+        "id": 35,
+        "prompt": "Which Express method defines a GET route?",
+        "correctAnswer": "app.get()",
+        "correctIndex": 1,
+        "answers": [
+            "app.route()",
+            "app.get()",
+            "app.send()",
+            "app.listen()"
+        ]
+    },
+    {
+        "id": 36,
+        "prompt": "What is the purpose of app.listen() in an Express app?",
+        "correctAnswer": "Starts the web server and listens for incoming requests",
+        "correctIndex": 2,
+        "answers": [
+            "Registers a new middleware function",
+            "Loads environment variables",
+            "Starts the web server and listens for incoming requests",
+            "Connects to the database"
+        ]
+    },
+    {
+        "id": 37,
+        "prompt": "Which npm command initializes a new Node.js project?",
+        "correctAnswer": "npm init",
+        "correctIndex": 0,
+        "answers": [
+            "npm init",
+            "npm install",
+            "npm start",
+            "npm build"
+        ]
+    },
+    {
+        "id": 38,
+        "prompt": "What is the advantage of using environment variables?",
+        "correctAnswer": "They keep secrets and configuration separate from code",
+        "correctIndex": 2,
+        "answers": [
+            "They make debugging easier",
+            "They automatically generate routes",
+            "They keep secrets and configuration separate from code",
+            "They compress static files"
+        ]
+    },
+    {
+        "id": 39,
+        "prompt": "What is the purpose of module.exports in Node.js?",
+        "correctAnswer": "To make functions or variables available to other files",
+        "correctIndex": 2,
+        "answers": [
+            "To import packages",
+            "To load environment variables",
+            "To make functions or variables available to other files",
+            "To render templates"
+        ]
+    },
+    {
+        "id": 40,
+        "prompt": "What does the npm start command usually do?",
+        "correctAnswer": "Runs the script defined as 'start' in package.json",
+        "correctIndex": 1,
+        "answers": [
+            "Runs all scripts in the project",
+            "Runs the script defined as 'start' in package.json",
+            "Installs all dependencies",
+            "Initializes a new environment file"
+        ]
+    }
+]
+
+						}
                     ]
                 }
             ]
