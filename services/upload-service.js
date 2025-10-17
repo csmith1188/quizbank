@@ -6,12 +6,13 @@ let { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/
 xlsx.stream.set_readable(Readable);
 
 // template
-const SHEET_HEADERS = new Map([
-    ['unit', 0],
-    ['task', 1],
-    ['prompt', 2],
-    ['correctIndex', 3]
-]);
+const SHEET_HEADERS = ['unit', 'task', 'prompt', 'type', 'correctIndex'];
+
+// create map for quick lookup of header indices
+const SHEET_HEADERS_MAP = new Map();
+SHEET_HEADERS.forEach((header, index) => {
+    SHEET_HEADERS_MAP.set(header.toLowerCase(), index);
+});
 
 function rowLetterToIndex(letter) {
     let index = 0;
@@ -35,8 +36,8 @@ function indexToRowLetter(index) {
 
 function validateSheetData(sheetData) {
 
-    if (sheetData[0].length < SHEET_HEADERS.size) {
-        throw new Error("Not enough columns in sheet. Found " + numCols + ", minimum is " + (SHEET_HEADERS.size));
+    if (sheetData[0].length < SHEET_HEADERS_MAP.size) {
+        throw new Error("Not enough columns in sheet. Found " + numCols + ", minimum is " + (SHEET_HEADERS_MAP.size));
     }
 }
 
@@ -44,7 +45,7 @@ function validateSheetData(sheetData) {
 // just necessary to know if we should skip the first row when parsing
 function sheetHasHeaderRow(sheetData) {
     const sheetFirstCell = sheetData[0][0].toLowerCase().trim();
-    const templateFirstCell = Array.from(SHEET_HEADERS)[0][0];
+    const templateFirstCell = Array.from(SHEET_HEADERS_MAP)[0][0];
     return sheetFirstCell === templateFirstCell;
 }
 
@@ -67,7 +68,7 @@ module.exports.parseSheet = (sheetFileData) => {
     for (let row = firstDataRowNum; row < sheetData.length; row++) {
 
         // check for empty cells
-        for (let col = 0; col < SHEET_HEADERS.size; col++) {
+        for (let col = 0; col < SHEET_HEADERS_MAP.size; col++) {
             const cellValue = sheetData[row][col] || '';
             if (cellValue == '') {
                 throw new Error("Empty cell at row " + (row + 1) + " column " + indexToRowLetter(col));
@@ -78,7 +79,7 @@ module.exports.parseSheet = (sheetFileData) => {
         const answers = [];
 
         // collect answers from columns after 'correctIndex'
-        for (let col = SHEET_HEADERS.get('correctIndex') + 1; col < numCols; col++) {
+        for (let col = SHEET_HEADERS_MAP.get('correctIndex') + 1; col < numCols; col++) {
             const cellValue = rowData[col] || '';
             if (cellValue != '') {
                 answers.push(cellValue);
@@ -86,22 +87,33 @@ module.exports.parseSheet = (sheetFileData) => {
         }
 
         const createNew = {
-            unitName: rowData[SHEET_HEADERS.get('unit')],
-            taskName: rowData[SHEET_HEADERS.get('task')]
+            unitName: rowData[SHEET_HEADERS_MAP.get('unit')],
+            taskName: rowData[SHEET_HEADERS_MAP.get('task')]
         }
 
-        const prompt = rowData[SHEET_HEADERS.get('prompt')];
-        const correctIndex = rowLetterToIndex(rowData[SHEET_HEADERS.get('correctIndex')]) - SHEET_HEADERS.get('correctIndex') - 1;
-        const correctAnswer = rowData[SHEET_HEADERS.get('correctIndex') + correctIndex + 1];
+        const prompt = rowData[SHEET_HEADERS_MAP.get('prompt')];
+        const type = rowData[SHEET_HEADERS_MAP.get('type')];
+        type = type.toLowerCase().replace(/\s+/g, '-'); // ensure type is kebab-case
 
-        // for db
+        //const correctIndex = rowLetterToIndex(rowData[SHEET_HEADERS_MAP.get('correctIndex')]) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
+        //const correctAnswer = rowData[SHEET_HEADERS_MAP.get('correctIndex') + correctIndex + 1];
+
+        const correctIndicesRaw = rowData[SHEET_HEADERS_MAP.get('correctIndex')];
+        const correctIndices = correctIndicesRaw.split('').map(idx => {
+            idx = idx.trim();
+            return rowLetterToIndex(idx) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
+        });
+
+        const correctAnswers = correctIndices.map(idx => answers[idx]);
+
         const question = {
             taskUid: null, // to be filled in later
             index: null, // to be filled in later
             ai: false,
             prompt,
-            correct_answer: correctAnswer,
-            correct_index: correctIndex,
+            type,
+            correctAnswers,
+            correctIndices,
             answers
         };
 
