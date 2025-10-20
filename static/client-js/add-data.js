@@ -5,6 +5,14 @@ const cancelBtn = document.getElementById('cancelCourseBtn');
 const submitBtn = document.getElementById('submitCourseBtn');
 const courseNameInput = document.getElementById('courseNameInput');
 
+// Section upload logic
+const sectionModal = document.getElementById('newSectionModal');
+const openSectionModalBtn = document.getElementById('openSectionModalBtn');
+const cancelSectionBtn = document.getElementById('cancelSectionBtn');
+const submitSectionBtn = document.getElementById('submitSectionBtn');
+const sectionNameInput = document.getElementById('moduleNameInput');
+
+// Course upload handlers
 openModalBtn.addEventListener('click', () => {
     modal.classList.remove('hidden');
     courseNameInput.value = '';
@@ -40,14 +48,7 @@ submitBtn.addEventListener('click', async () => {
         alert('Error creating course.');
     }
 });
-
-// Section upload logic
-const sectionModal = document.getElementById('sectionModal');
-const openSectionModalBtn = document.getElementById('openSectionModalBtn');
-const cancelSectionBtn = document.getElementById('cancelSectionBtn');
-const submitSectionBtn = document.getElementById('submitSectionBtn');
-const sectionNameInput = document.getElementById('sectionNameInput');
-
+// Section upload handlers
 openSectionModalBtn.addEventListener('click', () => {
     sectionModal.classList.remove('hidden');
     sectionNameInput.value = '';
@@ -57,22 +58,25 @@ openSectionModalBtn.addEventListener('click', () => {
 cancelSectionBtn.addEventListener('click', () => {
     sectionModal.classList.add('hidden');
 });
-tSectionBtn.addEventListener('click', async () => {
+
+submitSectionBtn.addEventListener('click', async () => {
     const sectionName = sectionNameInput.value.trim();
+    const courseUid = window.CURRENT_COURSE_UID;
     if (!sectionName) return alert('Please enter a section name.');
+    if (!courseUid) return alert('Course UID is missing.');
 
     try {
         const response = await fetch('/api/section-upload/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sectionName }),
+            body: JSON.stringify({ sectionName, courseUid }),
         });
 
         const data = await response.json();
         if (data.success) {
             sectionModal.classList.add('hidden');
 
-            if (window.ALL_SECTION_DATA) {
+            if (window.ALL_SECTION_DATA && Array.isArray(window.ALL_SECTION_DATA)) {
                 window.ALL_SECTION_DATA.push(data.newSection);
                 if (typeof renderView === 'function') renderView('sections');
             }

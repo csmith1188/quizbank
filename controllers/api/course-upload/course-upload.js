@@ -1,4 +1,4 @@
-const { getCoursesForUser, createCourseForUser } = require('../../../services/resource-service');
+const { createCourseForUser } = require('../../../services/resource-service');
 
 module.exports = (router) => {
   router.post('/upload', async (req, res) => {
@@ -18,7 +18,7 @@ module.exports = (router) => {
         newCourse
       });
     } catch (error) {
-      console.error('❌ Error creating course:', error);
+      console.error('Error creating course:', error);
       res.status(500).json({ success: false, message: 'Server error creating course.' });
     }
   });

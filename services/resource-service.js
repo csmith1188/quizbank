@@ -116,17 +116,15 @@ module.exports.createCourseForUser = async (userUid, courseName) => {
     return course.toJSON();
 };
 
-module.exports.createSectionForUser = async (userUid, sectionName) => {
+module.exports.createSectionForUser = async (userUid, sectionName, courseUid) => {
     if (!sectionName || !sectionName.trim()) {
         throw new Error("Section name is required.");
     }
 
-    const courses = await Course.findAll({
-        where: { userUid },
-        attributes: ["uid"]
-    });
+    if (!courseUid) {
+        throw new Error("Course UID is required.");
+    }
 
-    const courseUid = courses[0].uid;
     const count = await Section.count({ where: { courseUid } });
     const section = await Section.create({
         courseUid,

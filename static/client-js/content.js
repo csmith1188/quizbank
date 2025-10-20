@@ -2,6 +2,7 @@ const allCourseDataText = document.getElementById('all-course-data').textContent
 const uploadSection = document.getElementsByClassName('upload-section')[0];
 const uploadForm = document.getElementById('bulk-upload-form');
 const openEditFormBtn = document.getElementById('openCourseModalBtn');
+const sectionUploadForm = document.getElementById('section-upload-form');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -235,10 +236,16 @@ function renderView(view, filter = "") {
         return;
     }
 
-    if (view === "courses" ) {
+    if (view === "courses") {
         openEditFormBtn.style.display = 'inline-block';
-    }else {
+    } else {
         openEditFormBtn.style.display = 'none';
+    }
+
+    if (view === "sections" && selectedPath.course) {
+        sectionUploadForm.style.display = 'inline-block';
+    } else {
+        sectionUploadForm.style.display = 'none';
     }
 
     if (view === 'units' && selectedPath.section) {
