@@ -11,7 +11,7 @@ const SHEET_HEADERS = ['unit', 'task', 'prompt', 'type', 'correctIndex'];
 // create map for quick lookup of header indices
 const SHEET_HEADERS_MAP = new Map();
 SHEET_HEADERS.forEach((header, index) => {
-    SHEET_HEADERS_MAP.set(header.toLowerCase(), index);
+    SHEET_HEADERS_MAP.set(header, index);
 });
 
 function rowLetterToIndex(letter) {
@@ -68,7 +68,7 @@ module.exports.parseSheet = (sheetFileData) => {
     for (let row = firstDataRowNum; row < sheetData.length; row++) {
 
         // check for empty cells
-        for (let col = 0; col < SHEET_HEADERS_MAP.size; col++) {
+        for (let col = 0; col < SHEET_HEADERS_MAP.size - 1; col++) {
             const cellValue = sheetData[row][col] || '';
             if (cellValue == '') {
                 throw new Error("Empty cell at row " + (row + 1) + " column " + indexToRowLetter(col));
@@ -92,23 +92,27 @@ module.exports.parseSheet = (sheetFileData) => {
         }
 
         const prompt = rowData[SHEET_HEADERS_MAP.get('prompt')];
-        const type = rowData[SHEET_HEADERS_MAP.get('type')];
+        let type = rowData[SHEET_HEADERS_MAP.get('type')];
         type = type.toLowerCase().replace(/\s+/g, '-'); // ensure type is kebab-case
 
-        //const correctIndex = rowLetterToIndex(rowData[SHEET_HEADERS_MAP.get('correctIndex')]) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
-        //const correctAnswer = rowData[SHEET_HEADERS_MAP.get('correctIndex') + correctIndex + 1];
-
         const correctIndicesRaw = rowData[SHEET_HEADERS_MAP.get('correctIndex')];
-        const correctIndices = correctIndicesRaw.split('').map(idx => {
-            idx = idx.trim();
-            return rowLetterToIndex(idx) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
-        });
 
-        const correctAnswers = correctIndices.map(idx => answers[idx]);
+        let correctIndices = [];
+        let correctAnswers = [];
+
+        // if there is no correct indexes, then the question is probably open-ended
+        if (correctIndicesRaw){
+
+            correctIndices = correctIndicesRaw.split('').map(idx => {
+                idx = idx.trim();
+                return rowLetterToIndex(idx) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
+            });
+
+            correctAnswers = correctIndices.map(idx => answers[idx]);
+
+        }
 
         const question = {
-            taskUid: null, // to be filled in later
-            index: null, // to be filled in later
             ai: false,
             prompt,
             type,

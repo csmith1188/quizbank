@@ -208,6 +208,10 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             const {unitName, taskName} = item.createNew;
             const question = item.question;
 
+            if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
+                throw new Error(`Not enough answer choices for question of type ${question.type}`);
+            }
+
             // find section
             const sectionEntity = await Section.findOne({
                 where: {
@@ -273,14 +277,25 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 },
                 transaction: t
             });
-            
-            // prepare question data for insertion
-            question.index = lastQuestionIndex + 1;
-            question.taskUid = taskEntity.uid;
-            question.answers = JSON.stringify(question.answers);
+
+            // if multiple answer question, store as array, else single answer
+            const correctAnswers = question.type === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
+            const correctIndices = question.type === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
+
+            // for insertion
+            const questionData = {
+                taskUid: taskEntity.uid,
+                index: lastQuestionIndex + 1,
+                ai: question.ai,
+                prompt: question.prompt,
+                type: question.type,
+                correct_index: correctIndices,
+                correct_answer: correctAnswers,
+                answers: JSON.stringify(question.answers)
+            }
 
             // create question
-            await Question.create(question, { transaction: t });
+            await Question.create(questionData, { transaction: t });
 
         }
 
