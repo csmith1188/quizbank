@@ -8,8 +8,8 @@ const courseNameInput = document.getElementById('courseNameInput');
 // Section upload logic
 const sectionModal = document.getElementById('newSectionModal');
 const openSectionModalBtn = document.getElementById('openSectionModalBtn');
-const cancelSectionBtn = document.getElementById('cancelSectionBtn');
-const submitSectionBtn = document.getElementById('submitSectionBtn');
+const cancelSectionBtn = document.getElementById('cancelModuleBtn');
+const submitSectionBtn = document.getElementById('submitModuleBtn');
 const sectionNameInput = document.getElementById('moduleNameInput');
 
 // Course upload handlers
@@ -23,7 +23,8 @@ cancelBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
 });
 
-submitBtn.addEventListener('click', async () => {
+submitBtn.addEventListener('click', async (event) => {
+    event.preventDefault(); // Prevent default form submission
     const courseName = courseNameInput.value.trim();
     if (!courseName) return alert('Please enter a course name.');
 
@@ -48,6 +49,7 @@ submitBtn.addEventListener('click', async () => {
         alert('Error creating course.');
     }
 });
+
 // Section upload handlers
 openSectionModalBtn.addEventListener('click', () => {
     sectionModal.classList.remove('hidden');
@@ -59,10 +61,14 @@ cancelSectionBtn.addEventListener('click', () => {
     sectionModal.classList.add('hidden');
 });
 
-submitSectionBtn.addEventListener('click', async () => {
+submitSectionBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
     const sectionName = sectionNameInput.value.trim();
-    const courseUid = window.CURRENT_COURSE_UID;
+    const path = selectedPath;
+    const courseUid = path.course.uid;
+    
     if (!sectionName) return alert('Please enter a section name.');
+    if (!courseUid) return alert('Course UID is missing.');
     if (!courseUid) return alert('Course UID is missing.');
 
     try {
@@ -76,10 +82,7 @@ submitSectionBtn.addEventListener('click', async () => {
         if (data.success) {
             sectionModal.classList.add('hidden');
 
-            if (window.ALL_SECTION_DATA && Array.isArray(window.ALL_SECTION_DATA)) {
-                window.ALL_SECTION_DATA.push(data.newSection);
-                if (typeof renderView === 'function') renderView('sections');
-            }
+            //LOAD DATA FIX IT ROBERT FIX IT
         }
     } catch (err) {
         console.error(err);
