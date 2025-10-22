@@ -272,7 +272,7 @@ function renderView(view, filter = "") {
 
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
-        let v = btn.getAttribute('data-view').slice(0,-1);
+        let v = btn.getAttribute('data-view').slice(0, -1);
         let currentPath = selectedPath[v];
         if (currentPath) {
             btn.innerHTML = `<span>${currentPath.name}</span> <button class="unselect-btn" data-unselect="${v}" title="Unselect">×</button>`;

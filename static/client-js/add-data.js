@@ -24,7 +24,7 @@ cancelBtn.addEventListener('click', () => {
 });
 
 submitBtn.addEventListener('click', async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
     const courseName = courseNameInput.value.trim();
     if (!courseName) return alert('Please enter a course name.');
 
@@ -66,7 +66,7 @@ submitSectionBtn.addEventListener('click', async (event) => {
     const sectionName = sectionNameInput.value.trim();
     const path = selectedPath;
     const courseUid = path.course.uid;
-    
+
     if (!sectionName) return alert('Please enter a section name.');
     if (!courseUid) return alert('Course UID is missing.');
 
