@@ -13,7 +13,6 @@ const resourceDepthMap = new Map([
 const questionTypeMinAnswerChoices = new Map([
     ["multiple-choice", 2],
     ["multiple-answer", 2],
-    ["true-false", 2],
     ["open-ended", 0]
 ]);
 
