@@ -2,6 +2,7 @@ const allCourseDataText = document.getElementById('all-course-data').textContent
 const uploadSection = document.getElementsByClassName('upload-section')[0];
 const uploadForm = document.getElementById('bulk-upload-form');
 const openEditFormBtn = document.getElementById('openCourseModalBtn');
+const sectionUploadForm = document.getElementById('section-upload-form');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -235,10 +236,16 @@ function renderView(view, filter = "") {
         return;
     }
 
-    if (view === "courses" ) {
+    if (view === "courses") {
         openEditFormBtn.style.display = 'inline-block';
-    }else {
+    } else {
         openEditFormBtn.style.display = 'none';
+    }
+
+    if (view === "sections" && selectedPath.course) {
+        sectionUploadForm.style.display = 'inline-block';
+    } else {
+        sectionUploadForm.style.display = 'none';
     }
 
     if (view === 'units' && selectedPath.section) {
@@ -252,8 +259,8 @@ function renderView(view, filter = "") {
             currentView = "questions";
             view = currentView;
         } else {
-            if (typeof renderQuestionEdit === "function") {
-                renderQuestionEdit(questionDetail);
+            if (typeof renderQuestionDetail === "function") {
+                renderQuestionDetail(questionDetail);
                 return;
             } else {
                 const area = document.getElementById('browserListArea');
@@ -279,7 +286,7 @@ function renderView(view, filter = "") {
     const area = document.getElementById('browserListArea');
     area.innerHTML = `<div class="browser-no-results">Loading...</div>`;
     let items = getScoped(view);
-    if (filter) {
+    if (filter && typeof filter === "string") {
         items = items.filter(item => {
             const field = (item.name || item.prompt || item.text || "");
             return field.toLowerCase().includes(filter.toLowerCase());
