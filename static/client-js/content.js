@@ -259,8 +259,8 @@ function renderView(view, filter = "") {
             currentView = "questions";
             view = currentView;
         } else {
-            if (typeof renderQuestionEdit === "function") {
-                renderQuestionEdit(questionDetail);
+            if (typeof renderQuestionDetail === "function") {
+                renderQuestionDetail(questionDetail);
                 return;
             } else {
                 const area = document.getElementById('browserListArea');
@@ -286,7 +286,7 @@ function renderView(view, filter = "") {
     const area = document.getElementById('browserListArea');
     area.innerHTML = `<div class="browser-no-results">Loading...</div>`;
     let items = getScoped(view);
-    if (filter) {
+    if (filter && typeof filter === "string") {
         items = items.filter(item => {
             const field = (item.name || item.prompt || item.text || "");
             return field.toLowerCase().includes(filter.toLowerCase());

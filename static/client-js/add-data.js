@@ -69,7 +69,6 @@ submitSectionBtn.addEventListener('click', async (event) => {
     
     if (!sectionName) return alert('Please enter a section name.');
     if (!courseUid) return alert('Course UID is missing.');
-    if (!courseUid) return alert('Course UID is missing.');
 
     try {
         const response = await fetch('/api/section-upload/upload', {
@@ -82,7 +81,16 @@ submitSectionBtn.addEventListener('click', async (event) => {
         if (data.success) {
             sectionModal.classList.add('hidden');
 
-            //LOAD DATA FIX IT ROBERT FIX IT
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === courseUid);
+                if (course) {
+                    if (!course.sections) {
+                        course.sections = [];
+                    }
+                    course.sections.push(data.newSection);
+                    if (typeof renderView === 'function') renderView('sections');
+                }
+            }
         }
     } catch (err) {
         console.error(err);
