@@ -1,7 +1,8 @@
-// content.js (updated)
-// NOTE: replace your current content.js with this file
-
 const allCourseDataText = document.getElementById('all-course-data').textContent;
+const uploadSection = document.getElementsByClassName('upload-section')[0];
+const uploadForm = document.getElementById('bulk-upload-form');
+const openEditFormBtn = document.getElementById('openCourseModalBtn');
+const sectionUploadForm = document.getElementById('section-upload-form');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -207,14 +208,10 @@ function updateSelectedPathDisplay() {
     pathEl.innerHTML = arr.length ? arr.join(' &rsaquo; ') : "<span>No selection</span>";
 }
 
-/**
- * Add a dynamic browser tab if missing (for the Question Edit tab).
- * Keeps event listeners consistent with other tabs.
- */
 function addBrowserTabIfMissing(view, label) {
     const tabsContainer = document.querySelector('.browser-tabs');
     if (!tabsContainer) return;
-    if (tabsContainer.querySelector(`[data-view="${view}"]`)) return; // already exists
+    if (tabsContainer.querySelector(`[data-view="${view}"]`)) return;
 
     const btn = document.createElement('button');
     btn.className = 'browser-tab';
@@ -224,39 +221,48 @@ function addBrowserTabIfMissing(view, label) {
 
     // main click: switch to view
     btn.addEventListener('click', function (e) {
-        // avoid firing when close button is clicked (it will stopPropagation)
         if (e.target && e.target.classList && e.target.classList.contains('unselect-btn')) return;
         currentView = view;
         renderView(currentView, document.getElementById('searchInput')?.value || "");
     });
 
     tabsContainer.appendChild(btn);
-    attachUnselectListeners(); // bind the close button we just created
+    attachUnselectListeners();
 }
 
-/**
- * Render the main browser view (courses/sections/units/tasks/questions/questionDetail/questionEdit)
- */
 function renderView(view, filter = "") {
-    // special direct render for questionDetail (keeps behavior as before)
     if (view === "questionDetail" && questionDetail) {
         renderQuestionDetail(questionDetail);
         return;
     }
 
-    // special: questionEdit -> call renderQuestionEdit if available
+    if (view === "courses") {
+        openEditFormBtn.style.display = 'inline-block';
+    } else {
+        openEditFormBtn.style.display = 'none';
+    }
+
+    if (view === "sections" && selectedPath.course) {
+        sectionUploadForm.style.display = 'inline-block';
+    } else {
+        sectionUploadForm.style.display = 'none';
+    }
+
+    if (view === 'units' && selectedPath.section) {
+        uploadSection.style.display = 'block';
+    } else {
+        uploadSection.style.display = 'none';
+    }
+
     if (view === "questionEdit") {
         if (!questionDetail) {
-            // nothing to edit; go back
             currentView = "questions";
             view = currentView;
         } else {
-            // render edit UI (prefer external renderQuestionEdit if loaded)
-            if (typeof renderQuestionEdit === "function") {
-                renderQuestionEdit(questionDetail);
+            if (typeof renderQuestionDetail === "function") {
+                renderQuestionDetail(questionDetail);
                 return;
             } else {
-                // fallback message until edit-question.js loads
                 const area = document.getElementById('browserListArea');
                 area.innerHTML = `<div class="browser-no-results">Edit UI not yet available.</div>`;
                 return;
@@ -266,39 +272,12 @@ function renderView(view, filter = "") {
 
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
-        let v = btn.getAttribute('data-view');
-        switch (v) {
-            case "courses":
-                if (selectedPath.course) {
-                    btn.innerHTML = `<span>${selectedPath.course.name}</span> <button class="unselect-btn" data-unselect="course" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "sections":
-                if (selectedPath.section) {
-                    btn.innerHTML = `<span>${selectedPath.section.name}</span> <button class="unselect-btn" data-unselect="section" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "units":
-                if (selectedPath.unit) {
-                    btn.innerHTML = `<span>${selectedPath.unit.name}</span> <button class="unselect-btn" data-unselect="unit" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "tasks":
-                if (selectedPath.task) {
-                    btn.innerHTML = `<span>${selectedPath.task.name}</span> <button class="unselect-btn" data-unselect="task" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            default:
-                // for dynamic tabs (like questionEdit) we keep their innerHTML as-is
-                break;
+        let v = btn.getAttribute('data-view').slice(0, -1);
+        let currentPath = selectedPath[v];
+        if (currentPath) {
+            btn.innerHTML = `<span>${currentPath.name}</span> <button class="unselect-btn" data-unselect="${v}" title="Unselect">×</button>`;
+        } else {
+            btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1) + 's'}</span>`;
         }
     });
     attachUnselectListeners();
@@ -307,7 +286,7 @@ function renderView(view, filter = "") {
     const area = document.getElementById('browserListArea');
     area.innerHTML = `<div class="browser-no-results">Loading...</div>`;
     let items = getScoped(view);
-    if (filter) {
+    if (filter && typeof filter === "string") {
         items = items.filter(item => {
             const field = (item.name || item.prompt || item.text || "");
             return field.toLowerCase().includes(filter.toLowerCase());
@@ -332,13 +311,9 @@ function renderView(view, filter = "") {
     attachDropDownListeners(view, items);
 }
 
-/**
- * Render the question detail in the list area.
- * This will now create an Edit button that creates a new "Question Edit" tab when clicked.
- */
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
-    area.classList.add('question-detail-mode'); // optional visual class
+    area.classList.add('question-detail-mode');
 
     let answers = [];
     try {
@@ -381,10 +356,8 @@ function renderQuestionDetail(question) {
     };
 
     document.getElementById('questionDetailEditBtn').onclick = () => {
-        // keep questionDetail set (used by edit view)
         questionDetail = question;
 
-        // create the tab (if it doesn't exist) and switch to it
         addBrowserTabIfMissing('questionEdit', 'Question Edit');
 
         currentView = 'questionEdit';
@@ -454,6 +427,107 @@ function attachUnselectListeners() {
     });
 }
 
+function pickQuestions() {
+    const numberToPick = parseInt(prompt("How many questions would you like to pick?", "1"), 10) || 1;
+    const path = selectedPath;
+    let questions = [];
+
+    const collectQuestions = (items) => {
+        items.forEach(item => {
+            if (item.questions) {
+                questions = questions.concat(item.questions);
+            }
+        });
+    };
+
+    if (path.task) {
+        collectQuestions([path.task]);
+    } else if (path.unit) {
+        collectQuestions(path.unit.tasks || []);
+    } else if (path.section) {
+        path.section.units.forEach(unit => {
+            collectQuestions(unit.tasks || []);
+        });
+    } else if (path.course) {
+        path.course.sections.forEach(section => {
+            section.units.forEach(unit => {
+                collectQuestions(unit.tasks || []);
+            });
+        });
+    } else {
+        questions = getAllQuestions();
+    }
+
+    // Remove duplicates
+    questions = Array.from(new Set(questions.map(q => JSON.stringify(q)))).map(q => JSON.parse(q));
+
+    questions = questions.sort(() => Math.random() - 0.5);
+    const pickedQuestions = questions.slice(0, Math.max(numberToPick, 0));
+
+    // Create a pop-up
+    let popUpContent = "<h3>Picked Questions</h3>";
+
+    pickedQuestions.forEach(q => {
+        let answers = [];
+        try {
+            answers = typeof q.answers === "string" ? JSON.parse(q.answers) : q.answers;
+        } catch {
+            answers = q.answers || [];
+        }
+        let correctIdx = (typeof q.correct_index !== "undefined" ? q.correct_index : q.correctIndex);
+        let correctAns = q.correctAnswer || q.correct_answer;
+
+        // Construct the path for the question
+        const paths = [
+            q.parentCourse ? q.parentCourse.name : null,
+            q.parentSection ? q.parentSection.name : null,
+            q.parentUnit ? q.parentUnit.name : null,
+            q.parentTask ? q.parentTask.name : null
+        ].filter(Boolean).join(' > ');
+
+        popUpContent += `<div style="margin-bottom: 20px;">
+            <strong>Question:</strong> ${q.prompt || q.text}<br>
+            ${paths ? `<div style="font-size: 0.9em; color: #ccc; margin-bottom: 5px;">${paths}</div>` : ''}
+            <strong>Answers:</strong>
+            <ul style="list-style-type: none; padding-left: 0;">
+            ${answers.map((ans, idx) => `
+            <li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
+             ${correctIdx === idx || ans === correctAns ? '*' : ''} ${ans}${(correctIdx === idx || ans === correctAns)}
+            </li>`).join('')}
+            </ul>
+        </div>`;
+    });
+
+    if (pickedQuestions.length === 0) {
+        popUpContent += "<p>No questions available in the current selection.</p>";
+    }
+
+    // Display the pop-up
+    const popUp = document.createElement('div');
+    popUp.style.position = 'fixed';
+    popUp.style.top = '50%';
+    popUp.style.left = '50%';
+    popUp.style.transform = 'translate(-50%, -50%)';
+    popUp.style.backgroundColor = 'black';
+    popUp.style.border = '2px solid #333';
+    popUp.style.borderRadius = '8px';
+    popUp.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    popUp.style.padding = '20px';
+    popUp.style.zIndex = '1000';
+    popUp.style.maxWidth = '90%';
+    popUp.style.maxHeight = '80%';
+    popUp.style.overflowY = 'auto';
+    popUp.innerHTML = popUpContent + '<button id="closePopUp" style="margin-top: 10px;">Close</button>';
+    document.body.appendChild(popUp);
+
+    const closeButton = document.getElementById('closePopUp');
+    closeButton.onclick = () => {
+        document.body.removeChild(popUp);
+    };
+
+    return pickedQuestions;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -475,5 +549,40 @@ window.addEventListener("DOMContentLoaded", () => {
             renderView(currentView, "");
         }
     });
+
+    uploadForm.onsubmit = function (e) {
+        e.preventDefault();
+
+        if (!selectedPath.section) {
+            alert("Please select a section to upload to.");
+            return;
+        }
+
+        if (!uploadForm.sheet.files || uploadForm.sheet.files.length === 0) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        const formData = new FormData(uploadForm);
+        formData.set('sectionUid', selectedPath.section ? selectedPath.section.uid : "");
+        fetch('/api/bulk-upload/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                const updatedSection = JSON.parse(data);
+                const course = ALL_COURSE_DATA.courses.find(c => c.uid === updatedSection.courseUid);
+                course.sections[updatedSection.index - 1] = updatedSection;
+                selectedPath.section = updatedSection;
+                renderView('units');
+                uploadForm.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Upload failed: ' + error.message);
+            });
+    };
+
     renderView(currentView);
 });

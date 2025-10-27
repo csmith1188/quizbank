@@ -65,23 +65,31 @@ The seeding system is designed to populate the database with initial data for co
    {
      "courses": [
        {
+   
+         "id": 1,
          "name": "Course 1",
          "sections": [
            {
+   
+             "id": 1,
              "name": "Section 1",
              "units": [
                {
+   
+                 "id": 1,
                  "name": "Unit 1",
                  "tasks": [
                    {
+                     "id": 1,
                      "name": "Task 1",
                      "questions": [
                        {
+                         "id": 1,
+                         "ai": false,
                          "prompt": "What is 2 + 2?",
                          "correctAnswer": "4",
                          "correctIndex": 0,
-                         "answers": ["4", "3", "5", "6"],
-                         "ai": false
+                         "answers": ["4", "3", "5", "6"]
                        }
                      ]
                    }

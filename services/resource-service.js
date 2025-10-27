@@ -1,4 +1,4 @@
-const { Course, Section, Unit, Task, Question } = require("../db/db");
+const { User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
@@ -35,7 +35,7 @@ const collectQuestions = (data) => {
 };
 
 // Fetch the full course hierarchy for a user
-getFullCourseHierarchy = async (userUid) => {
+module.exports.getFullCourseHierarchy = async (userUid) => {
     const courses = await Course.findAll({
         where: { userUid: userUid }, // Filter by userUid
         include: [{
@@ -58,6 +58,107 @@ getFullCourseHierarchy = async (userUid) => {
         courses: courses.map(c => c.toJSON())
     };
     return json;
+}
+
+module.exports.getSection = async (sectionUid) => {
+    const section = await Section.findOne({
+        where: { uid: sectionUid },
+        include: [{
+            model: Unit,
+            as: "units",
+            include: [{
+                model: Task,
+                as: "tasks",
+                include: [{ model: Question, as: "questions" }]
+            }]
+        }]
+    });
+    if (!section) throw new Error("Section not found");
+    return section.toJSON();
+}
+
+module.exports.getSectionsForUser = async (userUid) => {
+    const sections = await Section.findAll({
+        include: [{
+            model: Course,
+            as: "course",
+            where: { userUid: userUid },
+            attributes: []
+        }],
+        attributes: ["uid", "name", "index", "createdAt", "updatedAt"],
+    });
+    if (!sections) throw new Error("No sections found for user");
+    return sections.map(s => s.toJSON());
+}
+
+module.exports.getCoursesForUser = async (userUid) => {
+    const courses = await Course.findAll({
+        where: { userUid: userUid },
+        attributes: ["uid", "name", "index", "createdAt", "updatedAt"],
+    });
+    if (!courses) throw new Error("No courses found for user");
+    return courses.map(c => c.toJSON());
+}
+
+module.exports.createCourseForUser = async (userUid, courseName) => {
+    if (!courseName || !courseName.trim()) {
+        throw new Error("Course name is required.");
+    }
+
+    const count = await Course.count({ where: { userUid } });
+
+    const course = await Course.create({
+        userUid,
+        name: courseName.trim(),
+        index: count + 1
+    });
+
+    return course.toJSON();
+};
+
+module.exports.createSectionForUser = async (userUid, sectionName, courseUid) => {
+    if (!sectionName || !sectionName.trim()) {
+        throw new Error("Section name is required.");
+    }
+
+    if (!courseUid) {
+        throw new Error("Course UID is required.");
+    }
+
+    const count = await Section.count({ where: { courseUid } });
+    const section = await Section.create({
+        courseUid,
+        name: sectionName.trim(),
+        index: count + 1
+    });
+    return section.toJSON();
+};
+
+module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
+    let model;
+    switch (resourceType) {
+        case "course": model = Course; break;
+        case "section": model = Section; break;
+        case "unit": model = Unit; break;
+        case "task": model = Task; break;
+        case "question": model = Question; break;
+        default: throw new Error(`Invalid resource type: ${resourceType}`);
+    }
+
+    const resource = await model.findOne({
+        where: { uid: resourceUid },
+        include: [{
+            model: Course,
+            as: "course",
+            attributes: ["uid", "userUid"],
+            include: [{ model: User, as: "user", attributes: ["uid", "username"] }]
+        }],
+        attributes: ["uid"]
+    });
+
+    if (!resource) throw new Error(`${resourceType} not found`);
+
+    return resource.course.userUid;
 }
 
 // Parse the resource path into segments and pick amount
@@ -121,7 +222,7 @@ module.exports.getResource = async (userId, path) => {
         throw new Error(`Path must start with a course: found ${segments[0].type}`);
     }
 
-    let data = await getFullCourseHierarchy(userId);
+    let data = await module.exports.getFullCourseHierarchy(userId);
     let resolvedData = resolveHierarchy(data, segments);
 
     if (
