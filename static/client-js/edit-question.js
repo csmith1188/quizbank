@@ -116,8 +116,10 @@ function renderQuestionEdit(question) {
             return;
         }
 
-        const newQuestionData = parseFormattedQuestion(formattedText);
+        const newQuestionData = parseFormattedQuestion(text);
+        console.log(newQuestionData);
         const newQuestionType = determineQuestionType(newQuestionData);
+        console.log(newQuestionType);
 
         // first line: question prompt
         question.prompt  = newQuestionData.prompt;
@@ -176,7 +178,7 @@ function parseFormattedQuestion(text) {
     const questionData = {
         prompt: lines[0].replace(/^1\.\s*/, ""),
         answers: [],
-        correct_index: 0
+        correct_indices: []
     };
 
     for (let i = 1; i < lines.length; i++) {
@@ -185,18 +187,18 @@ function parseFormattedQuestion(text) {
         if (isCorrect) line = line.slice(1);
         line = line.replace(/^[a-d]\)\s*/i, "");
         questionData.answers.push(line);
-        if (isCorrect) questionData.correct_index = i - 1;
+        if (isCorrect) questionData.correct_indices.push(i - 1);
     }
 
     return questionData;
 }
 
-function determineQuestionType(newQuestionData) {
-    if (Array.isArray(newQuestionData.correct_index)) {
-        return "multiple-answer";
-    } else if (newQuestionData.answers && newQuestionData.answers.length > 0) {
-        return "multiple-choice";
-    } else {
+function determineQuestionType(questionData) {
+    if (questionData.answers.length === 0) {
         return "open-ended";
+    } else if(questionData.answers.length > 1){
+        return "multiple-answer";
+    } else {
+        return "multiple-choice";
     }
 }
