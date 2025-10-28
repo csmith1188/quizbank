@@ -11,6 +11,9 @@ const { readDirPaths } = require('./util/file-helpers');
 const localsmiddleware = require('./middleware/locals');
 const {isAuthenticated} = require('./middleware/auth');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
