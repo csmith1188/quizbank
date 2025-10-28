@@ -6,7 +6,7 @@ module.exports = function (router) {
     const uid = parseInt(req.params.uid, 10);
     if (Number.isNaN(uid)) return res.status(400).json({ error: 'Invalid question id' });
 
-    let { prompt, answers, correct_index, correct_answer, ai } = req.body;
+    let { prompt, type, answers, correct_index, correct_answer, ai } = req.body;
 
     try {
       const question = await Question.findOne({ where: { uid } });
@@ -34,6 +34,7 @@ module.exports = function (router) {
 
       const updated = await question.update({
         prompt: (typeof prompt !== 'undefined') ? prompt : question.prompt,
+        type: (typeof type !== 'undefined') ? type : question.type,
         answers: JSON.stringify(answers),
         correct_index: (typeof correct_index !== 'undefined') ? correct_index : question.correct_index,
         correct_answer: (typeof correct_answer !== 'undefined') ? correct_answer : question.correct_answer,

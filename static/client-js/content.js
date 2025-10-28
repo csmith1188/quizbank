@@ -336,8 +336,8 @@ function renderQuestionDetail(question) {
         <strong>${question.type === 'open-ended' ? 'Open Ended' : 'Choices:'}</strong>
         <ul>
         ${answers.map((ans, idx) =>
-        `<li style="${(correctIdx === idx || ans === correctAns || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? 'font-weight:bold; color:green;' : ''}">
-                ${ans}${(correctIdx === idx || ans === correctAns || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? " <b>(Correct)</b>" : ""}
+        `<li style="${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? 'font-weight:bold; color:green;' : ''}">
+                ${ans}${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? " <b>(Correct)</b>" : ""}
             </li>`
     ).join("")}
         </ul>

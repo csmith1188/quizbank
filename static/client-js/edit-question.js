@@ -111,8 +111,8 @@ function renderQuestionEdit(question) {
         const text = document.getElementById('editExportText').value.trim();
         const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
 
-        if (lines.length < 2) {
-            alert("Invalid format. Must include question and at least one answer.");
+        if (lines.length < 1) {
+            alert("Invalid format. Must include a prompt");
             return;
         }
 
@@ -127,7 +127,8 @@ function renderQuestionEdit(question) {
         
         // remaining lines: answers
         question.answers = newQuestionData.answers;
-        question.correct_index = newQuestionData.correct_index;
+        question.correct_index = newQuestionData.correct_indices.length === 1 ? newQuestionData.correct_indices[0] : JSON.stringify(newQuestionData.correct_indices);
+        question.correct_answer = newQuestionData.correct_indices.length === 1 ? newQuestionData.answers[question.correctIndex] : null;
 
         // persist to server
         try {
@@ -194,11 +195,13 @@ function parseFormattedQuestion(text) {
 }
 
 function determineQuestionType(questionData) {
-    if (questionData.answers.length === 0) {
-        return "open-ended";
-    } else if(questionData.answers.length > 1){
+    if (questionData.correct_indices.length === 1) {
+        return "multiple-choice";
+    } else if(questionData.correct_indices.length > 1){
         return "multiple-answer";
     } else {
-        return "multiple-choice";
+        return "open-ended";
     }
+
+
 }
