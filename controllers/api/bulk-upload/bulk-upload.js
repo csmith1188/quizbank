@@ -1,4 +1,3 @@
-const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const { parseSheet } = require('../../../services/upload-service');
@@ -19,11 +18,6 @@ const upload = multer({
 });
 
 module.exports = (router) => {
-
-    router.get('/', (req, res) => {
-        res.render('pages/teacher/upload-test');
-    });
-
     router.post('/upload', (req, res) => {
         upload.single('sheet')(req, res, async (err) => {
 

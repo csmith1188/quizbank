@@ -12,22 +12,18 @@ module.exports = function (router) {
       const question = await Question.findOne({ where: { uid } });
       if (!question) return res.status(404).json({ error: 'Question not found' });
 
-      // Normalize answers (accept array or JSON string)
       if (typeof answers === 'string') {
-        try { answers = JSON.parse(answers); } catch (e) { /* leave as string if invalid JSON */ }
+        try { answers = JSON.parse(answers); } catch (e) {  }
       }
 
       if (!Array.isArray(answers)) {
-        // fallback to existing answers if incoming payload is invalid
         answers = JSON.parse(question.answers || '[]');
       }
 
-      // Validate correct_index if provided
       if (typeof correct_index !== 'undefined' && (correct_index < 0 || correct_index >= answers.length)) {
         return res.status(400).json({ error: 'correct_index out of range' });
       }
 
-      // If correct_answer not provided but correct_index is, derive it
       if (typeof correct_answer === 'undefined' && typeof correct_index !== 'undefined') {
         correct_answer = answers[correct_index] ?? null;
       }
