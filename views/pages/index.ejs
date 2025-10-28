@@ -1,0 +1,13 @@
+<%- include('../partials/header.ejs', {title: 'Quizbanks Home' }) %>
+
+    <main class="container">
+      <div class="glass-card">
+        <h1 class="page-title">Welcome to the Quiz Bank Application!</h1>
+        <% if (user) { %>
+          <% } else { %>
+            <p class="user-welcome">Please login to continue.</p>
+            <% } %>
+      </div>
+    </main>
+
+  <%- include('../partials/footer.ejs') %>
