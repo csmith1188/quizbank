@@ -13,11 +13,13 @@ function renderQuestionEdit(question) {
         ? question.correct_index
         : (typeof question.correctIndex !== "undefined" ? question.correctIndex : 0));
 
+    const hasMultipleAnswers = typeof question.correct_index === "string" && question.correct_index.startsWith("[");
+
     // format numbered question with * before correct answer
     const formattedText = [
         `1. ${question.prompt || question.text || ""}`,
         ...answers.map((ans, idx) =>
-            `${(idx === correctIdx) ? "*" : ""}${String.fromCharCode(97 + idx)}) ${ans}`
+            `${(idx === correctIdx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? "*" : ""}${String.fromCharCode(97 + idx)}) ${ans}`
         )
     ].join("\n");
 
@@ -45,9 +47,12 @@ function renderQuestionEdit(question) {
         renderView(currentView);
     };
 
+
+
     async function updateQuestionOnServer(q) {
         const payload = {
             prompt: q.prompt,
+            type: q.type,
             answers: JSON.stringify(q.answers || []),
             correct_index: (typeof q.correct_index !== 'undefined') ? q.correct_index : null,
             correct_answer: (q.answers && q.answers[q.correct_index]) ? q.answers[q.correct_index] : (q.correctAnswer || q.correct_answer || null),
@@ -106,26 +111,24 @@ function renderQuestionEdit(question) {
         const text = document.getElementById('editExportText').value.trim();
         const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
 
-        if (lines.length < 2) {
-            alert("Invalid format. Must include question and at least one answer.");
+        if (lines.length < 1) {
+            alert("Invalid format. Must include a prompt");
             return;
         }
 
+        const newQuestionData = parseFormattedQuestion(text);
+        console.log(newQuestionData);
+        const newQuestionType = determineQuestionType(newQuestionData);
+        console.log(newQuestionType);
+
         // first line: question prompt
-        question.prompt = question.text = lines[0].replace(/^1\.\s*/, "");
-
+        question.prompt  = newQuestionData.prompt;
+        question.type = newQuestionType;
+        
         // remaining lines: answers
-        question.answers = [];
-        question.correct_index = 0;
-
-        for (let i = 1; i < lines.length; i++) {
-            let line = lines[i];
-            const isCorrect = line.startsWith("*");
-            if (isCorrect) line = line.slice(1);
-            line = line.replace(/^[a-d]\)\s*/i, "");
-            question.answers.push(line);
-            if (isCorrect) question.correct_index = i - 1;
-        }
+        question.answers = newQuestionData.answers;
+        question.correct_index = newQuestionData.correct_indices.length === 1 ? newQuestionData.correct_indices[0] : JSON.stringify(newQuestionData.correct_indices);
+        question.correct_answer = newQuestionData.correct_indices.length === 1 ? newQuestionData.answers[question.correctIndex] : null;
 
         // persist to server
         try {
@@ -168,4 +171,37 @@ function renderQuestionEdit(question) {
             btn.textContent = "⬆ Paste & Update";
         }
     };
+}
+
+function parseFormattedQuestion(text) {
+    const lines = text.trim().split("\n").map(line => line.trim()).filter(Boolean);
+
+    const questionData = {
+        prompt: lines[0].replace(/^1\.\s*/, ""),
+        answers: [],
+        correct_indices: []
+    };
+
+    for (let i = 1; i < lines.length; i++) {
+        let line = lines[i];
+        const isCorrect = line.startsWith("*");
+        if (isCorrect) line = line.slice(1);
+        line = line.replace(/^[a-d]\)\s*/i, "");
+        questionData.answers.push(line);
+        if (isCorrect) questionData.correct_indices.push(i - 1);
+    }
+
+    return questionData;
+}
+
+function determineQuestionType(questionData) {
+    if (questionData.correct_indices.length === 1) {
+        return "multiple-choice";
+    } else if(questionData.correct_indices.length > 1){
+        return "multiple-answer";
+    } else {
+        return "open-ended";
+    }
+
+
 }

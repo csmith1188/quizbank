@@ -1,4 +1,4 @@
-const { User, Course, Section, Unit, Task, Question } = require("../db/db");
+const { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
@@ -8,6 +8,12 @@ const resourceDepthMap = new Map([
     ["unit", 2],
     ["task", 3],
     ["question", 4]
+]);
+
+const questionTypeMinAnswerChoices = new Map([
+    ["multiple-choice", 2],
+    ["multiple-answer", 2],
+    ["open-ended", 0]
 ]);
 
 // Add plural to singular map
@@ -244,4 +250,110 @@ module.exports.getResource = async (userId, path) => {
     }
 
     return resolvedData;
+}
+
+module.exports.insertUploadData = async (data, sectionUid) => {
+
+    return sequelize.transaction(async (t) => {
+
+        // keeps track of created units and tasks to avoid duplicates
+        const newUnits = new Map(); // key: unitName, value: unitEntity
+        const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
+
+        for (let item of data) {
+            const {unitName, taskName} = item.createNew;
+            const question = item.question;
+
+            if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
+                throw new Error(`Not enough answer choices for question of type ${question.type}`);
+            }
+
+            // find section
+            const sectionEntity = await Section.findOne({
+                where: {
+                    uid: sectionUid,
+                },
+                transaction: t
+            });
+
+            if (!sectionEntity) {
+                throw new Error(`Section not found`);
+            }
+
+            let unitEntity;
+
+            if (!newUnits.has(unitName)){
+
+                // create unit
+                const lastUnitIndex = await Unit.max('index', {
+                    where: {
+                        sectionUid: sectionUid
+                    },
+                    transaction: t
+                });
+
+                unitEntity = await Unit.create({
+                    name: unitName,
+                    index: (lastUnitIndex || 0) + 1,
+                    sectionUid: sectionUid,
+                }, { transaction: t });
+
+                newUnits.set(unitName, unitEntity);
+            }
+
+            // keys like this are necessary because of the hierarchical relationship
+            // imagine two tasks with the same name in different units
+            // sorry if I hurty your brain
+            let taskKey = unitName + ":" + taskName;
+            let taskEntity = newTasks.get(taskKey);
+
+            if (!taskEntity){
+
+                const lastTaskIndex = await Task.max('index', {
+                    where: {
+                        unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid
+                    },
+                    transaction: t
+                });
+
+                // create task
+                taskEntity = await Task.create({
+                    name: taskName,
+                    index: (lastTaskIndex || 0) + 1,
+                    unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid, // get from map if already created
+                }, { transaction: t });
+
+                newTasks.set(taskKey, taskEntity);
+            }
+
+            // find next question index
+            const lastQuestionIndex = await Question.count({
+                where: {
+                    taskUid: taskEntity ? taskEntity.uid : newTasks.get(taskName).uid
+                },
+                transaction: t
+            });
+
+            // if multiple answer question, store as array, else single answer
+            const correctAnswers = question.type === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
+            const correctIndices = question.type === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
+
+            // for insertion
+            const questionData = {
+                taskUid: taskEntity.uid,
+                index: lastQuestionIndex + 1,
+                ai: question.ai,
+                prompt: question.prompt,
+                type: question.type,
+                correct_index: correctIndices,
+                correct_answer: correctAnswers,
+                answers: JSON.stringify(question.answers)
+            }
+
+            // create question
+            await Question.create(questionData, { transaction: t });
+
+        }
+
+    });
 }
