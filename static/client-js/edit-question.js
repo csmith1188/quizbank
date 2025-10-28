@@ -194,11 +194,19 @@ function parseFormattedQuestion(text) {
     return questionData;
 }
 
+function isTrueFalse(questionData) {
+    return questionData.answers.length === 2 &&
+        ((questionData.answers[0].toLowerCase() === "true" && questionData.answers[1].toLowerCase() === "false") ||
+         (questionData.answers[0].toLowerCase() === "false" && questionData.answers[1].toLowerCase() === "true"));
+}
+
 function determineQuestionType(questionData) {
-    if (questionData.correct_indices.length === 1) {
-        return "multiple-choice";
-    } else if(questionData.correct_indices.length > 1){
+    if (questionData.correct_indices.length > 2) {
         return "multiple-answer";
+    } else if (isTrueFalse(questionData)) {
+        return "true-false";
+    } else if (questionData.correct_indices.length === 1) {
+        return "multiple-choice";
     } else {
         return "open-ended";
     }

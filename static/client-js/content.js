@@ -332,7 +332,7 @@ function renderQuestionDetail(question) {
       <h3>Question Detail</h3>
       <div class="question-prompt">${question.prompt || question.text || ""}</div>
       <div class="question-meta">
-        <strong>AI Generated:</strong> ${question.ai ? "Yes" : "No"}
+        ${question.ai ? "<strong>AI Generated</strong>" : ""}
       </div>
       <div class="answer-list">
         <strong>${question.type === 'open-ended' ? 'Open Ended' : 'Choices:'}</strong>

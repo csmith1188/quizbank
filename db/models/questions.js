@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         ai: { type: DataTypes.BOOLEAN, defaultValue: false },
         type: {
-            type: DataTypes.ENUM('multiple-choice', 'multiple-answer', 'open-ended'),
+            type: DataTypes.ENUM('multiple-choice', 'multiple-answer', 'true-false', 'open-ended'),
         },
         prompt: { type: DataTypes.TEXT, allowNull: false },
         correct_answer: { type: DataTypes.TEXT },
