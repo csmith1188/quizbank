@@ -259,10 +259,11 @@ function renderView(view, filter = "") {
             currentView = "questions";
             view = currentView;
         } else {
-            if (typeof renderQuestionDetail === "function") {
-                renderQuestionDetail(questionDetail);
+            if (typeof renderQuestionEdit === "function") {
+                renderQuestionEdit(questionDetail);
                 return;
             } else {
+                // fallback message until edit-question.js loads
                 const area = document.getElementById('browserListArea');
                 area.innerHTML = `<div class="browser-no-results">Edit UI not yet available.</div>`;
                 return;

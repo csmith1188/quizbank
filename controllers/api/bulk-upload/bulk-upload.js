@@ -3,8 +3,6 @@ const path = require('path');
 const { parseSheet } = require('../../../services/upload-service');
 const { getSection, getResourceOwnerUid, insertUploadData} = require('../../../services/resource-service');
 
-const router = express.Router();
-
 // store files in memory
 const upload = multer({
   storage: multer.memoryStorage(),
