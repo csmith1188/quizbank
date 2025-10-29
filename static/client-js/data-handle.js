@@ -1,11 +1,11 @@
-// Course upload logic
+// Course upload varibles
 const modal = document.getElementById('courseModal');
 const openModalBtn = document.getElementById('openCourseModalBtn');
 const cancelBtn = document.getElementById('cancelCourseBtn');
 const submitBtn = document.getElementById('submitCourseBtn');
 const courseNameInput = document.getElementById('courseNameInput');
 
-// Section upload logic
+// Section upload varibles
 const sectionModal = document.getElementById('newSectionModal');
 const openSectionModalBtn = document.getElementById('openSectionModalBtn');
 const cancelSectionBtn = document.getElementById('cancelModuleBtn');
