@@ -3,11 +3,12 @@ const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
 const resourceDepthMap = new Map([
-    ["course", 0],
-    ["section", 1],
-    ["unit", 2],
-    ["task", 3],
-    ["question", 4]
+    ["user", 0],
+    ["course", 1],
+    ["section", 2],
+    ["unit", 3],
+    ["task", 4],
+    ["question", 5]
 ]);
 
 const questionTypeMinAnswerChoices = new Map([
@@ -25,17 +26,19 @@ const pluralToSingular = {
     "questions": "question"
 };
 
+const MAX_QUESTIONS_PICK = 20;
+
 // Recursively collect all questions from the data
-const collectQuestions = (data) => {
+const collectQuestions = (data, questionType = null) => {
     if (!data) return [];
     if (Array.isArray(data)) {
-        return data.flatMap(collectQuestions);
+        return data.flatMap(item => collectQuestions(item, questionType));
     }
     if (typeof data === "object") {
         if (data.questions) {
-            return data.questions;
+            return questionType ? data.questions.filter(q => q.type === questionType) : data.questions;
         }
-        return Object.values(data).flatMap(collectQuestions);
+        return Object.values(data).flatMap(item => collectQuestions(item, questionType));
     }
     return [];
 };
@@ -217,7 +220,7 @@ function resolveHierarchy(root, segments) {
     return data;
 }
 
-module.exports.getResource = async (userId, path) => {
+module.exports.getResource = async (path, questionType = null) => {
     const { segments, pickAmount } = parseResourcePath(path);
 
     if (segments.length === 0) {
@@ -225,10 +228,11 @@ module.exports.getResource = async (userId, path) => {
     }
 
     if (resourceDepthMap.get(segments[0].type) !== 0) {
-        throw new Error(`Path must start with a course: found ${segments[0].type}`);
+        throw new Error(`Path must start with a user: found ${segments[0].type}`);
     }
 
-    let data = await module.exports.getFullCourseHierarchy(userId);
+    const userUid = segments.shift().indexes[0]; // remove user segment as well as get userUid
+    let data = await module.exports.getFullCourseHierarchy(userUid);
     let resolvedData = resolveHierarchy(data, segments);
 
     if (
@@ -241,12 +245,20 @@ module.exports.getResource = async (userId, path) => {
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
-        const allQuestions = collectQuestions(resolvedData);
+
+        if (pickAmount <= 0 || pickAmount > MAX_QUESTIONS_PICK) {
+            throw new Error(`Pick amount must be between 1 and ${MAX_QUESTIONS_PICK}`);
+        }
+
+        const allQuestions = collectQuestions(resolvedData, questionType);
 
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
-        if (pickAmount > allQuestions.length) throw new Error(`Requested ${pickAmount} questions, but only ${allQuestions.length} available`);
 
-        resolvedData = { questions: getRandomItems(allQuestions, pickAmount) };
+        resolvedData = { questions: [] };
+        while (resolvedData.questions.length < pickAmount) {
+            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.questions.length);
+            resolvedData.questions.push(...pickedQuestions);
+        }
     }
 
     return resolvedData;

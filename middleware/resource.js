@@ -4,8 +4,8 @@ const { shallow } = require("../util/scope-limit");
 module.exports = async (req, res, next) => {
     try {
         const resourcePath = req.path;
-        const userUid = req.session.user.uid;
-        const data = await resourceService.getResource(userUid, resourcePath);
+        const questionType = req.query.type;
+        const data = await resourceService.getResource(resourcePath, questionType);
         
         res.send(shallow(data));
 
