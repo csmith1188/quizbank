@@ -1,3 +1,4 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const UserService = require('../../services/user-service');
 const createSession = require('../../middleware/create-session');
