@@ -1,0 +1,628 @@
+{
+    "id": 1,
+    "name": "Computer Programming NOCTI",
+    "sections": [
+        {
+            "id": 1,
+            "name": "NOCTI",
+            "description": "Computer Programming NOCTI",
+            "units": [
+                {
+                    "id": 1,
+                    "name": "NodeJS, Express, EJS",
+                    "description": "An overview of using NodeJS with Express and EJS for web development.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "name": "HTTP Server",
+                            "description": "Creating a simple HTTP server using Node.js.",
+                            "genprompt": "Generate multiple-choice questions. Each question has four answers. Write them in the question object format. The content of the question is about creating a simple HTTP server using Node.js. Focus on server creation, request handling, and response management.",
+                            "questions": [
+                                {
+                                    "id": 1,
+                                    "prompt": "Which of the following errors is caused by calculation error?",
+                                    "correctAnswer": "arithmatic",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "logical",
+                                        "arithmatic",
+                                        "truncation",
+                                        "semantic"
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "prompt": "Which of the following uses three basic control structures?",
+                                    "correctAnswer": "structured programming",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "structured programming",
+                                        "circular connector",
+                                        "modular construction",
+                                        "loop structure"
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "prompt": "What type of principle is used for configuring preferences that allow the user to personalize an application?",
+                                    "correctAnswer": "GUI",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "CLI",
+                                        "GUI",
+                                        "API",
+                                        "DOS"
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "prompt": "All computer instructions are based on four basic logic patterns. These patterns are simple sequence, selection, loop and...",
+                                    "correctAnswer": "branch",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "trailer",
+                                        "modular",
+                                        "top-down",
+                                        "branch"
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "prompt": "Two types of programs that create machine codes are the interpreter and the...",
+                                    "correctAnswer": "compiler",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "assembler",
+                                        "object",
+                                        "compiler",
+                                        "source"
+                                    ]
+                                },
+                                {
+                                    "id": 6,
+                                    "prompt": "In the order of calculations in a program",
+                                    "correctAnswer": "multiplication precedes exponentation",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "addition precedes division",
+                                        "parentheses precede exponentation",
+                                        "subtraction precedes addition",
+                                        "multiplication precedes exponentation"
+                                    ]
+                                },
+                                {
+                                    "id": 7,
+                                    "prompt": "One of the main goals in analyzing user requirements is to",
+                                    "correctAnswer": "elicit requirements from a user's point of view.",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "troubleshoot the problem",
+                                        "shutdown and maintain the system",
+                                        "keep the customer happy",
+                                        "elicit requirements from a user's point of view."
+                                    ]
+                                },
+                                {
+                                    "id": 8,
+                                    "prompt": "A programmer is starting a new programming project. During what phase of the programming project should the programmer begin planning for data storage?",
+                                    "correctAnswer": "implementation",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "billing",
+                                        "documentation",
+                                        "implementation",
+                                        "test"
+                                    ]
+                                },
+                                {
+                                    "id": 9,
+                                    "prompt": "An example of a loop structure is",
+                                    "correctAnswer": "DO UNTIL",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "DO UNTIL",
+                                        "SELECT IF",
+                                        "EXECUTE",
+                                        "NEXT"
+                                    ]
+                                },
+                                {
+                                    "id": 10,
+                                    "prompt": "Which of the following consists of a sequence of events to follow so they can be repeated?",
+                                    "correctAnswer": "script",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "runtime",
+                                        "test files",
+                                        "trace route",
+                                        "script"
+                                    ]
+                                },
+                                {
+                                    "id": 11,
+                                    "prompt": "Which of the following is used to store a set of instructions for a computer to execute?",
+                                    "correctAnswer": "Program",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Program",
+                                        "Buffer",
+                                        "Script",
+                                        "Port"
+                                    ]
+                                },
+                                {
+                                    "id": 12,
+                                    "prompt": "Which control structure is used to execute a block of code as long as a condition is true?",
+                                    "correctAnswer": "While loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "For loop",
+                                        "While loop",
+                                        "If-else",
+                                        "Switch case"
+                                    ]
+                                },
+                                {
+                                    "id": 13,
+                                    "prompt": "What type of error occurs when the program does not produce the expected result?",
+                                    "correctAnswer": "Logic error",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Logic error",
+                                        "Syntax error",
+                                        "Runtime error",
+                                        "Compilation error"
+                                    ]
+                                },
+                                {
+                                    "id": 14,
+                                    "prompt": "Which of the following is used to display output in the console in most programming languages?",
+                                    "correctAnswer": "print",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "print",
+                                        "input",
+                                        "output",
+                                        "show"
+                                    ]
+                                },
+                                {
+                                    "id": 15,
+                                    "prompt": "What is the primary purpose of a compiler?",
+                                    "correctAnswer": "To convert high-level code to machine code",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "To execute code",
+                                        "To convert high-level code to machine code",
+                                        "To debug code",
+                                        "To monitor code execution"
+                                    ]
+                                },
+                                {
+                                    "id": 16,
+                                    "prompt": "Which data structure stores a collection of items in an ordered way?",
+                                    "correctAnswer": "List",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "List",
+                                        "Set",
+                                        "Dictionary",
+                                        "Tuple"
+                                    ]
+                                },
+                                {
+                                    "id": 17,
+                                    "prompt": "Which of the following is a characteristic of object-oriented programming?",
+                                    "correctAnswer": "Encapsulation",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Procedural approach",
+                                        "Encapsulation",
+                                        "Sequence execution",
+                                        "Sequential statements"
+                                    ]
+                                },
+                                {
+                                    "id": 18,
+                                    "prompt": "Which of the following is the best description of an algorithm?",
+                                    "correctAnswer": "A set of instructions to solve a problem",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "A set of instructions to solve a problem",
+                                        "A computer program",
+                                        "A flowchart",
+                                        "A data structure"
+                                    ]
+                                },
+                                {
+                                    "id": 19,
+                                    "prompt": "What does the term 'IDE' stand for in software development?",
+                                    "correctAnswer": "Integrated Development Environment",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Integrated Debugging Environment",
+                                        "Integrated Development Environment",
+                                        "Internal Development Engine",
+                                        "Interactive Design Editor"
+                                    ]
+                                },
+                                {
+                                    "id": 20,
+                                    "prompt": "What type of loop runs a set of instructions a specific number of times?",
+                                    "correctAnswer": "For loop",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "For loop",
+                                        "While loop",
+                                        "Do-while loop",
+                                        "Infinite loop"
+                                    ]
+                                },
+                                {
+                                    "id": 21,
+                                    "prompt": "Which of the following is an example of a high-level programming language?",
+                                    "correctAnswer": "Python",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Assembly",
+                                        "Python",
+                                        "Machine code",
+                                        "Binary"
+                                    ]
+                                },
+                                {
+                                    "id": 22,
+                                    "prompt": "Which operation has the highest precedence in mathematical expressions?",
+                                    "correctAnswer": "Exponentiation",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "Addition",
+                                        "Multiplication",
+                                        "Exponentiation",
+                                        "Subtraction"
+                                    ]
+                                },
+                                {
+                                    "id": 23,
+                                    "prompt": "Which of the following is used to define a function in Python?",
+                                    "correctAnswer": "def",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "def",
+                                        "function",
+                                        "method",
+                                        "define"
+                                    ]
+                                },
+                                {
+                                    "id": 24,
+                                    "prompt": "In object-oriented programming, what is used to describe an object’s attributes and behavior?",
+                                    "correctAnswer": "Class",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Class",
+                                        "Function",
+                                        "Method",
+                                        "Loop"
+                                    ]
+                                },
+                                {
+                                    "id": 25,
+                                    "prompt": "Which of the following is NOT a primitive data type?",
+                                    "correctAnswer": "Array",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "Integer",
+                                        "String",
+                                        "Float",
+                                        "Array"
+                                    ]
+                                },
+                                {
+                                    "id": 26,
+                                    "prompt": "In which phase of software development do you identify potential risks?",
+                                    "correctAnswer": "Planning",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Design",
+                                        "Planning",
+                                        "Testing",
+                                        "Implementation"
+                                    ]
+                                },
+                                {
+                                    "id": 27,
+                                    "prompt": "Which type of loop executes a block of code at least once before checking the condition?",
+                                    "correctAnswer": "Do-while loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "While loop",
+                                        "Do-while loop",
+                                        "For loop",
+                                        "Repeat-until loop"
+                                    ]
+                                },
+                                {
+                                    "id": 28,
+                                    "prompt": "What does SQL stand for?",
+                                    "correctAnswer": "Structured Query Language",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Structured Query Language",
+                                        "Sequential Query Language",
+                                        "Systematic Query Language",
+                                        "Standard Query Language"
+                                    ]
+                                },
+                                {
+                                    "id": 29,
+                                    "prompt": "Which data structure uses the LIFO (Last In First Out) principle?",
+                                    "correctAnswer": "Stack",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Queue",
+                                        "Stack",
+                                        "Array",
+                                        "Linked list"
+                                    ]
+                                },
+                                {
+                                    "id": 30,
+                                    "prompt": "Which of the following is the best way to handle exceptions in Python?",
+                                    "correctAnswer": "try-except",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "if-else",
+                                        "try-except",
+                                        "switch-case",
+                                        "catch-finally"
+                                    ]
+                                },
+                                {
+                                    "id": 31,
+                                    "prompt": "Which of the following is an example of a relational operator?",
+                                    "correctAnswer": "<>",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "=",
+                                        "<>",
+                                        "AND",
+                                        "OR"
+                                    ]
+                                },
+                                {
+                                    "id": 32,
+                                    "prompt": "What is the purpose of the 'break' statement in loops?",
+                                    "correctAnswer": "To terminate the loop",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "To skip the current iteration",
+                                        "To terminate the loop",
+                                        "To restart the loop",
+                                        "To continue the next iteration"
+                                    ]
+                                },
+                                {
+                                    "id": 33,
+                                    "prompt": "Which of the following is an example of a version control system?",
+                                    "correctAnswer": "Git",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Git",
+                                        "SQL",
+                                        "Python",
+                                        "JavaScript"
+                                    ]
+                                },
+                                {
+                                    "id": 34,
+                                    "prompt": "Which function is used to find the length of a string in Python?",
+                                    "correctAnswer": "len()",
+                                    "correctIndex": 3,
+                                    "answers": [
+                                        "length()",
+                                        "size()",
+                                        "count()",
+                                        "len()"
+                                    ]
+                                },
+                                {
+                                    "id": 35,
+                                    "prompt": "In which phase of software development is the final product delivered to the customer?",
+                                    "correctAnswer": "Deployment",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Testing",
+                                        "Deployment",
+                                        "Design",
+                                        "Planning"
+                                    ]
+                                },
+                                {
+                                    "id": 36,
+                                    "prompt": "Which of the following is a non-relational database?",
+                                    "correctAnswer": "MongoDB",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "MySQL",
+                                        "SQLite",
+                                        "MongoDB",
+                                        "PostgreSQL"
+                                    ]
+                                },
+                                {
+                                    "id": 37,
+                                    "prompt": "What is the purpose of an API in programming?",
+                                    "correctAnswer": "To allow different software applications to communicate",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "To convert code into machine-readable instructions",
+                                        "To allow different software applications to communicate",
+                                        "To control the execution of code",
+                                        "To store data permanently"
+                                    ]
+                                },
+                                {
+                                    "id": 38,
+                                    "prompt": "Which keyword is used to define a constant in most programming languages?",
+                                    "correctAnswer": "const",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "final",
+                                        "const",
+                                        "immutable",
+                                        "constant"
+                                    ]
+                                },
+                                {
+                                    "id": 39,
+                                    "prompt": "What is a 'syntax error'?",
+                                    "correctAnswer": "A typo in the code that prevents compilation",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "A mistake in the program's logic",
+                                        "A typo in the code that prevents compilation",
+                                        "An issue that occurs during runtime",
+                                        "A warning generated by the compiler"
+                                    ]
+                                },
+                                {
+                                    "id": 40,
+                                    "prompt": "Which of the following is NOT an example of a loop control statement?",
+                                    "correctAnswer": "exit",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "continue",
+                                        "break",
+                                        "exit",
+                                        "return"
+                                    ]
+                                },
+                                {
+                                    "id": 41,
+                                    "prompt": "Which of the following is a typical feature of a database management system (DBMS)?",
+                                    "correctAnswer": "Data integrity",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "Data integrity",
+                                        "Data redundancy",
+                                        "Data inconsistency",
+                                        "Data encryption"
+                                    ]
+                                },
+                                {
+                                    "id": 42,
+                                    "prompt": "Which of the following sorting algorithms has the best average-case time complexity?",
+                                    "correctAnswer": "Quick Sort",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "Bubble Sort",
+                                        "Quick Sort",
+                                        "Selection Sort",
+                                        "Insertion Sort"
+                                    ]
+                                },
+                                {
+                                    "id": 43,
+                                    "prompt": "Which of the following programming languages is used for web development?",
+                                    "correctAnswer": "JavaScript",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "Python",
+                                        "Java",
+                                        "JavaScript",
+                                        "C++"
+                                    ]
+                                },
+                                {
+                                    "id": 44,
+                                    "prompt": "Which of the following is an example of a boolean data type value?",
+                                    "correctAnswer": "True",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "1",
+                                        "True",
+                                        "42",
+                                        "None"
+                                    ]
+                                },
+                                {
+                                    "id": 45,
+                                    "prompt": "What is the purpose of the 'return' statement in a function?",
+                                    "correctAnswer": "To send a value back to the calling code",
+                                    "correctIndex": 1,
+                                    "answers": [
+                                        "To terminate the function",
+                                        "To send a value back to the calling code",
+                                        "To define the function's parameters",
+                                        "To loop through the function's body"
+                                    ]
+                                },
+                                {
+                                    "id": 46,
+                                    "prompt": "Which of the following represents a binary value?",
+                                    "correctAnswer": "1",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "1",
+                                        "True",
+                                        "False",
+                                        "Null"
+                                    ]
+                                },
+                                {
+                                    "id": 47,
+                                    "prompt": "What does HTTP stand for?",
+                                    "correctAnswer": "HyperText Transfer Protocol",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "HyperText Transfer Protocol",
+                                        "HyperText Transmission Protocol",
+                                        "Hyper Transfer Text Protocol",
+                                        "Hyperlink Text Transfer Protocol"
+                                    ]
+                                },
+                                {
+                                    "id": 48,
+                                    "prompt": "Which of the following is a feature of Agile development?",
+                                    "correctAnswer": "Continuous feedback",
+                                    "correctIndex": 2,
+                                    "answers": [
+                                        "Waterfall model",
+                                        "Fixed timelines",
+                                        "Continuous feedback",
+                                        "Documentation-heavy"
+                                    ]
+                                },
+                                {
+                                    "id": 49,
+                                    "prompt": "If a programmer downloads a copy of Microsoft SQL Server from a file-sharing website without paying for it, the programmer has committed an offense called",
+                                    "correctAnswer": "piracy",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "piracy",
+                                        "larceny",
+                                        "felony",
+                                        "spyware"
+                                    ]
+                                },
+                                {
+                                    "id": 50,
+                                    "prompt": "A programmer has to make programming changes to an existing program. therefore the comments in the existing program must also be updated. The comments are referred to as _____ documentation.",
+                                    "correctAnswer": "internal",
+                                    "correctIndex": 0,
+                                    "answers": [
+                                        "internal",
+                                        "external",
+                                        "primary",
+                                        "secondary"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

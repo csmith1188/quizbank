@@ -1,0 +1,318 @@
+Unit,Task,Question,Type,Correct Row,Answer,Answer,Answer,Answer
+Variables and Data Types,Documetation,Text in the program that is meant for programmers to read and ignored by the program itself.,Multiple Choice,H,syntax,variable,comment,literal
+Variables and Data Types,Documetation,A way of writing identifiers without using spaces that is easily readable.,Multiple Choice,G,constant,camelCase,string,float
+Variables and Data Types,Documetation,A set of common rules that programmers share to help each other understand one another's code.,Multiple Choice,F,convention,expression,assignment,keyword
+Variables and Data Types,Documetation,A way of naming objects in code that is easy for humans to read.,Multiple Choice,I,boolean,comment,datatype,self-documenting
+Variables and Data Types,Documetation,Why might a programmer include a comment above a complex calculation in their code?,Multiple Choice,F,To explain the purpose or logic of the calculation,To make the program run faster,To change the syntax of the code,To store values for later use
+Variables and Data Types,Documetation,Which of these is an example of a self-documenting variable name?,Multiple Choice,H,x1,a,totalScore,val
+Variables and Data Types,Documetation,"If a variable is named 'temp', what is a better self-documenting alternative if it stores a user's age?",Multiple Choice,G,t,userAge,data,number
+Variables and Data Types,Documetation,What is the main benefit of using self-documenting names instead of comments for simple values?,Multiple Choice,I,It makes the program run faster,It allows multiple programmers to edit at once,It replaces all debugging tools,It reduces the need for extra comments and makes code easier to read
+Variables and Data Types,Documetation,Where is the best place to put a comment explaining a function’s purpose?,Multiple Choice,F,Directly above the function definition,Randomly in the middle of the code,After the closing brace of the function,In a separate text file
+Variables and Data Types,Documetation,Which type of comment is most useful for reminding yourself or others of a TODO item in code?,Multiple Choice,G,A multiline comment explaining every line,Inline comment with a clear marker like TODO,No comment is needed for TODO items,A comment at the end of the program
+Variables and Data Types,Documetation,Which symbol is used to create a single-line comment in Python?,Multiple Choice,F,#,//,/* */,--
+Variables and Data Types,Documetation,How can you create a multi-line comment in Python?,Multiple Choice,G,Use multiple # symbols on each line,"Use triple quotes (''' or """""") around the comment text",Use /* and */ like in C,Use // at the beginning and end of the block
+Variables and Data Types,Datatypes,A categorization of data that differentiates it from other data (numbers/letters/etc.).,Multiple Choice,G,expression,datatype,boolean,arithmetic operator
+Variables and Data Types,Datatypes,"A value that is a basic data type, and not a complex object.",Multiple Choice,F,primitive,assignment,camelCase,statement
+Variables and Data Types,Datatypes,"A data type with a whole number, positive or negative.",Multiple Choice,H,float,constant,integer,string
+Variables and Data Types,Datatypes,"A data type with a decimal place, positive or negative.",Multiple Choice,F,float,expression,boolean,character
+Variables and Data Types,Datatypes,A data type with a 'True' or 'False' value.,Multiple Choice,I,integer,statement,referential,boolean
+Variables and Data Types,Datatypes,"A data type that is a single character, such as 'a' or '1'.",Multiple Choice,F,character,string,boolean,integer
+Variables and Data Types,Datatypes,"A datatype that contains one or more human-readable characters, always encapsulated in quotation marks.",Multiple Choice,G,assignment,string,camelCase,float
+Variables and Data Types,Datatypes,"A value that is written directly in the code, such as a number or string.",Multiple Choice,I,identifier,value,constant,literal
+Variables and Data Types,Datatypes,Changing a value of a certain data type to a different data type.,Multiple Choice,G,constant,conversion,nesting,datatype
+Variables and Data Types,Datatypes,Which of the following is a literal integer value in Python?,Multiple Choice,H,"""42""",3.14,42,True
+Variables and Data Types,Datatypes,Which of the following is a boolean literal?,Multiple Choice,G,0,False,"""False""",3.0
+Variables and Data Types,Datatypes,What data type would the value 3.0 belong to?,Multiple Choice,F,float,integer,string,boolean
+Variables and Data Types,Datatypes,"What is the type of the literal 'Hello, world!'?",Multiple Choice,I,integer,float,boolean,string
+Variables and Data Types,Datatypes,Which of the following values is a character literal in Python?,Multiple Choice,F,'a',"""abc""",True,5
+Variables and Data Types,Datatypes,"If you perform conversion on the integer 5 to a string, what will the new value look like?",Multiple Choice,G,5,"""5""",5.0,True
+Variables and Data Types,Datatypes,Which literal would be stored in a variable declared as a float?,Multiple Choice,H,42,True,3.14,'a'
+Variables and Data Types,Datatypes,Which of the following is NOT a primitive datatype in Python?,Multiple Choice,F,list,integer,boolean,float
+Variables and Data Types,Datatypes,How does Python treat the literal '0' in quotation marks?,Multiple Choice,G,integer,string,boolean,float
+Variables and Data Types,Datatypes,Which of these is a valid boolean expression in Python?,Multiple Choice,H,"""True""",0,3 > 2,'False'
+Variables and Data Types,Datatypes,What will be the datatype of the result when you divide 5 by 2 in Python 3?,Multiple Choice,F,float,integer,string,boolean
+Variables and Data Types,Assignment,A value that is stored in memory and can be changed.,Multiple Choice,I,constant,primitive,string,variable
+Variables and Data Types,Assignment,A name of a variable that can be used in expressions.,Multiple Choice,F,identifier,constant,variable,primitive
+Variables and Data Types,Assignment,A piece of data that can be stored in a variable or used in an expression.,Multiple Choice,G,identifier,value,constant,variable
+Variables and Data Types,Assignment,"Replacing an expression, object or variable name with the associated value.",Multiple Choice,G,statement,substitution,syntax,keyword
+Variables and Data Types,Assignment,Associating a value with an identifier to create a variable or object.,Multiple Choice,F,assignment,primitive,string,datatype
+Variables and Data Types,Assignment,A symbol in code used for assignment.,Multiple Choice,H,constant,float,assignment operator,camelCase
+Variables and Data Types,Assignment,A value that is referring to a different value.,Multiple Choice,G,comment,referential,assignment operator,integer
+Variables and Data Types,Assignment,A value that is not changed after it is set.,Multiple Choice,F,constant,variable,primitive,string
+Variables and Data Types,Assignment,Which assignment operator will add 2 to the current value of y and store the result back in y?,Multiple Choice,G,=,+=,-=,*=
+Variables and Data Types,Assignment,"If you want to copy the value of variable a into variable b, which operator would you use?",Multiple Choice,F,=,+=,==,*=
+Variables and Data Types,Assignment,What happens when you try to change a constant value in Python?,Multiple Choice,H,It silently updates the value,It converts the constant to a variable,It will cause an error if reassignment is attempted,It doubles the value
+Variables and Data Types,Assignment,Which of the following is an example of a referential assignment in Python?,Multiple Choice,F,b = a,b = 5,a += b,b == a
+Variables and Data Types,Assignment,What will be the value of x after this code? x = 10; x -= 4,Multiple Choice,G,10,6,4,14
+Variables and Data Types,Assignment,Which of the following is a valid use of the multiplication assignment operator in Python?,Multiple Choice,H,*x = 3,x =* 3,x *= 3,x = 3*
+Variables and Data Types,Assignment,Which of the following assignments will store a float value in variable x?,Multiple Choice,F,x = 3.14,x = '3.14',x = True,x = 3
+Variables and Data Types,Assignment,What is the difference between '=' and '==' in Python?,Multiple Choice,F,"'=' assigns a value, '==' checks for equality",They are the same,"'=' compares values, '==' assigns","'=' multiplies values, '==' divides"
+Variables and Data Types,Assignment,"If you write x = y = 10 in Python, what is happening?",Multiple Choice,H,x is assigned y's old value,y is assigned x's old value,Both x and y are assigned the value 10,Only x is assigned 10
+Variables and Data Types,Assignment,"If you assign the value of one variable to another, what happens when the first variable changes later?",Multiple Choice,G,The second variable automatically updates to match,The second variable keeps its value unless explicitly reassigned,Both variables are deleted,The program throws an error
+Variables and Data Types,Assignment,What happens if you try to assign a value to a variable that hasn't been declared in Python?,Multiple Choice,F,Python automatically creates the variable and assigns the value,Python throws an error,The value is ignored,The program stops running
+Variables and Data Types,Expressions,A piece of code that completes a small task in the program.,Multiple Choice,I,identifier,arithmetic operator,literal,statement
+Variables and Data Types,Expressions,"An 'equation' in code that must be resolved before continuing the program by using substitution, comparisons, and arithmetic.",Multiple Choice,F,expression,value,boolean,referential
+Variables and Data Types,Expressions,A symbol in code used to perform math equations in an expression.,Multiple Choice,H,camelCase,integer,arithmetic operator,syntax
+Variables and Data Types,Expressions,What is the value of x after this code runs? x = 5; x = x + 3,Multiple Choice,F,8,5,3,x+3
+Variables and Data Types,Expressions,What will be the value of x after this code? x = 2; x = x ** 3,Multiple Choice,F,8,6,9,x**3
+Variables and Data Types,Expressions,What will be the value of x after this code runs? x = 7; x = x * 2,Multiple Choice,F,14,7,2,x*2
+Variables and Data Types,Expressions,"If x = 4 and y = 2, what is the value of x // y in Python?",Multiple Choice,H,2.0,4,2,0
+Variables and Data Types,Expressions,What is the result of the expression 10 % 3 in Python?,Multiple Choice,F,1,3,0,10
+Variables and Data Types,Expressions,"If a = 6 and b = 4, what is the value of a - b * 2?",Multiple Choice,G,4,-2,2,8
+Variables and Data Types,Expressions,What is the result of the expression (5 + 3) * 2 in Python?,Multiple Choice,F,16,13,11,10
+Variables and Data Types,Expressions,"If x = 10 and y = 3, what is the value of x / y in Python?",Multiple Choice,H,3,3.0,3.333...,3.33
+Variables and Data Types,Expressions,What will be the value of z after this code? z = 15; z = z // 4,Multiple Choice,G,3.75,3,4,15
+Variables and Data Types,Expressions,What is the result of the expression 2 ** 4 + 1 in Python?,Multiple Choice,F,17,16,18,32
+Variables and Data Types,Expressions,What is the result of the expression 8 / 2 * 3 in Python?,Multiple Choice,G,4,12,8,6
+Variables and Data Types,Expressions,What is the result of the expression 10 - 3 + 2 * 4 in Python?,Multiple Choice,H,36,9,15,24
+Variables and Data Types,Expressions,"In Python, which operator has the highest precedence: multiplication (*), addition (+), or parentheses ()?",Multiple Choice,F,parentheses (),multiplication (*),addition (+),They all have equal precedence
+Variables and Data Types,Expressions,"When Python evaluates an expression with multiple operators of equal precedence, what rule does it follow?",Multiple Choice,G,Right to left evaluation,Left to right evaluation,Random evaluation,"Parentheses first, then random"
+Comparisons and Conditions,Comparisons and Conditions,"A symbol used to compare two values, such as 'greater than' or 'equal to'.",Multiple Choice,F,comparison operator,assignment operator,arithmetic operator,logical operator
+Comparisons and Conditions,Comparisons and Conditions,"A statement that evaluates to True or False, often used in control flow.",Multiple Choice,F,condition,expression,statement,literal
+Comparisons and Conditions,Comparisons and Conditions,A section of code that has been segregated and can only be run by some other part of the code.,Multiple Choice,F,code block,conditional statement,expression,boolean
+Comparisons and Conditions,Comparisons and Conditions,A code block that is run when a given condition resolves as 'True' or 'not False'.,Multiple Choice,I,conversion,if,statement,conditional statement
+Comparisons and Conditions,Comparisons and Conditions,Putting one type of code block or value inside a similar code block or value.,Multiple Choice,H,literal,statement,nesting,datatype
+Comparisons and Conditions,Comparisons and Conditions,The most common conditional statement that runs if the condition resolves as 'True' or 'not False'.,Multiple Choice,I,substitution,character,conversion,if
+Comparisons and Conditions,Comparisons and Conditions,Very common conditional statement that runs if its condition is 'True' or 'not False' and the previous if statement's condition is 'False'.,Multiple Choice,G,assignment,else if,value,integer
+Comparisons and Conditions,Comparisons and Conditions,Very common conditional statement that runs if all previous if and else if statements' conditions are 'False'.,Multiple Choice,H,float,camelCase,else,primitive
+Comparisons and Conditions,Comparisons and Conditions,What is the result of the expression: 7 > 3?,Multiple Choice,F,True,False,7,error
+Comparisons and Conditions,Comparisons and Conditions,Which comparison operator checks if two values are NOT equal?,Multiple Choice,F,!=,==,>=,<=
+Comparisons and Conditions,Comparisons and Conditions,What will the condition (10 == 5) evaluate to?,Multiple Choice,G,True,False,10,error
+Comparisons and Conditions,Comparisons and Conditions,Which keyword is used to add an alternative path with no condition when an 'if' condition is False?,Multiple Choice,F,else,elif,then,unless
+Comparisons and Conditions,Comparisons and Conditions,What does the condition (x < 0) check for?,Multiple Choice,G,x is greater than zero,x is less than zero,x equals zero,x is a positive number
+Comparisons and Conditions,Comparisons and Conditions,Which of these is a valid comparison operator?,Multiple Choice,H,++,<<,<=,=<
+Comparisons and Conditions,Comparisons and Conditions,What does an 'else if' (or 'elif') condition allow you to do?,Multiple Choice,F,Check another condition if the previous one is False,Repeat code forever,Compare two strings,Stop the program
+Comparisons and Conditions,Comparisons and Conditions,What is the boolean result of (4 <= 4)?,Multiple Choice,F,True,False,error,undefined
+Comparisons and Conditions,Comparisons and Conditions,Which of these conditions checks if x is both greater than 0 and less than 10?,Multiple Choice,G,x > 0 or x < 10,x > 0 and x < 10,x == 0 and x == 10,x >= 0 or x <= 10
+Comparisons and Conditions,Comparisons and Conditions,"In most programming languages, what value does a condition produce?",Multiple Choice,H,a number,a string,True or False,a variable
+Comparisons and Conditions,Comparisons and Conditions,"If (x == 10) is True, which branch will run in an if/else statement?",Multiple Choice,F,the 'if' branch,the 'else' branch,both branches,neither branch
+Comparisons and Conditions,Comparisons and Conditions,Which of these is an example of a logical error in conditions?,Multiple Choice,G,Forgetting a colon after 'if',Using x > 10 instead of x >= 10,Leaving out parentheses,Misspelling the keyword 'else'
+Comparisons and Conditions,Comparisons and Conditions,"How many ""if""s does an if statement have?",Multiple Choice,G,One for each condition you want to check,Only one,As many as you need,At least two
+Comparisons and Conditions,Comparisons and Conditions,"How many ""else""s does an if statement have?",Multiple Choice,I,One for each condition you want to check,Only one,As many as you need,One or none
+Comparisons and Conditions,Comparisons and Conditions,"How many ""elif""s does an if statement have?",Multiple Choice,F,One for each condition to check after the first,Only one,One for each condition you want to check,"One for each ""else"" in the if statement"
+Comparisons and Conditions,Comparisons and Conditions,"""elif""s always goes...?",Multiple Choice,H,At the beginning of an if statement,At the end of an if statement,In between the if and else statements,At the beginning of an else statement
+Comparisons and Conditions,Comparisons and Conditions,"An ""else""s will never have a ...?",Multiple Choice,I,"An ""elif""",A colon,A code block,condition
+Comparisons and Conditions,Conditional Loops,A code block that repeats for as long as a given condition resolves as 'True' or 'not False'.,Multiple Choice,F,conditional loop,boolean,else,camelCase
+Comparisons and Conditions,Conditional Loops,A loop that continues until a condition is no longer True.,Multiple Choice,F,while loop,for loop,conditional loop,do-while loop
+Comparisons and Conditions,Conditional Loops,A loop that never ends because its condition always evaluates to True.,Multiple Choice,H,while loop,for loop,infinite loop,nested loop
+Comparisons and Conditions,Conditional Loops,A loop inside another loop.,Multiple Choice,I,conditional loop,iterator,infinite loop,nested loop
+Comparisons and Conditions,Conditional Loops,"A keyword used to immediately end a loop, even if its condition is still True.",Multiple Choice,F,break,continue,exit,stop
+Comparisons and Conditions,Conditional Loops,A keyword that skips the rest of the current loop iteration and continues with the next one.,Multiple Choice,G,break,continue,return,skip
+Comparisons and Conditions,Conditional Loops,"In Python, which loop is generally used when the number of iterations is known ahead of time?",Multiple Choice,F,for loop,while loop,infinite loop,nested loop
+Comparisons and Conditions,Conditional Loops,"In Python, which loop is generally used when the number of iterations is not known and depends on a condition?",Multiple Choice,G,for loop,while loop,do-while loop,nested loop
+Comparisons and Conditions,Conditional Loops,"In Python, what will happen if a 'break' statement is executed inside a nested loop?",Multiple Choice,F,Only the current loop will terminate,All loops terminate,The program crashes,The loop resets
+Comparisons and Conditions,Conditional Loops,"In Python, what will the 'continue' statement do inside a loop?",Multiple Choice,F,Skip the rest of the current iteration and continue with the next one,Terminate the loop completely,Pause the program,Restart the loop from the first iteration
+Comparisons and Conditions,Conditional Loops,Which of the following is an example of an infinite loop in Python?,Multiple Choice,G,for i in range(5):,while True:,for i in range(10):,if True:
+Comparisons and Conditions,Conditional Loops,"In Python, what happens if the loop condition is false at the start of a 'while' loop?",Multiple Choice,F,The loop body will not execute,The loop executes once anyway,The loop executes infinitely,Python throws an error
+Comparisons and Conditions,Conditional Loops,Which of these statements is true about nested loops?,Multiple Choice,F,The inner loop completes all iterations for each iteration of the outer loop,The outer loop stops when the inner loop starts,Nested loops are only allowed with for loops,Break statements do not work inside nested loops
+Comparisons and Conditions,Conditional Loops,Which statement will immediately exit a while loop regardless of the condition?,Multiple Choice,F,break,continue,pass,exit
+Comparisons and Conditions,Conditional Loops,Which statement will skip the current iteration of a while loop and move to the next evaluation of the condition?,Multiple Choice,G,break,continue,pass,stop
+Comparisons and Conditions,Conditional Loops,What is a common risk of using a while loop without modifying the variables involved in the condition?,Multiple Choice,F,Creating an infinite loop,Skipping loop iterations,Breaking the loop early,Executing the loop once
+Comparisons and Conditions,Conditional Loops,"If a while loop contains another while loop inside it, what is the correct term for this structure?",Multiple Choice,H,infinite loop,conditional loop,nested loop,iterative loop
+Comparisons and Conditions,Conditional Loops,"In Python, what happens if a while loop's condition never becomes False and there is no break statement?",Multiple Choice,F,The loop runs infinitely,The loop executes once,The program throws an error,The loop skips all iterations
+Comparisons and Conditions,Logical Operators,An operator that combines two boolean expressions to return True if both are True.,Multiple Choice,F,and,or,not,xor
+Comparisons and Conditions,Logical Operators,An operator that combines two boolean expressions to return True if at least one is True.,Multiple Choice,G,and,or,not,xor
+Comparisons and Conditions,Logical Operators,An operator that negates a boolean expression.,Multiple Choice,H,and,or,not,xor
+Comparisons and Conditions,Logical Operators,What is the result of 'True and False'?,Multiple Choice,H,True,error,False,undefined
+Comparisons and Conditions,Logical Operators,What is the result of 'True or False'?,Multiple Choice,F,True,False,error,undefined
+Comparisons and Conditions,Logical Operators,What is the result of 'not True'?,Multiple Choice,G,True,False,error,undefined
+Comparisons and Conditions,Logical Operators,Which logical operator is often used to check multiple conditions that all must be True?,Multiple Choice,F,and,or,not,xor
+Comparisons and Conditions,Logical Operators,Which logical operator is often used when only one of several conditions needs to be True?,Multiple Choice,G,and,or,not,xor
+Comparisons and Conditions,Logical Operators,Logical operators are used to combine or modify what type of values?,Multiple Choice,F,boolean values,strings,integers,characters
+Comparisons and Conditions,Logical Operators,"In Python, what does the expression '5 and 0' return?",Multiple Choice,H,True,5,0,False
+Comparisons and Conditions,Logical Operators,"In Python, what does the expression '0 or 10' return?",Multiple Choice,I,0,True,False,10
+Comparisons and Conditions,Logical Operators,"In Python, applying 'not' to a non-empty string like 'hello' will return:",Multiple Choice,G,True,False,hello,error
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of True + True?",Multiple Choice,G,True,2,1,error
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of 5 * False?",Multiple Choice,H,False,5,0,error
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of True * True?",Multiple Choice,G,True,1,error,False
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of '[] or 5'?",Multiple Choice,F,5,[],True,False
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of '{}' and 10?",Multiple Choice,H,10,True,{},False
+Comparisons and Conditions,Logical Operators,"In Python, what does the expression 'not []' evaluate to?",Multiple Choice,F,True,False,[],0
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of '0 and 10'?",Multiple Choice,G,10,0,True,False
+Comparisons and Conditions,Logical Operators,"What is the result of 'None or ""hello""' in Python?",Multiple Choice,F,"""hello""",None,True,False
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of 'not """"'?",Multiple Choice,F,True,False,"""""",0
+Comparisons and Conditions,Logical Operators,"In Python, what is the result of '5 or 0'?",Multiple Choice,F,5,0,True,False
+Comparisons and Conditions,Logical Operators,"In Python, combining 'not True and False' evaluates to:",Multiple Choice,F,False,True,0,1
+Comparisons and Conditions,Logical Operators,What is the result of 'not None or True' in Python?,Multiple Choice,F,True,False,None,0
+Comparisons and Conditions,Logical Operators,"In Python, what does the expression '[] and 100' return?",Multiple Choice,F,[],100,True,False
+Comparisons and Conditions,Error Messages,"An error that occurs when the program is running, often due to invalid operations or data.",Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,An error that occurs when the code does not follow the language's syntax rules.,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,An error that occurs when the code runs without crashing but produces incorrect results.,Multiple Choice,H,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error will occur if you try to divide a number by zero in Python?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error is caused by missing a colon at the end of a Python if statement?,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,"If a program calculates 2 + 2 and returns 5, what type of error is this?",Multiple Choice,H,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What error type occurs if you try to add a number and a string in Python?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What kind of error would you see if you misspell a function name in your code?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error occurs when parentheses are not properly closed in Python?,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,A program is supposed to calculate the area of a rectangle but accidentally multiplies length by 2 instead of length × width. What error type is this?,Multiple Choice,H,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What kind of error occurs if you forget the quotation marks around a string in Python?,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What kind of error will Python produce for this line: x = (5 + 3,Multiple Choice,F,syntax error,run-time error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error occurs if you forget to indent a line after a colon in Python?,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,"If a program sorts a list but the output is in the wrong order due to a wrong comparison, what type of error is this?",Multiple Choice,H,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error occurs if you call a function with the wrong number of arguments?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What kind of error will Python produce if you write 'if x = 5:' instead of 'if x == 5:'?,Multiple Choice,G,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,A program is supposed to calculate the sum of numbers but uses subtraction instead. What type of error is this?,Multiple Choice,H,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error occurs if you try to concatenate a string with an integer without converting the integer?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,What type of error occurs when a variable is used before it has been assigned a value?,Multiple Choice,F,run-time error,syntax error,logical error,type error
+Comparisons and Conditions,Error Messages,"What type of error occurs if you accidentally use the wrong operator in a calculation, producing incorrect results?",Multiple Choice,H,run-time error,syntax error,logical error,type error
+Functions,Debuggers,A tool that can stop and step through a program to examine how it functions.,Multiple Choice,H,comment,expression,debugger,substitution
+Functions,Debuggers,Using console output to quickly check data in the program while it runs.,Multiple Choice,F,log point,watcher,breakpoint,literal
+Functions,Debuggers,Telling a debugger to run a statement without pausing.,Multiple Choice,G,assignment operator,step-over,else,conversion
+Functions,Debuggers,Telling a debugger to break a statement or code block into smaller steps and step through them.,Multiple Choice,I,if,character,boolean,step-into
+Functions,Debuggers,Telling a debugger to stop stepping through smaller parts of a statement or code block and continue to the next statement.,Multiple Choice,F,step-out,float,constant,camelCase
+Functions,Debuggers,Telling a debugger to stop stepping through the program and run normally.,Multiple Choice,H,nesting,else if,continue,syntax
+Functions,Debuggers,Marks a variable or object for tracking while debugging.,Multiple Choice,G,string,watcher,datatype,integer
+Functions,Debuggers,Marks a variable or object for tracking while debugging.,Multiple Choice,G,string,watcher,datatype,integer
+Functions,Debuggers,Tells a debugger to stop at a specified line of code.,Multiple Choice,I,assignment,logical operator,conversion,watchpoint
+Functions,Debuggers,Start the debugger if the program reaches this point.,Multiple Choice,I,assignment,watchpoint,conversion,breakpoint
+Functions,Debuggers,A tool built into Python editors that helps pause and check code line by line.,Multiple Choice,G,loop,debugger,function,argument
+Functions,Debuggers,Prints a value to the console without stopping the program.,Multiple Choice,H,breakpoint,step-into,log point,continue
+Functions,Debuggers,Run one line of code but skip over any function details inside it.,Multiple Choice,F,step-over,watcher,resume,string
+Functions,Debuggers,Move inside a function call so you can see it run line by line.,Multiple Choice,I,log point,continue,debugger,step-into
+Functions,Debuggers,Exit the current function and return to the line of code that called it.,Multiple Choice,H,step-into,log point,step-out,loop
+Functions,Debuggers,Keeps the program running until another breakpoint is reached.,Multiple Choice,G,watcher,continue,debugger,boolean
+Functions,Debuggers,Stops when a chosen variable’s value changes.,Multiple Choice,H,loop,continue,watchpoint,comment
+Functions,Debuggers,A marker in the code where the debugger will pause automatically.,Multiple Choice,G,watcher,breakpoint,step-over,tuple
+Functions,Debuggers,Shows how the program moves from one line of code to the next.,Multiple Choice,I,integer,loop,debugger,stepping
+Functions,Debuggers,The action of pausing the program at a set line to check values.,Multiple Choice,F,breakpoint,comment,list,integer
+Functions,Debuggers,A command that continues running code until the next stop point.,Multiple Choice,H,step-into,log point,resume,tuple
+Functions,Debuggers,When a debugger moves through code one line at a time.,Multiple Choice,G,loop,stepping,watchpoint,variable
+Functions,Debuggers,Used to follow the changing value of a variable while paused.,Multiple Choice,I,function,comment,log point,watcher
+Functions,Debuggers,"Runs code until it enters a function, then lets you explore inside it.",Multiple Choice,F,step-into,step-out,resume,boolean
+Functions,Procedures,A repeatable code block that the program can jump to that can take arguments (inputs) and return values (outputs).,Multiple Choice,G,expression,function,statement,code block
+Functions,Procedures,A partition of program memory that segregates different variables and objects.,Multiple Choice,F,scope,constant,character,conversion
+Functions,Procedures,The identifier of a value you can pass to a function to use it in that function's scope.,Multiple Choice,F,parameter,argument,variable,constant
+Functions,Procedures,The value you passed to a function identified by its parameter name.,Multiple Choice,I,boolean,assignment,literal,argument
+Functions,Procedures,"Ends a function, and if given a value, substitutes the function call with the value.",Multiple Choice,H,datatype,if,return statement,substitution
+Functions,Procedures,The value a function call is replaced with when the function reaches a return statement.,Multiple Choice,G,comment,return value,else,camelCase
+Functions,Procedures,A function that does not include a return statement will return what by default in Python?,Multiple Choice,H,0,False,None,Error
+Functions,Procedures,What is it called when you provide actual values to a function's parameters?,Multiple Choice,I,defining parameters,returning values,variable assignment,passing arguments
+Functions,Procedures,What keyword is used in Python to define a new function?,Multiple Choice,F,def,function,define,proc
+Functions,Procedures,Which of these is an advantage of using functions in a program?,Multiple Choice,G,More errors,Code reuse,Slower execution,Larger memory use
+Functions,Procedures,"What is the name given to a variable defined inside a function, only accessible in that function?",Multiple Choice,F,local variable,global variable,constant,argument
+Functions,Procedures,"What is the name given to a variable defined outside of any function, accessible throughout the program?",Multiple Choice,G,local variable,global variable,constant,parameter
+Functions,Procedures,What happens if a function has multiple return statements?,Multiple Choice,F,The first return reached will end the function,All return statements are executed,The last return always overrides the others,It causes an error
+Functions,Procedures,What is the term for providing a default value to a parameter in a function definition?,Multiple Choice,G,return value,default parameter,local variable,optional scope
+Functions,Procedures,Which of these is a correct way to call a function named 'greet' with one argument 'Alice'?,Multiple Choice,I,greet = 'Alice',greet{'Alice'},greet['Alice'],greet('Alice')
+Functions,Procedures,What is it called when a function calls itself?,Multiple Choice,H,looping,iteration,recursion,nesting
+Functions,Procedures,What happens when a return statement is executed in a function?,Multiple Choice,H,The function repeats,The function pauses,The function stops and gives back a value,The function deletes its parameters
+Functions,Procedures,How do you return multiple values in a return statement?,Multiple Choice,F,By separating them with commas,By using global variables,By printing the values,By using separate return statements
+Functions,Procedures,"Given def greet(name, times=1): which call uses a keyword argument for 'name'?",Multiple Choice,G,"greet('Ava', 3)","greet(name='Ava', times=3)",greet('Ava'),"greet(times=3, 'Ava')"
+Functions,Procedures,"Given def add(a, b): which call raises a TypeError for the wrong number of arguments?",Multiple Choice,F,add(1),"add(1, 2)","add(a=1, b=2)","add(b=2, a=1)"
+Functions,Procedures,"Given def paint(color, size): which call uses only positional arguments?",Multiple Choice,F,"paint('red', 5)","paint(color='red', size=5)","paint('red', size=5)","paint(size=5, 'red')"
+Functions,Procedures,In def show(*items): what does *items collect?,Multiple Choice,F,All extra positional arguments as a tuple,All keyword arguments as a dict,Only the first argument,Nothing; * makes it optional only
+Functions,Procedures,"Given def area(w, h=2): which call correctly sets h to 3?",Multiple Choice,G,area(h=3),"area(5, h=3)","area(w=5, 3)","area(5, 3, h=3)"
+Functions,Procedures,"Given def power(base, exp=2): which call uses the default for exp?",Multiple Choice,F,power(5),"power(base=5, exp=3)","power(5, 3)",power(exp=2)
+Functions,Procedures,"Given def mix(a, b, c): which call sets a=3, b=1, c=2?",Multiple Choice,F,"mix(3, 1, 2)","mix(a=1, b=2, c=3)","mix(b=1, a=2, c=3)","mix(1, 2, 3)"
+Functions,Procedures,"Given def draw(x, y): which call is invalid because a positional argument follows a keyword argument?",Multiple Choice,F,"draw(x=1, 2)","draw(1, y=2)","draw(x=1, y=2)","draw(1, 2)"
+Functions,Procedures,"In def build(a, b=0, c=1): how many total parameters are defined?",Multiple Choice,H,1,2,3,0
+Functions,Procedures,"Given def cook(temp, mode): which call raises a TypeError for giving multiple values for the same parameter?",Multiple Choice,H,"cook(temp=350, mode='bake')","cook(350, 'bake')","cook(350, temp=400)","cook(mode='bake', temp=350)"
+Functions,Procedures,"Given def add(a,b): print(a+b); result = add(2,3); what is stored in result?",Multiple Choice,F,None,5,TypeError,add
+Functions,Procedures,Given def f(): return 7; x = f() * 2; what is x?,Multiple Choice,F,14,9,None,TypeError
+Functions,Procedures,Given def g(): return; y = g(); what is y?,Multiple Choice,F,None,0,'',TypeError
+Functions,Procedures,"Given def pair(): return 2, 3; t = pair(); which option best describes t?",Multiple Choice,F,"A tuple containing (2, 3)","A list [2, 3]",Two separate return values that can't be assigned,An int 5
+Functions,Procedures,Assume inc adds 1 to its input and dbl multiplies its input by 2; what is dbl(inc(3))?,Multiple Choice,F,8,7,6,9
+Functions,Procedures,When is the code inside a function executed?,Multiple Choice,F,When the function is called,When the function is defined with def,When the file is saved,When Python starts
+Functions,Procedures,Which line correctly defines a function named hello that takes no parameters?,Multiple Choice,F,def hello():,function hello:,def hello:,def hello[]:
+Functions,Procedures,"In a function, what is the main difference between return and print?",Multiple Choice,F,return sends a value back to the caller; print just displays text,return prints text; print sends a value back,Both do the same thing,print stops the function; return continues it
+Functions,Procedures,Where should a function's docstring be placed?,Multiple Choice,F,As the first statement inside the function body,Above the def line in a comment,At the end of the file,In a separate .txt file
+Functions,Procedures,How many objects can a Python function return?,Multiple Choice,F,"Exactly one object, but it can be a list",At most two objects,Unlimited objects separated by commas,Zero only; Python functions can't return
+Functions,Procedures,Which naming style is recommended for function names in Python?,Multiple Choice,F,lowercase_with_underscores (snake_case),camelCase,PascalCase,UPPERCASE
+Lists and Loops,Ordered Collections,A variable that holds multiple values in a specific sequence.,Multiple Choice,H,dictionary,random sample,ordered collection,operator
+Lists and Loops,Ordered Collections,An unordered collection that has a series of values with their own identifying keys.,Multiple Choice,G,tuple,list/array,set,dict
+Lists and Loops,Ordered Collections,A single value stored inside a collection such as a list; accessed by its index..,Multiple Choice,H,index,slice,item/element,length
+Lists and Loops,Ordered Collections,The integer position used to locate an element in a list.,Multiple Choice,F,index,item,count,pointer
+Lists and Loops,Ordered Collections,An index that counts from the end of a sequence.,Multiple Choice,G,slice,negative index,offset,reverse pointer
+Lists and Loops,Ordered Collections,A subsection of a sequence selected with [start:stop:step].,Multiple Choice,G,length,slice,range,window function
+Lists and Loops,Ordered Collections,The number of elements contained in a collection.,Multiple Choice,H,capacity,index,length,width
+Lists and Loops,Ordered Collections,A property meaning the object can be changed after creation.,Multiple Choice,H,ordered,immutable,mutable,hashable
+Lists and Loops,Ordered Collections,"In Python, an ordered, immutable collection of elements written with parentheses.",Multiple Choice,H,list,set,tuple,dict
+Lists and Loops,Ordered Collections,"What Python structure is an ordered collection that is mutable and written with square brackets like [1,2,3]?",Multiple Choice,F,list,tuple,ordered collection,element
+Lists and Loops,Ordered Collections,"In nums=[10,20,30], the 1 in nums[1] is the ____.",Multiple Choice,F,index,element,length,slice
+Lists and Loops,Ordered Collections,"In nums=[4,5,6,7], the -1 in nums[-1] is a ____.",Multiple Choice,F,negative index,index,tuple,length
+Lists and Loops,Ordered Collections,The expression nums[1:4] uses a ____ to select a run of elements.,Multiple Choice,G,mutable,slice,element,tuple
+Lists and Loops,Ordered Collections,The value returned by len(nums) is the list's ____.,Multiple Choice,F,length,mutable,tuple,slice
+Lists and Loops,Ordered Collections,Changing nums[0]=99 shows that a Python list is ____.,Multiple Choice,H,tuple,element,mutable,index
+Lists and Loops,Ordered Collections,"A single value inside a list, such as 42 in [3,42,7], is an ____.",Multiple Choice,F,element,index,length,tuple
+Lists and Loops,Ordered Collections,"Which term names an ordered collection that is immutable and written with parentheses like (1,2,3)?",Multiple Choice,F,tuple,list,ordered collection,mutable
+Lists and Loops,Ordered Collections,The phrase 'items keep their order and can be accessed by position' describes an ____.,Multiple Choice,F,ordered collection,element,dictionary,length
+Lists and Loops,Ordered Collections,The expression nums[::2] returns every other item using a ____ with a step.,Multiple Choice,F,slice,index,negative index,element
+Lists and Loops,Ordered Collections,"In a list, what is the index of the first element?",Multiple Choice,F,0,1,-1,Depends on the list
+Lists and Loops,Ordered Collections,What is the index of the last element in a list named items?,Multiple Choice,G,len(items),len(items) - 1,-1,items[-1]
+Lists and Loops,Ordered Collections,"Given nums=[1,2,3]; nums.append([4,5]); what is nums?",Multiple Choice,F,"[1,2,3,[4,5]]","[1,2,3,4,5]","[1,2,3]","[4,5]"
+Lists and Loops,Ordered Collections,"Given nums=[1,2,3]; nums.extend([4,5]); what is len(nums)?",Multiple Choice,F,5,3,4,6
+Lists and Loops,Ordered Collections,"Given items=[10,20,30]; items.insert(1,15); what is items?",Multiple Choice,F,"[10,15,20,30]","[15,10,20,30]","[10,20,30]","[10,20,15,30]"
+Lists and Loops,Ordered Collections,"Given items=[2,4,6,8]; x=items.pop(); what are x and items?",Multiple Choice,F,"x==8 and items==[2,4,6]","x==2 and items==[4,6,8]","x==8 and items==[2,4,6,8]","x==6 and items==[2,4,8]"
+Lists and Loops,Ordered Collections,"What does the expression [3,1,4].sort() return?",Multiple Choice,G,None,"[1,3,4]","[4,3,1]",An error
+Lists and Loops,Ordered Collections,"Given nums=[5,1,5,2]; what does nums.count(5) return?",Multiple Choice,F,2,1,3,0
+Lists and Loops,Ordered Collections,"Given nums=[3,1,2]; nums.sort(); what is nums?",Multiple Choice,G,None,"[1,2,3]","[3,2,1]","[3,1,2]"
+Lists and Loops,Ordered Collections,"Given nums=[1,2]; nums += [3,4]; what is nums?",Multiple Choice,F,"[1,2,3,4]","[[1,2],[3,4]]","[1,2,[3,4]]","[3,4]"
+Lists and Loops,Ordered Collections,"Given nums=[10,20,30]; 25 in nums evaluates to what?",Multiple Choice,I,'25',25,True,False
+Lists and Loops,Ordered Collections,"Given nums=[1,2,3,4]; del nums[1]; what is nums?",Multiple Choice,G,"[2,3,4]","[1,3,4]","[1,2,4]","[1,2,3]"
+Lists and Loops,Ordered Collections,"Given nums=['b','a','c']; nums.reverse(); what is nums?",Multiple Choice,F,"['c','a','b']","['a','b','c']","['b','a','c']",None
+Lists and Loops,Iterative Loops,A loop that runs a set number of times or over each item in a sequence using the 'for' keyword.,Multiple Choice,G,while loop,for loop,if statement,recursion
+Lists and Loops,Iterative Loops,"Any object you can loop over item by item in a for loop (examples: list, tuple, string).",Multiple Choice,F,iterable,iterator,condition,index
+Lists and Loops,Iterative Loops,One complete pass of the loop body for a single item or count.,Multiple Choice,H,iterator,traversal,iteration,loop variable
+Lists and Loops,Iterative Loops,The variable name that temporarily holds the current item during a for loop.,Multiple Choice,I,index,parameter,constant,loop variable
+Lists and Loops,Iterative Loops,"The process of visiting each element in a sequence one by one, usually with a loop.",Multiple Choice,F,traversal,break,continue,loop scope
+Lists and Loops,Iterative Loops,"The set of names available inside the loop body (e.g., the loop variable and variables defined before or within the loop).",Multiple Choice,F,loop scope,global scope,iterator,file scope
+Lists and Loops,Iterative Loops,A statement that immediately exits the nearest enclosing loop.,Multiple Choice,F,break,continue,return,pass
+Lists and Loops,Iterative Loops,A statement that skips the rest of the current loop iteration and moves to the next one.,Multiple Choice,F,continue,break,stop,exit
+Lists and Loops,Iterative Loops,"Which option loops over both index and value in nums=[10,20,30]?",Multiple Choice,F,"for i, v in enumerate(nums):","for i, v in nums.items():",for i in nums.values():,for v of enumerate(nums):
+Lists and Loops,Iterative Loops,What is the effect of break inside a for loop?,Multiple Choice,G,Skips to the next iteration,Immediately exits the loop,Restarts the loop from the top,Exits the entire program
+Lists and Loops,Iterative Loops,What is the effect of continue inside a for loop?,Multiple Choice,F,Skips the rest of the current iteration,Exits the loop,Repeats the current iteration,Throws an exception
+Lists and Loops,Iterative Loops,How many times does for i in range(3): run the loop body?,Multiple Choice,H,"2 times (i = 1,2)",4 times (i = 0..3),"3 times (i = 0,1,2)",It depends on list length
+Lists and Loops,Iterative Loops,Which option correctly traverses all characters in s='cat'?,Multiple Choice,H,for ch of s:,for s in ch:,for ch in s:,for ch in range(s):
+Lists and Loops,Iterative Loops,"Given nums=[1,2]; out=[]; for n in nums: out.append(n*2); what is out after the loop?",Multiple Choice,F,"[2,4]","[1,2,1,2]","[1,2]",Error: append needs two args
+Lists and Loops,Iterative Loops,"In nums=[10,20,30], what do i and v represent in for i, v in enumerate(nums):?",Multiple Choice,F,"i is the index, v is the element value","i is the value, v is the next index",i and v are both values,i and v are both indexes
+Lists and Loops,Iterative Loops,What is printed by: for i in range(3): print(i)?,Multiple Choice,F,0 1 2 (each on its own line),1 2 3 (each on its own line),0 1 2 (on one line),1 2 3 (on one line)
+Lists and Loops,Iterative Loops,What is the value of total after: total=0; for i in range(4): total += i?,Multiple Choice,G,4,6,10,Error: total needs to be a list
+Lists and Loops,Iterative Loops,What does this code print? for ch in 'dog': if ch=='o': break; print(ch),Multiple Choice,F,d,do,dog,
+Lists and Loops,Iterative Loops,What does this code print? for ch in 'cat': if ch=='a': continue; print(ch),Multiple Choice,F,c t (each on its own line),cat (on one line),c a t (each on its own line),Nothing.
+Lists and Loops,Iterative Loops,What is the value of s after: s=''; for i in range(3): s += str(i)?,Multiple Choice,F,'012','123','3','0 1 2'
+Lists and Loops,Nested Collections,Providing multiple indices to find an element in a list that is itself an element in another list.,Multiple Choice,F,multi-dimensional,constant,return value,conversion
+Dictionaries and Objects,Unordered Collections,"A variable that holds many individual values in no particular order, because each value has its own key.",Multiple Choice,F,unordered collection,argument,literal,camelCase
+Dictionaries and Objects,Unordered Collections,An unordered collection that has a series of values with their own identifying keys.,Multiple Choice,H,list,scope,dictionary,boolean
+Dictionaries and Objects,Unordered Collections,"A word that represents a value in an unordered collection, or the value of a property.",Multiple Choice,F,key,assignment,index,datatype
+Dictionaries and Objects,Unordered Collections,"Given d={'a':1,'b':2}; what does d['a'] evaluate to?",Multiple Choice,F,1,'a',['a'],KeyError
+Dictionaries and Objects,Unordered Collections,Given d={'x':1}; d['y']=3; what is d?,Multiple Choice,F,"{'x':1,'y':3}",{'x':1},{'y':3},"{'x':1,'y':[3]}"
+Dictionaries and Objects,Unordered Collections,Which test checks whether 'id' is a key in d?,Multiple Choice,F,'id' in d,d.contains('id'),in d.keys('id'),id in d.values()
+Dictionaries and Objects,Unordered Collections,After d={'a':1}; d['a']=5; what is len(d)?,Multiple Choice,H,0,2,1,5
+Dictionaries and Objects,Unordered Collections,What happens when you access d['z'] and 'z' is not a key?,Multiple Choice,I,Returns 0,Returns '',Returns None,Raises KeyError
+Dictionaries and Objects,Unordered Collections,"In {'a':1,'a':2}, what is the value of 'a'?",Multiple Choice,F,2 (the last assignment wins),1 (the first assignment wins),Both 1 and 2 are stored,Undefined behavior
+Dictionaries and Objects,Unordered Collections,Which statement is true about dictionary keys?,Multiple Choice,H,Keys must be strings,Keys can be lists,"Keys must be immutable types like str, int, or tuple",Keys must be unique only within values
+Dictionaries and Objects,Unordered Collections,"Given d={'0':'zero', 0:'number zero'}, what does d[0] return?",Multiple Choice,H,'zero',KeyError,number zero,0
+Dictionaries and Objects,Unordered Collections,"Given d={'a':1,'b':2}, what does d['a'] evaluate to?",Multiple Choice,H,'a',KeyError,1,['a']
+Dictionaries and Objects,Unordered Methods,"Given d={'k':9,'m':8}; del d['k']; what is d now?",Multiple Choice,G,{},{'m':8},{'k':9},"{'k':9,'m':8}"
+Dictionaries and Objects,Unordered Methods,Given d={'x':7}; what does len(d) evaluate to?,Multiple Choice,F,1,7,'x',KeyError
+Dictionaries and Objects,Unordered Methods,Which expression returns 0 if 'missing' is not a key in d?,Multiple Choice,H,d['missing'] or 0,"d.default('missing',0)","d.get('missing',0)",0 if 'missing' not in d else d['missing']
+Dictionaries and Objects,Unordered Methods,What does d.items() produce?,Multiple Choice,G,A list of keys,"An iterable of (key, value) pairs",A list of values,A copy of the dictionary
+Dictionaries and Objects,Unordered Methods,Which method returns a view of just the values in d?,Multiple Choice,I,d.value(),d.items(),d.keys(),d.values()
+Dictionaries and Objects,Unordered Methods,"Which method adds all key-value pairs from e into d, overwriting existing keys in d?",Multiple Choice,F,d.update(e),d.extend(e),d.merge(e),d.append(e)
+Dictionaries and Objects,Unordered Methods,"In for k in d:, what does k represent?",Multiple Choice,F,Each key in d,Each value in d,"Each (key,value) pair",Each index position
+Dictionaries and Objects,Unordered Methods,"Which call removes key 'x' and returns its value, or 0 if 'x' is missing?",Multiple Choice,G,"d.get('x', 0)","d.pop('x', 0)",del d['x'] or 0,"d.remove('x', 0)"
+Dictionaries and Objects,Unordered Methods,Which method returns a value you can loop over to get keys only?,Multiple Choice,I,d.items(),d.values(),list(d),d.keys()
+Dictionaries and Objects,Unordered Methods,Which method removes all key-value pairs from d?,Multiple Choice,H,del d,d.erase(),d.clear(),d.empty()
+Dictionaries and Objects,Unordered Methods,Given a={'x':1}; b=a.copy(); a['x']=9; what is b['x']?,Multiple Choice,F,1,9,KeyError,None
+Dictionaries and Objects,Unordered Methods,Which loop goes through both key and value?,Multiple Choice,F,"for k, v in d.items():","for v in d.values(), k in d.keys():","for k, v in d:",for pair in d.keys():
+Dictionaries and Objects,Unordered Methods,Which loop iterates over both keys and values of d?,Multiple Choice,F,"for k, v in d.items():","for k, v in d:","for (k, v) in d.keys():","for k in d.keys(), v in d.values():"
+Dictionaries and Objects,Unordered Methods,Which test checks if 'id' is a key in d?,Multiple Choice,I,id in d.values(),d.has('id'),d.keys('id'),'id' in d
+Dictionaries and Objects,Unordered Methods,Given d={'a':1}; what happens if you evaluate d['b'] when 'b' is not a key?,Multiple Choice,G,Returns None,Raises KeyError,Returns 0,Creates key 'b'
+Dictionaries and Objects,Unordered Methods,Which expression checks if key 'user' exists in d?,Multiple Choice,F,'user' in d,d.contains('user'),'user' in d.values(),d.has_key('user')
+Dictionaries and Objects,Unordered Methods,"Given d={'x':1,'y':2}; which expression produces a list of keys?",Multiple Choice,I,d.values(),d.items(),list(d.values()),list(d.keys())
+Dictionaries and Objects,Unordered Methods,"Given d={'a':1,'b':2}; which one safely returns 0 when 'c' is not present?",Multiple Choice,G,d['c'] or 0,"d.get('c',0)","d.value('c',0)","d.fetch('c',0)"
+Dictionaries and Objects,Unordered Methods,Given d={'p':1}; e={'q':2}; which expression updates d with e in-place?,Multiple Choice,G,d.merge(e),d.update(e),d.append(e),e.update(d) then use e
+Dictionaries and Objects,Unordered Methods,"Given d={'b':2,'a':1}, what does sorted(d) return?",Multiple Choice,F,"['a','b']","[1,2]","[('a',1),('b',2)]","['b','a']"
+Dictionaries and Objects,Unordered Methods,"Given d={'a':1} and e={'b':2}, which creates a new merged dict without changing d or e (Python 3.9+)?",Multiple Choice,G,d.update(e),d | e,"{**d, **e}",e.update(d) and use d
+Dictionaries and Objects,Unordered Methods,What does d.get('z') return when 'z' is not a key and no default is provided?,Multiple Choice,I,KeyError,0,'',None
+Dictionaries and Objects,Unordered Methods,"What does d.pop('x', 0) do if 'x' is not a key in d?",Multiple Choice,F,Returns 0 and leaves d unchanged,Raises KeyError,Adds 'x' with value 0 to d,Returns None and leaves d unchanged
+Dictionaries and Objects,Unordered Methods,Which statement removes key 'k' and raises an error if 'k' is missing?,Multiple Choice,F,del d['k'],"d.pop('k', None)",d.clear('k'),d.discard('k')
+Dictionaries and Objects,Unordered Methods,Given d={'p':1}; e={'q':2}; which expression updates d with e in-place?,Multiple Choice,G,d.merge(e),d.update(e),d.append(e),e.update(d) then use e
+Classes and Modules,Modules,A file containing pre-made code that can be imported into other programs for easy use.,Multiple Choice,F,module,library,class,object
+Classes and Modules,Modules,Loading a module into your program for use.,Multiple Choice,G,module,import,constructor,inheritance
+Classes and Modules,Classes,"A collection of data and functions bundled together, often representing a real-world concept.",Multiple Choice,F,object,property,method,class
+Classes and Modules,Classes,A value or characteristic that belongs to an object.,Multiple Choice,G,method,property,constructor,inheritance
+Classes and Modules,Classes,A function that belongs to an object and can perform actions on the object or its data.,Multiple Choice,H,object,class,method,constructor
+Classes and Modules,Classes,A blueprint used to create objects with similar structure and behavior.,Multiple Choice,I,property,method,inheritance,class
+Classes and Modules,Classes,A special method used to initialize a new object when it is created.,Multiple Choice,F,constructor,method,property,class
+Classes and Modules,Classes,A mechanism that allows one class to use the properties and methods of another class.,Multiple Choice,G,object,inheritance,constructor,method
