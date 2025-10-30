@@ -4,13 +4,13 @@ module.exports = (router) => {
   router.post('/upload', async (req, res) => {
     try {
       const userUid = req.session.user.uid;
-      const { courseName } = req.body;
+      const { courseName, description } = req.body;
 
       if (!courseName || !courseName.trim()) {
         return res.json({ success: false, message: 'Course name is required.' });
       }
 
-      const newCourse = await createCourseForUser(userUid, courseName);
+      const newCourse = await createCourseForUser(userUid, courseName, description);
 
       res.json({
         success: true,

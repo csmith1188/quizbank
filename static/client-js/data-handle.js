@@ -4,6 +4,7 @@ const openModalBtn = document.getElementById('openCourseModalBtn');
 const cancelBtn = document.getElementById('cancelCourseBtn');
 const submitBtn = document.getElementById('submitCourseBtn');
 const courseNameInput = document.getElementById('courseNameInput');
+const courseDescInput = document.getElementById('courseDescriptionInput');
 
 // Section upload varibles
 const sectionModal = document.getElementById('newSectionModal');
@@ -11,6 +12,24 @@ const openSectionModalBtn = document.getElementById('openSectionModalBtn');
 const cancelSectionBtn = document.getElementById('cancelModuleBtn');
 const submitSectionBtn = document.getElementById('submitModuleBtn');
 const sectionNameInput = document.getElementById('moduleNameInput');
+const sectionDescInput = document.getElementById('moduleDescriptionInput');
+
+// Unit upload varibles
+const unitModal = document.getElementById('unitModal');
+const openUnitModalBtn = document.getElementById('openUnitBtn');
+const cancelUnitBtn = document.getElementById('cancelUnitBtn');
+const submitUnitBtn = document.getElementById('submitUnitBtn');
+const unitNameInput = document.getElementById('unitNameInput');
+const unitDescInput = document.getElementById('unitDescriptionInput');
+
+// Task upload varibles
+const taskModal = document.getElementById('taskModal');
+const openTaskModalBtn = document.getElementById('openTaskBtn');
+const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+const submitTaskBtn = document.getElementById('submitTaskBtn');
+const taskNameInput = document.getElementById('taskNameInput');
+const taskDescInput = document.getElementById('taskDescriptionInput');
+const taskGenPromptInput = document.getElementById('taskGenPrompt');
 
 // Course upload handlers
 openModalBtn.addEventListener('click', () => {
@@ -32,7 +51,7 @@ submitBtn.addEventListener('click', async (event) => {
         const response = await fetch('/api/course-upload/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ courseName }),
+            body: JSON.stringify({ courseName, description: courseDescInput.value.trim() }),
         });
 
         const data = await response.json();
@@ -64,17 +83,17 @@ cancelSectionBtn.addEventListener('click', () => {
 submitSectionBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     const sectionName = sectionNameInput.value.trim();
+    const description = sectionDescInput.value.trim();
     const path = selectedPath;
     const courseUid = path.course.uid;
 
     if (!sectionName) return alert('Please enter a section name.');
-    if (!courseUid) return alert('Course UID is missing.');
 
     try {
         const response = await fetch('/api/section-upload/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sectionName, courseUid }),
+            body: JSON.stringify({ sectionName, courseUid, description }),
         });
 
         const data = await response.json();
@@ -95,5 +114,111 @@ submitSectionBtn.addEventListener('click', async (event) => {
     } catch (err) {
         console.error(err);
         alert('Error creating section.');
+    }
+});
+
+// Unit upload handlers
+openUnitModalBtn.addEventListener('click', () => {
+    unitModal.classList.remove('hidden');
+    unitNameInput.value = '';
+    unitNameInput.focus();
+});
+
+cancelUnitBtn.addEventListener('click', () => {
+    unitModal.classList.add('hidden');
+});
+
+submitUnitBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const unitName = unitNameInput.value.trim();
+    const description = unitDescInput.value.trim();
+    const path = selectedPath;
+    const sectionUid = path.section.uid;
+
+    if (!unitName) return alert('Please enter a unit name.');
+
+    try {
+        const response = await fetch('/api/unit-upload/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ unitName, sectionUid, description }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            unitModal.classList.add('hidden');
+
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+                if (course) {
+                    const section = course.sections.find(s => s.uid === sectionUid);
+                    if (section) {
+                        if (!section.units) {
+                            section.units = [];
+                        }
+                        section.units.push(data.newUnit);
+                        if (typeof renderView === 'function') renderView('units');
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error creating unit.');
+    }
+});
+
+// Task upload handlers
+openTaskModalBtn.addEventListener('click', () => {
+    taskModal.classList.remove('hidden');
+    taskNameInput.value = '';
+    taskNameInput.focus();
+});
+
+cancelTaskBtn.addEventListener('click', () => {
+    taskModal.classList.add('hidden');
+}); 
+
+submitTaskBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const taskName = taskNameInput.value.trim();
+    const description = taskDescInput.value.trim();
+    const genPrompt = taskGenPromptInput.value.trim();
+    const path = selectedPath;
+    const unitUid = path.unit.uid;
+
+    if (!taskName) return alert('Please enter a task name.');
+
+    try {
+        const response = await fetch('/api/task-upload/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskName, unitUid, description, genPrompt }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            taskModal.classList.add('hidden');
+
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+                if (course) {
+                    const section = course.sections.find(s => s.uid === path.section.uid);
+                    if (section) {
+                        const unit = section.units.find(u => u.uid === unitUid);
+                        if (unit) {
+                            if (!unit.tasks) {
+                                unit.tasks = [];
+                            }
+                            unit.tasks.push(data.newTask);
+                            if (typeof renderView === 'function') renderView('tasks');
+                        }
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error creating task.');
     }
 });

@@ -20,15 +20,6 @@
             </nav>
             <div class="browser-selected-path" id="browserSelectedPath"></div>
             <div class="browser-list-area" id="browserListArea"></div>
-            <div class="upload-section">
-                <h3>Bulk Upload</h3>
-                <form id="bulk-upload-form" action="/api/bulk-upload/upload" method="POST"
-                    enctype="multipart/form-data">
-                    <input type="file" name="sheet" accept=".xlsx,.xls" required>
-                    <input type="hidden" name="sectionUid" placeholder="Section UID" required>
-                    <button type="submit">Upload</button>
-                </form>
-            </div>
 
             <%- include('../../partials/upload-forms.ejs') %>
 

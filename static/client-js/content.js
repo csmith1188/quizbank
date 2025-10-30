@@ -3,6 +3,8 @@ const uploadSection = document.getElementsByClassName('upload-section')[0];
 const uploadForm = document.getElementById('bulk-upload-form');
 const openEditFormBtn = document.getElementById('openCourseModalBtn');
 const sectionUploadForm = document.getElementById('section-upload-form');
+const unitUploadForm = document.getElementById('newUnitModal');
+const taskUploadForm = document.getElementById('newTaskModal');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -249,9 +251,17 @@ function renderView(view, filter = "") {
     }
 
     if (view === 'units' && selectedPath.section) {
+        unitUploadForm.style.display = 'inline-block';
         uploadSection.style.display = 'block';
     } else {
+        unitUploadForm.style.display = 'none';
         uploadSection.style.display = 'none';
+    }
+
+    if (view === 'tasks' && selectedPath.unit) {
+        taskUploadForm.style.display = 'inline-block';
+    } else {
+        taskUploadForm.style.display = 'none';
     }
 
     if (view === "questionEdit") {
