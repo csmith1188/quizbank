@@ -3,18 +3,23 @@
         {
             "id": 1,
             "name": "Course1",
+            "description": "An introductory course to Japanese language and culture.",
             "sections": [
                 {
                     "id": 1,
                     "name": "Section1",
+                    "description": "Basics of Japanese Language",
                     "units": [
                         {
                             "id": 1,
                             "name": "Unit1",
+                            "description": "Introduction to Japanese",
                             "tasks": [
                                 {
                                     "id": 1,
                                     "name": "Task1",
+                                    "description": "Basic Japanese Vocabulary",
+                                    "genprompt": "You are a helpful assistant for creating multiple-choice questions for learning basic Japanese vocabulary. Each question should have one correct answer and three distractors. Ensure the questions cover a variety of common words and phrases used in everyday conversation.",
                                     "questions": [
                                         {
                                             "id": 1,

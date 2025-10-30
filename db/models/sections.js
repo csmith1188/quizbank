@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         name: { type: DataTypes.TEXT, allowNull: false },
+        description: { type: DataTypes.TEXT, allowNull: true },
     }, {
         tableName: 'sections'
     });

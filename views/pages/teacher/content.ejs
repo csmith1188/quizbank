@@ -20,45 +20,8 @@
             </nav>
             <div class="browser-selected-path" id="browserSelectedPath"></div>
             <div class="browser-list-area" id="browserListArea"></div>
-            <div class="upload-section">
-                <h3>Bulk Upload</h3>
-                <form id="bulk-upload-form" action="/api/bulk-upload/upload" method="POST"
-                    enctype="multipart/form-data">
-                    <input type="file" name="sheet" accept=".xlsx,.xls" required>
-                    <input type="hidden" name="sectionUid" placeholder="Section UID" required>
-                    <button type="submit">Upload</button>
-                </form>
-            </div>
 
-            <form id="course-upload-form" action="/api/course-upload/upload" method="POST">
-                <button type="button" id="openCourseModalBtn">Create Course</button>
-            </form>
-
-            <div id="courseModal" class="course-modal hidden">
-                <div class="course-modal-content glass-card">
-                    <h3>Create New Course</h3>
-                    <input type="text" id="courseNameInput" placeholder="Enter course name..." />
-                    <div class="course-modal-buttons">
-                        <button id="submitCourseBtn" class="modal-btn">Create</button>
-                        <button id="cancelCourseBtn" class="modal-btn cancel">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <form id="section-upload-form" action="/api/section-upload/upload" method="POST">
-                <button type="button" id="openSectionModalBtn">Create Section</button>
-            </form>
-
-            <div id="newSectionModal" class="course-modal hidden">
-                <div class="course-modal-content glass-card">
-                    <h3>Create Section</h3>
-                    <input type="text" id="moduleNameInput" placeholder="Enter section name..." />
-                    <div class="course-modal-buttons">
-                        <button id="submitModuleBtn" class="modal-btn">Create</button>
-                        <button id="cancelModuleBtn" class="modal-btn cancel">Cancel</button>
-                    </div>
-                </div>
-            </div>
+            <%- include('../../partials/upload-forms.ejs') %>
 
         </div>
     </main>
@@ -68,5 +31,5 @@
 </script>
     <script src="/client-js/content.js"></script>
     <script src="/client-js/edit-question.js"></script>
-    <script src="/client-js/add-data.js"></script>
+    <script src="/client-js/data-handle.js"></script>
     <%- include('../../partials/footer.ejs') %>
