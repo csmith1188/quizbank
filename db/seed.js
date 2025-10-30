@@ -18,6 +18,7 @@ async function seed() {
     for (const courseData of jsonData.courses) {
       let courseIndex = courseData.id;
       let courseName = courseData.name;
+      let courseDesc = courseData.description || "";
 
       // Check for existing courses with the same index
       while (await Course.findOne({ where: { index: courseIndex } })) {
@@ -29,12 +30,15 @@ async function seed() {
         defaults: {
           name: courseName,
           userUid: 1,
+          description: courseDesc,
         },
       });
 
       for (const sectionData of courseData.sections || []) {
         let sectionIndex = sectionData.id;
         let sectionName = sectionData.name;
+        let sectionDesc = sectionData.description || "";
+
 
         // Check for existing sections with the same index
         while (await Section.findOne({ where: { index: sectionIndex, courseUid: course.uid } })) {
@@ -45,12 +49,14 @@ async function seed() {
           where: { index: sectionIndex, courseUid: course.uid },
           defaults: {
             name: sectionName,
+            description: sectionDesc,
           },
         });
 
         for (const unitData of sectionData.units || []) {
           let unitIndex = unitData.id;
           let unitName = unitData.name;
+          let unitDesc = unitData.description || "";
 
           // Check for existing units with the same index
           while (await Unit.findOne({ where: { index: unitIndex, sectionUid: section.uid } })) {
@@ -61,12 +67,15 @@ async function seed() {
             where: { index: unitIndex, sectionUid: section.uid },
             defaults: {
               name: unitName,
+              description: unitDesc,
             },
           });
 
           for (const taskData of unitData.tasks || []) {
             let taskIndex = taskData.id;
             let taskName = taskData.name;
+            let taskDesc = taskData.description || "";
+            let taskGenPrompt = taskData.genprompt || "";
 
             // Check for existing tasks with the same index
             while (await Task.findOne({ where: { index: taskIndex, unitUid: unit.uid } })) {
@@ -77,6 +86,8 @@ async function seed() {
               where: { index: taskIndex, unitUid: unit.uid },
               defaults: {
                 name: taskName,
+                description: taskDesc,
+                genprompt: taskGenPrompt,
               },
             });
 

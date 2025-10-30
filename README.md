@@ -9,7 +9,12 @@ A RESTful API for accessing quiz bank hierarchy data.
 npm install
 ```
 
-2. Start the server:
+2. Make the database
+```bash
+node db/database-init.js
+```
+
+3. Start the server:
 ```bash
 npm start
 ```
@@ -50,15 +55,6 @@ The seeding system is designed to populate the database with initial data for co
 ### Seeding Process
 
 1. **Define Seed Data**: The seed data is defined in a JSON file located at `quizsources/courses.json`. This file contains the hierarchy of courses, sections, units, tasks, and questions.
-
-2. **Run Seeder**: Use the following command to seed the database:
-   ```bash
-   node db/database-init.js
-   ```
-
-   This will:
-   - Recreate the database tables.
-   - Populate the database with the data from `quizsources/courses.json` or any other JSON file provided.
 
 3. **Example Seed Data**: Below is an example structure of the `courses.json` file:
    ```json
