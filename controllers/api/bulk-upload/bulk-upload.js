@@ -1,6 +1,7 @@
 const multer = require('multer');
-const { parseSheet, uploadSheetData } = require('../../../services/upload-service');
-const { getSection, getResourceOwnerUid } = require('../../../services/resource-service');
+const path = require('path');
+const { parseSheet } = require('../../../services/upload-service');
+const { getSection, getResourceOwnerUid, insertUploadData} = require('../../../services/resource-service');
 
 // store files in memory
 const upload = multer({
@@ -35,11 +36,11 @@ module.exports = (router) => {
             }
             
             const parsedData = parseSheet(req.file.buffer);
-            await uploadSheetData(parsedData, sectionUid);
+            await insertUploadData(parsedData, sectionUid);
 
-            const newSectionData = await getSection(sectionUid);
+            const updatedSectionData = await getSection(sectionUid);
 
-            res.json(newSectionData);
+            res.json(updatedSectionData);
         });
     });
 };

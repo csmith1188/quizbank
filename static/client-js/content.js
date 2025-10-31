@@ -269,10 +269,11 @@ function renderView(view, filter = "") {
             currentView = "questions";
             view = currentView;
         } else {
-            if (typeof renderQuestionDetail === "function") {
-                renderQuestionDetail(questionDetail);
+            if (typeof renderQuestionEdit === "function") {
+                renderQuestionEdit(questionDetail);
                 return;
             } else {
+                // fallback message until edit-question.js loads
                 const area = document.getElementById('browserListArea');
                 area.innerHTML = `<div class="browser-no-results">Edit UI not yet available.</div>`;
                 return;
@@ -334,19 +335,21 @@ function renderQuestionDetail(question) {
     let correctIdx = (typeof question.correct_index !== "undefined" ? question.correct_index : question.correctIndex);
     let correctAns = question.correctAnswer || question.correct_answer;
 
+    let hasMultipleAnswers = typeof question.correct_index === "string" && question.correct_index.startsWith("[");
+
     let html = `
     <div class="question-detail">
       <h3>Question Detail</h3>
       <div class="question-prompt">${question.prompt || question.text || ""}</div>
       <div class="question-meta">
-        <strong>AI Generated:</strong> ${question.ai ? "Yes" : "No"}
+        ${question.ai ? "<strong>AI Generated</strong>" : ""}
       </div>
       <div class="answer-list">
-        <strong>Choices:</strong>
+        <strong>${question.type === 'open-ended' ? 'Open Ended' : 'Choices:'}</strong>
         <ul>
         ${answers.map((ans, idx) =>
-        `<li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
-                ${ans}${(correctIdx === idx || ans === correctAns) ? " <b>(Correct)</b>" : ""}
+        `<li style="${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? 'font-weight:bold; color:green;' : ''}">
+                ${ans}${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? " <b>(Correct)</b>" : ""}
             </li>`
     ).join("")}
         </ul>
