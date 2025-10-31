@@ -3,12 +3,11 @@ const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
 const resourceDepthMap = new Map([
-    ["user", 0],
-    ["course", 1],
-    ["section", 2],
-    ["unit", 3],
-    ["task", 4],
-    ["question", 5]
+    ["course", 0],
+    ["section", 1],
+    ["unit", 2],
+    ["task", 3],
+    ["question", 4]
 ]);
 
 const questionTypeMinAnswerChoices = new Map([
@@ -220,7 +219,7 @@ function resolveHierarchy(root, segments) {
     return data;
 }
 
-module.exports.getResource = async (path, questionType = null) => {
+module.exports.getResource = async (userUid, path, questionType = null) => {
     const { segments, pickAmount } = parseResourcePath(path);
 
     if (segments.length === 0) {
@@ -228,10 +227,9 @@ module.exports.getResource = async (path, questionType = null) => {
     }
 
     if (resourceDepthMap.get(segments[0].type) !== 0) {
-        throw new Error(`Path must start with a user: found ${segments[0].type}`);
+        throw new Error(`Path must start with a course: found ${segments[0].type}`);
     }
 
-    const userUid = segments.shift().indexes[0]; // remove user segment as well as get userUid
     let data = await module.exports.getFullCourseHierarchy(userUid);
     let resolvedData = resolveHierarchy(data, segments);
 

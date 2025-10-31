@@ -5,7 +5,8 @@ module.exports = async (req, res, next) => {
     try {
         const resourcePath = req.path;
         const questionType = req.query.type;
-        const data = await resourceService.getResource(resourcePath, questionType);
+        const userUid = req.session.user.uid;
+        const data = await resourceService.getResource(userUid, resourcePath, questionType);
         
         res.send(shallow(data));
 
