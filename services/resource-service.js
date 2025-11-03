@@ -2,12 +2,12 @@ const { sequelize, User, Course, Section, Unit, Task, Question } = require("../d
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
-const resourceDepthMap = new Map([
-    ["course", 0],
-    ["section", 1],
-    ["unit", 2],
-    ["task", 3],
-    ["question", 4]
+const resourceTypeMap = new Map([
+    ["course", Course],
+    ["section", Section],
+    ["unit", Unit],
+    ["task", Task],
+    ["question", Question]
 ]);
 
 const questionTypeMinAnswerChoices = new Map([
@@ -186,7 +186,7 @@ function parseResourcePath(path) {
         if (pluralToSingular[type]) type = pluralToSingular[type];
         segments.push({
             type: type,
-            indexes: pieces[i + 1]
+            ids: pieces[i + 1] // can either be index or uid
                 ? pieces[i + 1].split("+").map(Number)
                 : []
         });
@@ -195,51 +195,64 @@ function parseResourcePath(path) {
 }
 
 // Resolve the hierarchy based on segments
-function resolveHierarchy(root, segments) {
-    let data = root;
+// function resolveHierarchy(root, segments) {
+//     let data = root;
 
-    segments.forEach(({ type, indexes }) => {
-        const collection = data[type + "s"];
-        if (!collection) throw new Error(`Invalid resource type: ${type}`);
+//     segments.forEach(({ type, indexes }) => {
+//         const collection = data[type + "s"];
+//         if (!collection) throw new Error(`Invalid resource type: ${type}`);
 
-        if (!indexes.length) { 
-            data = collection; 
-            return; 
-        }
+//         if (!indexes.length) { 
+//             data = collection; 
+//             return; 
+//         }
 
-        const matched = collection.filter(e => indexes.includes(e.index));
-        if (!matched.length) throw new Error(`Resource not found: ${type} ${indexes}`);
+//         const matched = collection.filter(e => indexes.includes(e.index));
+//         if (!matched.length) throw new Error(`Resource not found: ${type} ${indexes}`);
 
-        data = matched.length === 1 ? matched[0] : {
-            name: `Combined ${type}s`,
-            [type + "s"]: matched
-        };
-    });
+//         data = matched.length === 1 ? matched[0] : {
+//             name: `Combined ${type}s`,
+//             [type + "s"]: matched
+//         };
+//     });
 
-    return data;
-}
+//     return data;
+// }
 
-module.exports.getResource = async (userUid, path, questionType = null) => {
+module.exports.getResource = async (path, questionType = null) => {
     const { segments, pickAmount } = parseResourcePath(path);
 
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
 
-    if (resourceDepthMap.get(segments[0].type) !== 0) {
+    if (resourceTypeMap.get(segments[0].type) !== Course) {
         throw new Error(`Path must start with a course: found ${segments[0].type}`);
     }
 
-    let data = await module.exports.getFullCourseHierarchy(userUid);
-    let resolvedData = resolveHierarchy(data, segments);
+    let resolvedData = [];
 
-    if (
-        segments.length === 1 &&
-        segments[0].type === "course" &&
-        Array.isArray(resolvedData)
-    ) {
-        resolvedData = { courses: resolvedData };
-    }
+    segments.forEach(async ({type, ids}) => {
+        const model = resourceTypeMap.get(type);
+        const entities = [];
+
+        for (uid of ids) {
+
+            let entity = await model.findOne({
+                where: {
+                    uid
+                }
+            });
+
+            if(!entity){
+                throw new Error(`${type} with id ${uid} not found.`);
+            }
+
+            resolvedData.push(entity);
+
+        }
+
+    });
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -367,3 +380,10 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
     });
 }
+
+async function testing(){
+    let test = await module.exports.getResource('course/1/');
+    console.log(test);
+}
+
+testing();
