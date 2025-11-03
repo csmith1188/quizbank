@@ -163,6 +163,24 @@ module.exports.createSectionForUser = async (sectionName, courseUid, description
     return section.toJSON();
 };
 
+module.exports.createQuestionForUser = async (taskUid, prompt, type, answers, correctIndex, correctAnswer, ai = false) => {
+    if (!taskUid) {
+        throw new Error("Task UID is required.");
+    }
+    const count = await Question.count({ where: { taskUid } });
+    const question = await Question.create({
+        taskUid,
+        index: count + 1,
+        ai,
+        prompt,
+        type,
+        answers: JSON.stringify(answers),
+        correct_index: Array.isArray(correctIndex) ? JSON.stringify(correctIndex) : correctIndex,
+        correct_answer: Array.isArray(correctAnswer) ? JSON.stringify(correctAnswer) : correctAnswer,
+    });
+    return question.toJSON();
+};
+
 module.exports.createTaskForUser = async (taskName, unitUid, description, GenPrompt) => {
     if (!taskName) {
         throw new Error("Task name is required.");

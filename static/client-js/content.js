@@ -5,6 +5,7 @@ const openEditFormBtn = document.getElementById('openCourseModalBtn');
 const sectionUploadForm = document.getElementById('section-upload-form');
 const unitUploadForm = document.getElementById('newUnitModal');
 const taskUploadForm = document.getElementById('newTaskModal');
+const questionModalForm = document.getElementById('newQuestionModalForm');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -262,6 +263,12 @@ function renderView(view, filter = "") {
         taskUploadForm.style.display = 'inline-block';
     } else {
         taskUploadForm.style.display = 'none';
+    }
+
+    if (view === 'questions' && selectedPath.task) {
+        questionModalForm.style.display = 'inline-block';
+    } else {
+        questionModalForm.style.display = 'none';
     }
 
     if (view === "questionEdit") {

@@ -31,6 +31,14 @@ const taskNameInput = document.getElementById('taskNameInput');
 const taskDescInput = document.getElementById('taskDescriptionInput');
 const taskGenPromptInput = document.getElementById('taskGenPrompt');
 
+// Question upload variables
+const questionModal = document.getElementById('question-creation');
+const openQuestionModalBtn = document.getElementById('openQuestionBtn');
+const cancelQuestionBtn = document.getElementById('cancelQuestionBtn');
+const submitQuestionBtn = document.getElementById('submitQuestionBtn');
+const questionOptionsInput = document.getElementById('questionOptionsInput');
+const qustionCreation = document.getElementById('question-creation');
+
 // Course upload handlers
 openModalBtn.addEventListener('click', () => {
     modal.classList.remove('hidden');
@@ -220,5 +228,60 @@ submitTaskBtn.addEventListener('click', async (event) => {
     } catch (err) {
         console.error(err);
         alert('Error creating task.');
+    }
+});
+
+// Question upload handlers
+openQuestionModalBtn.addEventListener('click', () => {
+    console.log('Opening question modal');
+    questionModal.classList.remove('hidden');
+    questionOptionsInput.value = '';
+    questionOptionsInput.focus();
+});
+
+cancelQuestionBtn.addEventListener('click', () => {
+    console.log('Closing question modal');
+    questionModal.classList.add('hidden');
+});
+
+submitQuestionBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const questionOptions = questionOptionsInput.value.trim();
+    console.log('Submitting question with options:', questionOptions);
+    const path = selectedPath;
+    const unitUid = path.unit.uid;
+
+    if (!questionOptions) return alert('Please enter question options.');
+
+    try {
+        const response = await fetch('/api/question-upload/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ unitUid, questionOptions }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+                if (course) {
+                    const section = course.sections.find(s => s.uid === path.section.uid);
+                    if (section) {
+                        const unit = section.units.find(u => u.uid === unitUid);
+                        if (unit) {
+                            if (!unit.questions) {
+                                unit.questions = [];
+                            }
+                            unit.questions.push(data.newQuestion);
+                            if (typeof renderView === 'function') renderView('questions');
+                        }
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error creating question.');
     }
 });
