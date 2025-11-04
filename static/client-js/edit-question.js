@@ -117,18 +117,29 @@ function renderQuestionEdit(question) {
         }
 
         const newQuestionData = parseFormattedQuestion(text);
-        console.log(newQuestionData);
         const newQuestionType = determineQuestionType(newQuestionData);
-        console.log(newQuestionType);
 
-        // first line: question prompt
+        if (newQuestionData.answers.length > 0 && newQuestionData.correct_indices.length === 0){
+            alert("At least one correct answer must be specified (prefix correct answers with *)");
+            return;
+        }
+
         question.prompt  = newQuestionData.prompt;
         question.type = newQuestionType;
-        
-        // remaining lines: answers
         question.answers = newQuestionData.answers;
-        question.correct_index = newQuestionData.correct_indices.length === 1 ? newQuestionData.correct_indices[0] : JSON.stringify(newQuestionData.correct_indices);
-        question.correct_answer = newQuestionData.correct_indices.length === 1 ? newQuestionData.answers[question.correctIndex] : null;
+
+        // if one correct answer, store plain.
+        // if more than one correct answer, store as JSON array.
+        if (newQuestionData.correct_indices.length > 1) {
+            question.correct_index = JSON.stringify(newQuestionData.correct_indices);
+            question.correct_answer = JSON.stringify(newQuestionData.correct_indices.map(idx => newQuestionData.answers[idx]));
+        } else if (newQuestionData.correct_indices.length === 1) {
+            question.correct_index = newQuestionData.correct_indices[0];
+            question.correct_answer = newQuestionData.answers[question.correct_index];
+        } else {
+            question.correct_index = null;
+            question.correct_answer = null;
+        }
 
         // persist to server
         try {
@@ -201,12 +212,12 @@ function isTrueFalse(questionData) {
 }
 
 function determineQuestionType(questionData) {
-    if (questionData.correct_indices.length > 2) {
-        return "multiple-answer";
+    if (questionData.correct_indices.length === 1) {
+        return "multiple-choice";
     } else if (isTrueFalse(questionData)) {
         return "true-false";
-    } else if (questionData.correct_indices.length === 1) {
-        return "multiple-choice";
+    } else if (questionData.correct_indices.length >= 2) {
+        return "multiple-answer";
     } else {
         return "open-ended";
     }
