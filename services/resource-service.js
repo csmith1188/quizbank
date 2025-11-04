@@ -108,7 +108,7 @@ module.exports.getCoursesForUser = async (userUid) => {
     return courses.map(c => c.toJSON());
 }
 
-module.exports.createCourseForUser = async (userUid, courseName) => {
+module.exports.createCourseForUser = async (userUid, courseName, curseDescription) => {
     if (!courseName || !courseName.trim()) {
         throw new Error("Course name is required.");
     }
@@ -118,14 +118,34 @@ module.exports.createCourseForUser = async (userUid, courseName) => {
     const course = await Course.create({
         userUid,
         name: courseName.trim(),
-        index: count + 1
+        index: count + 1,
+        description: curseDescription
     });
 
     return course.toJSON();
 };
 
-module.exports.createSectionForUser = async (userUid, sectionName, courseUid) => {
-    if (!sectionName || !sectionName.trim()) {
+module.exports.createUnitForUser = async (unitName, sectionUid, description) => {
+    if (!unitName) {
+        throw new Error("Unit name is required.");
+    }
+
+    if (!sectionUid) {
+        throw new Error("Section UID is required.");
+    }
+
+    const count = await Unit.count({ where: { sectionUid } });
+    const unit = await Unit.create({
+        sectionUid,
+        name: unitName,
+        index: count + 1,
+        description: description
+    });
+    return unit.toJSON();
+};
+
+module.exports.createSectionForUser = async (sectionName, courseUid, description) => {
+    if (!sectionName) {
         throw new Error("Section name is required.");
     }
 
@@ -136,10 +156,30 @@ module.exports.createSectionForUser = async (userUid, sectionName, courseUid) =>
     const count = await Section.count({ where: { courseUid } });
     const section = await Section.create({
         courseUid,
-        name: sectionName.trim(),
-        index: count + 1
+        name: sectionName,
+        index: count + 1,
+        description: description
     });
     return section.toJSON();
+};
+
+module.exports.createTaskForUser = async (taskName, unitUid, description, GenPrompt) => {
+    if (!taskName) {
+        throw new Error("Task name is required.");
+    }
+    if (!unitUid) {
+        throw new Error("Unit UID is required.");
+    }
+
+    const count = await Task.count({ where: { unitUid } });
+    const task = await Task.create({
+        unitUid,
+        name: taskName,
+        index: count + 1,
+        description: description,
+        genprompt: GenPrompt
+    });
+    return task.toJSON();
 };
 
 module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
@@ -176,7 +216,7 @@ function parseResourcePath(path) {
 
     if (pieces[pieces.length - 2] === "pick") {
         pickAmount = parseInt(pieces.pop(), 10);
-        pieces.pop(); // remove 'pick'
+        pieces.pop();
     }
 
     const segments = [];
