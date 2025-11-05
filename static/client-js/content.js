@@ -321,8 +321,11 @@ function renderView(view, filter = "") {
         <button class="browser-list-item" data-view="${view}" data-id="${item.uid ?? item.id}" tabindex="0">
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
-        </button>
-      </li>`;
+        </button>`;
+        if (view !== "questions") {
+            html += `<button class="edit-btn" data-id="${item.uid}" title="Edit">✎</button>`;
+        }
+        html += `</li>`;
     });
     html += `</ul>`;
     area.innerHTML = html;

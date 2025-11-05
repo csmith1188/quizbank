@@ -788,3 +788,42 @@
   border-color: var(--browser-accent);
   box-shadow: 0 0 4px rgba(20, 184, 166, 0.3);
 }
+
+.browser-list-item {
+  background: var(--browser-surface);
+  color: var(--browser-text);
+  border: 1px solid var(--browser-border);
+  border-radius: 8px;
+  padding: 0.8em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.browser-list-item:hover,
+.browser-list-item:focus {
+  background: var(--browser-accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn {
+  background: var(--browser-primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  padding: 0.4em 0.6em;
+  cursor: pointer;
+  margin-left: 0.5em;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.edit-btn:hover {
+  background: var(--browser-accent);
+  transform: translateY(-1px);
+}

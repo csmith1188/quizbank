@@ -185,7 +185,7 @@ openTaskModalBtn.addEventListener('click', () => {
 
 cancelTaskBtn.addEventListener('click', () => {
     taskModal.classList.add('hidden');
-}); 
+});
 
 submitTaskBtn.addEventListener('click', async (event) => {
     event.preventDefault();
@@ -233,48 +233,54 @@ submitTaskBtn.addEventListener('click', async (event) => {
 
 // Question upload handlers
 openQuestionModalBtn.addEventListener('click', () => {
-    console.log('Opening question modal');
     questionModal.classList.remove('hidden');
     questionOptionsInput.value = '';
     questionOptionsInput.focus();
 });
 
 cancelQuestionBtn.addEventListener('click', () => {
-    console.log('Closing question modal');
     questionModal.classList.add('hidden');
 });
 
 submitQuestionBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     const questionOptions = questionOptionsInput.value.trim();
-    console.log('Submitting question with options:', questionOptions);
     const path = selectedPath;
-    const unitUid = path.unit.uid;
+    const taskUid = path.task.uid;
 
-    if (!questionOptions) return alert('Please enter question options.');
+    if (!questionOptions) return alert('Please enter question data.');
+
+    const parsedQuestion = parseFormattedQuestion(questionOptions);
 
     try {
         const response = await fetch('/api/question-upload/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ unitUid, questionOptions }),
+            body: JSON.stringify({
+                taskUid,
+                question: parsedQuestion
+            }),
         });
 
         const data = await response.json();
         if (data.success) {
+            questionModal.classList.add('hidden');
 
             if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
                 const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
                 if (course) {
                     const section = course.sections.find(s => s.uid === path.section.uid);
                     if (section) {
-                        const unit = section.units.find(u => u.uid === unitUid);
+                        const unit = section.units.find(u => u.uid === path.unit.uid);
                         if (unit) {
-                            if (!unit.questions) {
-                                unit.questions = [];
+                            const task = unit.tasks.find(t => t.uid === taskUid);
+                            if (task) {
+                                if (!task.questions) {
+                                    task.questions = [];
+                                }
+                                task.questions.push(data.newQuestion);
+                                if (typeof renderView === 'function') renderView('questions');
                             }
-                            unit.questions.push(data.newQuestion);
-                            if (typeof renderView === 'function') renderView('questions');
                         }
                     }
                 }
