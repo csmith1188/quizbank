@@ -57,7 +57,7 @@ controllers.forEach(controllerPath => {
     }
 });
 
-app.use('/api/resource', isAuthenticated, resource);
+app.use('/api/resource', resource);
 app.use(errorHandler);
 
 app.listen(port, () => {

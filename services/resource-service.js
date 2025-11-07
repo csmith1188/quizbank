@@ -10,6 +10,8 @@ const resourceTypeMap = new Map([
     ["question", Question]
 ]);
 
+const resourceTypes = Array.from(resourceTypeMap.keys());
+
 const questionTypeMinAnswerChoices = new Map([
     ["multiple-choice", 2],
     ["multiple-answer", 2],
@@ -212,12 +214,6 @@ module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
 // Parse the resource path into segments and pick amount
 function parseResourcePath(path) {
     const pieces = path.split("/").filter(Boolean);
-    let pickAmount = null;
-
-    if (pieces[pieces.length - 2] === "pick") {
-        pickAmount = parseInt(pieces.pop(), 10);
-        pieces.pop();
-    }
 
     const segments = [];
     for (let i = 0; i < pieces.length; i += 2) {
@@ -226,12 +222,12 @@ function parseResourcePath(path) {
         if (pluralToSingular[type]) type = pluralToSingular[type];
         segments.push({
             type: type,
-            ids: pieces[i + 1] // can either be index or uid
+            ids: pieces[i + 1]
                 ? pieces[i + 1].split("+").map(Number)
                 : []
         });
     }
-    return { segments, pickAmount };
+    return segments;
 }
 
 // Resolve the hierarchy based on segments
@@ -259,40 +255,54 @@ function parseResourcePath(path) {
 //     return data;
 // }
 
-module.exports.getResource = async (path, questionType = null) => {
-    const { segments, pickAmount } = parseResourcePath(path);
+async function resolveResource(type, uid) {
+    const model = resourceTypeMap.get(type);
+    if (!model) {
+        throw new Error(`Invalid resource type: ${type}`);
+    }
+
+    const entity = await model.findOne({
+        where: { uid }
+    });
+
+    if (!entity) {
+        throw new Error(`${type} with id ${uid} not found.`);
+    }
+
+    return entity;
+}
+
+async function entitiesInSameHierarchy(aType, aUid, bType, bUid) {
+    const entityA = await resolveResource(aType, aUid);
+    const entityB = await resolveResource(bType, bUid);
+    const centerType = "unit";
+    // traverse both to center type and check if uids match
+};
+
+module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
+    const segments = parseResourcePath(path);
 
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
 
-    if (resourceTypeMap.get(segments[0].type) !== Course) {
-        throw new Error(`Path must start with a course: found ${segments[0].type}`);
-    }
-
     let resolvedData = [];
 
-    segments.forEach(async ({type, ids}) => {
-        const model = resourceTypeMap.get(type);
+    for (const segmentIndex in segments) {
+
+        const { type, ids } = segments[segmentIndex];
+        const isLast = segmentIndex === segments.length - 1;
         const entities = [];
 
-        for (uid of ids) {
+        for (const uid of ids) {
 
-            let entity = await model.findOne({
-                where: {
-                    uid
-                }
-            });
-
-            if(!entity){
-                throw new Error(`${type} with id ${uid} not found.`);
-            }
-
-            resolvedData.push(entity);
-
+            let entity = await resolveResource(type, uid);
+            let jsonEntity = entity.dataValues;
+            entities.push(jsonEntity);
         }
 
-    });
+        resolvedData = entities;
+    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -306,6 +316,7 @@ module.exports.getResource = async (path, questionType = null) => {
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
 
         resolvedData = { questions: [] };
+        // keep repeating questions until we reach the pick amount
         while (resolvedData.questions.length < pickAmount) {
             const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.questions.length);
             resolvedData.questions.push(...pickedQuestions);
@@ -420,10 +431,3 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
     });
 }
-
-async function testing(){
-    let test = await module.exports.getResource('course/1/');
-    console.log(test);
-}
-
-testing();
