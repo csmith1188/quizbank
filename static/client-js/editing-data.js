@@ -1,0 +1,121 @@
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.addEventListener('click', async (e) => {
+    if (!e.target.classList.contains('edit-btn')) return;
+
+    const id = e.target.getAttribute('data-id');
+    const view = document.querySelector('.browser-tab.active')?.getAttribute('data-view') || 'courses';
+
+    const items = window.getScoped(view);
+    const item = items.find(i => String(i.uid ?? i.id) === String(id));
+    if (!item) return alert('Item not found.');
+
+    // Create a custom popup for editing
+    const popup = document.createElement('div');
+    popup.classList.add('custom-popup');
+    popup.innerHTML = `
+      <div class="popup-content">
+        <h2>Edit ${view.slice(0, -1)}</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" value="${item.name || ''}" />
+        <label for="index">Index:</label>
+        <input type="number" id="index" value="${item.index || ''}" />
+        <label for="description">Description:</label>
+        <textarea id="description">${item.description || ''}</textarea>
+        ${item.genprompt !== undefined ? `
+        <label for="genprompt">Generation Prompt:</label>
+        <input type="text" id="genprompt" value="${item.genprompt || ''}" />
+        ` : ''}
+        <button id="save-btn">Save</button>
+        <button id="cancel-btn">Cancel</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+
+    // Handle save button click
+    document.getElementById('save-btn').addEventListener('click', async () => {
+      const newName = document.getElementById('name').value.trim();
+      const newIndex = document.getElementById('index').value.trim();
+      const newDescription = document.getElementById('description').value.trim();
+      const newGenPrompt = item.genprompt !== undefined ? document.getElementById('genprompt').value.trim() : undefined;
+
+      try {
+        const response = await fetch('/api/edit/edit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: view.slice(0, -1),
+            uid: item.uid ?? item.id,
+            name: newName,
+            index: newIndex,
+            description: newDescription,
+            genprompt: newGenPrompt
+          })
+        });
+
+        if (!response.ok) throw new Error('Failed to update');
+        const updated = await response.json();
+
+        if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+          const courses = window.ALL_COURSE_DATA.courses;
+          updateInMemoryData(courses, view, id, updated);
+        }
+        
+        renderView(view, document.getElementById('searchInput').value);
+      } catch (err) {
+        console.error(err);
+        alert('Edit failed: ' + err.message);
+      } finally {
+        document.body.removeChild(popup);
+      }
+    });
+
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+      document.body.removeChild(popup);
+    });
+  });
+});
+
+function updateInMemoryData(courses, view, id, updated) {
+  for (const course of courses) {
+    if (view === 'courses' && String(course.uid) === String(id)) {
+      Object.assign(course, updated);
+      return;
+    }
+
+    if (course.sections) {
+      for (const section of course.sections) {
+        if (view === 'sections' && String(section.uid) === String(id)) {
+          Object.assign(section, updated);
+          return;
+        }
+
+        if (section.units) {
+          for (const unit of section.units) {
+            if (view === 'units' && String(unit.uid) === String(id)) {
+              Object.assign(unit, updated);
+              return;
+            }
+
+            if (unit.tasks) {
+              for (const task of unit.tasks) {
+                if (view === 'tasks' && String(task.uid) === String(id)) {
+                  Object.assign(task, updated);
+                  return;
+                }
+
+                if (task.questions) {
+                  for (const question of task.questions) {
+                    if (view === 'questions' && String(question.uid) === String(id)) {
+                      Object.assign(question, updated);
+                      return;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+<!-- Bulk Upload -->
+<div class="upload-section">
+    <h3>Bulk Upload</h3>
+    <form id="bulk-upload-form" action="/api/bulk-upload/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="sheet" accept=".xlsx,.xls" required>
+        <input type="hidden" name="sectionUid" placeholder="Section UID" required>
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
+<!-- Course upload forms -->
+<form id="course-upload-form" action="/api/course-upload/upload" method="POST">
+    <button type="button" id="openCourseModalBtn">Create Course</button>
+</form>
+
+<div id="courseModal" class="course-modal hidden">
+    <div class="course-modal-content glass-card">
+        <h3>Create New Course</h3>
+        <input type="text" id="courseNameInput" placeholder="Enter course name..." />
+        <input type="text" id="courseDescriptionInput" placeholder="Enter course description..." />
+        <div class="course-modal-buttons">
+            <button id="submitCourseBtn" class="modal-btn">Create</button>
+            <button id="cancelCourseBtn" class="modal-btn cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Section upload forms -->
+<form id="section-upload-form" action="/api/section-upload/upload" method="POST">
+    <button type="button" id="openSectionModalBtn">Create Section</button>
+</form>
+
+<div id="newSectionModal" class="course-modal hidden">
+    <div class="course-modal-content glass-card">
+        <h3>Create Section</h3>
+        <input type="text" id="moduleNameInput" placeholder="Enter section name..." />
+        <input type="text" id="moduleDescriptionInput" placeholder="Enter description...">
+        <div class="course-modal-buttons">
+            <button id="submitModuleBtn" class="modal-btn">Create</button>
+            <button id="cancelModuleBtn" class="modal-btn cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Unit upload forms -->
+<form id="newUnitModal" action="/api/unit-upload/upload">
+    <button type="button" id="openUnitBtn">Create Unit</button>
+</form>
+
+<div id="unitModal" class="course-modal hidden">
+    <div class="course-modal-content glass-card">
+        <h3>Create Unit</h3>
+        <input type="text" id="unitNameInput" placeholder="Enter unit name..." />
+        <input type="text" id="unitDescriptionInput" placeholder="Enter description...">
+        <div class="course-modal-buttons">
+            <button id="submitUnitBtn" class="modal-btn">Create</button>
+            <button id="cancelUnitBtn" class="modal-btn cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Task upload forms -->
+
+<form id="newTaskModal" action="/api/task-upload/upload">
+    <button type="button" id="openTaskBtn">Create Task</button>
+</form>
+
+<div id="taskModal" class="course-modal hidden">
+    <div class="course-modal-content glass-card">
+        <h3>Create Task</h3>
+        <input type="text" id="taskNameInput" placeholder="Enter task name..." />
+        <input type="text" id="taskDescriptionInput" placeholder="Enter description...">
+        <input type="text" id="taskGenPrompt" placeholder="Enter the generation prompt...">
+        <div class="course-modal-buttons">
+            <button id="submitTaskBtn" class="modal-btn">Create</button>
+            <button id="cancelTaskBtn" class="modal-btn cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Question upload forms -->
+<form id="newQuestionModalForm" action="/api/question-upload/upload">
+    <button type="button" id="openQuestionBtn">Create Question</button>
+</form>
+
+<div id="question-creation" class="course-modal hidden">
+    <h3>Create New Question</h3>
+    <textarea id="questionOptionsInput" rows="4" placeholder="Enter question, ex. 
+    1. Example question,
+    a) Option A,
+    *b) Option B,
+    c) Option C" required></textarea>
+    <div class="question-creation-buttons">
+        <button id="submitQuestionBtn" class="modal-btn">Create Question</button>
+        <button id="cancelQuestionBtn" class="modal-btn cancel">Cancel</button>
+    </div>
+</div>

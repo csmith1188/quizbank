@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest identifier="man00001">
-  <organization default="toc00001">
-    <tableofcontents identifier="toc00001"/>
-  </organization>
-  <resources>
-    <resource baseurl="res00001" file="blackboard_quiz.dat" identifier="res00001" type="assessment/x-bb-pool"/>
-  </resources>
-</manifest>

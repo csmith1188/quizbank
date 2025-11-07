@@ -1,4 +1,11 @@
 const allCourseDataText = document.getElementById('all-course-data').textContent;
+const uploadSection = document.getElementsByClassName('upload-section')[0];
+const uploadForm = document.getElementById('bulk-upload-form');
+const openEditFormBtn = document.getElementById('openCourseModalBtn');
+const sectionUploadForm = document.getElementById('section-upload-form');
+const unitUploadForm = document.getElementById('newUnitModal');
+const taskUploadForm = document.getElementById('newTaskModal');
+const questionModalForm = document.getElementById('newQuestionModalForm');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -204,54 +211,100 @@ function updateSelectedPathDisplay() {
     pathEl.innerHTML = arr.length ? arr.join(' &rsaquo; ') : "<span>No selection</span>";
 }
 
+function addBrowserTabIfMissing(view, label) {
+    const tabsContainer = document.querySelector('.browser-tabs');
+    if (!tabsContainer) return;
+    if (tabsContainer.querySelector(`[data-view="${view}"]`)) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'browser-tab';
+    btn.setAttribute('data-view', view);
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = `<span>${label}</span> <button class="unselect-btn" data-unselect="${view}" title="Close">×</button>`;
+
+    // main click: switch to view
+    btn.addEventListener('click', function (e) {
+        if (e.target && e.target.classList && e.target.classList.contains('unselect-btn')) return;
+        currentView = view;
+        renderView(currentView, document.getElementById('searchInput')?.value || "");
+    });
+
+    tabsContainer.appendChild(btn);
+    attachUnselectListeners();
+}
+
 function renderView(view, filter = "") {
     if (view === "questionDetail" && questionDetail) {
         renderQuestionDetail(questionDetail);
         return;
     }
+
+    if (view === "courses") {
+        openEditFormBtn.style.display = 'inline-block';
+    } else {
+        openEditFormBtn.style.display = 'none';
+    }
+
+    if (view === "sections" && selectedPath.course) {
+        sectionUploadForm.style.display = 'inline-block';
+    } else {
+        sectionUploadForm.style.display = 'none';
+    }
+
+    if (view === 'units' && selectedPath.section) {
+        unitUploadForm.style.display = 'inline-block';
+        uploadSection.style.display = 'block';
+    } else {
+        unitUploadForm.style.display = 'none';
+        uploadSection.style.display = 'none';
+    }
+
+    if (view === 'tasks' && selectedPath.unit) {
+        taskUploadForm.style.display = 'inline-block';
+    } else {
+        taskUploadForm.style.display = 'none';
+    }
+
+    if (view === 'questions' && selectedPath.task) {
+        questionModalForm.style.display = 'inline-block';
+    } else {
+        questionModalForm.style.display = 'none';
+    }
+
+    if (view === "questionEdit") {
+        if (!questionDetail) {
+            currentView = "questions";
+            view = currentView;
+        } else {
+            if (typeof renderQuestionEdit === "function") {
+                renderQuestionEdit(questionDetail);
+                return;
+            } else {
+                // fallback message until edit-question.js loads
+                const area = document.getElementById('browserListArea');
+                area.innerHTML = `<div class="browser-no-results">Edit UI not yet available.</div>`;
+                return;
+            }
+        }
+    }
+
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
-        let v = btn.getAttribute('data-view');
-        switch (v) {
-            case "courses":
-                if (selectedPath.course) {
-                    btn.innerHTML = `<span>${selectedPath.course.name}</span> <button class="unselect-btn" data-unselect="course" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "sections":
-                if (selectedPath.section) {
-                    btn.innerHTML = `<span>${selectedPath.section.name}</span> <button class="unselect-btn" data-unselect="section" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "units":
-                if (selectedPath.unit) {
-                    btn.innerHTML = `<span>${selectedPath.unit.name}</span> <button class="unselect-btn" data-unselect="unit" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            case "tasks":
-                if (selectedPath.task) {
-                    btn.innerHTML = `<span>${selectedPath.task.name}</span> <button class="unselect-btn" data-unselect="task" title="Unselect">×</button>`;
-                } else {
-                    btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                }
-                break;
-            default:
-                btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1)}</span>`;
-                break;
+        let v = btn.getAttribute('data-view').slice(0, -1);
+        let currentPath = selectedPath[v];
+        if (currentPath) {
+            btn.innerHTML = `<span>${currentPath.name}</span> <button class="unselect-btn" data-unselect="${v}" title="Unselect">×</button>`;
+        } else {
+            btn.innerHTML = `<span>${v.charAt(0).toUpperCase() + v.slice(1) + 's'}</span>`;
         }
     });
     attachUnselectListeners();
     updateSelectedPathDisplay();
+
     const area = document.getElementById('browserListArea');
     area.innerHTML = `<div class="browser-no-results">Loading...</div>`;
     let items = getScoped(view);
-    if (filter) {
+    if (filter && typeof filter === "string") {
         items = items.filter(item => {
             const field = (item.name || item.prompt || item.text || "");
             return field.toLowerCase().includes(filter.toLowerCase());
@@ -268,8 +321,9 @@ function renderView(view, filter = "") {
         <button class="browser-list-item" data-view="${view}" data-id="${item.uid ?? item.id}" tabindex="0">
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
-        </button>
-      </li>`;
+        </button>`;
+        html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
+        html += `</li>`;
     });
     html += `</ul>`;
     area.innerHTML = html;
@@ -278,6 +332,8 @@ function renderView(view, filter = "") {
 
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
+    area.classList.add('question-detail-mode');
+
     let answers = [];
     try {
         answers = typeof question.answers === "string" ? JSON.parse(question.answers) : question.answers;
@@ -286,30 +342,46 @@ function renderQuestionDetail(question) {
     }
     let correctIdx = (typeof question.correct_index !== "undefined" ? question.correct_index : question.correctIndex);
     let correctAns = question.correctAnswer || question.correct_answer;
+
+    let hasMultipleAnswers = typeof question.correct_index === "string" && question.correct_index.startsWith("[");
+
     let html = `
     <div class="question-detail">
       <h3>Question Detail</h3>
-      <div class="question-prompt">${question.prompt || question.text}</div>
+      <div class="question-prompt">${question.prompt || question.text || ""}</div>
       <div class="question-meta">
-        <strong>AI Generated:</strong> ${question.ai ? "Yes" : "No"}
+        ${question.ai ? "<strong>AI Generated</strong>" : ""}
       </div>
       <div class="answer-list">
-        <strong>Choices:</strong>
+        <strong>${question.type === 'open-ended' ? 'Open Ended' : 'Choices:'}</strong>
         <ul>
         ${answers.map((ans, idx) =>
-        `<li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
-                ${ans}${(correctIdx === idx || ans === correctAns) ? " <b>(Correct)</b>" : ""}
+        `<li style="${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? 'font-weight:bold; color:green;' : ''}">
+                ${ans}${(correctIdx === idx || hasMultipleAnswers && JSON.parse(question.correct_index).includes(idx)) ? " <b>(Correct)</b>" : ""}
             </li>`
     ).join("")}
         </ul>
       </div>
-      <button id="questionDetailBackBtn">Back</button>
+      <div class="question-detail-actions">
+        <button id="questionDetailEditBtn" class="edit-btn">✎ Edit</button>
+        <button id="questionDetailBackBtn" class="back-btn">Back</button>
+      </div>
     </div>
     `;
     area.innerHTML = html;
+
     document.getElementById('questionDetailBackBtn').onclick = () => {
         questionDetail = null;
         currentView = "questions";
+        renderView(currentView);
+    };
+
+    document.getElementById('questionDetailEditBtn').onclick = () => {
+        questionDetail = question;
+
+        addBrowserTabIfMissing('questionEdit', 'Question Edit');
+
+        currentView = 'questionEdit';
         renderView(currentView);
     };
 }
@@ -335,8 +407,14 @@ function attachDropDownListeners(view, items) {
         });
     });
 }
+
 function attachUnselectListeners() {
+    // attach close/unselect handlers for any unselect buttons
     document.querySelectorAll('.unselect-btn').forEach(btn => {
+        // avoid attaching duplicate listeners by checking a marker
+        if (btn._hasUnselectListener) return;
+        btn._hasUnselectListener = true;
+
         btn.addEventListener('click', function (e) {
             e.stopPropagation();
             let which = btn.getAttribute('data-unselect');
@@ -357,11 +435,120 @@ function attachUnselectListeners() {
                     selectedPath.task = null;
                     currentView = "tasks";
                     break;
+                case "questionEdit":
+                    const tabEl = document.querySelector(`.browser-tab[data-view="questionEdit"]`);
+                    if (tabEl) tabEl.remove();
+                    currentView = questionDetail ? "questionDetail" : "questions";
+                    break;
+                default:
+                    break;
             }
             renderView(currentView, document.getElementById('searchInput').value);
         });
     });
 }
+
+function pickQuestions() {
+    const numberToPick = parseInt(prompt("How many questions would you like to pick?", "1"), 10) || 1;
+    const path = selectedPath;
+    let questions = [];
+
+    const collectQuestions = (items) => {
+        items.forEach(item => {
+            if (item.questions) {
+                questions = questions.concat(item.questions);
+            }
+        });
+    };
+
+    if (path.task) {
+        collectQuestions([path.task]);
+    } else if (path.unit) {
+        collectQuestions(path.unit.tasks || []);
+    } else if (path.section) {
+        path.section.units.forEach(unit => {
+            collectQuestions(unit.tasks || []);
+        });
+    } else if (path.course) {
+        path.course.sections.forEach(section => {
+            section.units.forEach(unit => {
+                collectQuestions(unit.tasks || []);
+            });
+        });
+    } else {
+        questions = getAllQuestions();
+    }
+
+    // Remove duplicates
+    questions = Array.from(new Set(questions.map(q => JSON.stringify(q)))).map(q => JSON.parse(q));
+
+    questions = questions.sort(() => Math.random() - 0.5);
+    const pickedQuestions = questions.slice(0, Math.max(numberToPick, 0));
+
+    // Create a pop-up
+    let popUpContent = "<h3>Picked Questions</h3>";
+
+    pickedQuestions.forEach(q => {
+        let answers = [];
+        try {
+            answers = typeof q.answers === "string" ? JSON.parse(q.answers) : q.answers;
+        } catch {
+            answers = q.answers || [];
+        }
+        let correctIdx = (typeof q.correct_index !== "undefined" ? q.correct_index : q.correctIndex);
+        let correctAns = q.correctAnswer || q.correct_answer;
+
+        // Construct the path for the question
+        const paths = [
+            q.parentCourse ? q.parentCourse.name : null,
+            q.parentSection ? q.parentSection.name : null,
+            q.parentUnit ? q.parentUnit.name : null,
+            q.parentTask ? q.parentTask.name : null
+        ].filter(Boolean).join(' > ');
+
+        popUpContent += `<div style="margin-bottom: 20px;">
+            <strong>Question:</strong> ${q.prompt || q.text}<br>
+            ${paths ? `<div style="font-size: 0.9em; color: #ccc; margin-bottom: 5px;">${paths}</div>` : ''}
+            <strong>Answers:</strong>
+            <ul style="list-style-type: none; padding-left: 0;">
+            ${answers.map((ans, idx) => `
+            <li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
+             ${correctIdx === idx || ans === correctAns ? '*' : ''} ${ans}${(correctIdx === idx || ans === correctAns)}
+            </li>`).join('')}
+            </ul>
+        </div>`;
+    });
+
+    if (pickedQuestions.length === 0) {
+        popUpContent += "<p>No questions available in the current selection.</p>";
+    }
+
+    // Display the pop-up
+    const popUp = document.createElement('div');
+    popUp.style.position = 'fixed';
+    popUp.style.top = '50%';
+    popUp.style.left = '50%';
+    popUp.style.transform = 'translate(-50%, -50%)';
+    popUp.style.backgroundColor = 'black';
+    popUp.style.border = '2px solid #333';
+    popUp.style.borderRadius = '8px';
+    popUp.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    popUp.style.padding = '20px';
+    popUp.style.zIndex = '1000';
+    popUp.style.maxWidth = '90%';
+    popUp.style.maxHeight = '80%';
+    popUp.style.overflowY = 'auto';
+    popUp.innerHTML = popUpContent + '<button id="closePopUp" style="margin-top: 10px;">Close</button>';
+    document.body.appendChild(popUp);
+
+    const closeButton = document.getElementById('closePopUp');
+    closeButton.onclick = () => {
+        document.body.removeChild(popUp);
+    };
+
+    return pickedQuestions;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.browser-tab').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -383,5 +570,40 @@ window.addEventListener("DOMContentLoaded", () => {
             renderView(currentView, "");
         }
     });
+
+    uploadForm.onsubmit = function (e) {
+        e.preventDefault();
+
+        if (!selectedPath.section) {
+            alert("Please select a section to upload to.");
+            return;
+        }
+
+        if (!uploadForm.sheet.files || uploadForm.sheet.files.length === 0) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        const formData = new FormData(uploadForm);
+        formData.set('sectionUid', selectedPath.section ? selectedPath.section.uid : "");
+        fetch('/api/bulk-upload/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                const updatedSection = JSON.parse(data);
+                const course = ALL_COURSE_DATA.courses.find(c => c.uid === updatedSection.courseUid);
+                course.sections[updatedSection.index - 1] = updatedSection;
+                selectedPath.section = updatedSection;
+                renderView('units');
+                uploadForm.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Upload failed: ' + error.message);
+            });
+    };
+
     renderView(currentView);
 });
