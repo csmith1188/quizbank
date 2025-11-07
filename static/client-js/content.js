@@ -5,6 +5,7 @@ const openEditFormBtn = document.getElementById('openCourseModalBtn');
 const sectionUploadForm = document.getElementById('section-upload-form');
 const unitUploadForm = document.getElementById('newUnitModal');
 const taskUploadForm = document.getElementById('newTaskModal');
+const questionModalForm = document.getElementById('newQuestionModalForm');
 window.ALL_COURSE_DATA = JSON.parse(allCourseDataText);
 
 let currentView = "courses";
@@ -264,6 +265,12 @@ function renderView(view, filter = "") {
         taskUploadForm.style.display = 'none';
     }
 
+    if (view === 'questions' && selectedPath.task) {
+        questionModalForm.style.display = 'inline-block';
+    } else {
+        questionModalForm.style.display = 'none';
+    }
+
     if (view === "questionEdit") {
         if (!questionDetail) {
             currentView = "questions";
@@ -314,8 +321,9 @@ function renderView(view, filter = "") {
         <button class="browser-list-item" data-view="${view}" data-id="${item.uid ?? item.id}" tabindex="0">
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
-        </button>
-      </li>`;
+        </button>`;
+        html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
+        html += `</li>`;
     });
     html += `</ul>`;
     area.innerHTML = html;

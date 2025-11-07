@@ -185,10 +185,16 @@ function renderQuestionEdit(question) {
 }
 
 function parseFormattedQuestion(text) {
-    const lines = text.trim().split("\n").map(line => line.trim()).filter(Boolean);
+    const lines = text
+        .trim()
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+
+    const questionLine = lines[0].replace(/^Q\.?\s*|^\d+\.\s*|^Question:\s*/i, "").trim();
 
     const questionData = {
-        prompt: lines[0].replace(/^1\.\s*/, ""),
+        prompt: questionLine,
         answers: [],
         correct_indices: []
     };
@@ -196,24 +202,33 @@ function parseFormattedQuestion(text) {
     for (let i = 1; i < lines.length; i++) {
         let line = lines[i];
         const isCorrect = line.startsWith("*");
+
         if (isCorrect) line = line.slice(1);
-        line = line.replace(/^[a-d]\)\s*/i, "");
+
+        line = line.replace(/^[a-z0-9]\)\s*/i, "").trim();
+
         questionData.answers.push(line);
         if (isCorrect) questionData.correct_indices.push(i - 1);
     }
 
+    questionData.type = determineQuestionType(questionData);
     return questionData;
 }
 
 function isTrueFalse(questionData) {
-    return questionData.answers.length === 2 &&
-        ((questionData.answers[0].toLowerCase() === "true" && questionData.answers[1].toLowerCase() === "false") ||
-         (questionData.answers[0].toLowerCase() === "false" && questionData.answers[1].toLowerCase() === "true"));
+    const answers = questionData.answers.map(a => a.toLowerCase());
+    return (
+        answers.length === 2 &&
+        (
+            (answers.includes("true") && answers.includes("false")) ||
+            (answers.includes("yes") && answers.includes("no"))
+        )
+    );
 }
 
 function determineQuestionType(questionData) {
-    if (questionData.correct_indices.length === 1) {
-        return "multiple-choice";
+    if (questionData.correct_indices.length > 2) {
+        return "multiple-answer";
     } else if (isTrueFalse(questionData)) {
         return "true-false";
     } else if (questionData.correct_indices.length >= 2) {
@@ -221,6 +236,4 @@ function determineQuestionType(questionData) {
     } else {
         return "open-ended";
     }
-
-
 }

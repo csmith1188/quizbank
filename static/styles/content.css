@@ -719,3 +719,192 @@
   border-color: var(--browser-accent);
   box-shadow: 0 0 4px rgba(20, 184, 166, 0.3);
 }
+
+#question-creation {
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  flex-direction: column;
+  gap: 1rem;
+  width: 90%;
+}
+
+#question-creation h3 {
+  color: var(--browser-primary);
+  margin: 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.question-creation-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.question-creation-buttons .modal-btn {
+  flex: 1;
+  margin: 0 0.2rem;
+}
+
+.course-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.course-modal-content {
+  background: var(--browser-surface);
+  border-radius: var(--browser-radius);
+  padding: 1rem 1.2rem;
+  width: 90%;
+  max-width: 500px;
+  max-height: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+#questionOptionsInput {
+  padding: 0.5em;
+  font-size: 1rem;
+  border: 1.2px solid var(--browser-border);
+  border-radius: var(--browser-radius);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  resize: none;
+  width: 20%;
+  height: 20%;
+}
+
+#questionOptionsInput:focus {
+  border-color: var(--browser-accent);
+  box-shadow: 0 0 4px rgba(20, 184, 166, 0.3);
+}
+
+.browser-list-item {
+  background: var(--browser-surface);
+  color: var(--browser-text);
+  border: 1px solid var(--browser-border);
+  border-radius: 8px;
+  padding: 0.8em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.browser-list-item:hover,
+.browser-list-item:focus {
+  background: var(--browser-accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn {
+  background: var(--browser-primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  padding: 0.4em 0.6em;
+  cursor: pointer;
+  margin-left: 0.5em;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.edit-btn:hover {
+  background: var(--browser-accent);
+  transform: translateY(-1px);
+}
+.custom-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--browser-surface, white);
+  border: 1px solid var(--browser-border, #ccc);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 400px;
+  padding: 20px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-content h2 {
+  margin-bottom: 15px;
+  color: var(--browser-primary, black);
+}
+
+.popup-content label {
+  margin-top: 10px;
+  color: var(--browser-text, black);
+}
+
+.popup-content input,
+.popup-content textarea {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid var(--browser-border, #ccc);
+  border-radius: 4px;
+  background-color: var(--browser-bg, white);
+  color: var(--browser-text, black);
+}
+
+.popup-content button {
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-content #save-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.popup-content #cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+[data-theme='dark'] .custom-popup {
+  background-color: var(--browser-surface);
+  border: 1px solid var(--browser-border);
+}
+
+[data-theme='dark'] .popup-content h2,
+[data-theme='dark'] .popup-content label {
+  color: var(--browser-text);
+}
+
+[data-theme='dark'] .popup-content input,
+[data-theme='dark'] .popup-content textarea {
+  background-color: var(--browser-bg);
+  color: var(--browser-text);
+  border: 1px solid var(--browser-border);
+}
+
+[data-theme='dark'] .popup-content #save-btn {
+  background-color: #4CAF50;
+}
+
+[data-theme='dark'] .popup-content #cancel-btn {
+  background-color: #f44336;
+}
