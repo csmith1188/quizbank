@@ -2,7 +2,7 @@ const { sequelize, User, Course, Section, Unit, Task, Question } = require("../d
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
-const resourceTypeMap = new Map([
+const resourceTypeModelMap = new Map([
     ["course", Course],
     ["section", Section],
     ["unit", Unit],
@@ -10,7 +10,12 @@ const resourceTypeMap = new Map([
     ["question", Question]
 ]);
 
-const resourceTypes = Array.from(resourceTypeMap.keys());
+const resourceTypeIndexMap = new Map();
+resourceTypes.forEach((type, index) => {
+    resourceTypeIndexMap.set(type, index);
+});
+
+const resourceTypes = Array.from(resourceTypeModelMap.keys());
 
 const questionTypeMinAnswerChoices = new Map([
     ["multiple-choice", 2],
@@ -256,7 +261,7 @@ function parseResourcePath(path) {
 // }
 
 async function resolveResource(type, uid) {
-    const model = resourceTypeMap.get(type);
+    const model = resourceTypeModelMap.get(type);
     if (!model) {
         throw new Error(`Invalid resource type: ${type}`);
     }
@@ -273,10 +278,42 @@ async function resolveResource(type, uid) {
 }
 
 async function entitiesInSameHierarchy(aType, aUid, bType, bUid) {
+
     const entityA = await resolveResource(aType, aUid);
     const entityB = await resolveResource(bType, bUid);
-    const centerType = "unit";
+    if (entityA.uid === entityB.uid) return true;
+
+    const aTypeIndex = resourceTypeIndexMap.get(aType);
+    const bTypeIndex = resourceTypeIndexMap.get(bType);
+
+    const centerIndex = Math.floor(resourceTypes.length / 2);
+    const centerType = resourceTypes[centerIndex];
+
     // traverse both to center type and check if uids match
+
+    const aTraversalDistance = Math.abs(centerIndex - aType);
+    const aTraversalDirection = Math.sign(centerIndex - aType);
+
+    let currentA = entityA;
+
+    for (let i = 0; i < aTraversalDistance; i++) {
+
+        const nextIndex = aTypeIndex + (aTraversalDirection * i);
+        const nextType = resourceTypes[nextIndex];
+        const nextModel = resourceTypeModelMap.get(nextType);
+        
+        // if moving down, search for entity with foreign key of last entity
+        // if moving up, use foreign key
+        
+        if (aTraversalDirection === 1) {
+            
+        } else if (aTraversalDirection === -1){
+
+        }
+
+    }
+
+
 };
 
 module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
