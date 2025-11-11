@@ -10,12 +10,12 @@ const resourceTypeModelMap = new Map([
     ["question", Question]
 ]);
 
+const resourceTypes = Array.from(resourceTypeModelMap.keys());
+
 const resourceTypeIndexMap = new Map();
 resourceTypes.forEach((type, index) => {
     resourceTypeIndexMap.set(type, index);
 });
-
-const resourceTypes = Array.from(resourceTypeModelMap.keys());
 
 const questionTypeMinAnswerChoices = new Map([
     ["multiple-choice", 2],
@@ -50,9 +50,9 @@ const collectQuestions = (data, questionType = null) => {
 };
 
 // Fetch the full course hierarchy for a user
-module.exports.getFullCourseHierarchy = async (userUid) => {
+module.exports.getFullCourseHierarchy = async (courseUid) => {
     const courses = await Course.findAll({
-        where: { userUid: userUid }, // Filter by userUid
+        where: { uid: courseUid }, // Filter by courseUid
         include: [{
             model: Section,
             as: "sections",
@@ -235,30 +235,32 @@ function parseResourcePath(path) {
     return segments;
 }
 
-// Resolve the hierarchy based on segments
-// function resolveHierarchy(root, segments) {
-//     let data = root;
+// gets the full hierarchy underneath an entity
+async function getEntityHierarchy(entityType, entityUid) {
+    const model = resourceTypeModelMap.get(entityType);
+    const typeIndex = resourceTypeIndexMap.get(entityType);
+    const include = {};
 
-//     segments.forEach(({ type, indexes }) => {
-//         const collection = data[type + "s"];
-//         if (!collection) throw new Error(`Invalid resource type: ${type}`);
+    let tempInclude = include;
 
-//         if (!indexes.length) { 
-//             data = collection; 
-//             return; 
-//         }
+    for (let i = typeIndex + 1; i < resourceTypes.length; i++){
+        const type = resourceTypes[i];
+        const isLast = (i === resourceTypes.length - 1);
+        tempInclude.model = resourceTypeModelMap.get(type);
+        tempInclude.as = type + 's';
+        if (!isLast) {
+            tempInclude.include = [{}];
+            tempInclude = tempInclude.include[0];
+        }
+    }
 
-//         const matched = collection.filter(e => indexes.includes(e.index));
-//         if (!matched.length) throw new Error(`Resource not found: ${type} ${indexes}`);
+    const scope = await model.findOne({
+        where: { uid: entityUid },
+        include: [include]
+    });
 
-//         data = matched.length === 1 ? matched[0] : {
-//             name: `Combined ${type}s`,
-//             [type + "s"]: matched
-//         };
-//     });
-
-//     return data;
-// }
+    return scope;
+}
 
 async function resolveResource(type, uid) {
     const model = resourceTypeModelMap.get(type);
@@ -274,71 +276,126 @@ async function resolveResource(type, uid) {
         throw new Error(`${type} with id ${uid} not found.`);
     }
 
-    return entity;
+    return entity.dataValues;
 }
 
-async function entitiesInSameHierarchy(aType, aUid, bType, bUid) {
-
-    const entityA = await resolveResource(aType, aUid);
-    const entityB = await resolveResource(bType, bUid);
-    if (entityA.uid === entityB.uid) return true;
-
-    const aTypeIndex = resourceTypeIndexMap.get(aType);
-    const bTypeIndex = resourceTypeIndexMap.get(bType);
+async function entitiesInSameHierarchy(entities) {
 
     const centerIndex = Math.floor(resourceTypes.length / 2);
     const centerType = resourceTypes[centerIndex];
 
-    // traverse both to center type and check if uids match
+    const uids = [];
 
-    const aTraversalDistance = Math.abs(centerIndex - aType);
-    const aTraversalDirection = Math.sign(centerIndex - aType);
+    // traverse entities to center type and check if uids match
 
-    let currentA = entityA;
+    for (e of entities) {
+        const typeIndex = resourceTypeIndexMap.get(e.constructor.name.toLowerCase());
+        const traversalDistance = Math.abs(centerIndex - typeIndex);
+        const traversalDirection = Math.sign(centerIndex - typeIndex);
 
-    for (let i = 0; i < aTraversalDistance; i++) {
+        let currentEntity = e;
 
-        const nextIndex = aTypeIndex + (aTraversalDirection * i);
-        const nextType = resourceTypes[nextIndex];
-        const nextModel = resourceTypeModelMap.get(nextType);
-        
-        // if moving down, search for entity with foreign key of last entity
-        // if moving up, use foreign key
-        
-        if (aTraversalDirection === 1) {
-            
-        } else if (aTraversalDirection === -1){
+        for (let i = 0; i < traversalDistance; i++) {
+
+            // where we will be after step
+            const nextIndex = typeIndex + (traversalDirection * (i + 1));
+            const nextType = resourceTypes[nextIndex];
+            const nextModel = resourceTypeModelMap.get(nextType);
+
+            // if moving forward, search for entity with foreign key of last entity
+            // if moving backward, use foreign key
+
+            if (traversalDirection === 1) {
+
+                // where we are before step
+                const currentIndex = nextIndex - traversalDirection;
+                const currentType = resourceTypes[currentIndex];
+                const currentModel = resourceTypeModelMap.get(currentType);
+
+                const where = {};
+                where[currentType + 'Uid'] = currentEntity.uid;
+
+                currentEntity = await nextModel.findOne({
+                    where
+                });
+
+
+            } else if (traversalDirection === -1) {
+
+                const nextUid = currentEntity[nextType + 'Uid'];
+
+                currentEntity = await nextModel.findOne({
+                    where: {
+                        uid: nextUid
+                    }
+                })
+
+            }
 
         }
 
+        // when the loop is over, currentEntity should theoretically be of the centerType
+        // add currentEntity uid to uid array
+        uids.push(currentEntity.uid);
+
     }
 
+    // check that all uids match
+
+    const firstUid = uids[0];
+
+    for (uid of uids) {
+        if (uid !== firstUid) return false;
+    }
+
+    return true;
 
 };
 
-module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
-    const segments = parseResourcePath(path);
+// Resolve the hierarchy based on segments
+function resolveHierarchy(root, segments) {
+    let data = root;
+
+    segments.forEach(({ type, ids }) => {
+        const collection = data[type + "s"];
+        if (!collection) throw new Error(`Invalid resource type: ${type}`);
+
+        if (!ids.length) { 
+            data = collection; 
+            return; 
+        }
+
+        const matched = collection.filter(e => ids.includes(e.uid));
+        if (!matched.length) throw new Error(`Resource not found: ${type} ${ids}`);
+
+        data = matched.length === 1 ? matched[0] : {
+            name: `Combined ${type}s`,
+            [type + "s"]: matched
+        };
+    });
+
+    return data;
+}
+
+module.exports.getResource = async (path, questionType = null) => {
+    const { segments, pickAmount } = parseResourcePath(path);
+
+    console.log(path);
+    console.log(parseResourcePath(path));
 
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
 
-    let resolvedData = [];
+    let data = await getEntityHierarchy(segments[0].type, segments[0].ids[0]); // add combining the top layer later
+    let resolvedData = resolveHierarchy(data, segments);
 
-    for (const segmentIndex in segments) {
-
-        const { type, ids } = segments[segmentIndex];
-        const isLast = segmentIndex === segments.length - 1;
-        const entities = [];
-
-        for (const uid of ids) {
-
-            let entity = await resolveResource(type, uid);
-            let jsonEntity = entity.dataValues;
-            entities.push(jsonEntity);
-        }
-
-        resolvedData = entities;
+    if (
+        segments.length === 1 &&
+        segments[0].type === "course" &&
+        Array.isArray(resolvedData)
+    ) {
+        resolvedData = { courses: resolvedData };
     }
 
     // if pick amount is not null, pick questions under the resolved data
@@ -353,7 +410,6 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
 
         resolvedData = { questions: [] };
-        // keep repeating questions until we reach the pick amount
         while (resolvedData.questions.length < pickAmount) {
             const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.questions.length);
             resolvedData.questions.push(...pickedQuestions);
@@ -372,7 +428,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
         const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
 
         for (let item of data) {
-            const {unitName, taskName} = item.createNew;
+            const { unitName, taskName } = item.createNew;
             const question = item.question;
 
             if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
@@ -393,7 +449,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
             let unitEntity;
 
-            if (!newUnits.has(unitName)){
+            if (!newUnits.has(unitName)) {
 
                 // create unit
                 const lastUnitIndex = await Unit.max('index', {
@@ -418,7 +474,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             let taskKey = unitName + ":" + taskName;
             let taskEntity = newTasks.get(taskKey);
 
-            if (!taskEntity){
+            if (!taskEntity) {
 
                 const lastTaskIndex = await Task.max('index', {
                     where: {
@@ -468,3 +524,9 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
     });
 }
+
+// async function testing(){
+//     console.log(await getEntityHierarchy('section', 1));
+// }
+
+// testing();
