@@ -1,36 +1,32 @@
-const fs = require('fs');
-const path = require('path');
-const archiver = require('archiver');
-const resourceService = require('../services/resource-service');
+import fs from 'fs';
+import path from 'path';
+import archiver from 'archiver';
+import resourceService from '../services/resource-service.js';
 
 async function initialize() {
     const allContentData = await resourceService.getResource(2, '/course');
     console.log('hello', allContentData);
+    console.log('Initialization complete.');
+    return allContentData;
 }
 
-initialize();
+const quizData = await initialize(); // Await the initialization to get quiz data
 
-// Read the 10th.json file
 function loadQuizData() {
-    const filePath = path.join(__dirname, '../quizsources/courses.json');
-    if (!fs.existsSync(filePath)) {
-        console.error(`Error: File not found at path: ${filePath}`);
+    // Use the quizData obtained from the database instead of reading from a file
+    if (!quizData) {
+        console.error('Error: Quiz data is not available.');
         process.exit(1);
     }
     
-    try {
-        const quizData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        console.log(quizData, "quizData");
-        return quizData;
-    } catch (error) {
-        console.error('Error reading json:', error.message);
-        process.exit(1);
-    }
+    console.log(quizData, "quizData");
+    return quizData;
 }
 
 // Ensure exports directory exists
 function ensureExportsDir() {
-    const exportsDir = path.join(__dirname, 'exports');
+    const exportsDir = path.join(path.resolve(), 'exports');
+    console.log(exportsDir, "exportsDir");
     if (!fs.existsSync(exportsDir)) {
         fs.mkdirSync(exportsDir, { recursive: true });
         console.log('Created exports directory');
@@ -39,21 +35,33 @@ function ensureExportsDir() {
 }
 
 // Get task by section, unit, and task IDs
-function getTask(quizData, sectionId, unitId, taskId) {
+function getTask(quizData, sectionUid, unitUid, taskUid) {
     try {
-        const section = quizData.sections.find(s => s.id === sectionId);
+        if (!quizData || !quizData.courses || !quizData.courses.length) {
+            throw new Error('Quiz data is not properly structured or courses are missing');
+        }
+        
+        const section = quizData.courses.flatMap(course => course.sections).find(s => s.uid === sectionUid);
         if (!section) {
-            throw new Error(`Section with ID ${sectionId} not found`);
+            throw new Error(`Section with UID ${sectionUid} not found`);
         }
         
-        const unit = section.units.find(u => u.id === unitId);
+        if (!section.units) {
+            throw new Error(`No units found in section "${section.name}"`);
+        }
+        
+        const unit = section.units.find(u => u.uid === unitUid);
         if (!unit) {
-            throw new Error(`Unit with ID ${unitId} not found in section "${section.name}"`);
+            throw new Error(`Unit with UID ${unitUid} not found in section "${section.name}"`);
         }
         
-        const task = unit.tasks.find(t => t.id === taskId);
+        if (!unit.tasks) {
+            throw new Error(`No tasks found in unit "${unit.name}"`);
+        }
+        
+        const task = unit.tasks.find(t => t.uid === taskUid);
         if (!task) {
-            throw new Error(`Task with ID ${taskId} not found in unit "${unit.name}"`);
+            throw new Error(`Task with UID ${taskUid} not found in unit "${unit.name}"`);
         }
         
         return { section, unit, task };
@@ -82,25 +90,25 @@ function escapeXml(text) {
 }
 
 // Create Blackboard XML content
-function createBlackboardXML(task, sectionName, unitName) {
-    const questionList = task.questions.map((q, index) => 
-        `    <QUESTION id="q${q.id}" class="QUESTION_MULTIPLECHOICE" />`
+function createBlackboardXML(task) {
+    const questionList = task.questions.map((q) => 
+        `    <QUESTION id="q${q.index}" class="QUESTION_MULTIPLECHOICE" />`
     ).join('\n');
 
-    const questions = task.questions.map((q, index) => {
-        const answers = q.answers.map((answer, aIndex) => {
-            return `    <ANSWER id="q${q.id}_a${aIndex + 1}" position="${aIndex + 1}">
-      <DATES>
-        <CREATED value="${getCurrentTimestamp()}" />
-        <UPDATED value="${getCurrentTimestamp()}" />
-      </DATES>
-      <TEXT>${escapeXml(answer)}</TEXT>
-    </ANSWER>`;
-        }).join('\n');
+    const questions = task.questions.map((q) => {
+        const answers = Array.isArray(q.answers) ? q.answers.map((answer, aIndex) => {
+            return `    <ANSWER id="q${q.index}_a${aIndex + 1}" position="${aIndex + 1}">
+              <DATES>
+                <CREATED value="${getCurrentTimestamp()}" />
+                <UPDATED value="${getCurrentTimestamp()}" />
+              </DATES>
+              <TEXT>${escapeXml(answer)}</TEXT>
+            </ANSWER>`;
+        }).join('\n') : '';
 
-        const correctAnswerId = `q${q.id}_a${q.correctIndex + 1}`;
+        const correctAnswerId = `q${q.index}_a${q.correctIndex + 1}`;
 
-        return `  <QUESTION_MULTIPLECHOICE id="q${q.id}">
+        return `  <QUESTION_MULTIPLECHOICE id="q${q.index}">
     <DATES>
       <CREATED value="${getCurrentTimestamp()}" />
       <UPDATED value="${getCurrentTimestamp()}" />
@@ -156,7 +164,7 @@ function createManifestXML(filename) {
 async function createBlackboardZIP(blackboardXML, manifestXML, sectionName, unitName, taskName) {
     return new Promise((resolve, reject) => {
         const zipFilename = `blackboard_${sectionName.replace(/\s+/g, '_')}_${unitName.replace(/\s+/g, '_')}_${taskName.replace(/\s+/g, '_')}.zip`;
-        const zipPath = path.join(__dirname, 'exports', zipFilename);
+        const zipPath = path.join(path.dirname(import.meta.url), 'exports', zipFilename);
         
         const output = fs.createWriteStream(zipPath);
         const archive = archiver('zip', {
@@ -195,16 +203,16 @@ async function convertToBlackboard(sectionId, unitId, taskId) {
         const { section, unit, task } = getTask(quizData, sectionId, unitId, taskId);
         
         console.log(`Converting task: ${task.name}`);
-        console.log(`Section: ${section.name} (ID: ${section.id})`);
-        console.log(`Unit: ${unit.name} (ID: ${unit.id})`);
-        console.log(`Task: ${task.name} (ID: ${task.id})`);
+        console.log(`Section: ${section.name} (ID: ${section.index})`);
+        console.log(`Unit: ${unit.name} (ID: ${unit.index})`);
+        console.log(`Task: ${task.name} (ID: ${task.index})`);
         console.log(`Description: ${task.description}`);
         console.log(`Number of questions: ${task.questions.length}`);
         
         // Validate questions
         const validQuestions = task.questions.filter(q => 
             q.prompt && q.answers && q.answers.length > 0 && 
-            q.correctAnswer && q.correctIndex !== undefined
+            q.correct_answer && q.correct_index !== undefined
         );
         
         if (validQuestions.length !== task.questions.length) {
@@ -224,9 +232,11 @@ async function convertToBlackboard(sectionId, unitId, taskId) {
         const blackboardXML = createBlackboardXML(cleanTask, section.name, unit.name);
         
         // Create manifest XML
+        console.log('Creating manifest XML...');
         const manifestXML = createManifestXML('blackboard_quiz.dat');
         
         // Ensure exports directory exists
+        console.log('Ensuring exports directory exists...');
         ensureExportsDir();
         
         // Create the ZIP file
@@ -250,7 +260,6 @@ async function convertToBlackboard(sectionId, unitId, taskId) {
         process.exit(1);
     }
 }
-
 // Show available tasks
 function showAvailableTasks() {
     console.log('Loading quiz data...');
@@ -259,29 +268,29 @@ function showAvailableTasks() {
     console.log('\nAvailable tasks:');
     console.log('================');
 
-    const sections = quizData.courses.sections || [];
+    const sections = quizData.courses.flatMap(course => course.sections) || [];
     console.log(`Total sections: ${sections.length}`);
     console.log(sections);
     const courses = quizData.courses || [];
     console.log(`Total courses: ${courses.length}`);
-    courses.forEach((course) => {
+    courses.forEach((course, courseIndex) => {
         console.log(`Course ${course.id}: ${course.name}`);
-        course.sections.forEach((section) => {
+        course.sections.forEach((section, sectionIndex) => {
             console.log(`  Section ${section.id}: ${section.name}`);
-            section.units.forEach((unit) => {
+            section.units.forEach((unit, unitIndex) => {
                 console.log(`    Unit ${unit.id}: ${unit.name}`);
-                unit.tasks.forEach((task) => {
+                unit.tasks.forEach((task, taskIndex) => {
                     console.log(`      Task ${task.id}: ${task.name} (${task.questions.length} questions)`);
                 });
             });
         });
     });
     
-    sections.forEach((section) => {
+    sections.forEach((section, sectionIndex) => {
         console.log(`\nSection ${section.id}: ${section.name}`);
-        section.units.forEach((unit) => {
+        section.units.forEach((unit, unitIndex) => {
             console.log(`  Unit ${unit.id}: ${unit.name}`);
-            unit.tasks.forEach((task) => {
+            unit.tasks.forEach((task, taskIndex) => {
                 console.log(`    Task ${task.id}: ${task.name} (${task.questions.length} questions)`);
             });
         });
