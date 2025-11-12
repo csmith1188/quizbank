@@ -216,69 +216,6 @@ module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
     return resource.course.userUid;
 }
 
-// Parse the resource path into segments and pick amount
-function parseResourcePath(path) {
-    const pieces = path.split("/").filter(Boolean);
-
-    const segments = [];
-    for (let i = 0; i < pieces.length; i += 2) {
-        let type = pieces[i];
-        // Normalize plural to singular
-        if (pluralToSingular[type]) type = pluralToSingular[type];
-        segments.push({
-            type: type,
-            ids: pieces[i + 1]
-                ? pieces[i + 1].split("+").map(Number)
-                : []
-        });
-    }
-    return segments;
-}
-
-// gets the full hierarchy underneath an entity
-async function getEntityHierarchy(entityType, entityUid) {
-    const model = resourceTypeModelMap.get(entityType);
-    const typeIndex = resourceTypeIndexMap.get(entityType);
-    const include = {};
-
-    let tempInclude = include;
-
-    for (let i = typeIndex + 1; i < resourceTypes.length; i++){
-        const type = resourceTypes[i];
-        const isLast = (i === resourceTypes.length - 1);
-        tempInclude.model = resourceTypeModelMap.get(type);
-        tempInclude.as = type + 's';
-        if (!isLast) {
-            tempInclude.include = [{}];
-            tempInclude = tempInclude.include[0];
-        }
-    }
-
-    const scope = await model.findOne({
-        where: { uid: entityUid },
-        include: [include]
-    });
-
-    return scope;
-}
-
-async function resolveResource(type, uid) {
-    const model = resourceTypeModelMap.get(type);
-    if (!model) {
-        throw new Error(`Invalid resource type: ${type}`);
-    }
-
-    const entity = await model.findOne({
-        where: { uid }
-    });
-
-    if (!entity) {
-        throw new Error(`${type} with id ${uid} not found.`);
-    }
-
-    return entity.dataValues;
-}
-
 async function entitiesInSameHierarchy(entities) {
 
     const centerIndex = Math.floor(resourceTypes.length / 2);
@@ -352,6 +289,69 @@ async function entitiesInSameHierarchy(entities) {
 
 };
 
+async function resolveResource(type, uid) {
+    const model = resourceTypeModelMap.get(type);
+    if (!model) {
+        throw new Error(`Invalid resource type: ${type}`);
+    }
+
+    const entity = await model.findOne({
+        where: { uid }
+    });
+
+    if (!entity) {
+        throw new Error(`${type} with id ${uid} not found.`);
+    }
+
+    return entity.toJSON();
+}
+
+// Parse the resource path into segments and pick amount
+function parseResourcePath(path) {
+    const pieces = path.split("/").filter(Boolean);
+
+    const segments = [];
+    for (let i = 0; i < pieces.length; i += 2) {
+        let type = pieces[i];
+        // Normalize plural to singular
+        if (pluralToSingular[type]) type = pluralToSingular[type];
+        segments.push({
+            type: type,
+            ids: pieces[i + 1]
+                ? pieces[i + 1].split("+").map(Number)
+                : []
+        });
+    }
+    return segments;
+}
+
+// gets the full hierarchy underneath an entity
+async function getEntityHierarchy(entityType, entityUid) {
+    const model = resourceTypeModelMap.get(entityType);
+    const typeIndex = resourceTypeIndexMap.get(entityType);
+    const include = {};
+
+    let tempInclude = include;
+
+    for (let i = typeIndex + 1; i < resourceTypes.length; i++){
+        const type = resourceTypes[i];
+        const isLast = (i === resourceTypes.length - 1);
+        tempInclude.model = resourceTypeModelMap.get(type);
+        tempInclude.as = type + 's';
+        if (!isLast) {
+            tempInclude.include = [{}];
+            tempInclude = tempInclude.include[0];
+        }
+    }
+
+    const scope = await model.findOne({
+        where: { uid: entityUid },
+        include: [include]
+    });
+
+    return scope.toJSON();
+}
+
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
@@ -377,17 +377,16 @@ function resolveHierarchy(root, segments) {
     return data;
 }
 
-module.exports.getResource = async (path, questionType = null) => {
-    const { segments, pickAmount } = parseResourcePath(path);
-
-    console.log(path);
-    console.log(parseResourcePath(path));
+module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
+    const segments = parseResourcePath(path);
 
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
 
-    let data = await getEntityHierarchy(segments[0].type, segments[0].ids[0]); // add combining the top layer later
+    const firstSegment = segments.shift(); // gets and removes first segment
+
+    let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]); // add combining the top layer later
     let resolvedData = resolveHierarchy(data, segments);
 
     if (
