@@ -36,32 +36,34 @@ function ensureExportsDir() {
 
 // Get task by section, unit, and task IDs
 function getTask(quizData, sectionUid, unitUid, taskUid) {
+    console.log('Getting task for Section UID:', sectionUid, 'Unit UID:', unitUid, 'Task UID:', taskUid);
     try {
         if (!quizData || !quizData.courses || !quizData.courses.length) {
             throw new Error('Quiz data is not properly structured or courses are missing');
         }
         
-        const section = quizData.courses.flatMap(course => course.sections).find(s => s.uid === sectionUid);
+        const section = quizData.courses.flatMap(course => course.sections)[sectionUid];
+        console.log(section, "section");
         if (!section) {
-            throw new Error(`Section with UID ${sectionUid} not found`);
+            throw new Error(`Section with uid ${sectionUid} not found`);
         }
         
         if (!section.units) {
             throw new Error(`No units found in section "${section.name}"`);
         }
         
-        const unit = section.units.find(u => u.uid === unitUid);
+        const unit = section.units[unitUid];
         if (!unit) {
-            throw new Error(`Unit with UID ${unitUid} not found in section "${section.name}"`);
+            throw new Error(`Unit with uid ${unitUid} not found in section "${section.name}"`);
         }
         
         if (!unit.tasks) {
             throw new Error(`No tasks found in unit "${unit.name}"`);
         }
         
-        const task = unit.tasks.find(t => t.uid === taskUid);
+        const task = unit.tasks[taskUid];
         if (!task) {
-            throw new Error(`Task with UID ${taskUid} not found in unit "${unit.name}"`);
+            throw new Error(`Task with uid ${taskUid} not found in unit "${unit.name}"`);
         }
         
         return { section, unit, task };
@@ -165,8 +167,10 @@ async function createBlackboardZIP(blackboardXML, manifestXML, sectionName, unit
     return new Promise((resolve, reject) => {
         const zipFilename = `blackboard_${sectionName.replace(/\s+/g, '_')}_${unitName.replace(/\s+/g, '_')}_${taskName.replace(/\s+/g, '_')}.zip`;
         const zipPath = path.join(path.dirname(import.meta.url), 'exports', zipFilename);
+        console.log(zipPath, "zipPath");
         
         const output = fs.createWriteStream(zipPath);
+        console.log(output, "output");
         const archive = archiver('zip', {
             zlib: { level: 9 } // Sets the compression level
         });
@@ -178,23 +182,31 @@ async function createBlackboardZIP(blackboardXML, manifestXML, sectionName, unit
         });
 
         archive.on('error', (err) => {
+            console.log('Archive error:');
             reject(err);
         });
 
+        console.log('Appending files to ZIP...');
         archive.pipe(output);
 
         // Add the Blackboard XML file to the root of the ZIP
+        console.log('Adding blackboard_quiz.dat to ZIP...');
         archive.append(blackboardXML, { name: 'blackboard_quiz.dat' });
+        console.log(archive)
         
         // Add the manifest file to the root of the ZIP
+        console.log('Adding imsmanifest.xml to ZIP...');
         archive.append(manifestXML, { name: 'imsmanifest.xml' });
+        console.log(archive)
 
+        console.log('Finalizing ZIP file...');
         archive.finalize();
     });
 }
 
 // Main conversion function
 async function convertToBlackboard(sectionId, unitId, taskId) {
+    console.log(`Converting Section ID: ${sectionId}, Unit ID: ${unitId}, Task ID: ${taskId}`);
     try {
         console.log('Loading quiz data...');
         const quizData = loadQuizData();
@@ -311,8 +323,11 @@ if (process.argv.length === 2) {
 } else if (process.argv.length === 5) {
     // Convert specific task
     const sectionId = parseInt(process.argv[2]);
+    console.log(sectionId, "sectionId");
     const unitId = parseInt(process.argv[3]);
+    console.log(unitId, "unitId");
     const taskId = parseInt(process.argv[4]);
+    console.log(taskId, "taskId");
     
     if (isNaN(sectionId) || isNaN(unitId) || isNaN(taskId)) {
         console.error('Error: All arguments must be valid numbers.');
