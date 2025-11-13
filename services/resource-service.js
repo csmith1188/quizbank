@@ -50,9 +50,9 @@ const collectQuestions = (data, questionType = null) => {
 };
 
 // Fetch the full course hierarchy for a user
-module.exports.getFullCourseHierarchy = async (courseUid) => {
+module.exports.getUserFullHierarchy = async (userUid) => {
     const courses = await Course.findAll({
-        where: { uid: courseUid }, // Filter by courseUid
+        where: { userUid: userUid }, // Filter by userUid
         include: [{
             model: Section,
             as: "sections",
@@ -68,11 +68,7 @@ module.exports.getFullCourseHierarchy = async (courseUid) => {
         }]
     });
 
-    // Convert to plain JSON objects
-    let json = {
-        courses: courses.map(c => c.toJSON())
-    };
-    return json;
+    return courses.map(c => c.toJSON());
 }
 
 module.exports.getSection = async (sectionUid) => {
@@ -327,6 +323,11 @@ function parseResourcePath(path) {
 
 // gets the full hierarchy underneath an entity
 async function getEntityHierarchy(entityType, entityUid) {
+
+    if (entityType === 'course' && typeof entityUid === 'undefined') {
+        throw new Error("Can't get all courses.");
+    }
+
     const model = resourceTypeModelMap.get(entityType);
     const typeIndex = resourceTypeIndexMap.get(entityType);
     const include = {};
@@ -345,7 +346,7 @@ async function getEntityHierarchy(entityType, entityUid) {
     }
 
     const scope = await model.findOne({
-        where: { uid: entityUid },
+        where: {uid: entityUid},
         include: [include]
     });
 
@@ -355,6 +356,10 @@ async function getEntityHierarchy(entityType, entityUid) {
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
+
+    if (segments.length === 0) {
+        return data;
+    }
 
     segments.forEach(({ type, ids }) => {
         const collection = data[type + "s"];
@@ -386,16 +391,8 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
     const firstSegment = segments.shift(); // gets and removes first segment
 
-    let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]); // add combining the top layer later
+    let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]);
     let resolvedData = resolveHierarchy(data, segments);
-
-    if (
-        segments.length === 1 &&
-        segments[0].type === "course" &&
-        Array.isArray(resolvedData)
-    ) {
-        resolvedData = { courses: resolvedData };
-    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -408,10 +405,10 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
 
-        resolvedData = { questions: [] };
-        while (resolvedData.questions.length < pickAmount) {
-            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.questions.length);
-            resolvedData.questions.push(...pickedQuestions);
+        resolvedData = [];
+        while (resolvedData.length < pickAmount) {
+            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.length);
+            resolvedData.push(...pickedQuestions);
         }
     }
 
@@ -523,9 +520,3 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
     });
 }
-
-// async function testing(){
-//     console.log(await getEntityHierarchy('section', 1));
-// }
-
-// testing();
