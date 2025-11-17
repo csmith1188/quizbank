@@ -31,6 +31,14 @@ const taskNameInput = document.getElementById('taskNameInput');
 const taskDescInput = document.getElementById('taskDescriptionInput');
 const taskGenPromptInput = document.getElementById('taskGenPrompt');
 
+// Question upload variables
+const questionModal = document.getElementById('question-creation');
+const openQuestionModalBtn = document.getElementById('openQuestionBtn');
+const cancelQuestionBtn = document.getElementById('cancelQuestionBtn');
+const submitQuestionBtn = document.getElementById('submitQuestionBtn');
+const questionOptionsInput = document.getElementById('questionOptionsInput');
+const qustionCreation = document.getElementById('question-creation');
+
 // Course upload handlers
 openModalBtn.addEventListener('click', () => {
     modal.classList.remove('hidden');
@@ -177,7 +185,7 @@ openTaskModalBtn.addEventListener('click', () => {
 
 cancelTaskBtn.addEventListener('click', () => {
     taskModal.classList.add('hidden');
-}); 
+});
 
 submitTaskBtn.addEventListener('click', async (event) => {
     event.preventDefault();
@@ -220,5 +228,66 @@ submitTaskBtn.addEventListener('click', async (event) => {
     } catch (err) {
         console.error(err);
         alert('Error creating task.');
+    }
+});
+
+// Question upload handlers
+openQuestionModalBtn.addEventListener('click', () => {
+    questionModal.classList.remove('hidden');
+    questionOptionsInput.value = '';
+    questionOptionsInput.focus();
+});
+
+cancelQuestionBtn.addEventListener('click', () => {
+    questionModal.classList.add('hidden');
+});
+
+submitQuestionBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const questionOptions = questionOptionsInput.value.trim();
+    const path = selectedPath;
+    const taskUid = path.task.uid;
+
+    if (!questionOptions) return alert('Please enter question data.');
+
+    const parsedQuestion = parseFormattedQuestion(questionOptions);
+
+    try {
+        const response = await fetch('/api/question-upload/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                taskUid,
+                question: parsedQuestion
+            }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            questionModal.classList.add('hidden');
+
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
+                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+                if (course) {
+                    const section = course.sections.find(s => s.uid === path.section.uid);
+                    if (section) {
+                        const unit = section.units.find(u => u.uid === path.unit.uid);
+                        if (unit) {
+                            const task = unit.tasks.find(t => t.uid === taskUid);
+                            if (task) {
+                                if (!task.questions) {
+                                    task.questions = [];
+                                }
+                                task.questions.push(data.newQuestion);
+                                if (typeof renderView === 'function') renderView('questions');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error creating question.');
     }
 });

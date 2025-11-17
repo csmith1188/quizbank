@@ -165,6 +165,88 @@ module.exports.createSectionForUser = async (sectionName, courseUid, description
     });
     return section.toJSON();
 };
+module.exports.editCourseForUser = async ({ uid, name, index, description }) => {
+    if (!name || !name.trim()) {
+        throw new Error("Course name is required.");
+    }
+
+    const course = await Course.findOne({ where: { uid } });
+    if (!course) throw new Error("Course not found");
+
+    course.name = name.trim();
+    course.index = index;
+    course.description = description;
+    await course.save();
+
+    return course.toJSON();
+};
+
+module.exports.editSectionForUser = async ({ uid, name, index, description }) => {
+    if (!name || !name.trim()) {
+        throw new Error("Section name is required.");
+    }
+
+    const section = await Section.findOne({ where: { uid } });
+    if (!section) throw new Error("Section not found");
+
+    section.name = name.trim();
+    section.index = index;
+    section.description = description;
+    await section.save();
+
+    return section.toJSON();
+};
+
+module.exports.editUnitForUser = async ({ uid, name, index, description }) => {
+    if (!name || !name.trim()) {
+        throw new Error("Unit name is required.");
+    }
+
+    const unit = await Unit.findOne({ where: { uid } });
+    if (!unit) throw new Error("Unit not found");
+
+    unit.name = name.trim();
+    unit.index = index;
+    unit.description = description;
+    await unit.save();
+
+    return unit.toJSON();
+};
+
+module.exports.editTaskForUser = async ({ uid, name, index, description, genprompt }) => {
+    if (!name || !name.trim()) {
+        throw new Error("Task name is required.");
+    }
+
+    const task = await Task.findOne({ where: { uid } });
+    if (!task) throw new Error("Task not found");
+
+    task.name = name.trim();
+    task.index = index;
+    task.description = description;
+    task.genprompt = genprompt;
+    await task.save();
+
+    return task.toJSON();
+};
+
+module.exports.createQuestionForUser = async (taskUid, prompt, type, answers, correctIndex, correctAnswer, ai = false) => {
+    if (!taskUid) {
+        throw new Error("Task UID is required.");
+    }
+    const count = await Question.count({ where: { taskUid } });
+    const question = await Question.create({
+        taskUid,
+        index: count + 1,
+        ai,
+        prompt,
+        type,
+        answers: JSON.stringify(answers),
+        correct_index: Array.isArray(correctIndex) ? JSON.stringify(correctIndex) : correctIndex,
+        correct_answer: Array.isArray(correctAnswer) ? JSON.stringify(correctAnswer) : correctAnswer,
+    });
+    return question.toJSON();
+};
 
 module.exports.createTaskForUser = async (taskName, unitUid, description, GenPrompt) => {
     if (!taskName) {
