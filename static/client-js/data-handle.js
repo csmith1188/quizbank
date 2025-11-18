@@ -66,8 +66,8 @@ submitBtn.addEventListener('click', async (event) => {
         if (data.success) {
             modal.classList.add('hidden');
 
-            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
-                window.ALL_COURSE_DATA.courses.push(data.newCourse);
+            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA) {
+                window.ALL_COURSE_DATA.push(data.newCourse);
                 if (typeof renderView === 'function') renderView('courses');
             }
         }
@@ -108,8 +108,8 @@ submitSectionBtn.addEventListener('click', async (event) => {
         if (data.success) {
             sectionModal.classList.add('hidden');
 
-            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
-                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === courseUid);
+            if (window.ALL_COURSE_DATA) {
+                const course = window.ALL_COURSE_DATA.find(c => c.uid === courseUid);
                 if (course) {
                     if (!course.sections) {
                         course.sections = [];
@@ -156,8 +156,8 @@ submitUnitBtn.addEventListener('click', async (event) => {
         if (data.success) {
             unitModal.classList.add('hidden');
 
-            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
-                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+            if (window.ALL_COURSE_DATA) {
+                const course = window.ALL_COURSE_DATA.find(c => c.uid === path.course.uid);
                 if (course) {
                     const section = course.sections.find(s => s.uid === sectionUid);
                     if (section) {
@@ -208,8 +208,8 @@ submitTaskBtn.addEventListener('click', async (event) => {
         if (data.success) {
             taskModal.classList.add('hidden');
 
-            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
-                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+            if (window.ALL_COURSE_DATA) {
+                const course = window.ALL_COURSE_DATA.find(c => c.uid === path.course.uid);
                 if (course) {
                     const section = course.sections.find(s => s.uid === path.section.uid);
                     if (section) {
@@ -266,8 +266,8 @@ submitQuestionBtn.addEventListener('click', async (event) => {
         if (data.success) {
             questionModal.classList.add('hidden');
 
-            if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
-                const course = window.ALL_COURSE_DATA.courses.find(c => c.uid === path.course.uid);
+            if (window.ALL_COURSE_DATA) {
+                const course = window.ALL_COURSE_DATA.find(c => c.uid === path.course.uid);
                 if (course) {
                     const section = course.sections.find(s => s.uid === path.section.uid);
                     if (section) {
