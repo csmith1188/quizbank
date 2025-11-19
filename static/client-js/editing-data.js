@@ -37,7 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const newIndex = document.getElementById('index').value.trim();
       const newDescription = document.getElementById('description').value.trim();
       const newGenPrompt = item.genprompt !== undefined ? document.getElementById('genprompt').value.trim() : undefined;
-
+    
+      // Check for duplicate index
+      const existingItem = items.find(i => String(i.index) === String(newIndex) && String(i.uid ?? i.id) !== String(item.uid ?? item.id));
+      if (existingItem) {
+        return alert('An item with the same index already exists. Please choose a different index.');
+      }
+    
       try {
         const response = await fetch('/api/edit/edit', {
           method: 'POST',
@@ -51,10 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
             genprompt: newGenPrompt
           })
         });
-
+    
         if (!response.ok) throw new Error('Failed to update');
         const updated = await response.json();
-
+    
         if (window.ALL_COURSE_DATA && window.ALL_COURSE_DATA.courses) {
           const courses = window.ALL_COURSE_DATA.courses;
           updateInMemoryData(courses, view, id, updated);
@@ -67,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } finally {
         document.body.removeChild(popup);
       }
-    });
+    });    
 
     document.getElementById('cancel-btn').addEventListener('click', () => {
       document.body.removeChild(popup);

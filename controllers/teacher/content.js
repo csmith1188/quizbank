@@ -5,7 +5,7 @@ module.exports = function(router) {
         try {
             const user = req.session.user;
             if (!user) return res.redirect('/');
-            const allContentData = await resourceService.getResource(user.uid, '/course');
+            const allContentData = await resourceService.getUserFullHierarchy(user.uid);
             res.render('pages/teacher/content', {
                 allContentData: JSON.stringify(allContentData)
             });

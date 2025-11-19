@@ -44,4 +44,3 @@ if exist "blackboard_import.zip" (
 
 echo.
 pause
-

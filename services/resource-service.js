@@ -2,13 +2,20 @@ const { sequelize, User, Course, Section, Unit, Task, Question } = require("../d
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems } = require('../util/misc');
 
-const resourceDepthMap = new Map([
-    ["course", 0],
-    ["section", 1],
-    ["unit", 2],
-    ["task", 3],
-    ["question", 4]
+const resourceTypeModelMap = new Map([
+    ["course", Course],
+    ["section", Section],
+    ["unit", Unit],
+    ["task", Task],
+    ["question", Question]
 ]);
+
+const resourceTypes = Array.from(resourceTypeModelMap.keys());
+
+const resourceTypeIndexMap = new Map();
+resourceTypes.forEach((type, index) => {
+    resourceTypeIndexMap.set(type, index);
+});
 
 const questionTypeMinAnswerChoices = new Map([
     ["multiple-choice", 2],
@@ -43,7 +50,7 @@ const collectQuestions = (data, questionType = null) => {
 };
 
 // Fetch the full course hierarchy for a user
-module.exports.getFullCourseHierarchy = async (userUid) => {
+module.exports.getUserFullHierarchy = async (userUid) => {
     const courses = await Course.findAll({
         where: { userUid: userUid }, // Filter by userUid
         include: [{
@@ -61,11 +68,7 @@ module.exports.getFullCourseHierarchy = async (userUid) => {
         }]
     });
 
-    // Convert to plain JSON objects
-    let json = {
-        courses: courses.map(c => c.toJSON())
-    };
-    return json;
+    return courses.map(c => c.toJSON());
 }
 
 module.exports.getSection = async (sectionUid) => {
@@ -291,15 +294,99 @@ module.exports.getResourceOwnerUid = async (resourceType, resourceUid) => {
     return resource.course.userUid;
 }
 
+async function entitiesInSameHierarchy(entities) {
+
+    const centerIndex = Math.floor(resourceTypes.length / 2);
+    const centerType = resourceTypes[centerIndex];
+
+    const uids = [];
+
+    // traverse entities to center type and check if uids match
+
+    for (e of entities) {
+        const typeIndex = resourceTypeIndexMap.get(e.constructor.name.toLowerCase());
+        const traversalDistance = Math.abs(centerIndex - typeIndex);
+        const traversalDirection = Math.sign(centerIndex - typeIndex);
+
+        let currentEntity = e;
+
+        for (let i = 0; i < traversalDistance; i++) {
+
+            // where we will be after step
+            const nextIndex = typeIndex + (traversalDirection * (i + 1));
+            const nextType = resourceTypes[nextIndex];
+            const nextModel = resourceTypeModelMap.get(nextType);
+
+            // if moving forward, search for entity with foreign key of last entity
+            // if moving backward, use foreign key
+
+            if (traversalDirection === 1) {
+
+                // where we are before step
+                const currentIndex = nextIndex - traversalDirection;
+                const currentType = resourceTypes[currentIndex];
+                const currentModel = resourceTypeModelMap.get(currentType);
+
+                const where = {};
+                where[currentType + 'Uid'] = currentEntity.uid;
+
+                currentEntity = await nextModel.findOne({
+                    where
+                });
+
+
+            } else if (traversalDirection === -1) {
+
+                const nextUid = currentEntity[nextType + 'Uid'];
+
+                currentEntity = await nextModel.findOne({
+                    where: {
+                        uid: nextUid
+                    }
+                })
+
+            }
+
+        }
+
+        // when the loop is over, currentEntity should theoretically be of the centerType
+        // add currentEntity uid to uid array
+        uids.push(currentEntity.uid);
+
+    }
+
+    // check that all uids match
+
+    const firstUid = uids[0];
+
+    for (uid of uids) {
+        if (uid !== firstUid) return false;
+    }
+
+    return true;
+
+};
+
+async function resolveResource(type, uid) {
+    const model = resourceTypeModelMap.get(type);
+    if (!model) {
+        throw new Error(`Invalid resource type: ${type}`);
+    }
+
+    const entity = await model.findOne({
+        where: { uid }
+    });
+
+    if (!entity) {
+        throw new Error(`${type} with id ${uid} not found.`);
+    }
+
+    return entity.toJSON();
+}
+
 // Parse the resource path into segments and pick amount
 function parseResourcePath(path) {
     const pieces = path.split("/").filter(Boolean);
-    let pickAmount = null;
-
-    if (pieces[pieces.length - 2] === "pick") {
-        pickAmount = parseInt(pieces.pop(), 10);
-        pieces.pop();
-    }
 
     const segments = [];
     for (let i = 0; i < pieces.length; i += 2) {
@@ -308,29 +395,65 @@ function parseResourcePath(path) {
         if (pluralToSingular[type]) type = pluralToSingular[type];
         segments.push({
             type: type,
-            indexes: pieces[i + 1]
+            ids: pieces[i + 1]
                 ? pieces[i + 1].split("+").map(Number)
                 : []
         });
     }
-    return { segments, pickAmount };
+    return segments;
+}
+
+// gets the full hierarchy underneath an entity
+async function getEntityHierarchy(entityType, entityUid) {
+
+    if (entityType === 'course' && typeof entityUid === 'undefined') {
+        throw new Error("Can't get all courses.");
+    }
+
+    const model = resourceTypeModelMap.get(entityType);
+    const typeIndex = resourceTypeIndexMap.get(entityType);
+    const include = {};
+
+    let tempInclude = include;
+
+    for (let i = typeIndex + 1; i < resourceTypes.length; i++){
+        const type = resourceTypes[i];
+        const isLast = (i === resourceTypes.length - 1);
+        tempInclude.model = resourceTypeModelMap.get(type);
+        tempInclude.as = type + 's';
+        if (!isLast) {
+            tempInclude.include = [{}];
+            tempInclude = tempInclude.include[0];
+        }
+    }
+
+    const scope = await model.findOne({
+        where: {uid: entityUid},
+        include: [include]
+    });
+
+    return scope.toJSON();
 }
 
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
 
-    segments.forEach(({ type, indexes }) => {
+    if (segments.length === 0) {
+        return data;
+    }
+
+    segments.forEach(({ type, ids }) => {
         const collection = data[type + "s"];
         if (!collection) throw new Error(`Invalid resource type: ${type}`);
 
-        if (!indexes.length) { 
+        if (!ids.length) { 
             data = collection; 
             return; 
         }
 
-        const matched = collection.filter(e => indexes.includes(e.index));
-        if (!matched.length) throw new Error(`Resource not found: ${type} ${indexes}`);
+        const matched = collection.filter(e => ids.includes(e.uid));
+        if (!matched.length) throw new Error(`Resource not found: ${type} ${ids}`);
 
         data = matched.length === 1 ? matched[0] : {
             name: `Combined ${type}s`,
@@ -341,27 +464,17 @@ function resolveHierarchy(root, segments) {
     return data;
 }
 
-module.exports.getResource = async (userUid, path, questionType = null) => {
-    const { segments, pickAmount } = parseResourcePath(path);
+module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
+    const segments = parseResourcePath(path);
 
     if (segments.length === 0) {
         throw new Error("Empty resource path");
     }
 
-    if (resourceDepthMap.get(segments[0].type) !== 0) {
-        throw new Error(`Path must start with a course: found ${segments[0].type}`);
-    }
+    const firstSegment = segments.shift(); // gets and removes first segment
 
-    let data = await module.exports.getFullCourseHierarchy(userUid);
+    let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]);
     let resolvedData = resolveHierarchy(data, segments);
-
-    if (
-        segments.length === 1 &&
-        segments[0].type === "course" &&
-        Array.isArray(resolvedData)
-    ) {
-        resolvedData = { courses: resolvedData };
-    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -374,10 +487,10 @@ module.exports.getResource = async (userUid, path, questionType = null) => {
 
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
 
-        resolvedData = { questions: [] };
-        while (resolvedData.questions.length < pickAmount) {
-            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.questions.length);
-            resolvedData.questions.push(...pickedQuestions);
+        resolvedData = [];
+        while (resolvedData.length < pickAmount) {
+            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.length);
+            resolvedData.push(...pickedQuestions);
         }
     }
 
@@ -393,7 +506,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
         const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
 
         for (let item of data) {
-            const {unitName, taskName} = item.createNew;
+            const { unitName, taskName } = item.createNew;
             const question = item.question;
 
             if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
@@ -414,7 +527,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
             let unitEntity;
 
-            if (!newUnits.has(unitName)){
+            if (!newUnits.has(unitName)) {
 
                 // create unit
                 const lastUnitIndex = await Unit.max('index', {
@@ -439,7 +552,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             let taskKey = unitName + ":" + taskName;
             let taskEntity = newTasks.get(taskKey);
 
-            if (!taskEntity){
+            if (!taskEntity) {
 
                 const lastTaskIndex = await Task.max('index', {
                     where: {

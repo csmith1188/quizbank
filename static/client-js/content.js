@@ -13,7 +13,7 @@ let selectedPath = { course: null, section: null, unit: null, task: null };
 let questionDetail = null;
 
 function getAllCourses() {
-    return window.ALL_COURSE_DATA?.courses || [];
+    return window.ALL_COURSE_DATA || [];
 }
 
 function getAllSections() {
