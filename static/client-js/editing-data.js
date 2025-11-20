@@ -108,15 +108,6 @@ function updateInMemoryData(courses, view, id, updated) {
                   Object.assign(task, updated);
                   return;
                 }
-
-                if (task.questions) {
-                  for (const question of task.questions) {
-                    if (view === 'questions' && String(question.uid) === String(id)) {
-                      Object.assign(question, updated);
-                      return;
-                    }
-                  }
-                }
               }
             }
           }

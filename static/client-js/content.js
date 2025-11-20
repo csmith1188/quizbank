@@ -53,6 +53,7 @@ function getAllQuestions() {
             out.push({ ...q, parentTask: task, parentUnit: task.parentUnit, parentSection: task.parentSection, parentCourse: task.parentCourse });
         }
     }
+    console.log(out);
     return out;
 }
 
