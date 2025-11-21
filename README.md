@@ -19,11 +19,6 @@ node db/database-init.js
 npm start
 ```
 
-For development with auto-reload:
-```bash
-npm run dev
-```
-
 The server will run on port 3000 by default.
 
 ## Database
@@ -108,109 +103,114 @@ The seeding system is designed to populate the database with initial data for co
 
 ### Get Course Details
 ```
-GET /course/:courseId
+GET /api/resource/course/:courseId
 ```
 
 ### Pick Random Questions from a Course
 ```
-GET /course/:courseId/pick/:number
+GET /api/resource/course/:courseId/pick/?pick=:amount
 ```
 
 ### List Sections in a Course
 ```
-GET /course/:courseId/section
+GET /api/resource/course/:courseId/section
 ```
 
 ### Get Section Details
 ```
-GET /course/:courseId/section/:sectionId
+GET /api/resource/course/:courseId/section/:sectionId
 ```
 
 ### Pick Random Questions from a Section
 ```
-GET /course/:courseId/section/:sectionId/pick/:number
+GET /api/resource/course/:courseId/section/:sectionId/?pick=:amount
 ```
 
 ### List Units in a Section
 ```
-GET /course/:courseId/section/:sectionId/unit
+GET /api/resource/course/:courseId/section/:sectionId/unit
 ```
 
 ### Get Unit Details
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId
 ```
 
 **Multiple Units:** You can combine multiple units by separating their IDs with `+` signs:
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId1+unitId2+unitId3
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId1+unitId2+unitId3
 ```
 
 ### Pick Random Questions from a Unit
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/pick/:number
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/?pick=:amount
 ```
 
 **Multiple Units:** You can pick questions from multiple units by separating their IDs with `+` signs:
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId1+unitId2/pick/:number
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId1+unitId2/?pick=:number
 ```
 
 ### List Tasks in a Unit
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/task
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/task
 ```
 
 ### Get Task Details
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/task/:taskId
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId
 ```
 
 **Multiple Tasks:** You can combine multiple tasks by separating their IDs with `+` signs:
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/task/:taskId1+taskId2+taskId3
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId1+taskId2+taskId3
 ```
 
 ### Pick Random Questions from a Task
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/task/:taskId/pick/:number
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId/?pick=:amount
 ```
 
 **Multiple Tasks:** You can pick questions from multiple tasks by separating their IDs with `+` signs:
 ```
-GET /course/:courseId/section/:sectionId/unit/:unitId/task/:taskId1+taskId2/pick/:number
+GET /api/resource/course/:courseId/section/:sectionId/unit/:unitId/task/:taskId1+taskId2/?pick=:amount
 ```
 
 ## Example Usage
 
 1. Get all sections in course 1:
 ```
-GET /course/1/section
+GET /api/resource/course/1/section
 ```
 
 2. Get all units in section 2 of course 1:
 ```
-GET /course/1/section/2/unit
+GET /api/resource/course/1/section/2/unit
 ```
 
 3. Pick 10 random questions from unit 1 in section 2 of course 1:
 ```
-GET /course/1/section/2/unit/1/pick/10
+GET /api/resource/course/1/section/2/unit/1/?pick=10
 ```
 
 4. Pick 5 random questions from units 1 and 2 in section 2 of course 1:
 ```
-GET /course/1/section/2/unit/1+2/pick/5
+GET /api/resource/course/1/section/2/unit/1+2/?pick=5
 ```
 
-5. Get details for tasks 2 and 3 in unit 1, section 2, course 1:
+5. Pick 10 random multiple choice questions from units 1, 2, and 3 of section 4 of course 1:
 ```
-GET /course/1/section/2/unit/1/task/2+3
+GET /api/resource/course/1/section/2/unit/1+2/?pick=5&type=multiple-choice
 ```
 
-6. Pick 3 random questions from tasks 2 and 3 in unit 1, section 2, course 1:
+6. Get details for tasks 2 and 3 in unit 1, section 2, course 1:
 ```
-GET /course/1/section/2/unit/1/task/2+3/pick/3
+GET /api/resource/course/1/section/2/unit/1/task/2+3
+```
+
+7. Pick 3 random questions from tasks 2 and 3 in unit 1, section 2, course 1:
+```
+GET /api/resource/course/1/section/2/unit/1/task/2+3/?pick=3
 ```
 
 ## Response Format
