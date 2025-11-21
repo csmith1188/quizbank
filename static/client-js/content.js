@@ -53,6 +53,7 @@ function getAllQuestions() {
             out.push({ ...q, parentTask: task, parentUnit: task.parentUnit, parentSection: task.parentSection, parentCourse: task.parentCourse });
         }
     }
+    console.log(out);
     return out;
 }
 
@@ -322,8 +323,10 @@ function renderView(view, filter = "") {
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
         </button>`;
+        if (view !== "questions"){
         html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
         html += `</li>`;
+        }
     });
     html += `</ul>`;
     area.innerHTML = html;
