@@ -30,19 +30,30 @@ async function ensureExportsDir() {
     return exportsDir;
 }
 
-// Get unit by section and unit IDs
-function getUnit(quizData, sectionUid, unitUid) {
+// Get unit by course, section, and unit IDs
+function getUnit(quizData, courseUid, sectionUid, unitUid) {
+    console.log(`Getting unit with Course UID: ${courseUid}, Section UID: ${sectionUid}, Unit UID: ${unitUid}`);
     try {
-        const section = quizData.courses.flatMap(course => course.sections).find(sec => sec.uid === sectionUid);
+        if (!quizData.courses || quizData.courses.length === 0) {
+            throw new Error('No courses found in quiz data');
+        }
+
+        const course = quizData.courses.find(c => c.uid == courseUid);
+        console.log(quizData.courses.map(c => c.uid));
+        if (!course) {
+            throw new Error(`Course with UID ${courseUid} not found`);
+        }
+
+        const section = course.sections.find(sec => sec.uid == sectionUid);
         if (!section) {
-            throw new Error(`Section with ID ${sectionUid} not found`);
+            throw new Error(`Section with UID ${sectionUid} not found in course "${course.name}"`);
         }
-        
-        const unit = section.units.find(u => u.uid === unitUid);
+
+        const unit = section.units.find(u => u.uid == unitUid);
         if (!unit) {
-            throw new Error(`Unit with ID ${unitUid} not found in section "${section.name}"`);
+            throw new Error(`Unit with UID ${unitUid} not found in section "${section.name}"`);
         }
-        
+
         return { section, unit };
     } catch (error) {
         console.error('Error getting unit:', error.message);
@@ -73,7 +84,7 @@ function createUnitBlackboardXML(unit) {
     // Collect all questions from all tasks
     let allQuestions = [];
     let questionCounter = 1;
-    
+
     unit.tasks.forEach((task) => {
         task.questions.forEach((question) => {
             // Create a unique question ID that combines task and question
@@ -89,7 +100,7 @@ function createUnitBlackboardXML(unit) {
     });
 
     // Create question list
-    const questionList = allQuestions.map(q => 
+    const questionList = allQuestions.map(q =>
         `    <QUESTION id="${q.uid}" class="QUESTION_MULTIPLECHOICE" />`
     ).join('\n');
 
@@ -165,7 +176,7 @@ async function createBlackboardZIP(blackboardXML, manifestXML, sectionName, unit
         const zipFilename = `blackboard_unit_${sectionName.replace(/\s+/g, '_')}_${unitName.replace(/\s+/g, '_')}.zip`;
         const __filename = fileURLToPath(import.meta.url);
         const zipPath = path.join(path.dirname(__filename), 'exports', zipFilename);
-        
+
         const output = fs.createWriteStream(zipPath);
         const archive = archiver('zip', {
             zlib: { level: 9 } // Sets the compression level
@@ -175,110 +186,72 @@ async function createBlackboardZIP(blackboardXML, manifestXML, sectionName, unit
             resolve(zipPath);
         });
 
-        ('Setting up archive error handling...');
         archive.on('error', (err) => {
             reject(err);
         });
 
-        ('Piping archive data to output file...');
         archive.pipe(output);
 
         // Add the Blackboard XML file to the root of the ZIP
-        ('Adding Blackboard XML to archive...');
         archive.append(blackboardXML, { name: 'blackboard_quiz.dat' });
-        
+
         // Add the manifest file to the root of the ZIP
-        ('Adding manifest XML to archive...');
         archive.append(manifestXML, { name: 'imsmanifest.xml' });
 
-        ('Finalizing archive...');
         archive.finalize();
     });
 }
 
 // Main conversion function
-async function convertUnitToBlackboard(sectionUid, unitUid) {
+async function convertUnitToBlackboard(courseUid, sectionUid, unitUid) {
     try {
-        ('Loading quiz data...');
         const quizData = loadQuizData();
-        ('Quiz data loaded successfully.', quizData);
-        
-        ('Getting unit...');
-        (`Stuff, ${sectionUid}, ${unitUid}`);
-        const { section, unit } = getUnit(quizData, sectionUid, unitUid);
-        
-        (`Converting unit: ${unit.name}`);
-        (`Section: ${section.name} (ID: ${section.uid})`);
-        (`Unit: ${unit.name} (ID: ${unit.uid})`);
-        (`Number of tasks: ${unit.tasks.length}`);
-        
+
+        const { section, unit } = getUnit(quizData, courseUid, sectionUid, unitUid);
+
         // Count total questions across all tasks
         let totalQuestions = 0;
         let validQuestions = 0;
-        
+
         unit.tasks.forEach((task, taskIndex) => {
-            (`  Task ${taskIndex + 1}: ${task.name} (${task.questions.length} questions)`);
             totalQuestions += task.questions.length;
-            
+
             // Validate questions in this task
-            const taskValidQuestions = task.questions.filter(q => 
-                q.prompt && q.answers && q.answers.length > 0 && 
+            const taskValidQuestions = task.questions.filter(q =>
+                q.prompt && q.answers && q.answers.length > 0 &&
                 q.correct_answer && q.correct_index !== undefined
             );
-            
+
             validQuestions += taskValidQuestions.length;
-            
+
             if (taskValidQuestions.length !== task.questions.length) {
                 console.warn(`    Warning: ${task.questions.length - taskValidQuestions.length} questions were invalid and skipped.`);
             }
         });
-        
-        (`Total questions across all tasks: ${totalQuestions}`);
-        (`Valid questions: ${validQuestions}`);
-        
+
         if (validQuestions === 0) {
             console.error('No valid questions found in this unit.');
             process.exit(1);
         }
-        
+
         // Create the Blackboard XML
-        ('Creating Blackboard XML...');
         const blackboardXML = createUnitBlackboardXML(unit, section.name);
-        
+
         // Create manifest XML
-        ('Creating manifest XML...');
         const manifestXML = createManifestXML('blackboard_quiz.dat');
-        ('Manifest XML created.', manifestXML);
-        
+
         // Ensure exports directory exists
-        ('Ensuring exports directory exists...');
         ensureExportsDir();
-        
+
         // Create the ZIP file
-        ('Creating Blackboard ZIP file...');
         const zipPath = await createBlackboardZIP(blackboardXML, manifestXML, section.name, unit.name);
-        
-        ('\nConversion complete!');
-        ('Files created in exports folder:');
-        (`- ${path.basename(zipPath)} (Blackboard import ZIP file)`);
-        ('');
-        ('You can now import this ZIP file into Blackboard.');
-        ('');
-        ('Unit Summary:');
-        (`- Unit: ${unit.name} (ID: ${unit.uid})`);
-        (`- Section: ${section.name} (ID: ${section.uid})`);
-        (`- Tasks included: ${unit.tasks.length}`);
-        (`- Total questions: ${validQuestions}`);
-        ('');
-        ('Tasks included:');
+
         unit.tasks.forEach((task, index) => {
-            const validTaskQuestions = task.questions.filter(q => 
-                q.prompt && q.answers && q.answers.length > 0 && 
+            const validTaskQuestions = task.questions.filter(q =>
+                q.prompt && q.answers && q.answers.length > 0 &&
                 q.correct_answer && q.correct_index !== undefined
             );
-            (`  ${index + 1}. ${task.name}: ${validTaskQuestions.length} questions`);
         });
-        
     } catch (error) {
         console.error('Error during conversion:', error.message);
         process.exit(1);
@@ -287,54 +260,32 @@ async function convertUnitToBlackboard(sectionUid, unitUid) {
 
 // Show available units
 function showAvailableUnits() {
-    ('Loading quiz data...');
     const quizData = loadQuizData();
-    
-    ('\nAvailable units:');
-    ('================');
-    
+
     quizData.sections.forEach((section) => {
-        (`\nSection ${section.uid}: ${section.name}`);
         section.units.forEach((unit) => {
             let totalQuestions = 0;
             unit.tasks.forEach(task => {
                 totalQuestions += task.questions.length;
             });
-            (`  Unit ${unit.uid}: ${unit.name} (${unit.tasks.length} tasks, ${totalQuestions} total questions)`);
-            unit.tasks.forEach((task) => {
-                (`    Task ${task.uid}: ${task.name} (${task.questions.length} questions)`);
-            });
         });
     });
-    
-    ('\nTo convert a specific unit (all tasks), use:');
-    ('node convert_unit_to_blackboard.js <sectionId> <unitId>');
-    ('\nExamples:');
-    ('  node convert_unit_to_blackboard.js 2 1    # Variables and Data Types unit');
-    ('  node convert_unit_to_blackboard.js 2 2    # Another unit');
 }
+
 
 // Main execution
 if (process.argv.length === 2) {
     // No arguments provided, show available units
     showAvailableUnits();
-} else if (process.argv.length === 4) {
+} else if (process.argv.length === 5) {
     // Convert specific unit
-    const sectionId = parseInt(process.argv[2]);
-    const unitId = parseInt(process.argv[3]);
-    
-    if (isNaN(sectionId) || isNaN(unitId)) {
-        console.error('Error: All arguments must be valid numbers.');
-        process.exit(1);
-    }
-    
-    convertUnitToBlackboard(sectionId, unitId);
+    const courseId = process.argv[2];
+    const sectionId = process.argv[3];
+    const unitId = process.argv[4];
+
+    convertUnitToBlackboard(courseId, sectionId, unitId);
 } else {
-    console.error('Usage: node convert_unit_to_blackboard.js [<sectionId> <unitId>]');
+    console.error('Usage: node convert_unit_to_blackboard.js <courseUid> <sectionId> <unitId>');
     console.error('If no arguments provided, shows available units with their IDs.');
-    console.error('');
-    console.error('Examples:');
-    console.error('  node convert_unit_to_blackboard.js 2 1    # Variables and Data Types unit');
-    console.error('  node convert_unit_to_blackboard.js 2 2    # Another unit');
     process.exit(1);
 }
