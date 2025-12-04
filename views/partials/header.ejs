@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-    <%= typeof title !=='undefined' ? title : 'Quizbanks' %>
+    <%= typeof title !=='undefined' ? title + ' - Quizbanks' : 'Quizbanks' %>
   </title>
   <link rel="stylesheet" href="/styles/index.css">
 </head>
@@ -19,33 +19,33 @@
       <button id="backBtn" class="back-btn" onclick="goBack()" title="Go back" aria-label="Go back">
         &#8592; Back
       </button>
-          <a href="/help">Help</a>
-          <% if (user) { %>
+      <a href="https://github.com/csmith1188/quizbank/wiki">Help</a>
+      <% if (user) { %>
 
-            <% if (title !=='Teacher' ) { %>
-              <a href="/teacher" class="settings-btn <%= (title === 'Teacher') ? 'active' : '' %>">Course Dashboard</a>
+        <% if (title !=='Teacher' ) { %>
+          <a href="/teacher/content" class="settings-btn <%= (title === 'Teacher') ? 'active' : '' %>">Dashboard</a>
+          <% } %>
+            <% if (title !=='Logout' ) { %>
+              <a href="/login/logout" class="settings-btn <%= (title === 'Logout') ? 'active' : '' %>">Logout</a>
               <% } %>
-                <% if (title !=='Logout' ) { %>
-                  <a href="/login/logout" class="settings-btn <%= (title === 'Logout') ? 'active' : '' %>">Logout</a>
-                  <% } %>
-                    <span class="user-info">
-                      <%= user.username %>
-                    </span>
-                    <% } else { %>
-                      <% if (title !=='Login' ) { %>
-                        <a href="/login/" class="<%= (title === 'Login') ? 'active' : '' %>">Login</a>
+                <span class="user-info">
+                  <%= user.username %>
+                </span>
+                <% } else { %>
+                  <% if (title !=='Login' ) { %>
+                    <a href="/login/" class="<%= (title === 'Login') ? 'active' : '' %>">Login</a>
+                    <% } %>
+                      <% if (title !=='Register' ) { %>
+                        <a href="/login/register" class="<%= (title === 'Register') ? 'active' : '' %>">Register</a>
                         <% } %>
-                          <% if (title !=='Register' ) { %>
-                            <a href="/login/register" class="<%= (title === 'Register') ? 'active' : '' %>">Register</a>
-                            <% } %>
-                              <% } %>
-                                <button id="darkModeToggle" aria-label="Toggle dark mode" class="settings-btn"
-                                  title="Toggle dark mode">
-                                  <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm6.94-2.06a8.12 8.12 0 0 0 .06-1.44 8.12 8.12 0 0 0-.06-1.44l2.11-1.65a.5.5 0 0 0 .12-.62l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.03 7.03 0 0 0-1.25-.73l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.18-.84.4-1.25.73l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.62l2.11 1.65c-.04.47-.07.96-.07 1.44s.03.97.07 1.44l-2.11 1.65a.5.5 0 0 0-.12.62l2 3.46a.5.5 0 0 0 .6.22l2.49-1c.4.33.81.55 1.25.73l.38 2.65A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.18.84-.4 1.25-.73l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.62l-2.11-1.65z" />
-                                  </svg>
-                                </button>
+                          <% } %>
+                            <button id="darkModeToggle" aria-label="Toggle dark mode" class="settings-btn"
+                              title="Toggle dark mode">
+                              <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zm6.94-2.06a8.12 8.12 0 0 0 .06-1.44 8.12 8.12 0 0 0-.06-1.44l2.11-1.65a.5.5 0 0 0 .12-.62l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.03 7.03 0 0 0-1.25-.73l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.43.18-.84.4-1.25.73l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.62l2.11 1.65c-.04.47-.07.96-.07 1.44s.03.97.07 1.44l-2.11 1.65a.5.5 0 0 0-.12.62l2 3.46a.5.5 0 0 0 .6.22l2.49-1c.4.33.81.55 1.25.73l.38 2.65A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.43-.18.84-.4 1.25-.73l2.49 1a.5.5 0 0 0 .6-.22l2-3.46a.5.5 0 0 0-.12-.62l-2.11-1.65z" />
+                              </svg>
+                            </button>
     </div>
   </nav>
   <script>
