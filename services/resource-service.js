@@ -248,6 +248,24 @@ module.exports.createQuestionForUser = async (taskUid, prompt, type, answers, co
     return question.toJSON();
 };
 
+module.exports.deleteResourceForUser = async ({ type, uid }) => {
+    let model;
+    switch (type) {
+        case "course": model = Course; break;
+        case "section": model = Section; break;
+        case "unit": model = Unit; break;
+        case "task": model = Task; break;
+        case "question": model = Question; break;
+        default: throw new Error(`Invalid resource type: ${type}`);
+    }
+    const resource = await model.findOne({ where: { uid } });
+    if (!resource) {
+        return { success: false, message: `${type} not found` };
+    }
+    await resource.destroy();
+    return { success: true };
+};
+
 module.exports.createTaskForUser = async (taskName, unitUid, description, GenPrompt) => {
     if (!taskName) {
         throw new Error("Task name is required.");

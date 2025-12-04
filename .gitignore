@@ -1,4 +1,4 @@
 /node_modules
 /db/database.sqlite
-/.env
+.env
 /services/BBconverters/exports

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = window.getScoped(view);
     const item = items.find(i => String(i.uid ?? i.id) === String(id));
     if (!item) return alert('Item not found.');
-
+    
     // Create a custom popup for editing
     const popup = document.createElement('div');
     popup.classList.add('custom-popup');
@@ -80,39 +80,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-
-function updateInMemoryData(courses, view, id, updated) {
-  for (const course of courses) {
-    if (view === 'courses' && String(course.uid) === String(id)) {
-      Object.assign(course, updated);
-      return;
-    }
-
-    if (course.sections) {
-      for (const section of course.sections) {
-        if (view === 'sections' && String(section.uid) === String(id)) {
-          Object.assign(section, updated);
-          return;
-        }
-
-        if (section.units) {
-          for (const unit of section.units) {
-            if (view === 'units' && String(unit.uid) === String(id)) {
-              Object.assign(unit, updated);
-              return;
-            }
-
-            if (unit.tasks) {
-              for (const task of unit.tasks) {
-                if (view === 'tasks' && String(task.uid) === String(id)) {
-                  Object.assign(task, updated);
-                  return;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}

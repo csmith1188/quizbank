@@ -53,7 +53,6 @@ function getAllQuestions() {
             out.push({ ...q, parentTask: task, parentUnit: task.parentUnit, parentSection: task.parentSection, parentCourse: task.parentCourse });
         }
     }
-    console.log(out);
     return out;
 }
 
@@ -323,6 +322,7 @@ function renderView(view, filter = "") {
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
         </button>`;
+        html += `<button class="delete-btn" data-id="${item.uid}" onclick="deleteData(this)" title="Delete Button">🗑️ Delete</button>`;
         if (view !== "questions") {
             html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
             html += `</li>`;
@@ -341,6 +341,35 @@ function renderView(view, filter = "") {
     attachDropDownListeners(view, items);
 }
 
+async function deleteData(item) {
+    console.log("Delete function called");
+    let uid = item.getAttribute("data-id");
+    let view = document.querySelector('.browser-tab.active')?.getAttribute('data-view') || 'courses';
+    let confirmDelete = confirm("Are you sure you want to delete this item?");
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(`/api/edit/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: view.slice(0, -1),
+                uid: uid
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            //temparily reload the page to reflect changes
+            location.reload();
+        } else {
+            alert('Error deleting item: ' + (data.error || 'Unknown error'));
+        }
+    } catch (err) {
+        console.error('Error deleting item:', err);
+        alert('Error deleting item: ' + err.message);
+    }
+}
+
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
     area.classList.add('question-detail-mode');
@@ -352,7 +381,6 @@ function renderQuestionDetail(question) {
         answers = question.answers || [];
     }
     let correctIdx = (typeof question.correct_index !== "undefined" ? question.correct_index : question.correctIndex);
-    let correctAns = question.correctAnswer || question.correct_answer;
 
     let hasMultipleAnswers = typeof question.correct_index === "string" && question.correct_index.startsWith("[");
 
@@ -374,7 +402,7 @@ function renderQuestionDetail(question) {
         </ul>
       </div>
       <div class="question-detail-actions">
-        <button id="questionDetailEditBtn" class="edit-btn">✎ Edit</button>
+        <button id="questionDetailEditBtn" class="Question-edit-btn">✎ Edit</button>
         <button id="questionDetailBackBtn" class="back-btn">Back</button>
       </div>
     </div>
