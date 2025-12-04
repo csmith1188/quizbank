@@ -289,3 +289,16 @@ if (process.argv.length === 2) {
     console.error('If no arguments provided, shows available units with their IDs.');
     process.exit(1);
 }
+
+/*
+module.exports = {
+    convertUnitToBlackboard,
+    showAvailableUnits,
+    loadQuizData,
+    getUnit,
+    ensureExportsDir,
+    createUnitBlackboardXML,
+    createManifestXML,
+    createBlackboardZIP
+};
+*/

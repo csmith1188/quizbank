@@ -323,10 +323,18 @@ function renderView(view, filter = "") {
           <span>${display}</span>
           <span class="item-number">${item.number || item.index || ""}</span>
         </button>`;
-        if (view !== "questions"){
-        html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
-        html += `</li>`;
+        if (view !== "questions") {
+            html += `<button class="edit-btn" data-id="${item.uid ?? item.id}" title="Edit">✎ Edit</button>`;
+            html += `</li>`;
         }
+        /*
+        if (view == "units") {
+            html += `<button class="edit-btn" data-id="${item.uid}" title="Convert to Blackboard" onclick="convertUnitToBlackboard('${selectedPath.course.uid}', '${selectedPath.section.uid}', '${item.uid}');">Download</button>`;
+        }
+        if (view == "tasks") {
+            html += `<button class="edit-btn" data-id="${item.uid}" title="Edit"> Export</button>`;
+        }
+        */
     });
     html += `</ul>`;
     area.innerHTML = html;
@@ -489,7 +497,7 @@ function pickQuestions() {
     const pickedQuestions = questions.slice(0, Math.max(numberToPick, 0));
 
     // Create a pop-up
-    let popUpContent = "<h3>Picked Questions</h3>";
+    let popUpContent = "<h3 style='color: white;'>Picked Questions</h3>";
 
     pickedQuestions.forEach(q => {
         let answers = [];
@@ -509,14 +517,14 @@ function pickQuestions() {
             q.parentTask ? q.parentTask.name : null
         ].filter(Boolean).join(' > ');
 
-        popUpContent += `<div style="margin-bottom: 20px;">
+        popUpContent += `<div style="margin-bottom: 20px; color: white;">
             <strong>Question:</strong> ${q.prompt || q.text}<br>
             ${paths ? `<div style="font-size: 0.9em; color: #ccc; margin-bottom: 5px;">${paths}</div>` : ''}
             <strong>Answers:</strong>
             <ul style="list-style-type: none; padding-left: 0;">
             ${answers.map((ans, idx) => `
-            <li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : ''}">
-             ${correctIdx === idx || ans === correctAns ? '*' : ''} ${ans}${(correctIdx === idx || ans === correctAns)}
+            <li style="${(correctIdx === idx || ans === correctAns) ? 'font-weight:bold; color:green;' : 'color:white'}">
+             ${correctIdx === idx || ans === correctAns ? '*' : ''} ${ans}
             </li>`).join('')}
             </ul>
         </div>`;
