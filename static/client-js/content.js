@@ -632,7 +632,7 @@ window.addEventListener("DOMContentLoaded", () => {
             .then(response => response.text())
             .then(data => {
                 const updatedSection = JSON.parse(data);
-                const course = ALL_COURSE_DATA.courses.find(c => c.uid === updatedSection.courseUid);
+                const course = ALL_COURSE_DATA.find(c => c.uid === updatedSection.courseUid);
                 course.sections[updatedSection.index - 1] = updatedSection;
                 selectedPath.section = updatedSection;
                 renderView('units');

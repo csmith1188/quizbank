@@ -515,6 +515,29 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
     return resolvedData;
 }
 
+module.exports.isQuestionTrueFalse = (questionData) => {
+    const answers = questionData.answers.map(a => a.toLowerCase());
+    return (
+        answers.length === 2 &&
+        (
+            (answers.includes("true") && answers.includes("false")) ||
+            (answers.includes("yes") && answers.includes("no"))
+        )
+    );
+}
+
+module.exports.determineQuestionType = (questionData) => {
+    if (questionData.correct_indices.length > 2) {
+        return "multiple-answer";
+    } else if (isTrueFalse(questionData)) {
+        return "true-false";
+    } else if (questionData.correct_indices.length >= 2) {
+        return "multiple-answer";
+    } else {
+        return "open-ended";
+    }
+}
+
 module.exports.insertUploadData = async (data, sectionUid) => {
 
     return sequelize.transaction(async (t) => {
@@ -597,9 +620,11 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 transaction: t
             });
 
+            const questionType = module.exports.determineQuestionType(question);
+
             // if multiple answer question, store as array, else single answer
-            const correctAnswers = question.type === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
-            const correctIndices = question.type === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
+            const correctAnswers = questionType === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
+            const correctIndices = questionType === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
 
             // for insertion
             const questionData = {
@@ -607,7 +632,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 index: lastQuestionIndex + 1,
                 ai: question.ai,
                 prompt: question.prompt,
-                type: question.type,
+                type: questionType,
                 correct_index: correctIndices,
                 correct_answer: correctAnswers,
                 answers: JSON.stringify(question.answers)

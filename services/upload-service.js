@@ -5,8 +5,10 @@ let { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/
 
 xlsx.stream.set_readable(Readable);
 
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
 // template
-const SHEET_HEADERS = ['unit', 'task', 'prompt', 'type', 'correctIndex'];
+const SHEET_HEADERS = ['unit', 'task', 'prompt', 'correctIndex'];
 
 // create map for quick lookup of header indices
 const SHEET_HEADERS_MAP = new Map();
@@ -55,6 +57,24 @@ function sheetFileDataToJSON(fileData) {
     return xlsx.utils.sheet_to_json(worksheet, { header: 1 });
 }
 
+// takes either A-D, excel row letter, or numbered index and returns numbered index
+function parseCorrectRow(row) {
+
+    const correctRowIndex = SHEET_HEADERS_MAP.get('correctIndex');
+
+    // if the row is a number
+    if (!isNaN(+row)) {
+        return row - 1;
+    }
+
+    const lowerRow = row.toLowerCase();
+
+    if (lowerRow === 'a' || lowerRow === alphabet[correctRowIndex + 1]) return 0;
+    if (lowerRow === 'b' || lowerRow === alphabet[correctRowIndex + 2]) return 1;
+    if (lowerRow === 'c' || lowerRow === alphabet[correctRowIndex + 3]) return 2;
+    if (lowerRow === 'd' || lowerRow === alphabet[correctRowIndex + 4]) return 3;
+}
+
 module.exports.parseSheet = (sheetFileData) => {
 
     const sheetData = sheetFileDataToJSON(sheetFileData);
@@ -92,8 +112,6 @@ module.exports.parseSheet = (sheetFileData) => {
         }
 
         const prompt = rowData[SHEET_HEADERS_MAP.get('prompt')];
-        let type = rowData[SHEET_HEADERS_MAP.get('type')];
-        type = type.toLowerCase().replace(/\s+/g, '-'); // ensure type is kebab-case
 
         const correctIndicesRaw = rowData[SHEET_HEADERS_MAP.get('correctIndex')];
 
@@ -105,8 +123,10 @@ module.exports.parseSheet = (sheetFileData) => {
 
             correctIndices = correctIndicesRaw.split('').map(idx => {
                 idx = idx.trim();
-                return rowLetterToIndex(idx) - SHEET_HEADERS_MAP.get('correctIndex') - 1;
+                return parseCorrectRow(idx);
             });
+
+            console.log(correctIndicesRaw);
 
             correctAnswers = correctIndices.map(idx => answers[idx]);
 
@@ -115,7 +135,6 @@ module.exports.parseSheet = (sheetFileData) => {
         const question = {
             ai: false,
             prompt,
-            type,
             correctAnswers,
             correctIndices,
             answers
