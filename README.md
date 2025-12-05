@@ -108,7 +108,7 @@ GET /api/resource/course/:courseId
 
 ### Pick Random Questions from a Course
 ```
-GET /api/resource/course/:courseId/pick/?pick=:amount
+GET /api/resource/course/:courseId/?pick=:amount
 ```
 
 ### List Sections in a Course
