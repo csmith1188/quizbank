@@ -33,7 +33,7 @@ function renderQuestionEdit(question) {
         <textarea id="editExportText" rows="10" style="width:100%; font-family:monospace; font-size:1em; padding:0.8em; border-radius:8px; border:1px solid var(--browser-border); background:var(--browser-bg); color:var(--browser-text);">${formattedText}</textarea>
 
         <div class="question-detail-actions" style="margin-top:12px;">
-          <button id="saveExportBtn" class="edit-btn">⬆ Paste & Update</button>
+          <button id="saveExportBtn" class="upload-btn">⬆ Paste & Update</button>
           <button id="cancelEditBtn" class="back-btn">Cancel</button>
         </div>
       </div>
@@ -73,9 +73,9 @@ function renderQuestionEdit(question) {
     }
 
     function updateLocalAllCourseData(updatedQuestionObj) {
-        if (!window.ALL_COURSE_DATA || !Array.isArray(window.ALL_COURSE_DATA.courses)) return;
+        if (!window.ALL_COURSE_DATA || !Array.isArray(window.ALL_COURSE_DATA)) return;
         const uidToMatch = Number(updatedQuestionObj.uid ?? updatedQuestionObj.id);
-        for (const course of window.ALL_COURSE_DATA.courses) {
+        for (const course of window.ALL_COURSE_DATA) {
             for (const section of (course.sections || [])) {
                 for (const unit of (section.units || [])) {
                     for (const task of (unit.tasks || [])) {
