@@ -1,6 +1,6 @@
 const { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
 const { shallow } = require("../util/scope-limit");
-const { getRandomItems } = require('../util/misc');
+const { getRandomItems, parseStringifiedArraysInObject } = require('../util/misc');
 
 const resourceTypeModelMap = new Map([
     ["course", Course],
@@ -385,6 +385,7 @@ async function entitiesInSameHierarchy(entities) {
 
 };
 
+
 async function resolveResource(type, uid) {
     const model = resourceTypeModelMap.get(type);
     if (!model) {
@@ -461,7 +462,7 @@ function resolveHierarchy(root, segments) {
         return data;
     }
 
-    segments.forEach(({ type, ids }) => {
+    segments.forEach(({ type, ids }, index) => {
         const collection = data[type + "s"];
         if (!collection) throw new Error(`Invalid resource type: ${type}`);
 
@@ -481,6 +482,8 @@ function resolveHierarchy(root, segments) {
 
     return data;
 }
+
+
 
 module.exports.getResource = async (path, pickAmount = null, questionType = null) => {
     const segments = parseResourcePath(path);
