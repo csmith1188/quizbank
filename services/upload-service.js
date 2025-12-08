@@ -102,7 +102,8 @@ module.exports.parseSheet = (sheetFileData) => {
         for (let col = SHEET_HEADERS_MAP.get('correctIndex') + 1; col < numCols; col++) {
             const cellValue = rowData[col] || '';
             if (cellValue != '') {
-                answers.push(cellValue);
+                const answer = cellValue.toString();
+                answers.push(answer);
             }
         }
 

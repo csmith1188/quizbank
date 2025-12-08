@@ -92,6 +92,7 @@ async function seed() {
             });
 
             for (const qData of taskData.questions || []) {
+
               await Question.upsert({
                 index: qData.id,
                 ai: qData.ai || false,

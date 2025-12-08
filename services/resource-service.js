@@ -527,11 +527,11 @@ module.exports.isQuestionTrueFalse = (questionData) => {
 }
 
 module.exports.determineQuestionType = (questionData) => {
-    if (questionData.correct_indices.length > 2) {
+    if (questionData.correctIndices.length > 2) {
         return "multiple-answer";
-    } else if (isTrueFalse(questionData)) {
+    } else if (module.exports.isQuestionTrueFalse(questionData)) {
         return "true-false";
-    } else if (questionData.correct_indices.length >= 2) {
+    } else if (questionData.correctIndices.length >= 2) {
         return "multiple-answer";
     } else {
         return "open-ended";
