@@ -93,6 +93,9 @@ async function seed() {
 
             for (const qData of taskData.questions || []) {
 
+              qData.answers = qData.answers.map(a => a.toString());
+              qData.correctAnswer = qData.correctAnswer.toString();
+
               await Question.upsert({
                 index: qData.id,
                 ai: qData.ai || false,
