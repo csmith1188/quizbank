@@ -470,7 +470,7 @@ function resolveHierarchy(root, segments) {
             return; 
         }
 
-        const matched = collection.filter(e => ids.includes(e.uid));
+        const matched = collection.filter(e => ids.includes(e.index));
         if (!matched.length) throw new Error(`Resource not found: ${type} ${ids}`);
 
         data = matched.length === 1 ? matched[0] : {
