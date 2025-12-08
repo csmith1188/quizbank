@@ -126,8 +126,7 @@ module.exports.parseSheet = (sheetFileData) => {
                 idx = idx.trim();
                 return parseCorrectRow(idx);
             });
-
-            console.log(correctIndicesRaw);
+            
 
             correctAnswers = correctIndices.map(idx => answers[idx]);
 
