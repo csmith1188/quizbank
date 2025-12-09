@@ -102,6 +102,22 @@ module.exports.getSectionsForUser = async (userUid) => {
     return sections.map(s => s.toJSON());
 }
 
+async function swapIndexes(model, parentKey, parentUid, oldIndex, newIndex, t) {
+    if (oldIndex === newIndex) return;
+
+    const other = await model.findOne({
+        where: {
+            [parentKey]: parentUid,
+            index: newIndex
+        },
+        transaction: t
+    });
+
+    if (!other) return;
+
+    await other.update({ index: oldIndex }, { transaction: t });
+}
+
 module.exports.getCoursesForUser = async (userUid) => {
     const courses = await Course.findAll({
         where: { userUid: userUid },
@@ -165,69 +181,71 @@ module.exports.createSectionForUser = async (sectionName, courseUid, description
     });
     return section.toJSON();
 };
-module.exports.editCourseForUser = async ({ uid, name, index, description }) => {
-    if (!name || !name.trim()) {
-        throw new Error("Course name is required.");
-    }
 
+module.exports.editCourseForUser = async ({ uid, name, oldIndex, newIndex, description }) => {
     const course = await Course.findOne({ where: { uid } });
     if (!course) throw new Error("Course not found");
 
-    course.name = name.trim();
-    course.index = index;
-    course.description = description;
-    await course.save();
+    return sequelize.transaction(async (t) => {
+        // perform swap
+        await swapIndexes(Course, "userUid", course.userUid, oldIndex, newIndex, t);
 
-    return course.toJSON();
+        course.name = name.trim();
+        course.index = newIndex;
+        course.description = description;
+        await course.save({ transaction: t });
+
+        return course.toJSON();
+    });
 };
 
-module.exports.editSectionForUser = async ({ uid, name, index, description }) => {
-    if (!name || !name.trim()) {
-        throw new Error("Section name is required.");
-    }
-
+module.exports.editSectionForUser = async ({ uid, name, oldIndex, newIndex, description }) => {
     const section = await Section.findOne({ where: { uid } });
     if (!section) throw new Error("Section not found");
 
-    section.name = name.trim();
-    section.index = index;
-    section.description = description;
-    await section.save();
+    return sequelize.transaction(async (t) => {
+        await swapIndexes(Section, "courseUid", section.courseUid, oldIndex, newIndex, t);
 
-    return section.toJSON();
+        section.name = name.trim();
+        section.index = newIndex;
+        section.description = description;
+        await section.save({ transaction: t });
+
+        return section.toJSON();
+    });
 };
 
-module.exports.editUnitForUser = async ({ uid, name, index, description }) => {
-    if (!name || !name.trim()) {
-        throw new Error("Unit name is required.");
-    }
-
+module.exports.editUnitForUser = async ({ uid, name, oldIndex, newIndex, description }) => {
     const unit = await Unit.findOne({ where: { uid } });
     if (!unit) throw new Error("Unit not found");
 
-    unit.name = name.trim();
-    unit.index = index;
-    unit.description = description;
-    await unit.save();
+    return sequelize.transaction(async (t) => {
+        await swapIndexes(Unit, "sectionUid", unit.sectionUid, oldIndex, newIndex, t);
 
-    return unit.toJSON();
+        unit.name = name.trim();
+        unit.index = newIndex;
+        unit.description = description;
+        await unit.save({ transaction: t });
+
+        return unit.toJSON();
+    });
 };
 
-module.exports.editTaskForUser = async ({ uid, name, index, description, genprompt }) => {
-    if (!name || !name.trim()) {
-        throw new Error("Task name is required.");
-    }
-
+module.exports.editTaskForUser = async ({ uid, name, oldIndex, newIndex, description, genprompt }) => {
     const task = await Task.findOne({ where: { uid } });
     if (!task) throw new Error("Task not found");
 
-    task.name = name.trim();
-    task.index = index;
-    task.description = description;
-    task.genprompt = genprompt;
-    await task.save();
+    return sequelize.transaction(async (t) => {
+        await swapIndexes(Task, "unitUid", task.unitUid, oldIndex, newIndex, t);
 
-    return task.toJSON();
+        task.name = name.trim();
+        task.index = newIndex;
+        task.description = description;
+        task.genprompt = genprompt;
+        await task.save({ transaction: t });
+
+        return task.toJSON();
+    });
 };
 
 module.exports.createQuestionForUser = async (taskUid, prompt, type, answers, correctIndex, correctAnswer, ai = false) => {
