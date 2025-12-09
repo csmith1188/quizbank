@@ -4,9 +4,9 @@
   "description": "API for quiz bank hierarchy",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node app.js",
     "dev": "nodemon src/index.js",
-    "create-db": "node src/createDatabase.js"
+    "create-db": "node db/database-init.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
