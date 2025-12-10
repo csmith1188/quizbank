@@ -116,6 +116,7 @@ async function swapIndexes(model, parentKey, parentUid, oldIndex, newIndex, t) {
     if (!other) return;
 
     await other.update({ index: oldIndex }, { transaction: t });
+    return other;
 }
 
 module.exports.getCoursesForUser = async (userUid) => {
@@ -188,14 +189,20 @@ module.exports.editCourseForUser = async ({ uid, name, oldIndex, newIndex, descr
 
     return sequelize.transaction(async (t) => {
         // perform swap
-        await swapIndexes(Course, "userUid", course.userUid, oldIndex, newIndex, t);
+        let otherCourse = await swapIndexes(Course, "userUid", course.userUid, oldIndex, newIndex, t);
 
         course.name = name.trim();
         course.index = newIndex;
         course.description = description;
         await course.save({ transaction: t });
 
-        return course.toJSON();
+        if (!otherCourse) {
+            return course;
+        }
+
+        let bothCourses = [course, otherCourse].map(c => c.toJSON());
+
+        return bothCourses;
     });
 };
 
@@ -204,14 +211,20 @@ module.exports.editSectionForUser = async ({ uid, name, oldIndex, newIndex, desc
     if (!section) throw new Error("Section not found");
 
     return sequelize.transaction(async (t) => {
-        await swapIndexes(Section, "courseUid", section.courseUid, oldIndex, newIndex, t);
+        let otherSection = await swapIndexes(Section, "courseUid", section.courseUid, oldIndex, newIndex, t);
 
         section.name = name.trim();
         section.index = newIndex;
         section.description = description;
         await section.save({ transaction: t });
 
-        return section.toJSON();
+        if (!otherSection) {
+            return section;
+        }
+
+        let bothSections = [section, otherSection].map(s => s.toJSON());
+
+        return bothSections;
     });
 };
 
@@ -220,14 +233,20 @@ module.exports.editUnitForUser = async ({ uid, name, oldIndex, newIndex, descrip
     if (!unit) throw new Error("Unit not found");
 
     return sequelize.transaction(async (t) => {
-        await swapIndexes(Unit, "sectionUid", unit.sectionUid, oldIndex, newIndex, t);
+        let otherUnit = await swapIndexes(Unit, "sectionUid", unit.sectionUid, oldIndex, newIndex, t);
 
         unit.name = name.trim();
         unit.index = newIndex;
         unit.description = description;
         await unit.save({ transaction: t });
 
-        return unit.toJSON();
+        if (!otherUnit) {
+            return unit;
+        }
+
+        let bothUnits = [unit, otherUnit].map(u => u.toJSON());
+
+        return bothUnits;
     });
 };
 
@@ -236,7 +255,7 @@ module.exports.editTaskForUser = async ({ uid, name, oldIndex, newIndex, descrip
     if (!task) throw new Error("Task not found");
 
     return sequelize.transaction(async (t) => {
-        await swapIndexes(Task, "unitUid", task.unitUid, oldIndex, newIndex, t);
+        let otherTask = await swapIndexes(Task, "unitUid", task.unitUid, oldIndex, newIndex, t);
 
         task.name = name.trim();
         task.index = newIndex;
@@ -244,7 +263,13 @@ module.exports.editTaskForUser = async ({ uid, name, oldIndex, newIndex, descrip
         task.genprompt = genprompt;
         await task.save({ transaction: t });
 
-        return task.toJSON();
+        if (!otherTask) { 
+            return task;
+        }
+
+        let bothTasks = [task, otherTask].map(t => t.toJSON());
+
+        return bothTasks;
     });
 };
 
