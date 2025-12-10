@@ -100,9 +100,9 @@ module.exports.parseSheet = (sheetFileData) => {
 
         // collect answers from columns after 'correctIndex'
         for (let col = SHEET_HEADERS_MAP.get('correctIndex') + 1; col < numCols; col++) {
-            const cellValue = rowData[col]; // to fix
-            if (cellValue != '') {
-                const answer = cellValue;
+            const cellValue = rowData[col];
+            if (typeof cellValue !== 'undefined') {
+                const answer = cellValue.toString();
                 answers.push(answer);
             }
         }
