@@ -34,7 +34,7 @@ const pluralToSingular = {
 
 const MAX_QUESTIONS_PICK = 20;
 
-// Recursively collect all questions from the data
+// Recursively collect all questions below the data
 const collectQuestions = (data, questionType = null) => {
     if (!data) return [];
     if (Array.isArray(data)) {
@@ -475,6 +475,7 @@ async function getEntityHierarchy(entityType, entityUid) {
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
+    let hierarchyList = {};
 
     if (segments.length === 0) {
         return data;
@@ -498,7 +499,10 @@ function resolveHierarchy(root, segments) {
         };
     });
 
-    return data;
+    return {
+        data: data,
+        hierarchy: hierarchyList
+    }
 }
 
 
@@ -513,7 +517,9 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
     const firstSegment = segments.shift(); // gets and removes first segment
 
     let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]);
-    let resolvedData = resolveHierarchy(data, segments);
+    const resolved = resolveHierarchy(data, segments);
+    const hierarchyList = resolved.hierarchy;
+    let resolvedData = resolved.data;
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -526,14 +532,16 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
         if (allQuestions.length === 0) throw new Error("No questions available to pick from");
 
-        resolvedData = [];
-        while (resolvedData.length < pickAmount) {
-            const pickedQuestions = getRandomItems(allQuestions, pickAmount - resolvedData.length);
-            resolvedData.push(...pickedQuestions);
+        questions = [];
+        while (questions.length < pickAmount) {
+            const pickedQuestions = getRandomItems(allQuestions, pickAmount - questions.length);
+            questions.push(...pickedQuestions);
         }
+
+        return questions;
     }
 
-    return resolvedData;
+    return {};
 }
 
 module.exports.isQuestionTrueFalse = (questionData) => {
