@@ -49,6 +49,27 @@ const collectQuestions = (data, questionType = null) => {
     return [];
 };
 
+module.exports.getCourseFullHierarchy = async (courseUid) => {
+    const courses = await Course.findAll({
+        where: { uid: courseUid }, // Filter by userUid
+        include: [{
+            model: Section,
+            as: "sections",
+            include: [{
+                model: Unit,
+                as: "units",
+                include: [{
+                    model: Task,
+                    as: "tasks",
+                    include: [{ model: Question, as: "questions" }]
+                }]
+            }]
+        }]
+    });
+
+    return courses.map(c => c.toJSON());
+}
+
 // Fetch the full course hierarchy for a user
 module.exports.getUserFullHierarchy = async (userUid) => {
     const courses = await Course.findAll({
@@ -440,8 +461,55 @@ function parseResourcePath(path) {
     return segments;
 }
 
-// gets the full hierarchy underneath an entity
-async function getEntityHierarchy(entityType, entityUid) {
+// returns flat hierarchy list
+function getFlatHierarchy(tree) {
+    const output = { hierarchy: {} };
+
+    function walk(node) {
+        if (!node || typeof node !== 'object') return;
+
+        // Try to determine the entity type by its array children
+        for (const type of ['course', 'unit', 'section', 'task', 'question']) {
+            if (node[type + 's']) {
+                // This node is the parent of that type, not the type itself
+                continue;
+            }
+        }
+
+        // Figure out this node's type by checking which fields exist
+        for (const type of ['course', 'unit', 'section', 'task', 'question']) {
+            if (
+                node.type === type ||                       // optional explicit type
+                node.hasOwnProperty(type + 'Uid') ||        // child reference field
+                node.__type === type ||                     // optional tagging system
+                node._type === type                         // optional tagging
+            ) {
+                // If the node contains id and name, record it
+                if (node.id !== undefined && node.name !== undefined) {
+                    output.hierarchy[type] = {
+                        id: node.id,
+                        name: node.name
+                    };
+                }
+            }
+        }
+
+        // Recursively walk any children arrays (units, sections, tasks…)
+        for (const key of Object.keys(node)) {
+            if (Array.isArray(node[key])) {
+                for (const child of node[key]) {
+                    walk(child);
+                }
+            }
+        }
+    }
+
+    walk(tree);
+    return output;
+}
+
+// gets the full hierarchy underneath an entity (from entity down)
+async function getEntityHierarchyUnderneath(entityType, entityUid) {
 
     if (entityType === 'course' && typeof entityUid === 'undefined') {
         throw new Error("Can't get all courses.");
@@ -472,10 +540,56 @@ async function getEntityHierarchy(entityType, entityUid) {
     return scope.toJSON();
 }
 
+// gets the full hierarchy of an entity (from course down)
+async function getEntityFullHierarchy(entityType, entityUid) {
+
+    let currentType = entityType;
+    let currentUid = entityUid;
+
+    // get course uid of entity
+    while (currentType !== "course") {
+        const idx = resourceTypeIndexMap.get(currentType);
+        const model = resourceTypeModelMap.get(currentType);
+
+        // Determine parent type
+        const parentType = resourceTypes[idx - 1];
+        const parentField = parentType + "Uid";
+
+        // Load the entity to get its parent UID
+        const entity = await model.findOne({
+            where: { uid: currentUid },
+            attributes: [parentField]
+        });
+
+        if (!entity) {
+            throw new Error(`Entity not found: ${currentType} ${currentUid}`);
+        }
+
+        const parentUid = entity[parentField];
+
+        if (!parentUid) {
+            throw new Error(`No parent found for ${currentType} ${currentUid}`);
+        }
+
+        // Move upward one level
+        currentType = parentType;
+        currentUid = parentUid;
+    }
+
+    const fullHierarchy = module.exports.getCourseFullHierarchy(currentUid);
+    return fullHierarchy;
+
+}
+
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
-    let hierarchyList = {};
+    let hierarchyList = {
+        course: null,
+        section: null,
+        unit: null,
+        task: null,
+    };
 
     if (segments.length === 0) {
         return data;
@@ -516,9 +630,9 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
     const firstSegment = segments.shift(); // gets and removes first segment
 
-    let data = await getEntityHierarchy(firstSegment.type, firstSegment.ids[0]);
+    let data = await getEntityHierarchyUnderneath(firstSegment.type, firstSegment.ids[0]);
     const resolved = resolveHierarchy(data, segments);
-    const hierarchyList = resolved.hierarchy;
+    let flatHierarchy = resolved.hierarchy;
     let resolvedData = resolved.data;
 
     // if pick amount is not null, pick questions under the resolved data
@@ -538,10 +652,12 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
             questions.push(...pickedQuestions);
         }
 
-        return questions;
+        resolvedData = questions; 
     }
 
-    return {};
+    // todo flat hierarchy stuff
+
+    return resolvedData;
 }
 
 module.exports.isQuestionTrueFalse = (questionData) => {
