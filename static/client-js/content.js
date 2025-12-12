@@ -341,12 +341,17 @@ function renderView(view, filter = "") {
     attachDropDownListeners(view, items);
 }
 
-async function deleteData(item) {
-    console.log("Delete function called");
-    let uid = item.getAttribute("data-id");
-    let view = document.querySelector('.browser-tab.active')?.getAttribute('data-view') || 'courses';
-    let confirmDelete = confirm("Are you sure you want to delete this item?");
-    if (!confirmDelete) return;
+async function deleteData(itemBtn) {
+    if (!itemBtn) return;
+    const uid = itemBtn.getAttribute("data-id");
+    const view = document.querySelector('.browser-tab.active')?.getAttribute('data-view') || 'courses';
+
+    if (!uid) {
+        console.warn('No uid found on element', itemBtn);
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
         const response = await fetch(`/api/edit/delete`, {
@@ -357,18 +362,100 @@ async function deleteData(item) {
                 uid: uid
             })
         });
-        const data = await response.json();
-        if (data.success) {
-            //temparily reload the page to reflect changes
-            location.reload();
-        } else {
+
+        let data;
+        try { data = await response.json(); } catch (e) { data = { success: response.ok }; }
+
+        if (data && data.success === false) {
             alert('Error deleting item: ' + (data.error || 'Unknown error'));
+            return;
         }
+
+        const uidStr = String(uid);
+
+        const clearSelectionIfMatches = (obj) => {
+            if (!obj) return;
+            if (String(obj.uid) === uidStr) {
+                switch (view) {
+                    case 'courses':
+                        selectedPath.course = selectedPath.section = selectedPath.unit = selectedPath.task = null;
+                        break;
+                    case 'sections':
+                        selectedPath.section = selectedPath.unit = selectedPath.task = null;
+                        break;
+                    case 'units':
+                        selectedPath.unit = selectedPath.task = null;
+                        break;
+                    case 'tasks':
+                        selectedPath.task = null;
+                        break;
+                    case 'questions':
+                        questionDetail = null;
+                        break;
+                }
+            }
+        };
+
+        if (view === "courses") {
+            window.ALL_COURSE_DATA = (window.ALL_COURSE_DATA || []).filter(c => String(c.uid) !== uidStr);
+            clearSelectionIfMatches(selectedPath.course);
+
+        } else if (view === "sections") {
+            for (const course of (window.ALL_COURSE_DATA || [])) {
+                course.sections = (course.sections || []).filter(s => String(s.uid) !== uidStr);
+            }
+            clearSelectionIfMatches(selectedPath.section);
+
+        } else if (view === "units") {
+            for (const course of (window.ALL_COURSE_DATA || [])) {
+                for (const section of (course.sections || [])) {
+                    section.units = (section.units || []).filter(u => String(u.uid) !== uidStr);
+                }
+            }
+            clearSelectionIfMatches(selectedPath.unit);
+
+        } else if (view === "tasks") {
+            for (const course of (window.ALL_COURSE_DATA || [])) {
+                for (const section of (course.sections || [])) {
+                    for (const unit of (section.units || [])) {
+                        unit.tasks = (unit.tasks || []).filter(t => String(t.uid) !== uidStr);
+                    }
+                }
+            }
+            clearSelectionIfMatches(selectedPath.task);
+
+        } else if (view === "questions") {
+            for (const course of (window.ALL_COURSE_DATA || [])) {
+                for (const section of (course.sections || [])) {
+                    for (const unit of (section.units || [])) {
+                        for (const task of (unit.tasks || [])) {
+                            task.questions = (task.questions || []).filter(q => String(q.uid) !== uidStr);
+                        }
+                    }
+                }
+            }
+            if (questionDetail && String(questionDetail.uid) === uidStr) questionDetail = null;
+        }
+
+        updateSelectedPathDisplay();
+        document.querySelectorAll('.browser-tab').forEach(btn => {
+            const v = btn.getAttribute('data-view');
+            if (v === 'questionEdit' && !questionDetail) {
+                btn.remove();
+            }
+        });
+
+        const searchVal = document.getElementById('searchInput')?.value || "";
+        renderView(view, searchVal);
+
+        alert('Item deleted successfully.');
+
     } catch (err) {
         console.error('Error deleting item:', err);
-        alert('Error deleting item: ' + err.message);
+        alert('Error deleting item: ' + (err && err.message ? err.message : err));
     }
 }
+
 
 function renderQuestionDetail(question) {
     const area = document.getElementById('browserListArea');
