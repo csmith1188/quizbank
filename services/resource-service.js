@@ -461,59 +461,38 @@ function parseResourcePath(path) {
     return segments;
 }
 
-// returns flat hierarchy list
-function getFlatHierarchy(tree) {
-    const output = { hierarchy: {} };
+function flattenHierarchy(tree) {
+    const order = ["course", "unit", "section", "task", "question"];
+    const flat = {};
 
-    function walk(node) {
-        if (!node || typeof node !== 'object') return;
+    let current = tree;
 
-        // Try to determine the entity type by its array children
-        for (const type of ['course', 'unit', 'section', 'task', 'question']) {
-            if (node[type + 's']) {
-                // This node is the parent of that type, not the type itself
-                continue;
-            }
+    for (const type of order) {
+        if (!current) break;
+
+        // If this node is the correct type, extract it
+        if (current.id !== undefined && current.name !== undefined) {
+            flat[type] = {
+                id: current.id,
+                name: current.name
+            };
         }
 
-        // Figure out this node's type by checking which fields exist
-        for (const type of ['course', 'unit', 'section', 'task', 'question']) {
-            if (
-                node.type === type ||                       // optional explicit type
-                node.hasOwnProperty(type + 'Uid') ||        // child reference field
-                node.__type === type ||                     // optional tagging system
-                node._type === type                         // optional tagging
-            ) {
-                // If the node contains id and name, record it
-                if (node.id !== undefined && node.name !== undefined) {
-                    output.hierarchy[type] = {
-                        id: node.id,
-                        name: node.name
-                    };
-                }
-            }
-        }
+        // Move to the child (if any)
+        const plural = type + "s";
 
-        // Recursively walk any children arrays (units, sections, tasks…)
-        for (const key of Object.keys(node)) {
-            if (Array.isArray(node[key])) {
-                for (const child of node[key]) {
-                    walk(child);
-                }
-            }
+        if (Array.isArray(current[plural]) && current[plural].length > 0) {
+            current = current[plural][0]; // the next node in the chain
+        } else {
+            break;
         }
     }
 
-    walk(tree);
-    return output;
+    return flat;
 }
 
 // gets the full hierarchy underneath an entity (from entity down)
 async function getEntityHierarchyUnderneath(entityType, entityUid) {
-
-    if (entityType === 'course' && typeof entityUid === 'undefined') {
-        throw new Error("Can't get all courses.");
-    }
 
     const model = resourceTypeModelMap.get(entityType);
     const typeIndex = resourceTypeIndexMap.get(entityType);
@@ -584,16 +563,7 @@ async function getEntityFullHierarchy(entityType, entityUid) {
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
-    let hierarchyList = {
-        course: null,
-        section: null,
-        unit: null,
-        task: null,
-    };
-
-    if (segments.length === 0) {
-        return data;
-    }
+    const partialFlatHierarchy = {}
 
     segments.forEach(({ type, ids }, index) => {
         const collection = data[type + "s"];
@@ -604,7 +574,22 @@ function resolveHierarchy(root, segments) {
             return; 
         }
 
-        const matched = collection.filter(e => ids.includes(e.index));
+        const matched = [];
+
+        for (let e of collection) {
+
+            if (ids.includes(e.index)) {
+                matched.push(e);
+            }
+
+            // add to type to flat hierarchy
+            partialFlatHierarchy[type] = {
+                uid: e.uid,
+                name: e.name
+            }
+
+        }
+
         if (!matched.length) throw new Error(`Resource not found: ${type} ${ids}`);
 
         data = matched.length === 1 ? matched[0] : {
@@ -614,9 +599,9 @@ function resolveHierarchy(root, segments) {
     });
 
     return {
-        data: data,
-        hierarchy: hierarchyList
-    }
+        data,
+        partialFlatHierarchy
+    };
 }
 
 
@@ -628,12 +613,27 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
         throw new Error("Empty resource path");
     }
 
+    if (segments.length === 1 && !segments[0].ids.length) {
+        throw new Error("Cannot fetch everything");
+    }
+
     const firstSegment = segments.shift(); // gets and removes first segment
 
-    let data = await getEntityHierarchyUnderneath(firstSegment.type, firstSegment.ids[0]);
-    const resolved = resolveHierarchy(data, segments);
-    let flatHierarchy = resolved.hierarchy;
+    const root = await getEntityHierarchyUnderneath(firstSegment.type, firstSegment.ids[0]);
+    const resolved = resolveHierarchy(root, segments);
     let resolvedData = resolved.data;
+    let flatHierarchy = resolved.partialFlatHierarchy;
+
+    const flatRoot = {
+        uid: root.uid,
+        name: root.name
+    }
+
+    // put flatRoot at the top of the flatHierarchy object
+    flatHierarchy = {
+        [firstSegment.type]: flatRoot,
+        ...flatHierarchy
+    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -648,14 +648,14 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
         questions = [];
         while (questions.length < pickAmount) {
-            const pickedQuestions = getRandomItems(allQuestions, pickAmount - questions.length);
+            let pickedQuestions = getRandomItems(allQuestions, pickAmount - questions.length);
             questions.push(...pickedQuestions);
         }
 
         resolvedData = questions; 
     }
 
-    // todo flat hierarchy stuff
+    console.log(flatHierarchy);
 
     return resolvedData;
 }
