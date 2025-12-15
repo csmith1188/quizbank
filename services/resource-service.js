@@ -563,7 +563,6 @@ async function getEntityFullHierarchy(entityType, entityUid) {
 // Resolve the hierarchy based on segments
 function resolveHierarchy(root, segments) {
     let data = root;
-    const partialFlatHierarchy = {}
 
     segments.forEach(({ type, ids }, index) => {
         const collection = data[type + "s"];
@@ -582,12 +581,6 @@ function resolveHierarchy(root, segments) {
                 matched.push(e);
             }
 
-            // add to type to flat hierarchy
-            partialFlatHierarchy[type] = {
-                uid: e.uid,
-                name: e.name
-            }
-
         }
 
         if (!matched.length) throw new Error(`Resource not found: ${type} ${ids}`);
@@ -600,7 +593,6 @@ function resolveHierarchy(root, segments) {
 
     return {
         data,
-        partialFlatHierarchy
     };
 }
 
@@ -622,18 +614,6 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
     const root = await getEntityHierarchyUnderneath(firstSegment.type, firstSegment.ids[0]);
     const resolved = resolveHierarchy(root, segments);
     let resolvedData = resolved.data;
-    let flatHierarchy = resolved.partialFlatHierarchy;
-
-    const flatRoot = {
-        uid: root.uid,
-        name: root.name
-    }
-
-    // put flatRoot at the top of the flatHierarchy object
-    flatHierarchy = {
-        [firstSegment.type]: flatRoot,
-        ...flatHierarchy
-    }
 
     // if pick amount is not null, pick questions under the resolved data
     if (pickAmount) {
@@ -654,8 +634,6 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
 
         resolvedData = questions; 
     }
-
-    console.log(flatHierarchy);
 
     return resolvedData;
 }
