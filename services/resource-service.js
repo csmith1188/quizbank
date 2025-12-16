@@ -1,4 +1,5 @@
 const { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
+const { Op } = require('sequelize');
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems, parseStringifiedArraysInObject } = require('../util/misc');
 
@@ -500,7 +501,7 @@ async function getEntityHierarchyUnderneath(entityType, entityUid) {
 
     let tempInclude = include;
 
-    for (let i = typeIndex + 1; i < resourceTypes.length; i++){
+    for (let i = typeIndex + 1; i < resourceTypes.length; i++) {
         const type = resourceTypes[i];
         const isLast = (i === resourceTypes.length - 1);
         tempInclude.model = resourceTypeModelMap.get(type);
@@ -512,7 +513,7 @@ async function getEntityHierarchyUnderneath(entityType, entityUid) {
     }
 
     const scope = await model.findOne({
-        where: {uid: entityUid},
+        where: { uid: entityUid },
         include: [include]
     });
 
@@ -568,9 +569,9 @@ function resolveHierarchy(root, segments) {
         const collection = data[type + "s"];
         if (!collection) throw new Error(`Invalid resource type: ${type}`);
 
-        if (!ids.length) { 
-            data = collection; 
-            return; 
+        if (!ids.length) {
+            data = collection;
+            return;
         }
 
         const matched = [];
@@ -632,7 +633,7 @@ module.exports.getResource = async (path, pickAmount = null, questionType = null
             questions.push(...pickedQuestions);
         }
 
-        resolvedData = questions; 
+        resolvedData = questions;
     }
 
     return resolvedData;
@@ -661,6 +662,16 @@ module.exports.determineQuestionType = (questionData) => {
     }
 }
 
+function startsWith(column, value, length = 5) {
+    if (!value) return null;
+
+    return {
+        [column]: {
+            [Op.startsWith]: value.slice(0, length)
+        }
+    };
+};
+
 module.exports.insertUploadData = async (data, sectionUid) => {
 
     return sequelize.transaction(async (t) => {
@@ -669,24 +680,25 @@ module.exports.insertUploadData = async (data, sectionUid) => {
         const newUnits = new Map(); // key: unitName, value: unitEntity
         const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
 
+        // find section
+        const sectionEntity = await Section.findOne({
+            where: {
+                uid: sectionUid,
+            },
+            transaction: t
+        });
+
+        if (!sectionEntity) {
+            throw new Error(`Section not found`);
+        }
+
         for (let item of data) {
+
             const { unitName, taskName } = item.createNew;
             const question = item.question;
 
             if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
                 throw new Error(`Not enough answer choices for question of type ${question.type}`);
-            }
-
-            // find section
-            const sectionEntity = await Section.findOne({
-                where: {
-                    uid: sectionUid,
-                },
-                transaction: t
-            });
-
-            if (!sectionEntity) {
-                throw new Error(`Section not found`);
             }
 
             let unitEntity;
@@ -728,7 +740,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 // create task
                 taskEntity = await Task.create({
                     name: taskName,
-                    index: (lastTaskIndex || 0) + 1,
+                    index: (lastTaskIndex || 0) + 1, // lastTaskIndex or 1
                     unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid, // get from map if already created
                 }, { transaction: t });
 
