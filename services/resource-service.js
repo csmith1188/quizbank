@@ -1,4 +1,4 @@
-const { sequelize, User, Course, Section, Unit, Task, Question } = require("../db/db");
+const { sequelize, User, Course, Section, Unit, Task, Question, Sequelize } = require("../db/db");
 const { Op } = require('sequelize');
 const { shallow } = require("../util/scope-limit");
 const { getRandomItems, parseStringifiedArraysInObject } = require('../util/misc');
@@ -662,15 +662,7 @@ module.exports.determineQuestionType = (questionData) => {
     }
 }
 
-function startsWith(column, value, length = 5) {
-    if (!value) return null;
-
-    return {
-        [column]: {
-            [Op.startsWith]: value.slice(0, length)
-        }
-    };
-};
+// this entire function should be cleaned up and separated into sub functions
 
 module.exports.insertUploadData = async (data, sectionUid) => {
 
@@ -679,6 +671,26 @@ module.exports.insertUploadData = async (data, sectionUid) => {
         // keeps track of created units and tasks to avoid duplicates
         const newUnits = new Map(); // key: unitName, value: unitEntity
         const newTasks = new Map(); // key: unitName:taskName, value: taskEntity
+
+        // check db for already existing units and tasks then add to maps
+
+        const PREFIX_LEN = 5;
+
+        // search for the first few characters for efficiency
+
+        let unitPrefixes = new Set();
+        let taskPrefixes = new Set();
+
+        for (let e of data) {
+            unitPrefixes.add(e.createNew.unitName.slice(0, PREFIX_LEN));
+            taskPrefixes.add(e.createNew.taskName.slice(0, PREFIX_LEN));
+        }
+
+        const existingUnits = await Unit.findAll({
+            where: {
+                [Op.or]: [...unitPrefixes].map(p => ({[Op.startsWith]: {name: ''}}))
+            }
+        })
 
         // find section
         const sectionEntity = await Section.findOne({
@@ -691,6 +703,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
         if (!sectionEntity) {
             throw new Error(`Section not found`);
         }
+
 
         for (let item of data) {
 
@@ -722,9 +735,6 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 newUnits.set(unitName, unitEntity);
             }
 
-            // keys like this are necessary because of the hierarchical relationship
-            // imagine two tasks with the same name in different units
-            // sorry if I hurty your brain
             let taskKey = unitName + ":" + taskName;
             let taskEntity = newTasks.get(taskKey);
 
