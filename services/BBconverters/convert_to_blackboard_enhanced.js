@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 // Initialize and fetch quiz data
 async function initialize() {
-    const allContentData = await resourceService.getResource(2, '/course');
+    const allContentData = await resourceService.getResource('/course');
     return allContentData;
 }
 

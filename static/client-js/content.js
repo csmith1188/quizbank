@@ -574,6 +574,46 @@ function attachUnselectListeners() {
     });
 }
 
+async function pickOneQuestion() {
+    const path = selectedPath;
+    let apiUrl = '';
+
+    if (path.task) {
+        apiUrl = `/api/resource/course/${path.course.uid}/section/${path.section.index}/unit/${path.unit.index}/task/${path.task.index}/?pick=1`;
+    } else if (path.unit) {
+        apiUrl = `/api/resource/course/${path.course.uid}/section/${path.section.index}/unit/${path.unit.index}/?pick=1`;
+    } else if (path.section) {
+        apiUrl = `/api/resource/course/${path.course.uid}/section/${path.section.index}/?pick=1`;
+    } else if (path.course) {
+        apiUrl = `/api/resource/course/${path.course.uid}/?pick=1`;
+    } else {
+        alert("No valid path selected.");
+        return;
+    }
+
+    const popUp = document.createElement('div');
+    popUp.style.position = 'fixed';
+    popUp.style.top = '50%';
+    popUp.style.left = '50%';
+    popUp.style.transform = 'translate(-50%, -50%)';
+    popUp.style.backgroundColor = 'black';
+    popUp.style.border = '2px solid #333';
+    popUp.style.borderRadius = '8px';
+    popUp.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    popUp.style.padding = '20px';
+    popUp.style.zIndex = '1000';
+    popUp.style.maxWidth = '90%';
+    popUp.style.color = 'white';
+    popUp.innerHTML = `<strong>Path:</strong> <span id="pathText">${apiUrl}</span><br>
+                       <button id="closePopUp" style="margin-top: 10px;">Close</button>`;
+    navigator.clipboard.writeText(apiUrl);
+    document.body.appendChild(popUp);
+
+    document.getElementById('closePopUp').onclick = () => {
+        document.body.removeChild(popUp);
+    };
+}
+
 function pickQuestions() {
     const numberToPick = parseInt(prompt("How many questions would you like to pick?", "1"), 10) || 1;
     const path = selectedPath;
@@ -605,13 +645,11 @@ function pickQuestions() {
         questions = getAllQuestions();
     }
 
-    // Remove duplicates
     questions = Array.from(new Set(questions.map(q => JSON.stringify(q)))).map(q => JSON.parse(q));
 
     questions = questions.sort(() => Math.random() - 0.5);
     const pickedQuestions = questions.slice(0, Math.max(numberToPick, 0));
 
-    // Create a pop-up
     let popUpContent = "<h3 style='color: white;'>Picked Questions</h3>";
 
     pickedQuestions.forEach(q => {

@@ -6,10 +6,13 @@
         <div class="glass-card">
             <h2 class="browser-title">Browse Content</h2>
             <div class="browser-search-row">
-                <input type="text" id="searchInput" class="browser-search" placeholder="Search by name or number...">
+                <input type="text" id="searchInput" class="browser-search" placeholder="Search by name...">
                 <button id="searchBtn" class="browser-search-btn" title="Search"><span>🔍</span></button>
                 <button id="pickQuestionsBtn" class="browser-search-btn" title="Pick Questions"
                     onclick="pickQuestions()"><span>📋 Pick Questions</span></button>
+                    <button id="apiEndpointBtn" class="browser-search-btn" title="API Endpoint" onclick="pickOneQuestion()">
+                        <span>🌐 API Endpoint</span>
+                    </button>
             </div>
             <nav class="browser-tabs" id="browserTabs">
                 <button class="browser-tab active" data-view="courses"><span>Courses</span></button>

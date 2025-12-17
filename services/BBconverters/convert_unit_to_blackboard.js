@@ -5,7 +5,7 @@ import resourceService from '../resource-service.js';
 import { fileURLToPath } from 'url';
 
 async function initialize() {
-    const allContentData = await resourceService.getResource(2, '/course');
+    const allContentData = await resourceService.getResource('/course');
     return allContentData;
 }
 
