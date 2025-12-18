@@ -425,24 +425,6 @@ async function entitiesInSameHierarchy(entities) {
 
 };
 
-
-async function resolveResource(type, uid) {
-    const model = resourceTypeModelMap.get(type);
-    if (!model) {
-        throw new Error(`Invalid resource type: ${type}`);
-    }
-
-    const entity = await model.findOne({
-        where: { uid }
-    });
-
-    if (!entity) {
-        throw new Error(`${type} with id ${uid} not found.`);
-    }
-
-    return entity.toJSON();
-}
-
 // Parse the resource path into segments and pick amount
 function parseResourcePath(path) {
     const pieces = path.split("/").filter(Boolean);
@@ -460,36 +442,6 @@ function parseResourcePath(path) {
         });
     }
     return segments;
-}
-
-function flattenHierarchy(tree) {
-    const order = ["course", "unit", "section", "task", "question"];
-    const flat = {};
-
-    let current = tree;
-
-    for (const type of order) {
-        if (!current) break;
-
-        // If this node is the correct type, extract it
-        if (current.id !== undefined && current.name !== undefined) {
-            flat[type] = {
-                id: current.id,
-                name: current.name
-            };
-        }
-
-        // Move to the child (if any)
-        const plural = type + "s";
-
-        if (Array.isArray(current[plural]) && current[plural].length > 0) {
-            current = current[plural][0]; // the next node in the chain
-        } else {
-            break;
-        }
-    }
-
-    return flat;
 }
 
 // gets the full hierarchy underneath an entity (from entity down)
@@ -676,21 +628,84 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
         const PREFIX_LEN = 5;
 
-        // search for the first few characters for efficiency
-
-        let unitPrefixes = new Set();
-        let taskPrefixes = new Set();
+        const unitNames = new Set();
+        const taskNames = new Set();
 
         for (let e of data) {
-            unitPrefixes.add(e.createNew.unitName.slice(0, PREFIX_LEN));
-            taskPrefixes.add(e.createNew.taskName.slice(0, PREFIX_LEN));
+
+            unitNames.add(e.createNew.unitName);
+            taskNames.add(e.createNew.taskName);
         }
 
-        const existingUnits = await Unit.findAll({
+        const unitPrefixMatches = await Unit.findAll({
             where: {
-                [Op.or]: [...unitPrefixes].map(p => ({[Op.startsWith]: {name: ''}}))
+                [Op.or]: [...unitNames].map(p => ({
+                    name: {
+                        [Op.startsWith]: p.slice(0,PREFIX_LEN)
+                    }
+                }))
+            },
+            transaction: t
+        });
+
+        const taskPrefixMatches = await Task.findAll({
+            where: {
+                [Op.or]: [...taskNames].map(p => ({
+                    name: {
+                        [Op.startsWith]: p.slice(0,PREFIX_LEN)
+                    }
+                }))
+            },
+            transaction: t
+        });
+
+        const existingUnits = new Set();
+        const existingTasks = new Set();
+
+        /*const existingQuestionPrompts = new Set();
+
+        // add to both "new" maps so they're excluded from the upload
+
+        existingUnits.forEach(u => {
+            newUnits.set(u.name, u)
+        });
+
+        existingTasks.forEach(t => {
+            // search existing units for the parent unit, search db as a fallback
+            const parentUnit = existingUnits.find(u => u.uid === t.unitUid);
+
+            if (parentUnit) {
+
+                newTasks.set(`${parentUnit.name}:${t.name}`, t);
+
+            } else {
+
+                const dbParentUnit = Unit.findOne({
+                    where: {
+                        uid: t.unitUid
+                    }
+                })
+
+                if (dbParentUnit) {
+                    newTasks.set(`${dbParentUnit.name}:${t.name}`, t);
+                }
+
             }
-        })
+
+            // collect existing questions to be skipped when uploading
+            
+            // match questions of this task
+            const existingQuestions = Task.findAll({
+                where: {
+                    [Op.or]: [...taskPrefixes].map(p => ({
+                        name: {
+                            [Op.startsWith]: p
+                        }
+                    }))
+                }
+            })
+
+        });*/
 
         // find section
         const sectionEntity = await Section.findOne({
@@ -713,6 +728,7 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             if (question.answers.length < questionTypeMinAnswerChoices.get(question.type)) {
                 throw new Error(`Not enough answer choices for question of type ${question.type}`);
             }
+
 
             let unitEntity;
 

@@ -2,6 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const { parseSheet } = require('../../../services/upload-service');
 const { getSection, getResourceOwnerUid, insertUploadData} = require('../../../services/resource-service');
+const { isAuthenticated } = require('../../../middleware/auth');
 
 // store files in memory
 const upload = multer({
@@ -16,7 +17,7 @@ const upload = multer({
 });
 
 module.exports = (router) => {
-    router.post('/upload', (req, res) => {
+    router.post('/upload', isAuthenticated, (req, res) => {
         upload.single('sheet')(req, res, async (err) => {
 
             const sectionUid = req.body.sectionUid;
