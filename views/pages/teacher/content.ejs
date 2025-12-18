@@ -10,9 +10,12 @@
                 <button id="searchBtn" class="browser-search-btn" title="Search"><span>🔍</span></button>
                 <button id="pickQuestionsBtn" class="browser-search-btn" title="Pick Questions"
                     onclick="pickQuestions()"><span>📋 Pick Questions</span></button>
-                    <button id="apiEndpointBtn" class="browser-search-btn" title="API Endpoint" onclick="pickOneQuestion()">
-                        <span>🌐 API Endpoint</span>
-                    </button>
+                <button id="apiEndpointBtn" class="browser-search-btn" title="API Endpoint" onclick="pickOneQuestion()">
+                    <span>🌐 API Endpoint</span>
+                </button>
+                <div id="blackboardExportContainer" style="margin:10px 0;"></div>
+
+
             </div>
             <nav class="browser-tabs" id="browserTabs">
                 <button class="browser-tab active" data-view="courses"><span>Courses</span></button>
@@ -36,4 +39,5 @@
     <script src="/client-js/edit-question.js"></script>
     <script src="/client-js/data-handle.js"></script>
     <script src="/client-js/editing-data.js"></script>
+    <script src="/client-js/blackboard.js"></script>
     <%- include('../../partials/footer.ejs') %>
