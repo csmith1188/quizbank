@@ -639,9 +639,9 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
         const unitPrefixMatches = await Unit.findAll({
             where: {
-                [Op.or]: [...unitNames].map(p => ({
+                [Op.or]: [...unitNames].map(n => ({
                     name: {
-                        [Op.startsWith]: p.slice(0,PREFIX_LEN)
+                        [Op.startsWith]: n.slice(0,PREFIX_LEN)
                     }
                 }))
             },
@@ -650,62 +650,46 @@ module.exports.insertUploadData = async (data, sectionUid) => {
 
         const taskPrefixMatches = await Task.findAll({
             where: {
-                [Op.or]: [...taskNames].map(p => ({
+                [Op.or]: [...taskNames].map(n => ({
                     name: {
-                        [Op.startsWith]: p.slice(0,PREFIX_LEN)
+                        [Op.startsWith]: n.slice(0,PREFIX_LEN)
                     }
                 }))
             },
             transaction: t
         });
 
-        const existingUnits = new Set();
-        const existingTasks = new Set();
+        const existingQuestions = new Set();
 
-        /*const existingQuestionPrompts = new Set();
+        // filter matches to exact names
+        // add to "newUnits" and "newTasks" maps to skip creation later
 
-        // add to both "new" maps so they're excluded from the upload
-
-        existingUnits.forEach(u => {
-            newUnits.set(u.name, u)
+        unitPrefixMatches.forEach(u => {
+            if (unitNames.has(u.name)) {
+                newUnits.set(u.name, u);
+            }
         });
 
-        existingTasks.forEach(t => {
-            // search existing units for the parent unit, search db as a fallback
-            const parentUnit = existingUnits.find(u => u.uid === t.unitUid);
+        taskPrefixMatches.forEach(tk => {
+            const parentUnit = unitPrefixMatches.find(u => u.uid === tk.unitUid);
+            if (parentUnit && taskNames.has(tk.name)) {
 
-            if (parentUnit) {
+                newTasks.set(`${parentUnit.name}:${tk.name}`, tk);
 
-                newTasks.set(`${parentUnit.name}:${t.name}`, t);
-
-            } else {
-
-                const dbParentUnit = Unit.findOne({
+                // add task questions to existingQuestions set
+                const tkQuestions = Question.findAll({
                     where: {
-                        uid: t.unitUid
-                    }
-                })
+                        taskUid: tk.uid
+                    },
+                    transaction: t
+                });
 
-                if (dbParentUnit) {
-                    newTasks.set(`${dbParentUnit.name}:${t.name}`, t);
-                }
+                tkQuestions.forEach(q => {
+                    existingQuestions.add(q.prompt);
+                });
 
             }
-
-            // collect existing questions to be skipped when uploading
-            
-            // match questions of this task
-            const existingQuestions = Task.findAll({
-                where: {
-                    [Op.or]: [...taskPrefixes].map(p => ({
-                        name: {
-                            [Op.startsWith]: p
-                        }
-                    }))
-                }
-            })
-
-        });*/
+        });
 
         // find section
         const sectionEntity = await Section.findOne({
@@ -786,6 +770,11 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             // if multiple answer question, store as array, else single answer
             const correctAnswers = questionType === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
             const correctIndices = questionType === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
+
+            // check for existing question
+            if (existingQuestions.has(question.prompt)) {
+                continue; // skip insertion
+            }
 
             // for insertion
             const questionData = {
