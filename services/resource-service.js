@@ -670,14 +670,14 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             }
         });
 
-        taskPrefixMatches.forEach(tk => {
+        taskPrefixMatches.forEach(async tk => {
             const parentUnit = unitPrefixMatches.find(u => u.uid === tk.unitUid);
             if (parentUnit && taskNames.has(tk.name)) {
 
                 newTasks.set(`${parentUnit.name}:${tk.name}`, tk);
 
                 // add task questions to existingQuestions set
-                const tkQuestions = Question.findAll({
+                const tkQuestions = await Question.findAll({
                     where: {
                         taskUid: tk.uid
                     },
@@ -750,14 +750,24 @@ module.exports.insertUploadData = async (data, sectionUid) => {
                 // create task
                 taskEntity = await Task.create({
                     name: taskName,
-                    index: (lastTaskIndex || 0) + 1, // lastTaskIndex or 1
+                    index: (lastTaskIndex || 0) + 1, // lastTaskIndex  or 1
                     unitUid: unitEntity ? unitEntity.uid : newUnits.get(unitName).uid, // get from map if already created
                 }, { transaction: t });
 
                 newTasks.set(taskKey, taskEntity);
             }
 
-            // find next question index
+            console.log(question.prompt);
+            console.log(existingQuestions);
+            console.log(existingQuestions.has(question.prompt));
+
+
+            // check for existing question
+            if (existingQuestions.has(question.prompt)) {
+                continue; // skip insertion
+            }
+
+             // find next question index
             const lastQuestionIndex = await Question.count({
                 where: {
                     taskUid: taskEntity ? taskEntity.uid : newTasks.get(taskName).uid
@@ -770,11 +780,6 @@ module.exports.insertUploadData = async (data, sectionUid) => {
             // if multiple answer question, store as array, else single answer
             const correctAnswers = questionType === 'multiple-answer' ? JSON.stringify(question.correctAnswers) : question.correctAnswers[0];
             const correctIndices = questionType === 'multiple-answer' ? JSON.stringify(question.correctIndices) : question.correctIndices[0];
-
-            // check for existing question
-            if (existingQuestions.has(question.prompt)) {
-                continue; // skip insertion
-            }
 
             // for insertion
             const questionData = {
