@@ -1,0 +1,21 @@
+<%- include('../partials/teacher-header', { title: course.name, user, course }) %>
+<h1>
+    <%= course.name %>
+    <button
+        type="button"
+        class="btn btn-small copy-id-btn"
+        data-copy-id="<%= course.id %>"
+        aria-label="Copy course id to clipboard"
+        title="Copy course id to clipboard"
+    >
+        ⧉
+    </button>
+</h1>
+<ul class="links">
+    <li><strong>Task List</strong> — <a href="/courses/<%= course.id %>/tasks">Tasks</a> (<%= tasks.length %>)</li>
+    <li><strong>Units</strong> — <a href="/courses/<%= course.id %>/units">Units</a> (<%= units.length %>)</li>
+    <li><strong>Vocabulary</strong> — <a href="/courses/<%= course.id %>/vocab">Vocab list</a> (<%= vocabCount %>)</li>
+    <li><strong>Quizzes</strong> — <a href="/courses/<%= course.id %>/quizzes">Quizzes</a> (<%= quizzes.length %>)</li>
+    <li><strong>Questions</strong> — <a href="/courses/<%= course.id %>/questions">Question generator</a></li>
+</ul>
+<%- include('../partials/footer') %>

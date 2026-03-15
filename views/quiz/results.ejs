@@ -1,0 +1,112 @@
+<%
+  const safeQuizName = (typeof quiz !== 'undefined' && quiz && quiz.name) ? quiz.name : 'Quiz';
+  let breadcrumb;
+  if (typeof classItem !== 'undefined' && classItem && classItem.id) {
+    breadcrumb = '<a href="/classes">Classes</a> &rarr; <a href="/classes/' + classItem.id + '">' + classItem.name + '</a> &rarr; ' + safeQuizName + ' &rarr; Results';
+  } else {
+    breadcrumb = safeQuizName + ' &rarr; Results';
+  }
+%>
+<%- include('../partials/teacher-header', { title: 'Quiz Results - ' + safeQuizName, user, course: null, breadcrumb }) %>
+<h1>Results for <%= safeQuizName %></h1>
+<% if (typeof classItem !== 'undefined' && classItem && classItem.name) { %>
+<p>Class: <strong><%= classItem.name %></strong></p>
+<% } %>
+
+<p>
+    Score:
+    <strong>
+        <%= attempt.correct_questions || 0 %> / <%= attempt.total_questions || 0 %>
+    </strong>
+    (<%= attempt.score != null ? attempt.score.toFixed(1) : '0.0' %>%)
+</p>
+
+<p>
+<% if (typeof course !== 'undefined' && course && course.id) { %>
+    <a href="/courses/<%= course.id %>/mastery" class="btn">View my mastery for this course</a>
+    <% } %>
+
+<% if (attempt && attempt.id) { %>
+
+    <a
+        href="<%=
+            attempt.is_progress_quiz
+                ? ('/progress/' + attempt.id + '/coach')
+                : (classItem && classItem.id && quiz && quiz.id
+                    ? ('/classes/' + classItem.id + '/quizzes/' + quiz.id + '/results/' + attempt.id + '/coach')
+                    : '#')
+        %>"
+        class="btn ai-coach-btn"
+    >
+        Ask the AI Coach for an improvement plan
+    </a>
+
+<% } %>
+
+</p>
+
+<h2>By task</h2>
+<% if ((breakdown.tasks || []).length === 0) { %>
+<p>No task breakdown available.</p>
+<% } else { %>
+<table>
+    <thead>
+        <tr><th>Task</th><th>Questions</th><th>Missed</th></tr>
+    </thead>
+    <tbody>
+    <% breakdown.tasks.forEach(function(t) { %>
+        <tr>
+            <td><%= t.name %></td>
+            <td><%= t.total %></td>
+            <td><%= t.missed %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+<% } %>
+
+<h2>By unit</h2>
+<% if ((breakdown.units || []).length === 0) { %>
+<p>No unit breakdown available.</p>
+<% } else { %>
+<table>
+    <thead>
+        <tr><th>Unit</th><th>Questions</th><th>Missed</th></tr>
+    </thead>
+    <tbody>
+    <% breakdown.units.forEach(function(u) { %>
+        <tr>
+            <td><%= u.name %></td>
+            <td><%= u.total %></td>
+            <td><%= u.missed %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+<% } %>
+
+<h2>Per question</h2>
+<table>
+    <thead>
+        <tr><th>#</th><th>Question</th><th>Your answer</th><th>Result</th></tr>
+    </thead>
+    <tbody>
+    <% (answers || []).forEach(function(a, idx) { %>
+        <tr>
+            <td><%= idx + 1 %></td>
+            <td><%= a.prompt %></td>
+            <td>
+                <% if (a.chosen_index != null && !Number.isNaN(parseInt(a.chosen_index))) { %>
+                    <%= (a.answers && a.answers[parseInt(a.chosen_index)]) ? a.answers[parseInt(a.chosen_index)] : '(no answer)' %>
+                <% } else { %>
+                    (no answer)
+                <% } %>
+            </td>
+            <td><%= a.is_correct ? 'Correct' : 'Incorrect' %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+
+<%- include('../partials/footer') %>
+

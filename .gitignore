@@ -1,3 +1,5 @@
 /node_modules
-/db/database.sqlite
+/db/database.db
 /.env
+/.cursor
+/.vscode

@@ -1,0 +1,86 @@
+<%- include('../partials/teacher-header', { title: (question ? 'Edit' : 'New') + ' Question - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/tasks">Tasks</a> &rarr; Question ' + (question ? question.id : 'New') }) %>
+<h1><%= question ? 'Edit Question' : 'New Question' %></h1>
+<form method="post" action="<%= question ? '/courses/' + course.id + '/tasks/' + taskId + '/questions/' + question.id : '/courses/' + course.id + '/tasks/' + taskId + '/questions' %>" class="question-form-with-radios">
+    <label>Prompt <textarea name="prompt" class="textarea-prompt" required><%= question ? question.prompt : '' %></textarea></label>
+    <label>Answers (one per line) <textarea name="answers" rows="4" class="textarea-answers answers-source" placeholder="First answer&#10;Second answer&#10;..."><%= question && question.answers ? question.answers.join('\n') : '' %></textarea></label>
+    <input type="hidden" name="correctIndex" class="correct-index-input" value="<%= question ? question.correct_index : 0 %>" />
+    <input type="hidden" name="correctAnswer" class="correct-answer-text" value="<%= question ? question.correct_answer : '' %>" />
+    <div class="correct-answer-radios-label">Correct answer</div>
+    <div class="correct-answer-radios" data-initial-index="<%= question ? question.correct_index : 0 %>"></div>
+    <div class="actions">
+        <button type="submit" class="btn">Save</button>
+        <a href="/courses/<%= course.id %>/tasks/<%= taskId %>" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+<script>
+(function() {
+    function parseAnswers(text) {
+        if (!text || typeof text !== 'string') return [];
+        return text.split(/\r?\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+    }
+    function buildRadios(form) {
+        var ta = form.querySelector('.answers-source');
+        var container = form.querySelector('.correct-answer-radios');
+        var hidden = form.querySelector('.correct-index-input');
+        var correctText = form.querySelector('.correct-answer-text');
+        var answers = parseAnswers(ta ? ta.value : '');
+        var currentIndex = hidden ? parseInt(hidden.value, 10) || 0 : 0;
+        container.innerHTML = '';
+        if (answers.length === 0) {
+            if (hidden) hidden.value = '0';
+            return;
+        }
+        var selectedIndex = -1;
+        if (correctText && correctText.value.trim()) {
+            var match = correctText.value.trim();
+            for (var i = 0; i < answers.length; i++) {
+                if (answers[i] === match) { selectedIndex = i; break; }
+            }
+        }
+        if (selectedIndex < 0 && currentIndex >= 0 && currentIndex < answers.length) selectedIndex = currentIndex;
+        if (selectedIndex < 0) selectedIndex = 0;
+        answers.forEach(function(ans, i) {
+            var label = document.createElement('label');
+            label.style.display = 'block';
+            label.style.marginBottom = '0.25rem';
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'correctIndexRadio';
+            radio.value = i;
+            radio.checked = (i === selectedIndex);
+            radio.addEventListener('change', function() {
+                if (hidden) hidden.value = radio.value;
+                if (correctText) correctText.value = answers[parseInt(radio.value, 10)];
+            });
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(' ' + ans));
+            container.appendChild(label);
+        });
+        if (hidden) hidden.value = String(selectedIndex);
+        if (correctText && !correctText.value.trim() && answers[selectedIndex]) correctText.value = answers[selectedIndex];
+    }
+    function initForm(form) {
+        var ta = form.querySelector('.answers-source');
+        if (ta) {
+            ta.addEventListener('blur', function() { buildRadios(form); });
+            buildRadios(form);
+        }
+        var container = form.querySelector('.correct-answer-radios');
+        if (container) {
+            container.addEventListener('change', function(e) {
+                var r = e.target;
+                if (r.type === 'radio' && r.name === 'correctIndexRadio') {
+                    var h = form.querySelector('.correct-index-input');
+                    if (h) h.value = r.value;
+                    var ct = form.querySelector('.correct-answer-text');
+                    var labels = container.querySelectorAll('label');
+                    var idx = parseInt(r.value, 10);
+                    if (ct && labels[idx]) ct.value = labels[idx].textContent.replace(/^\s*/, '').trim();
+                }
+            });
+        }
+    }
+    document.querySelectorAll('.question-form-with-radios').forEach(initForm);
+})();
+</script>
+<%- include('../partials/footer') %>

@@ -1,0 +1,223 @@
+<%- include('../partials/teacher-header', { title: 'Question Generator - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Question generator' }) %>
+<h1>Question Generator</h1>
+<p><a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+
+<div class="generator-controls">
+    <label>Unit
+        <select id="unit-select">
+            <option value="">Select unit</option>
+            <option value="all">All units</option>
+            <% units.forEach(function(u) { %>
+            <option value="<%= u.id %>"><%= u.name %></option>
+            <% }); %>
+        </select>
+    </label>
+    <div id="task-list-container" style="margin-top: 0.75rem;">
+        <label>Task</label>
+        <div id="task-list"></div>
+        <div id="task-details" style="display: none; margin-top: 0.75rem; padding: 0.75rem; background: #f5f5f5; border-radius: 4px; border: 1px solid #eee;">
+            <p style="margin: 0 0 0.35rem 0;"><strong>Learning target:</strong> <span id="task-details-target" class="text-muted"></span></p>
+            <p style="margin: 0 0 0.35rem 0;"><strong>Description:</strong> <span id="task-details-description" class="text-muted"></span></p>
+            <p style="margin: 0;"><strong>Good questions in this task:</strong> <span id="task-details-good-count">0</span></p>
+        </div>
+    </div>
+    <div style="margin-top: 1rem;">
+        <label for="additional-context">Additional prompt context (optional)</label>
+        <textarea id="additional-context" rows="3" placeholder="e.g. Focus on safety procedures only, avoid trick questions, use 9th-grade vocabulary…" style="width: 100%; max-width: 36rem; display: block; margin-top: 0.35rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"></textarea>
+    </div>
+    <p style="margin-top: 1rem;">
+        <button type="button" id="generate-btn" class="btn" disabled>Generate 5 questions</button>
+    </p>
+</div>
+
+<div id="generator-loading" class="text-muted" style="display: none;">Generating...</div>
+<div id="generator-error" class="text-muted" style="display: none; color: #c00;"></div>
+<div id="questions-container" style="margin-top: 1.5rem;"></div>
+
+<script>
+(function() {
+    var courseId = <%= course.id %>;
+    var selectedTaskId = null;
+    var tasksCache = [];
+
+    var unitSelect = document.getElementById('unit-select');
+    var taskList = document.getElementById('task-list');
+    var taskDetailsEl = document.getElementById('task-details');
+    var taskDetailsTarget = document.getElementById('task-details-target');
+    var taskDetailsDescription = document.getElementById('task-details-description');
+    var taskDetailsGoodCount = document.getElementById('task-details-good-count');
+    var additionalContextEl = document.getElementById('additional-context');
+    var generateBtn = document.getElementById('generate-btn');
+    var loadingEl = document.getElementById('generator-loading');
+    var errorEl = document.getElementById('generator-error');
+    var questionsContainer = document.getElementById('questions-container');
+
+    function showError(msg) {
+        errorEl.textContent = msg || '';
+        errorEl.style.display = msg ? 'block' : 'none';
+    }
+
+    function showTaskDetails(task) {
+        if (!task) {
+            taskDetailsEl.style.display = 'none';
+            return;
+        }
+        taskDetailsTarget.textContent = (task.target && task.target.trim()) ? task.target : '—';
+        taskDetailsDescription.textContent = (task.description && task.description.trim()) ? task.description : '—';
+        taskDetailsGoodCount.textContent = task.good_count != null ? task.good_count : 0;
+        taskDetailsEl.style.display = 'block';
+    }
+
+    unitSelect.addEventListener('change', function() {
+        var unitId = unitSelect.value;
+        selectedTaskId = null;
+        tasksCache = [];
+        taskDetailsEl.style.display = 'none';
+        generateBtn.disabled = true;
+        questionsContainer.innerHTML = '';
+        showError('');
+        if (!unitId) {
+            taskList.innerHTML = '';
+            return;
+        }
+        fetch('/courses/' + courseId + '/generator/tasks?unitId=' + encodeURIComponent(unitId))
+            .then(function(r) { return r.json(); })
+            .then(function(tasks) {
+                tasksCache = tasks || [];
+                taskList.innerHTML = '';
+                if (tasks.length === 0) {
+                    taskList.innerHTML = '<p class="text-muted">No tasks in this selection.</p>';
+                    return;
+                }
+                tasks.forEach(function(t) {
+                    var label = document.createElement('label');
+                    label.style.display = 'block';
+                    label.style.marginBottom = '0.35rem';
+                    var radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'task';
+                    radio.value = t.id;
+                    radio.addEventListener('change', function() {
+                        selectedTaskId = parseInt(radio.value, 10);
+                        generateBtn.disabled = false;
+                        var selected = tasksCache.filter(function(x) { return x.id === selectedTaskId; })[0];
+                        showTaskDetails(selected);
+                    });
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(' ' + (t.name || 'Task ' + t.id)));
+                    taskList.appendChild(label);
+                });
+            })
+            .catch(function() {
+                showError('Failed to load tasks.');
+                taskList.innerHTML = '';
+            });
+    });
+
+    generateBtn.addEventListener('click', function() {
+        if (!selectedTaskId) return;
+        loadingEl.style.display = 'block';
+        errorEl.style.display = 'none';
+        questionsContainer.innerHTML = '';
+        var additionalContext = (additionalContextEl && additionalContextEl.value) ? additionalContextEl.value.trim() : '';
+        fetch('/courses/' + courseId + '/questions/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId: selectedTaskId, additionalContext: additionalContext || undefined }),
+            credentials: 'same-origin'
+        })
+            .then(function(r) {
+                loadingEl.style.display = 'none';
+                if (!r.ok) return r.json().then(function(e) { throw new Error(e.error || 'Generate failed'); });
+                return r.json();
+            })
+            .then(function(questions) {
+                if (!Array.isArray(questions) || questions.length === 0) {
+                    showError('No questions returned.');
+                    return;
+                }
+                questions.forEach(function(q, idx) {
+                    var card = document.createElement('div');
+                    card.className = 'generator-question-card';
+                    card.dataset.index = idx;
+                    card.style.border = '1px solid #ccc';
+                    card.style.borderRadius = '4px';
+                    card.style.padding = '1rem';
+                    card.style.marginBottom = '0.75rem';
+                    var prompt = document.createElement('p');
+                    prompt.innerHTML = '<strong>Prompt:</strong> ' + escapeHtml(q.prompt || '');
+                    card.appendChild(prompt);
+                    var answers = Array.isArray(q.answers) ? q.answers : [];
+                    if (answers.length) {
+                        var ansEl = document.createElement('p');
+                        ansEl.innerHTML = '<strong>Answers:</strong> ' + answers.map(escapeHtml).join(' | ');
+                        card.appendChild(ansEl);
+                    }
+                    var correct = document.createElement('p');
+                    correct.innerHTML = '<strong>Correct:</strong> ' + escapeHtml(q.correct_answer || '') + ' (index ' + (q.correct_index != null ? q.correct_index : 0) + ')';
+                    card.appendChild(correct);
+                    var actions = document.createElement('p');
+                    actions.style.marginTop = '0.5rem';
+                    var goodBtn = document.createElement('button');
+                    goodBtn.type = 'button';
+                    goodBtn.className = 'btn btn-small';
+                    goodBtn.textContent = 'Good';
+                    goodBtn.addEventListener('click', function() { saveQuestion(card, q, 'good'); });
+                    var badBtn = document.createElement('button');
+                    badBtn.type = 'button';
+                    badBtn.className = 'btn btn-small btn-danger';
+                    badBtn.textContent = 'Bad';
+                    badBtn.style.marginLeft = '0.5rem';
+                    badBtn.addEventListener('click', function() { saveQuestion(card, q, 'bad'); });
+                    actions.appendChild(goodBtn);
+                    actions.appendChild(badBtn);
+                    card.appendChild(actions);
+                    questionsContainer.appendChild(card);
+                });
+            })
+            .catch(function(err) {
+                loadingEl.style.display = 'none';
+                showError(err.message || 'Generate failed.');
+            });
+    });
+
+    function escapeHtml(s) {
+        if (s == null) return '';
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+    }
+
+    function saveQuestion(card, q, quality) {
+        var body = {
+            prompt: q.prompt || '',
+            correctAnswer: q.correct_answer || '',
+            correctIndex: q.correct_index != null ? q.correct_index : 0,
+            answers: Array.isArray(q.answers) ? q.answers : [],
+            quality: quality
+        };
+        fetch('/courses/' + courseId + '/tasks/' + selectedTaskId + '/questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+            credentials: 'same-origin'
+        })
+            .then(function(r) {
+                if (!r.ok) return r.json().then(function(e) { throw new Error(e.error || 'Save failed'); });
+                card.style.opacity = '0.6';
+                var statusP = card.querySelector('p:last-of-type');
+                statusP.textContent = 'Saved as ' + quality + '.';
+                var buttons = card.querySelectorAll('button');
+                for (var i = 0; i < buttons.length; i++) buttons[i].disabled = true;
+                if (quality === 'good' && taskDetailsGoodCount) {
+                    var n = parseInt(taskDetailsGoodCount.textContent, 10) || 0;
+                    taskDetailsGoodCount.textContent = n + 1;
+                }
+            })
+            .catch(function(err) {
+                alert(err.message || 'Save failed.');
+            });
+    }
+})();
+</script>
+<%- include('../partials/footer') %>

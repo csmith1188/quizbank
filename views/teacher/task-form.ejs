@@ -1,0 +1,11 @@
+<%- include('../partials/teacher-header', { title: (task ? 'Edit' : 'New') + ' Task - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/tasks">Tasks</a> &rarr; ' + (task ? 'Edit' : 'New') }) %>
+<h1><%= task ? 'Edit Task' : 'New Task' %></h1>
+<form method="post" action="<%= task ? '/courses/' + course.id + '/tasks/' + task.id : '/courses/' + course.id + '/tasks' %>">
+    <label>Name <input type="text" name="name" value="<%= task ? task.name : '' %>" required /></label>
+    <label>Target <textarea name="target" class="textarea-target"><%= task ? (task.target || '') : '' %></textarea></label>
+    <div class="actions">
+        <button type="submit" class="btn">Save</button>
+        <a href="/courses/<%= course.id %>/tasks<%= task ? '/' + task.id : '' %>" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+<%- include('../partials/footer') %>

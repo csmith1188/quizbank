@@ -1,0 +1,172 @@
+<%- include('../partials/teacher-header', { title: 'Manage Class - ' + classItem.name, user, course: null, breadcrumb: '<a href=\"/classes\">Classes</a> &rarr; ' + classItem.name }) %>
+<h1>
+    Manage Class: <%= classItem.name %>
+    <button
+        type="button"
+        class="btn btn-small copy-id-btn"
+        data-copy-id="<%= classItem.formbar_class_id || classItem.id %>"
+        aria-label="Copy class external id to clipboard"
+        title="Copy class external id to clipboard"
+    >
+        ⧉
+    </button>
+</h1>
+
+<h2>Courses</h2>
+<% if ((courses || []).length === 0) { %>
+<p>You don't have any courses yet. Create a course first.</p>
+<% } else { %>
+<form method="post" action="/classes/<%= classItem.id %>/courses" class="field-row">
+    <input type="hidden" name="action" value="assign">
+    <label>
+        Assign course:
+        <select name="course_id" required>
+            <option value="">Select a course...</option>
+            <% courses.forEach(function(c) { if (!assignedCourseIds.has(c.id)) { %>
+                <option value="<%= c.id %>"><%= c.name %></option>
+            <% } }); %>
+        </select>
+    </label>
+    <button type="submit" class="btn btn-small">Assign</button>
+</form>
+
+<% if (assignedCourseIds.size > 0) { %>
+<h3>Assigned courses</h3>
+<ul>
+    <% courses.forEach(function(c) { if (assignedCourseIds.has(c.id)) { %>
+        <li>
+            <strong><%= c.name %></strong>
+            <form method="post" action="/classes/<%= classItem.id %>/courses" style="display:inline;">
+                <input type="hidden" name="course_id" value="<%= c.id %>">
+                <input type="hidden" name="action" value="unassign">
+                <button type="submit" class="btn btn-small btn-secondary">Unassign</button>
+            </form>
+        </li>
+    <% } }); %>
+</ul>
+<% } %>
+<% } %>
+
+<h2>Quizzes</h2>
+<% if ((quizzes || []).length === 0) { %>
+<p>You don't have any quizzes yet. Create quizzes inside your courses.</p>
+<% } else { %>
+<form method="post" action="/classes/<%= classItem.id %>/quizzes" class="field-row">
+    <input type="hidden" name="action" value="assign">
+    <label>
+        Assign quiz:
+        <select name="quiz_id" required>
+            <option value="">Select a quiz...</option>
+            <% quizzes.forEach(function(q) { if (!assignedQuizIds.has(q.id)) { %>
+                <option value="<%= q.id %>"><%= q.name %></option>
+            <% } }); %>
+        </select>
+    </label>
+    <button type="submit" class="btn btn-small">Assign</button>
+</form>
+
+<% if (assignedQuizIds.size > 0) { %>
+<h3>Assigned quizzes</h3>
+<ul>
+    <% quizzes.forEach(function(q) { if (assignedQuizIds.has(q.id)) { %>
+        <li>
+            <strong><%= q.name %></strong>
+            <form method="post" action="/classes/<%= classItem.id %>/quizzes" style="display:inline;">
+                <input type="hidden" name="quiz_id" value="<%= q.id %>">
+                <input type="hidden" name="action" value="unassign">
+                <button type="submit" class="btn btn-small btn-secondary">Unassign</button>
+            </form>
+        </li>
+    <% } }); %>
+</ul>
+<% } %>
+<% } %>
+
+<p><a href="/classes" class="btn btn-secondary">Back to classes</a></p>
+
+<h2>Students</h2>
+<% if (!studentMastery || studentMastery.length === 0) { %>
+<p>No students are enrolled in this class yet.</p>
+<% } else { %>
+<div class="quiz-list-accordion">
+    <% studentMastery.forEach(function(s) { %>
+        <details class="quiz-list-details">
+            <summary class="quiz-list-summary">
+                <button
+                    type="button"
+                    class="btn btn-small copy-id-btn"
+                    data-copy-id="<%= s.formbarId || s.id %>"
+                    aria-label="Copy student external id to clipboard"
+                    title="Copy student external id to clipboard"
+                    onclick="event.stopPropagation();"
+                >
+                    ⧉
+                </button>
+                <span class="quiz-list-name"><%= s.name %></span>
+                <span class="quiz-list-meta">
+                    Overall mastery:
+                    <strong><%= Math.round((s.overallMastery || 0) * 100) %>%</strong>
+                </span>
+            </summary>
+            <div class="quiz-list-content">
+                <% if (!s.units || s.units.length === 0) { %>
+                    <p><em>No mastery data yet for this student.</em></p>
+                <% } else { %>
+                    <%
+                        // Determine the maximum number of tasks in any unit (by sort order)
+                        var maxTasks = 0;
+                        s.units.forEach(function(u) {
+                            var len = (u.tasks || []).length;
+                            if (len > maxTasks) maxTasks = len;
+                        });
+                    %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <% for (var col = 1; col <= maxTasks; col++) { %>
+                                    <th>Task <%= col %></th>
+                                <% } %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% s.units.forEach(function(u) { 
+                                var tasksSorted = (u.tasks || []).slice().sort(function(a, b) {
+                                    var sa = (a.taskOrder != null ? a.taskOrder : 0);
+                                    var sb = (b.taskOrder != null ? b.taskOrder : 0);
+                                    return sa - sb || a.taskId - b.taskId;
+                                });
+                            %>
+                                <tr>
+                                    <td><%= u.name %></td>
+                                    <% for (var col = 0; col < maxTasks; col++) { 
+                                        var cell = tasksSorted[col];
+                                        if (!cell) { %>
+                                            <td>-</td>
+                                        <% } else { 
+                                            var pct = Math.round((cell.mastery || 0) * 100);
+                                            var tooltip = 'Task ' + (col + 1) + ': ' + cell.taskName;
+                                        %>
+                                            <td title="<%= tooltip %>">
+                                                <div class="mastery-bar">
+                                                    <div class="mastery-bar-fill" style="width:<%= pct %>%"></div>
+                                                </div>
+                                                <span><%= pct %>%</span>
+                                                <br>
+                                                <span><%= cell.attempts %> q</span>
+                                            </td>
+                                        <% } %>
+                                    <% } %>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </div>
+        </details>
+    <% }); %>
+</div>
+<% } %>
+
+<%- include('../partials/footer') %>
+

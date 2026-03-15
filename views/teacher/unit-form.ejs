@@ -1,0 +1,10 @@
+<%- include('../partials/teacher-header', { title: 'New Unit - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/units">Units</a> &rarr; New' }) %>
+<h1>New Unit</h1>
+<form method="post" action="/courses/<%= course.id %>/units">
+    <label>Name <input type="text" name="name" required /></label>
+    <div class="actions">
+        <button type="submit" class="btn">Create</button>
+        <a href="/courses/<%= course.id %>/units" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+<%- include('../partials/footer') %>

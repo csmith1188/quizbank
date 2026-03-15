@@ -1,0 +1,18 @@
+<nav class="site-nav" aria-label="Main">
+    <a href="/classes">Classes</a>
+    <% if (typeof classItem !== 'undefined' && classItem) { %>
+        >&nbsp;<a href="/classes/<%= classItem.id %>"><%= classItem.name %></a>
+    <% } %>
+    <% if (typeof isTeacher !== 'undefined' && isTeacher) { %>
+        <a href="/courses">My Courses</a>
+    <% } %>
+    <% if (typeof isTeacher !== 'undefined' && isTeacher && typeof course !== 'undefined' && course) { %>
+        >&nbsp;<a href="/courses/<%= course.id %>"><%= course.name %></a>
+        >&nbsp;<a href="/courses/<%= course.id %>/tasks">Tasks</a>
+        >&nbsp;<a href="/courses/<%= course.id %>/units">Units</a>
+        >&nbsp;<a href="/courses/<%= course.id %>/vocab">Vocabulary</a>
+        >&nbsp;<a href="/courses/<%= course.id %>/quizzes">Quizzes</a>
+        >&nbsp;<a href="/courses/<%= course.id %>/questions">Questions</a>
+    <% } %>
+    <span class="nav-user"><%= user %> | <a href="/logout">Logout</a></span>
+</nav>

@@ -1,0 +1,111 @@
+<%- include('../partials/teacher-header', { title: 'Classes', user, course: null, breadcrumb: 'Classes' }) %>
+<h1>Classes</h1>
+
+<% const allClasses = (classesTeach || []).concat(classesStudent || []); %>
+<% if (!allClasses.length) { %>
+<p>No classes found for your account.</p>
+<% } else { %>
+<div class="quiz-list-accordion reorderable-list" data-reorder-url="/api/classes/reorder">
+    <% allClasses.forEach(function(c, idx) { %>
+        <details class="quiz-list-details" id="class-<%= c.id %>" data-id="<%= c.id %>">
+            <summary class="quiz-list-summary">
+                <span class="reorderable-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+                <span class="unit-order" data-prefix=""><%= idx + 1 %></span>
+                <button
+                    type="button"
+                    class="btn btn-small copy-id-btn"
+                    data-copy-id="<%= c.formbar_class_id || c.id %>"
+                    aria-label="Copy class external id to clipboard"
+                    title="Copy class external id to clipboard"
+                    onclick="event.stopPropagation();"
+                >
+                    ⧉
+                </button>
+                <span class="quiz-list-name"><%= c.name %></span>
+                <span class="quiz-list-meta">
+                    <%= c.role === 'teacher' ? 'Teacher' : 'Student' %>
+                    &middot;
+                    <%= c.studentCount %> student<%= c.studentCount === 1 ? '' : 's' %>
+                    <% if ((c.courses || []).length) { %>
+                        &middot; <%= c.courses.length %> course<%= c.courses.length === 1 ? '' : 's' %>
+                    <% } %>
+                    <% if ((c.quizzes || []).length) { %>
+                        &middot; <%= c.quizzes.length %> quiz<%= c.quizzes.length === 1 ? '' : 'zes' %>
+                    <% } %>
+                </span>
+                <% if (c.role === 'teacher') { %>
+                    <a href="/classes/<%= c.id %>" class="btn btn-small quiz-list-open-btn" onclick="event.stopPropagation()">Manage</a>
+                <% } %>
+            </summary>
+            <div class="quiz-list-content">
+                <p><strong>Students:</strong> <%= c.studentCount %></p>
+
+                <% if ((c.courses || []).length) { %>
+                    <p><strong>Courses:</strong></p>
+                    <ul>
+                        <% c.courses.forEach(function(course) { %>
+                            <li>
+                                <a
+                                    href="/courses/<%= course.id %><%= c.role === 'teacher' ? '' : '/mastery' %>"
+                                    onclick="event.stopPropagation()"
+                                ><%= course.name %></a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p><em>No courses assigned yet.</em></p>
+                <% } %>
+
+                <% if (c.role === 'teacher') { %>
+                    <p>
+                        <a href="/classes/<%= c.id %>" class="btn btn-small">Manage assignments</a>
+                    </p>
+                <% } else { %>
+                    <% var aq = c.studentAssignedQuizzes || []; %>
+                    <% if (aq.length) { %>
+                        <h3>Assigned quizzes</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Course</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% aq.forEach(function(row) { %>
+                                    <tr>
+                                        <td><%= row.title_override || row.quiz_name %></td>
+                                        <td><%= row.course_name %></td>
+                                        <td>
+                                            <a href="/classes/<%= c.id %>/quizzes/<%= row.quiz_id %>/take" class="btn btn-small">Take quiz</a>
+                                            <% if (row.best_attempt_id) { %>
+                                                <a href="/classes/<%= c.id %>/quizzes/<%= row.quiz_id %>/results/<%= row.best_attempt_id %>" class="btn btn-small btn-secondary">See best attempt</a>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <p><em>No quizzes assigned yet.</em></p>
+                    <% } %>
+                <% } %>
+            </div>
+        </details>
+    <% }); %>
+</div>
+
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('class-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+})();
+</script>
+<% } %>
+
+<%- include('../partials/footer') %>
+

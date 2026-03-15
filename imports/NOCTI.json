@@ -1,0 +1,3940 @@
+{
+  "id": 1,
+  "name": "Computer Programming NOCTI",
+  "sections": [
+    {
+      "id": 1,
+      "name": "NOCTI",
+      "description": "Computer Programming NOCTI",
+      "units": [
+        {
+          "id": 1,
+          "name": "General Information and Concepts",
+          "description": "Foundational computing concepts, hardware/software basics, data representation, operating systems, and development environments.",
+          "tasks": [
+            {
+              "id": 1,
+              "name": "Computing Fundamentals",
+              "description": "Identify roles of hardware, software, firmware, and the OS in running programs.",
+              "genprompt": "Generate multiple-choice questions (4 options) about hardware vs. software, operating system role, process vs. thread, and interpreters vs. compilers. Use entry-level NOCTI-style phrasing.",
+              "questions": [
+                {
+                  "id": 1,
+                  "prompt": "Which component is considered hardware?",
+                  "correctAnswer": "CPU",
+                  "correctIndex": 1,
+                  "answers": ["Compiler", "CPU", "Interpreter", "Shell"]
+                },
+                {
+                  "id": 2,
+                  "prompt": "Which best describes an operating system?",
+                  "correctAnswer": "Software that manages hardware and runs programs",
+                  "correctIndex": 3,
+                  "answers": ["A programming language", "A web browser", "A device driver only", "Software that manages hardware and runs programs"]
+                },
+                {
+                  "id": 3,
+                  "prompt": "Which item is application software?",
+                  "correctAnswer": "Spreadsheet program",
+                  "correctIndex": 0,
+                  "answers": ["Spreadsheet program", "Motherboard", "RAM module", "Power supply"]
+                },
+                {
+                  "id": 4,
+                  "prompt": "Firmware is typically stored in",
+                  "correctAnswer": "Non-volatile memory",
+                  "correctIndex": 2,
+                  "answers": ["CPU registers", "RAM only", "Non-volatile memory", "Cache only"]
+                },
+                {
+                  "id": 5,
+                  "prompt": "A process is best defined as",
+                  "correctAnswer": "An instance of a program in execution",
+                  "correctIndex": 1,
+                  "answers": ["A file on disk", "An instance of a program in execution", "A compiled library", "A hardware interrupt"]
+                },
+                {
+                  "id": 6,
+                  "prompt": "A thread is best described as",
+                  "correctAnswer": "A smaller unit of execution within a process",
+                  "correctIndex": 0,
+                  "answers": ["A smaller unit of execution within a process", "A type of device driver", "A storage partition", "A hardware port"]
+                },
+                {
+                  "id": 7,
+                  "prompt": "Which translates high-level code to machine code all at once?",
+                  "correctAnswer": "Compiler",
+                  "correctIndex": 2,
+                  "answers": ["Interpreter", "Assembler", "Compiler", "Linker"]
+                },
+                {
+                  "id": 8,
+                  "prompt": "Which executes source code line by line at runtime?",
+                  "correctAnswer": "Interpreter",
+                  "correctIndex": 0,
+                  "answers": ["Interpreter", "Compiler", "Linker", "Loader"]
+                },
+                {
+                  "id": 9,
+                  "prompt": "Which component temporarily stores data and instructions currently in use?",
+                  "correctAnswer": "RAM",
+                  "correctIndex": 1,
+                  "answers": ["SSD", "RAM", "CPU fan", "Power cord"]
+                },
+                {
+                  "id": 10,
+                  "prompt": "Which statement about device drivers is correct?",
+                  "correctAnswer": "They allow the OS to communicate with hardware",
+                  "correctIndex": 3,
+                  "answers": ["They are physical adapters", "They are only for printers", "They compile source code", "They allow the OS to communicate with hardware"]
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Data Types and Representation",
+              "description": "Explain integers, floats, booleans, characters/strings, and how data is represented in memory (bits/bytes).",
+              "genprompt": "Generate multiple-choice questions (4 options) on primitive data types, literal vs. variable, type coercion, and memory units (bit/byte/KB/MB).",
+              "questions": [
+                {
+                  "id": 1,
+                  "prompt": "Which data type represents whole numbers?",
+                  "correctAnswer": "Integer",
+                  "correctIndex": 0,
+                  "answers": ["Integer", "Float", "String", "Boolean"]
+                },
+                {
+                  "id": 2,
+                  "prompt": "Which value is a Boolean literal in many languages?",
+                  "correctAnswer": "true",
+                  "correctIndex": 2,
+                  "answers": ["'true'", "1.0", "true", "42"]
+                },
+                {
+                  "id": 3,
+                  "prompt": "A string literal is typically enclosed in",
+                  "correctAnswer": "Quotes",
+                  "correctIndex": 1,
+                  "answers": ["Braces", "Quotes", "Angle brackets", "Parentheses"]
+                },
+                {
+                  "id": 4,
+                  "prompt": "How many bits are in a byte?",
+                  "correctAnswer": "8",
+                  "correctIndex": 3,
+                  "answers": ["2", "4", "6", "8"]
+                },
+                {
+                  "id": 5,
+                  "prompt": "Which best describes a variable?",
+                  "correctAnswer": "A named storage location holding a value",
+                  "correctIndex": 1,
+                  "answers": ["A reserved keyword", "A named storage location holding a value", "A compiled file", "A runtime error"]
+                },
+                {
+                  "id": 6,
+                  "prompt": "Which is most likely a floating-point value?",
+                  "correctAnswer": "3.14",
+                  "correctIndex": 0,
+                  "answers": ["3.14", "314", "True", "'3.14'"]
+                },
+                {
+                  "id": 7,
+                  "prompt": "Type coercion refers to",
+                  "correctAnswer": "Automatically converting one data type to another",
+                  "correctIndex": 2,
+                  "answers": ["Encrypting data", "Compiling code", "Automatically converting one data type to another", "Allocating memory manually"]
+                },
+                {
+                  "id": 8,
+                  "prompt": "Which unit is largest?",
+                  "correctAnswer": "MB",
+                  "correctIndex": 3,
+                  "answers": ["Bit", "Byte", "KB", "MB"]
+                },
+                {
+                  "id": 9,
+                  "prompt": "Which is an example of a character?",
+                  "correctAnswer": "'A'",
+                  "correctIndex": 0,
+                  "answers": ["'A'", "\"Hello\"", "42", "false"]
+                },
+                {
+                  "id": 10,
+                  "prompt": "Which best describes a literal?",
+                  "correctAnswer": "A fixed value written directly in code",
+                  "correctIndex": 1,
+                  "answers": ["A runtime variable", "A fixed value written directly in code", "A compiled library", "A memory address"]
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "name": "Programming Paradigms",
+              "description": "Differentiate procedural, object-oriented, and event-driven programming at a high level.",
+              "genprompt": "Create MCQs comparing procedural vs. OOP vs. event-driven styles, including real-world examples and when to use each.",
+              "questions": [
+                {
+                  "id": 1,
+                  "prompt": "Which paradigm organizes code around functions and procedures?",
+                  "correctAnswer": "Procedural",
+                  "correctIndex": 1,
+                  "answers": ["Event-driven", "Procedural", "Reactive", "Declarative"]
+                },
+                {
+                  "id": 2,
+                  "prompt": "Which paradigm models programs as interacting objects with state and behavior?",
+                  "correctAnswer": "Object-oriented",
+                  "correctIndex": 2,
+                  "answers": ["Procedural", "Functional", "Object-oriented", "Linear"]
+                },
+                {
+                  "id": 3,
+                  "prompt": "Button clicks and key presses primarily drive which paradigm?",
+                  "correctAnswer": "Event-driven",
+                  "correctIndex": 0,
+                  "answers": ["Event-driven", "Batch processing", "Procedural", "Low-level"]
+                },
+                {
+                  "id": 4,
+                  "prompt": "Encapsulation and inheritance are associated with",
+                  "correctAnswer": "Object-oriented programming",
+                  "correctIndex": 3,
+                  "answers": ["Functional programming", "Procedural macros", "Event loops", "Object-oriented programming"]
+                },
+                {
+                  "id": 5,
+                  "prompt": "A game loop responding to user input and timers is an example of",
+                  "correctAnswer": "Event-driven design",
+                  "correctIndex": 1,
+                  "answers": ["Procedural design", "Event-driven design", "Declarative SQL", "Batch scripting"]
+                },
+                {
+                  "id": 6,
+                  "prompt": "Which is a typical benefit of OOP?",
+                  "correctAnswer": "Code reuse through classes",
+                  "correctIndex": 0,
+                  "answers": ["Code reuse through classes", "No need for testing", "Automatic UI creation", "No variables required"]
+                },
+                {
+                  "id": 7,
+                  "prompt": "Procedural code is often structured as",
+                  "correctAnswer": "A sequence of steps with function calls",
+                  "correctIndex": 2,
+                  "answers": ["Independent objects only", "Event queues only", "A sequence of steps with function calls", "SQL statements only"]
+                },
+                {
+                  "id": 8,
+                  "prompt": "GUI applications commonly use",
+                  "correctAnswer": "Event-driven programming",
+                  "correctIndex": 1,
+                  "answers": ["Procedural programming", "Event-driven programming", "Machine code only", "Assembly only"]
+                },
+                {
+                  "id": 9,
+                  "prompt": "Which is most closely related to classes and objects?",
+                  "correctAnswer": "OOP",
+                  "correctIndex": 3,
+                  "answers": ["Functional", "Procedural", "Event-driven", "OOP"]
+                },
+                {
+                  "id": 10,
+                  "prompt": "Which paradigm is best for simple scripts that run the same steps each time?",
+                  "correctAnswer": "Procedural",
+                  "correctIndex": 0,
+                  "answers": ["Procedural", "Event-driven", "OOP", "Quantum"]
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "name": "Development Tools",
+              "description": "Recognize IDEs, editors, version control systems, package managers, and CLIs.",
+              "genprompt": "Write MCQs on the purpose of IDEs/editors, Git basics (commit, push, pull), and package managers (npm/pip) at a conceptual level.",
+              "questions": [
+                {
+                  "id": 1,
+                  "prompt": "An IDE primarily provides",
+                  "correctAnswer": "Integrated editing, building, and debugging tools",
+                  "correctIndex": 2,
+                  "answers": ["Only a terminal", "Only a compiler", "Integrated editing, building, and debugging tools", "Only a code formatter"]
+                },
+                {
+                  "id": 2,
+                  "prompt": "Which tool records changes to source code over time?",
+                  "correctAnswer": "Version control system",
+                  "correctIndex": 0,
+                  "answers": ["Version control system", "Linker", "Device manager", "Task scheduler"]
+                },
+                {
+                  "id": 3,
+                  "prompt": "In Git, a commit is best described as",
+                  "correctAnswer": "A snapshot of changes with a message",
+                  "correctIndex": 1,
+                  "answers": ["A remote server", "A snapshot of changes with a message", "A binary package", "A runtime error"]
+                },
+                {
+                  "id": 4,
+                  "prompt": "Which command uploads local commits to a remote repository?",
+                  "correctAnswer": "Push",
+                  "correctIndex": 3,
+                  "answers": ["Clone", "Pull", "Fetch", "Push"]
+                },
+                {
+                  "id": 5,
+                  "prompt": "Which pulls and integrates new commits from a remote?",
+                  "correctAnswer": "Pull",
+                  "correctIndex": 0,
+                  "answers": ["Pull", "Push", "Stage", "Init"]
+                },
+                {
+                  "id": 6,
+                  "prompt": "npm and pip are examples of",
+                  "correctAnswer": "Package managers",
+                  "correctIndex": 2,
+                  "answers": ["Compilers", "Debuggers", "Package managers", "OS kernels"]
+                },
+                {
+                  "id": 7,
+                  "prompt": "A CLI is best described as",
+                  "correctAnswer": "A text-based interface to run commands",
+                  "correctIndex": 1,
+                  "answers": ["A GUI builder", "A text-based interface to run commands", "A device driver", "A virtual machine"]
+                },
+                {
+                  "id": 8,
+                  "prompt": "Which file often lists project dependencies for a package manager?",
+                  "correctAnswer": "A manifest like package.json",
+                  "correctIndex": 0,
+                  "answers": ["A manifest like package.json", "README only", "LICENSE only", "Binary executable"]
+                },
+                {
+                  "id": 9,
+                  "prompt": "Which best explains code linting?",
+                  "correctAnswer": "Static checks for style and simple errors",
+                  "correctIndex": 3,
+                  "answers": ["Runtime tracing", "Compiling to bytecode", "Packaging binaries", "Static checks for style and simple errors"]
+                },
+                {
+                  "id": 10,
+                  "prompt": "Why write descriptive commit messages?",
+                  "correctAnswer": "They help others understand what changed and why",
+                  "correctIndex": 2,
+                  "answers": ["They speed up the CPU", "They replace tests", "They help others understand what changed and why", "They compress the repository"]
+                }
+              ]
+            },
+            {
+              "id": 5,
+              "name": "Algorithms and Complexity (Intro)",
+              "description": "Describe what an algorithm is and basics of efficiency (qualitative).",
+              "genprompt": "Produce MCQs about what an algorithm is, input/output, and high-level time/space considerations (no math needed).",
+              "questions": [
+                {
+                  "id": 1,
+                  "prompt": "An algorithm is best defined as",
+                  "correctAnswer": "A step-by-step method to solve a problem",
+                  "correctIndex": 0,
+                  "answers": ["A step-by-step method to solve a problem", "A hardware device", "A compiled executable", "A network protocol"]
+                },
+                {
+                  "id": 2,
+                  "prompt": "Inputs and outputs of an algorithm should be",
+                  "correctAnswer": "Clearly defined",
+                  "correctIndex": 2,
+                  "answers": ["Hidden", "Random", "Clearly defined", "Unlimited"]
+                },
+                {
+                  "id": 3,
+                  "prompt": "Time complexity is a way to talk about",
+                  "correctAnswer": "How running time grows as input size increases",
+                  "correctIndex": 3,
+                  "answers": ["CPU voltage", "Disk size", "Number of files", "How running time grows as input size increases"]
+                },
+                {
+                  "id": 4,
+                  "prompt": "Space complexity refers to",
+                  "correctAnswer": "How much memory an algorithm needs",
+                  "correctIndex": 1,
+                  "answers": ["How many files are opened", "How much memory an algorithm needs", "How many functions are called", "How long the code is"]
+                },
+                {
+                  "id": 5,
+                  "prompt": "Why do we compare algorithm efficiency?",
+                  "correctAnswer": "To choose solutions that scale better",
+                  "correctIndex": 0,
+                  "answers": ["To choose solutions that scale better", "To avoid writing comments", "To increase code length", "To remove testing"]
+                },
+                {
+                  "id": 6,
+                  "prompt": "A good algorithm should be",
+                  "correctAnswer": "Correct and efficient",
+                  "correctIndex": 2,
+                  "answers": ["Long and complex", "Hidden and undocumented", "Correct and efficient", "Only hardware dependent"]
+                },
+                {
+                  "id": 7,
+                  "prompt": "Which is a qualitative sign of inefficiency?",
+                  "correctAnswer": "The program becomes very slow as data grows a little",
+                  "correctIndex": 1,
+                  "answers": ["Readable code", "The program becomes very slow as data grows a little", "Helpful comments", "Clear variable names"]
+                },
+                {
+                  "id": 8,
+                  "prompt": "A recipe in a cookbook is most similar to",
+                  "correctAnswer": "An algorithm",
+                  "correctIndex": 3,
+                  "answers": ["A compiler", "A device driver", "A binary file", "An algorithm"]
+                },
+                {
+                  "id": 9,
+                  "prompt": "Which matters most when comparing two correct algorithms for large inputs?",
+                  "correctAnswer": "How their performance grows with input size",
+                  "correctIndex": 0,
+                  "answers": ["How their performance grows with input size", "The author’s name", "The file extension", "The font used to print code"]
+                },
+                {
+                  "id": 10,
+                  "prompt": "Which is a typical tradeoff when designing algorithms?",
+                  "correctAnswer": "Time vs. space",
+                  "correctIndex": 2,
+                  "answers": ["Color vs. font", "Mouse vs. keyboard", "Time vs. space", "Wi-Fi vs. Ethernet"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+"id": 2,
+"name": "Ethics, Legal Compliance, and Security",
+"description": "Professional conduct, intellectual property, privacy, and basic security practices for entry-level programmers.",
+"tasks": [
+{
+"id": 1,
+"name": "Professional and Ethical Conduct",
+"description": "Understand ethics, professionalism, and responsible behavior in computing.",
+"genprompt": "Generate multiple-choice questions (4 options) about professional ethics scenarios, respectful communication, conflicts of interest, plagiarism, and reporting concerns.",
+"questions": [
+{
+"id": 1,
+"prompt": "Which action best demonstrates professional conduct on a software team?",
+"correctAnswer": "Giving clear status updates and meeting deadlines",
+"correctIndex": 1,
+"answers": [
+"Posting memes in project chats during meetings",
+"Giving clear status updates and meeting deadlines",
+"Ignoring code review comments",
+"Withholding information to look indispensable"
+]
+},
+{
+"id": 2,
+"prompt": "A classmate asks for a copy of your project so they can submit it as their own. The ethical response is to",
+"correctAnswer": "Refuse and suggest they do their own work",
+"correctIndex": 2,
+"answers": [
+"Share the code and change filenames",
+"Post the code publicly to help everyone",
+"Refuse and suggest they do their own work",
+"Trade code for future favors"
+]
+},
+{
+"id": 3,
+"prompt": "Which is an example of plagiarism in programming?",
+"correctAnswer": "Copying code without attribution and claiming authorship",
+"correctIndex": 0,
+"answers": [
+"Copying code without attribution and claiming authorship",
+"Citing a library’s license in your README",
+"Pair-programming with a teammate",
+"Using open-source code with proper attribution"
+]
+},
+{
+"id": 4,
+"prompt": "A conflict of interest occurs when a developer",
+"correctAnswer": "Has personal interests that could improperly influence decisions",
+"correctIndex": 3,
+"answers": [
+"Uses a linter on their code",
+"Works from home one day a week",
+"Attends a conference",
+"Has personal interests that could improperly influence decisions"
+]
+},
+{
+"id": 5,
+"prompt": "Which communication is most appropriate in a professional setting?",
+"correctAnswer": "Respectful, concise, and relevant to the work",
+"correctIndex": 2,
+"answers": [
+"All caps to show urgency",
+"Sarcasm to make a point",
+"Respectful, concise, and relevant to the work",
+"Long messages with unrelated personal stories"
+]
+},
+{
+"id": 6,
+"prompt": "If you observe harassment or discrimination on your team, the best first step is to",
+"correctAnswer": "Report it through the appropriate school/company channel",
+"correctIndex": 1,
+"answers": [
+"Joke about it to defuse tension",
+"Report it through the appropriate school/company channel",
+"Ignore it if it doesn’t affect your work",
+"Post about it on social media"
+]
+},
+{
+"id": 7,
+"prompt": "Which behavior supports an inclusive environment?",
+"correctAnswer": "Listening actively and inviting all voices to contribute",
+"correctIndex": 0,
+"answers": [
+"Listening actively and inviting all voices to contribute",
+"Interrupting to correct minor errors",
+"Assigning work based on stereotypes",
+"Sharing private messages publicly"
+]
+},
+{
+"id": 8,
+"prompt": "When discussing sensitive project details, you should",
+"correctAnswer": "Share only with those who need to know",
+"correctIndex": 2,
+"answers": [
+"Share with your entire class",
+"Upload to public forums for feedback",
+"Share only with those who need to know",
+"Send to personal group chats"
+]
+},
+{
+"id": 9,
+"prompt": "Ethical use of AI coding tools means",
+"correctAnswer": "Following school/company rules and citing generated code if required",
+"correctIndex": 3,
+"answers": [
+"Submitting AI output as your own without review",
+"Bypassing assignments using AI",
+"Ignoring licensing in generated snippets",
+"Following school/company rules and citing generated code if required"
+]
+},
+{
+"id": 10,
+"prompt": "Professional responsibility in a code review includes",
+"correctAnswer": "Giving specific, respectful feedback focused on the code",
+"correctIndex": 0,
+"answers": [
+"Giving specific, respectful feedback focused on the code",
+"Attacking the author’s personality",
+"Approving without reading",
+"Rejecting all changes to keep control"
+]
+}
+]
+},
+{
+"id": 2,
+"name": "Intellectual Property and Licensing",
+"description": "Basics of copyright, licensing, attribution, and using third-party assets.",
+"genprompt": "Generate multiple-choice questions (4 options) on copyright vs. license, attribution, open-source license characteristics (MIT/Apache/GPL at a high level), and proper reuse of code and media.",
+"questions": [
+{
+"id": 1,
+"prompt": "Copyright primarily protects",
+"correctAnswer": "Original works like code, text, images, and music",
+"correctIndex": 1,
+"answers": [
+"Ideas regardless of expression",
+"Original works like code, text, images, and music",
+"Computer hardware designs only",
+"Domain names only"
+]
+},
+{
+"id": 2,
+"prompt": "A software license",
+"correctAnswer": "Specifies how others may use, modify, and share the work",
+"correctIndex": 2,
+"answers": [
+"Is always optional",
+"Is the same as a trademark",
+"Specifies how others may use, modify, and share the work",
+"Prevents others from viewing the code"
+]
+},
+{
+"id": 3,
+"prompt": "Using code from the internet ethically means you should",
+"correctAnswer": "Follow the license and provide attribution if required",
+"correctIndex": 0,
+"answers": [
+"Follow the license and provide attribution if required",
+"Copy it verbatim and remove license text",
+"Rename variables to avoid detection",
+"Assume all code online is public domain"
+]
+},
+{
+"id": 4,
+"prompt": "The MIT License is known for being",
+"correctAnswer": "Permissive with minimal restrictions",
+"correctIndex": 3,
+"answers": [
+"Proprietary only",
+"Incompatible with reuse",
+"Strictly viral for all projects",
+"Permissive with minimal restrictions"
+]
+},
+{
+"id": 5,
+"prompt": "GPL-licensed code typically requires that",
+"correctAnswer": "Derivative works are shared under the same license",
+"correctIndex": 1,
+"answers": [
+"No attribution is needed",
+"Derivative works are shared under the same license",
+"You may not distribute source code",
+"You must keep the code private"
+]
+},
+{
+"id": 6,
+"prompt": "Attribution means",
+"correctAnswer": "Giving credit to the original creator as required by the license",
+"correctIndex": 2,
+"answers": [
+"Paying a fee for every use",
+"Turning in anonymous work",
+"Giving credit to the original creator as required by the license",
+"Only crediting if asked"
+]
+},
+{
+"id": 7,
+"prompt": "If a project has no license, the safest assumption is",
+"correctAnswer": "You do not have permission to reuse it",
+"correctIndex": 0,
+"answers": [
+"You do not have permission to reuse it",
+"It is automatically public domain",
+"Reuse is allowed for students",
+"It is covered by MIT License"
+]
+},
+{
+"id": 8,
+"prompt": "A proprietary EULA typically",
+"correctAnswer": "Limits copying and redistribution",
+"correctIndex": 3,
+"answers": [
+"Requires sharing source code",
+"Grants trademark ownership",
+"Allows sublicensing the product freely",
+"Limits copying and redistribution"
+]
+},
+{
+"id": 9,
+"prompt": "Which action best avoids license conflicts?",
+"correctAnswer": "Track third-party components and their licenses",
+"correctIndex": 1,
+"answers": [
+"Ignore dependency notices",
+"Track third-party components and their licenses",
+"Delete LICENSE files",
+"Mix code without attribution"
+]
+},
+{
+"id": 10,
+"prompt": "When using open images or sounds in an app, you should first",
+"correctAnswer": "Check the asset’s license and attribution requirements",
+"correctIndex": 2,
+"answers": [
+"Assume school projects need no attribution",
+"Only credit if the author emails you",
+"Check the asset’s license and attribution requirements",
+"Change the filename to be safe"
+]
+}
+]
+},
+{
+"id": 3,
+"name": "Data Privacy and Compliance (Intro)",
+"description": "Identify personal data, minimize collection, and handle information responsibly.",
+"genprompt": "Generate multiple-choice questions (4 options) about personally identifiable information (PII), data minimization, consent, retention, and safe sharing in school projects.",
+"questions": [
+{
+"id": 1,
+"prompt": "Which of the following is PII (personally identifiable information)?",
+"correctAnswer": "A student’s full name and school ID together",
+"correctIndex": 0,
+"answers": [
+"A student’s full name and school ID together",
+"A random number without context",
+"An anonymized dataset with no keys",
+"Aggregate counts only"
+]
+},
+{
+"id": 2,
+"prompt": "Data minimization means",
+"correctAnswer": "Collecting only the data needed for the stated purpose",
+"correctIndex": 2,
+"answers": [
+"Collecting as much data as possible",
+"Saving data forever",
+"Collecting only the data needed for the stated purpose",
+"Sharing data with all team members"
+]
+},
+{
+"id": 3,
+"prompt": "Before sharing a class project dataset containing names and emails, you should",
+"correctAnswer": "Remove or de-identify personal information where possible",
+"correctIndex": 1,
+"answers": [
+"Upload it publicly to get feedback",
+"Remove or de-identify personal information where possible",
+"Share it in a group chat",
+"Attach it to a public bug report"
+]
+},
+{
+"id": 4,
+"prompt": "Storing passwords in plain text is unsafe because",
+"correctAnswer": "Anyone who accesses storage can read them directly",
+"correctIndex": 3,
+"answers": [
+"It makes login faster",
+"It prevents duplication",
+"It improves search speed",
+"Anyone who accesses storage can read them directly"
+]
+},
+{
+"id": 5,
+"prompt": "A good practice for data retention is to",
+"correctAnswer": "Delete data when it is no longer needed",
+"correctIndex": 0,
+"answers": [
+"Delete data when it is no longer needed",
+"Keep data forever in case it’s useful",
+"Back up PII on personal devices",
+"Share raw data with classmates"
+]
+},
+{
+"id": 6,
+"prompt": "Sending PII over unsecured public Wi-Fi is risky because",
+"correctAnswer": "It can be intercepted by others on the network",
+"correctIndex": 1,
+"answers": [
+"It will compress the data",
+"It can be intercepted by others on the network",
+"It ensures encryption by default",
+"It hides your identity"
+]
+},
+{
+"id": 7,
+"prompt": "When collecting survey responses from students, you should first",
+"correctAnswer": "Explain the purpose and what data will be collected",
+"correctIndex": 2,
+"answers": [
+"Collect names, addresses, and passwords",
+"Share results with outside groups",
+"Explain the purpose and what data will be collected",
+"Ask for social security numbers"
+]
+},
+{
+"id": 8,
+"prompt": "An anonymized dataset is one where",
+"correctAnswer": "Personal identifiers have been removed so individuals aren’t identified",
+"correctIndex": 0,
+"answers": [
+"Personal identifiers have been removed so individuals aren’t identified",
+"Data is larger than before",
+"Only student grades remain",
+"Passwords are stored in plain text"
+]
+},
+{
+"id": 9,
+"prompt": "Sharing class data with another team should be done",
+"correctAnswer": "Only if they need it and it’s approved",
+"correctIndex": 3,
+"answers": [
+"Automatically for transparency",
+"By posting to social media",
+"By emailing it to everyone",
+"Only if they need it and it’s approved"
+]
+},
+{
+"id": 10,
+"prompt": "Which is the safest place for sensitive project notes?",
+"correctAnswer": "A private, access-controlled location",
+"correctIndex": 1,
+"answers": [
+"A public wiki",
+"A private, access-controlled location",
+"Printed copies left in class",
+"Personal social media"
+]
+}
+]
+},
+{
+"id": 4,
+"name": "Security Fundamentals",
+"description": "Basic security principles for entry-level developers.",
+"genprompt": "Generate multiple-choice questions (4 options) about authentication vs. authorization, least privilege, strong passwords, MFA, patching, and safe credential handling.",
+"questions": [
+{
+"id": 1,
+"prompt": "Authentication primarily answers",
+"correctAnswer": "Who are you?",
+"correctIndex": 2,
+"answers": [
+"What can you access?",
+"When did you log in?",
+"Who are you?",
+"Where is the server?"
+]
+},
+{
+"id": 2,
+"prompt": "Authorization primarily answers",
+"correctAnswer": "What are you allowed to do?",
+"correctIndex": 1,
+"answers": [
+"Who are you?",
+"What are you allowed to do?",
+"How fast is the network?",
+"What language is used?"
+]
+},
+{
+"id": 3,
+"prompt": "The principle of least privilege means",
+"correctAnswer": "Give only the access required to perform a task",
+"correctIndex": 0,
+"answers": [
+"Give only the access required to perform a task",
+"Give admin rights to all students",
+"Share logins to save time",
+"Disable passwords for convenience"
+]
+},
+{
+"id": 4,
+"prompt": "Which password is strongest?",
+"correctAnswer": "A long passphrase with mixed characters",
+"correctIndex": 3,
+"answers": [
+"123456",
+"password1",
+"qwerty",
+"A long passphrase with mixed characters"
+]
+},
+{
+"id": 5,
+"prompt": "Multi-factor authentication (MFA) increases security by",
+"correctAnswer": "Requiring two or more independent proofs of identity",
+"correctIndex": 2,
+"answers": [
+"Removing passwords",
+"Blocking all new logins",
+"Requiring two or more independent proofs of identity",
+"Encrypting video streams"
+]
+},
+{
+"id": 6,
+"prompt": "Storing API keys in source code is risky because",
+"correctAnswer": "They can leak if the code is shared",
+"correctIndex": 1,
+"answers": [
+"It improves performance",
+"They can leak if the code is shared",
+"It makes debugging easier",
+"It automatically rotates keys"
+]
+},
+{
+"id": 7,
+"prompt": "Keeping software up to date helps by",
+"correctAnswer": "Applying security patches for known vulnerabilities",
+"correctIndex": 0,
+"answers": [
+"Applying security patches for known vulnerabilities",
+"Eliminating the need for testing",
+"Increasing battery life",
+"Preventing user errors"
+]
+},
+{
+"id": 8,
+"prompt": "If you suspect an account is compromised, you should first",
+"correctAnswer": "Change the password and notify the appropriate contact",
+"correctIndex": 2,
+"answers": [
+"Ignore it",
+"Tell friends on social media",
+"Change the password and notify the appropriate contact",
+"Uninstall all applications"
+]
+},
+{
+"id": 9,
+"prompt": "Sharing accounts among team members is discouraged because",
+"correctAnswer": "It prevents traceability and increases risk",
+"correctIndex": 1,
+"answers": [
+"It speeds up onboarding",
+"It prevents traceability and increases risk",
+"It reduces costs",
+"It enforces MFA"
+]
+},
+{
+"id": 10,
+"prompt": "A secure way to handle secrets in a project is to",
+"correctAnswer": "Use environment variables or a secrets manager",
+"correctIndex": 3,
+"answers": [
+"Commit secrets to Git",
+"Email passwords to teammates",
+"Save keys in README",
+"Use environment variables or a secrets manager"
+]
+}
+]
+},
+{
+"id": 5,
+"name": "Safe Web Practices",
+"description": "Basic web safety concepts for entry-level projects.",
+"genprompt": "Generate multiple-choice questions (4 options) about HTTPS, input validation concept, safe downloads, avoiding risky links, and safe behavior on shared devices.",
+"questions": [
+{
+"id": 1,
+"prompt": "HTTPS helps protect users by",
+"correctAnswer": "Encrypting data between browser and server",
+"correctIndex": 0,
+"answers": [
+"Encrypting data between browser and server",
+"Making pages load without images",
+"Blocking all cookies",
+"Forcing offline mode"
+]
+},
+{
+"id": 2,
+"prompt": "A safe practice when downloading software is to",
+"correctAnswer": "Download from official or trusted sources",
+"correctIndex": 3,
+"answers": [
+"Use random mirror links",
+"Ignore checksums/signatures",
+"Disable antivirus first",
+"Download from official or trusted sources"
+]
+},
+{
+"id": 3,
+"prompt": "Input validation helps prevent",
+"correctAnswer": "Unintended or harmful input from being processed",
+"correctIndex": 1,
+"answers": [
+"High CPU temperature",
+"Unintended or harmful input from being processed",
+"Network congestion",
+"File backups"
+]
+},
+{
+"id": 4,
+"prompt": "On a shared computer, you should always",
+"correctAnswer": "Log out of accounts and close the browser",
+"correctIndex": 2,
+"answers": [
+"Save passwords in the browser",
+"Leave tabs open for convenience",
+"Log out of accounts and close the browser",
+"Share your session with others"
+]
+},
+{
+"id": 5,
+"prompt": "A suspicious link in an email should be",
+"correctAnswer": "Not clicked; verify with the sender through another channel",
+"correctIndex": 1,
+"answers": [
+"Clicked quickly before it expires",
+"Not clicked; verify with the sender through another channel",
+"Forwarded to classmates",
+"Saved to bookmarks for later"
+]
+},
+{
+"id": 6,
+"prompt": "Public Wi-Fi is riskier for sign-ins because",
+"correctAnswer": "Attackers may intercept traffic on the same network",
+"correctIndex": 0,
+"answers": [
+"Attackers may intercept traffic on the same network",
+"It guarantees faster speeds",
+"It disables encryption",
+"It provides free VPN"
+]
+},
+{
+"id": 7,
+"prompt": "Client-side code should not contain",
+"correctAnswer": "Hard-coded passwords or API keys",
+"correctIndex": 2,
+"answers": [
+"Comments",
+"Styling rules",
+"Hard-coded passwords or API keys",
+"Console logs during development"
+]
+},
+{
+"id": 8,
+"prompt": "When a browser shows a certificate warning, you should",
+"correctAnswer": "Avoid proceeding until the issue is resolved",
+"correctIndex": 3,
+"answers": [
+"Ignore it and continue",
+"Refresh repeatedly",
+"Switch to HTTP",
+"Avoid proceeding until the issue is resolved"
+]
+},
+{
+"id": 9,
+"prompt": "Using unique passwords for different sites is important because",
+"correctAnswer": "A breach on one site won’t compromise others",
+"correctIndex": 1,
+"answers": [
+"It’s easier to remember",
+"A breach on one site won’t compromise others",
+"It disables CAPTCHA",
+"It hides your browsing history"
+]
+},
+{
+"id": 10,
+"prompt": "Before entering credentials on a site, a good check is to",
+"correctAnswer": "Verify the URL and the HTTPS lock icon",
+"correctIndex": 0,
+"answers": [
+"Verify the URL and the HTTPS lock icon",
+"Ensure the page has animations",
+"Check if images load fast",
+"Trust any link sent by text"
+]
+}
+]
+}
+]
+},
+        {
+  "id": 3,
+  "name": "Analyze Programming Problems, Manage Projects, and Create Flowchart Solutions",
+  "description": "Requirements gathering, task breakdown, scheduling, and visual problem-solving with flowcharts and pseudocode.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Requirements and Use Cases",
+      "description": "Identify stakeholders, separate functional vs. nonfunctional requirements, and draft simple user stories/use cases.",
+      "genprompt": "Generate multiple-choice questions (4 options) on stakeholders, functional vs. nonfunctional requirements, acceptance criteria, and basic use-case thinking (entry-level NOCTI style).",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which statement is a functional requirement for a login page?",
+          "correctAnswer": "The system shall allow users to sign in with a valid password",
+          "correctIndex": 2,
+          "answers": [
+            "The page should look modern on all screens",
+            "The page should load in under 1 second",
+            "The system shall allow users to sign in with a valid password",
+            "The color scheme should match school colors"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "Which is a nonfunctional requirement?",
+          "correctAnswer": "Responses must be returned within 2 seconds",
+          "correctIndex": 1,
+          "answers": [
+            "Users can reset their password",
+            "Responses must be returned within 2 seconds",
+            "System stores user profiles",
+            "Teachers can create assignments"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "A stakeholder is best defined as",
+          "correctAnswer": "Anyone affected by or invested in the system",
+          "correctIndex": 0,
+          "answers": [
+            "Anyone affected by or invested in the system",
+            "Only the programmers",
+            "Only the paying customer",
+            "Only end users in the same class"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Which user story follows the standard format?",
+          "correctAnswer": "As a student, I want to view my grades so I can track progress",
+          "correctIndex": 3,
+          "answers": [
+            "I want grades to be fast",
+            "Grades must be accurate",
+            "Add grades to the page",
+            "As a student, I want to view my grades so I can track progress"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Acceptance criteria are used to",
+          "correctAnswer": "Confirm that a feature works as intended",
+          "correctIndex": 1,
+          "answers": [
+            "Decide team salaries",
+            "Confirm that a feature works as intended",
+            "Compile the program",
+            "Design database tables"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "Which requirement is most testable?",
+          "correctAnswer": "Export must generate a CSV file with headers name and score",
+          "correctIndex": 0,
+          "answers": [
+            "Export must generate a CSV file with headers name and score",
+            "Export should be nice",
+            "Export should be professional",
+            "Export should be modern"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Gathering requirements early helps primarily to",
+          "correctAnswer": "Reduce changes and rework later",
+          "correctIndex": 2,
+          "answers": [
+            "Avoid writing tests",
+            "Skip documentation",
+            "Reduce changes and rework later",
+            "Eliminate meetings forever"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Which is the best clarifying question for a teacher stakeholder?",
+          "correctAnswer": "Which grade fields do you need on the report?",
+          "correctIndex": 3,
+          "answers": [
+            "Why is this class hard?",
+            "Do you like computers?",
+            "Should we use dark mode?",
+            "Which grade fields do you need on the report?"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "A use case primarily describes",
+          "correctAnswer": "How a user interacts with the system to reach a goal",
+          "correctIndex": 1,
+          "answers": [
+            "The internal class diagram",
+            "How a user interacts with the system to reach a goal",
+            "The server hardware specs",
+            "The programming language features"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "Which item belongs in a requirements list for a school portal?",
+          "correctAnswer": "Parents can view student attendance records",
+          "correctIndex": 0,
+          "answers": [
+            "Parents can view student attendance records",
+            "Use the newest framework",
+            "Write code in only one file",
+            "Servers must be brand X"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Project Planning Basics",
+      "description": "Define scope, create milestones, estimate effort, and understand dependencies at a beginner level.",
+      "genprompt": "Generate multiple-choice questions (4 options) about scope vs. scope creep, milestones vs. tasks, estimates, priorities, and simple schedules (entry-level NOCTI style).",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Scope creep happens when",
+          "correctAnswer": "New features are added without adjusting time or resources",
+          "correctIndex": 2,
+          "answers": [
+            "The code compiles",
+            "A bug is fixed",
+            "New features are added without adjusting time or resources",
+            "Team members take breaks"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "A milestone is best described as",
+          "correctAnswer": "A significant checkpoint or deliverable",
+          "correctIndex": 1,
+          "answers": [
+            "A minor to-do item",
+            "A significant checkpoint or deliverable",
+            "An unrelated side project",
+            "A daily reminder"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Which item is a task rather than a milestone?",
+          "correctAnswer": "Implement grade export button",
+          "correctIndex": 0,
+          "answers": [
+            "Implement grade export button",
+            "Beta release",
+            "Phase 1 complete",
+            "Stakeholder sign-off"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "A dependency means",
+          "correctAnswer": "One task must finish before another can start",
+          "correctIndex": 3,
+          "answers": [
+            "Two tasks are optional",
+            "Tasks are unrelated",
+            "Tasks happen at the same time",
+            "One task must finish before another can start"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Time estimation should be",
+          "correctAnswer": "Based on task size and team experience",
+          "correctIndex": 1,
+          "answers": [
+            "Pure guesswork",
+            "Based on task size and team experience",
+            "Always doubled automatically",
+            "Always one day"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "The critical path in a schedule affects",
+          "correctAnswer": "The minimum time to finish the project",
+          "correctIndex": 0,
+          "answers": [
+            "The minimum time to finish the project",
+            "Only the budget",
+            "Only code quality",
+            "Only team size"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Prioritizing tasks helps mainly to",
+          "correctAnswer": "Deliver the most important features first",
+          "correctIndex": 2,
+          "answers": [
+            "Avoid merging code",
+            "Eliminate testing",
+            "Deliver the most important features first",
+            "Remove documentation"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "A simple schedule should include",
+          "correctAnswer": "Tasks, owners, and target dates",
+          "correctIndex": 3,
+          "answers": [
+            "Only code snippets",
+            "Only bug lists",
+            "Only screenshots",
+            "Tasks, owners, and target dates"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "Free slack (float) for a task means",
+          "correctAnswer": "How much a task can slip without delaying the project",
+          "correctIndex": 1,
+          "answers": [
+            "Extra budget for hardware",
+            "How much a task can slip without delaying the project",
+            "Time for team parties",
+            "Unlimited delay is allowed"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "When a stakeholder asks for a big new feature mid-project, the best response is to",
+          "correctAnswer": "Discuss impact on schedule and scope before committing",
+          "correctIndex": 0,
+          "answers": [
+            "Discuss impact on schedule and scope before committing",
+            "Say yes immediately without changes",
+            "Ignore the request",
+            "Cancel all testing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Flowcharts and Pseudocode",
+      "description": "Translate problems into simple flowcharts and pseudocode and interpret basic control flow.",
+      "genprompt": "Generate multiple-choice questions (4 options) about flowchart symbols (start/end, process, decision, input/output), sequence vs. selection vs. iteration, and interpreting short pseudocode in one line (no multi-line).",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "In a flowchart, the oval shape typically represents",
+          "correctAnswer": "Start/End",
+          "correctIndex": 0,
+          "answers": [
+            "Start/End",
+            "Decision",
+            "Process",
+            "Connector"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "In a flowchart, a diamond indicates",
+          "correctAnswer": "A decision with branches",
+          "correctIndex": 1,
+          "answers": [
+            "Program start",
+            "A decision with branches",
+            "Printed output",
+            "Data storage"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Which symbol usually represents a process step?",
+          "correctAnswer": "Rectangle",
+          "correctIndex": 2,
+          "answers": [
+            "Diamond",
+            "Oval",
+            "Rectangle",
+            "Parallelogram"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "A parallelogram in a flowchart often means",
+          "correctAnswer": "Input or output",
+          "correctIndex": 3,
+          "answers": [
+            "Loop start",
+            "Decision",
+            "Start/End",
+            "Input or output"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Sequence, selection, and iteration are the three basic",
+          "correctAnswer": "Control structures",
+          "correctIndex": 0,
+          "answers": [
+            "Control structures",
+            "Data types",
+            "Storage devices",
+            "Compilers"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "Which line of pseudocode shows selection?",
+          "correctAnswer": "IF score >= 60 THEN pass ELSE fail",
+          "correctIndex": 2,
+          "answers": [
+            "SET x = 5",
+            "PRINT name",
+            "IF score >= 60 THEN pass ELSE fail",
+            "REPEAT 10 TIMES add 1"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Which line of pseudocode shows iteration?",
+          "correctAnswer": "FOR i FROM 1 TO 3 DO total = total + i",
+          "correctIndex": 1,
+          "answers": [
+            "IF x < y THEN x = y",
+            "FOR i FROM 1 TO 3 DO total = total + i",
+            "SET answer = 42",
+            "STOP"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Which best describes pseudocode?",
+          "correctAnswer": "Plain-language steps resembling code logic",
+          "correctIndex": 3,
+          "answers": [
+            "Executable machine code",
+            "A compiled language",
+            "A strict syntax diagram",
+            "Plain-language steps resembling code logic"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "A connector in a flowchart is used to",
+          "correctAnswer": "Link separate parts of the diagram",
+          "correctIndex": 0,
+          "answers": [
+            "Link separate parts of the diagram",
+            "Run the program",
+            "Store variables",
+            "Mark the final answer"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "Which statement is most appropriate inside a process box?",
+          "correctAnswer": "total = total + amount",
+          "correctIndex": 2,
+          "answers": [
+            "YES/NO",
+            "Begin/End",
+            "total = total + amount",
+            "Input: name"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Risk and Constraints",
+      "description": "Recognize schedule, technical, and resource risks and choose simple mitigations.",
+      "genprompt": "Generate multiple-choice questions (4 options) about identifying common project risks (schedule, staffing, dependency, technical uncertainty) and basic mitigation or contingency planning.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A schedule risk is best described as",
+          "correctAnswer": "The project may take longer than planned",
+          "correctIndex": 1,
+          "answers": [
+            "Hardware will be cheaper",
+            "The project may take longer than planned",
+            "The code compiles on first try",
+            "The design is colorful"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "A dependency risk occurs when",
+          "correctAnswer": "Your task is blocked until another task finishes",
+          "correctIndex": 0,
+          "answers": [
+            "Your task is blocked until another task finishes",
+            "You have unlimited team members",
+            "You finished early",
+            "You changed the font"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "A technical risk example is",
+          "correctAnswer": "Using a new library with unknown issues",
+          "correctIndex": 3,
+          "answers": [
+            "Team lunch is late",
+            "The printer is out of paper",
+            "The logo is blue",
+            "Using a new library with unknown issues"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Which is a basic mitigation strategy?",
+          "correctAnswer": "Create a backup plan for critical tasks",
+          "correctIndex": 2,
+          "answers": [
+            "Ignore risks until the end",
+            "Cut all testing",
+            "Create a backup plan for critical tasks",
+            "Delete requirements"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "If one teammate with unique knowledge is absent, the risk is",
+          "correctAnswer": "Knowledge bottleneck",
+          "correctIndex": 0,
+          "answers": [
+            "Knowledge bottleneck",
+            "Infinite capacity",
+            "Zero scope",
+            "Automatic success"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "A constraint in a school project is",
+          "correctAnswer": "Fixed due date for presentation",
+          "correctIndex": 1,
+          "answers": [
+            "Unlimited budget",
+            "Fixed due date for presentation",
+            "Infinite team size",
+            "No requirements"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Adding more features near the deadline mostly increases",
+          "correctAnswer": "Schedule risk",
+          "correctIndex": 3,
+          "answers": [
+            "Battery life",
+            "Network speed",
+            "Typing accuracy",
+            "Schedule risk"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "A contingency plan is",
+          "correctAnswer": "Actions you will take if a risk happens",
+          "correctIndex": 2,
+          "answers": [
+            "A marketing slogan",
+            "A graphic design",
+            "Actions you will take if a risk happens",
+            "A code linter"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "Testing early reduces which risk most?",
+          "correctAnswer": "Finding defects too late to fix",
+          "correctIndex": 0,
+          "answers": [
+            "Finding defects too late to fix",
+            "Needing more chairs",
+            "Better cafeteria food",
+            "Too many commits"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "If a critical dependency is delayed, the best first step is to",
+          "correctAnswer": "Re-plan schedule and communicate impact",
+          "correctIndex": 1,
+          "answers": [
+            "Hide the problem",
+            "Re-plan schedule and communicate impact",
+            "Remove all features",
+            "Switch programming language immediately"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Team Roles and Communication",
+      "description": "Understand basic roles (dev, tester, reviewer) and give clear status updates and handoffs.",
+      "genprompt": "Generate multiple-choice questions (4 options) about roles and responsibilities, stand-up style updates (yesterday/today/blockers), handoff best practices, and constructive feedback.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A typical developer role includes",
+          "correctAnswer": "Implementing features according to requirements",
+          "correctIndex": 2,
+          "answers": [
+            "Setting school policy",
+            "Purchasing hardware for all classes",
+            "Implementing features according to requirements",
+            "Grading all assignments"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "A tester primarily focuses on",
+          "correctAnswer": "Verifying that the software works as expected",
+          "correctIndex": 1,
+          "answers": [
+            "Buying servers",
+            "Verifying that the software works as expected",
+            "Writing the school handbook",
+            "Setting network passwords"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "A code reviewer’s main goal is to",
+          "correctAnswer": "Improve quality by checking correctness and clarity",
+          "correctIndex": 0,
+          "answers": [
+            "Improve quality by checking correctness and clarity",
+            "Rewrite the entire project alone",
+            "Change all commit authors",
+            "Sell the code online"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "A clear stand-up update usually includes",
+          "correctAnswer": "What you did, what you will do, and blockers",
+          "correctIndex": 3,
+          "answers": [
+            "Weekend plans only",
+            "Favorite games",
+            "Personal opinions on UI colors",
+            "What you did, what you will do, and blockers"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Which is the best blocker description?",
+          "correctAnswer": "Waiting for API access to test login feature",
+          "correctIndex": 0,
+          "answers": [
+            "Waiting for API access to test login feature",
+            "Everything is bad",
+            "I don’t like math",
+            "It’s complicated"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "A good handoff note to a teammate should",
+          "correctAnswer": "Explain current status and next steps",
+          "correctIndex": 2,
+          "answers": [
+            "Hide unfinished work",
+            "Include unrelated jokes",
+            "Explain current status and next steps",
+            "Use only emojis"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Constructive code feedback should be",
+          "correctAnswer": "Specific, respectful, and actionable",
+          "correctIndex": 1,
+          "answers": [
+            "Sarcastic",
+            "Specific, respectful, and actionable",
+            "Personal",
+            "Vague"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "If two teammates disagree on an approach, the best next step is to",
+          "correctAnswer": "Compare options against requirements and constraints",
+          "correctIndex": 0,
+          "answers": [
+            "Compare options against requirements and constraints",
+            "Flip a coin",
+            "Stop all communication",
+            "Delete both approaches"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "During a team demo, the presenter should",
+          "correctAnswer": "Show features that meet acceptance criteria",
+          "correctIndex": 3,
+          "answers": [
+            "Read source code line by line",
+            "Discuss unrelated homework",
+            "Show every bug discovered",
+            "Show features that meet acceptance criteria"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "A clear task assignment includes",
+          "correctAnswer": "Owner, description, and due date",
+          "correctIndex": 2,
+          "answers": [
+            "Only the owner’s name",
+            "Only a due date",
+            "Owner, description, and due date",
+            "Only a screenshot"
+          ]
+        }
+      ]
+    }
+  ]
+},
+        {
+  "id": 4,
+  "name": "Design Program Solutions",
+  "description": "Apply modular design, data structures, and simple interfaces to plan solutions before coding.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Modular Decomposition",
+      "description": "Break problems into small, single-purpose functions and modules.",
+      "genprompt": "Generate MCQs (4 options) on cohesion, coupling (qualitative), choosing function boundaries, and separating concerns at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which is the best reason to split a long function into smaller ones?",
+          "correctAnswer": "Improves readability and reuse",
+          "correctIndex": 2,
+          "answers": ["Runs faster automatically", "Uses fewer variables", "Improves readability and reuse", "Avoids comments"]
+        },
+        {
+          "id": 2,
+          "prompt": "High cohesion in a module means",
+          "correctAnswer": "It does one focused job well",
+          "correctIndex": 1,
+          "answers": ["It depends on many other files", "It does one focused job well", "It mixes unrelated tasks", "It has many global variables"]
+        },
+        {
+          "id": 3,
+          "prompt": "Low coupling between modules means",
+          "correctAnswer": "Modules have few dependencies on each other",
+          "correctIndex": 0,
+          "answers": ["Modules have few dependencies on each other", "Everything uses the same global state", "All features in one file", "Functions share internal variables"]
+        },
+        {
+          "id": 4,
+          "prompt": "Which function boundary is most appropriate?",
+          "correctAnswer": "Separate input parsing from calculation",
+          "correctIndex": 3,
+          "answers": ["Put all code in main", "Mix printing with math and file IO", "Read files inside every loop", "Separate input parsing from calculation"]
+        },
+        {
+          "id": 5,
+          "prompt": "A benefit of modular design is",
+          "correctAnswer": "Easier testing of parts in isolation",
+          "correctIndex": 0,
+          "answers": ["Easier testing of parts in isolation", "No need for documentation", "Guaranteed zero bugs", "No version control needed"]
+        },
+        {
+          "id": 6,
+          "prompt": "Which task should be its own function?",
+          "correctAnswer": "Format a score into a letter grade",
+          "correctIndex": 2,
+          "answers": ["Declare constants", "Write entire app UI", "Format a score into a letter grade", "Rename the project"]
+        },
+        {
+          "id": 7,
+          "prompt": "Separation of concerns means",
+          "correctAnswer": "Keep unrelated responsibilities in different parts",
+          "correctIndex": 1,
+          "answers": ["Put all logic in one place", "Keep unrelated responsibilities in different parts", "Prefer globals over parameters", "Hardcode configuration"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which design is easier to change later?",
+          "correctAnswer": "Small functions with clear inputs and outputs",
+          "correctIndex": 3,
+          "answers": ["A single 500-line function", "Multiple functions sharing globals", "Printing inside every function", "Small functions with clear inputs and outputs"]
+        },
+        {
+          "id": 9,
+          "prompt": "When two functions share the same code block, a good step is to",
+          "correctAnswer": "Extract it into a helper function",
+          "correctIndex": 0,
+          "answers": ["Extract it into a helper function", "Copy and paste it", "Delete one use case", "Add a global flag"]
+        },
+        {
+          "id": 10,
+          "prompt": "A module that handles only file loading shows",
+          "correctAnswer": "Good cohesion",
+          "correctIndex": 2,
+          "answers": ["High coupling", "Mixed concerns", "Good cohesion", "Hidden side effects"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Data Modeling",
+      "description": "Choose basic data structures that fit the problem.",
+      "genprompt": "Generate MCQs (4 options) selecting between scalars, lists, and dictionaries for simple scenarios like inventory, leaderboard, and settings.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Best structure to store ordered test scores for one student?",
+          "correctAnswer": "List",
+          "correctIndex": 0,
+          "answers": ["List", "Dictionary", "Boolean", "Function"]
+        },
+        {
+          "id": 2,
+          "prompt": "Best structure for mapping student name to grade?",
+          "correctAnswer": "Dictionary",
+          "correctIndex": 3,
+          "answers": ["List", "Tuple", "Integer", "Dictionary"]
+        },
+        {
+          "id": 3,
+          "prompt": "Best way to store a single classroom temperature reading?",
+          "correctAnswer": "Number scalar",
+          "correctIndex": 1,
+          "answers": ["List of numbers", "Number scalar", "Dictionary by hour", "String only"]
+        },
+        {
+          "id": 4,
+          "prompt": "To store multiple choice answers in order, use a",
+          "correctAnswer": "List",
+          "correctIndex": 2,
+          "answers": ["Dictionary", "Set", "List", "Boolean"]
+        },
+        {
+          "id": 5,
+          "prompt": "App settings like {'volume':50,'theme':'dark'} should be a",
+          "correctAnswer": "Dictionary",
+          "correctIndex": 0,
+          "answers": ["Dictionary", "List", "Boolean", "Float"]
+        },
+        {
+          "id": 6,
+          "prompt": "A leaderboard of top 5 scores in descending order is best as",
+          "correctAnswer": "List sorted by score",
+          "correctIndex": 1,
+          "answers": ["Dictionary by player id only", "List sorted by score", "Single integer", "Random string"]
+        },
+        {
+          "id": 7,
+          "prompt": "Which is best for a schedule of class periods in sequence?",
+          "correctAnswer": "List of periods",
+          "correctIndex": 3,
+          "answers": ["Dictionary of random keys", "Single number", "Boolean flag", "List of periods"]
+        },
+        {
+          "id": 8,
+          "prompt": "To look up a phone number by contact name quickly, use",
+          "correctAnswer": "Dictionary name→number",
+          "correctIndex": 2,
+          "answers": ["List of numbers only", "Tuple of names", "Dictionary name→number", "Float array"]
+        },
+        {
+          "id": 9,
+          "prompt": "If order matters and duplicates are allowed, choose a",
+          "correctAnswer": "List",
+          "correctIndex": 0,
+          "answers": ["List", "Dictionary", "Key-value map only", "Boolean"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which structure naturally expresses key-value settings?",
+          "correctAnswer": "Dictionary",
+          "correctIndex": 1,
+          "answers": ["List", "Dictionary", "Character", "Function"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Interfaces and Contracts",
+      "description": "Specify function parameters, return values, and simple pre/postconditions.",
+      "genprompt": "Generate MCQs (4 options) interpreting a simple function contract, choosing correct calls, and identifying input/return expectations.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A function contract primarily states",
+          "correctAnswer": "What inputs it expects and what it returns",
+          "correctIndex": 2,
+          "answers": ["The IDE used", "Line count of code", "What inputs it expects and what it returns", "Brand of the CPU"]
+        },
+        {
+          "id": 2,
+          "prompt": "Given add(a,b) returns a+b, which call is correct?",
+          "correctAnswer": "add(3,4)",
+          "correctIndex": 0,
+          "answers": ["add(3,4)", "add('x')", "add()", "add(a=b) with only one value"]
+        },
+        {
+          "id": 3,
+          "prompt": "If a function promises to return an integer, then",
+          "correctAnswer": "Callers should expect an integer result",
+          "correctIndex": 1,
+          "answers": ["It must print the result", "Callers should expect an integer result", "It can return random types", "It runs only once"]
+        },
+        {
+          "id": 4,
+          "prompt": "A precondition describes",
+          "correctAnswer": "What must be true before the function runs",
+          "correctIndex": 3,
+          "answers": ["How fast the PC is", "What the user prefers", "How to compile the file", "What must be true before the function runs"]
+        },
+        {
+          "id": 5,
+          "prompt": "A postcondition describes",
+          "correctAnswer": "What the function guarantees after it runs",
+          "correctIndex": 0,
+          "answers": ["What the function guarantees after it runs", "Which editor to use", "Who owns the code", "How many comments to write"]
+        },
+        {
+          "id": 6,
+          "prompt": "If spec says greet(name) returns 'Hello, name', a valid output is",
+          "correctAnswer": "Hello, Kim",
+          "correctIndex": 2,
+          "answers": ["name", "Kim", "Hello, Kim", "true"]
+        },
+        {
+          "id": 7,
+          "prompt": "A function with no needed inputs should have",
+          "correctAnswer": "An empty parameter list",
+          "correctIndex": 1,
+          "answers": ["Many parameters", "An empty parameter list", "Hidden globals only", "Random arguments"]
+        },
+        {
+          "id": 8,
+          "prompt": "The purpose of parameters is to",
+          "correctAnswer": "Provide input values to the function",
+          "correctIndex": 0,
+          "answers": ["Provide input values to the function", "Store all program state", "Select the compiler", "Change file permissions"]
+        },
+        {
+          "id": 9,
+          "prompt": "A return value is used to",
+          "correctAnswer": "Send a result back to the caller",
+          "correctIndex": 3,
+          "answers": ["Print to console", "Declare variables", "Import modules", "Send a result back to the caller"]
+        },
+        {
+          "id": 10,
+          "prompt": "If contract says divide(a,b) requires b≠0, then calling divide(5,0)",
+          "correctAnswer": "Violates the precondition",
+          "correctIndex": 2,
+          "answers": ["Is always fine", "Returns 0 safely", "Violates the precondition", "Sorts the inputs"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Control Flow Design",
+      "description": "Select appropriate conditionals and loops for small tasks.",
+      "genprompt": "Generate MCQs (4 options) choosing between if/elif/else and for/while for basic scenarios; single-line snippets only.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "To run code only when a score is 60 or higher, use",
+          "correctAnswer": "if score >= 60:",
+          "correctIndex": 1,
+          "answers": ["for score in range(60):", "if score >= 60:", "while score:", "print(score)"]
+        },
+        {
+          "id": 2,
+          "prompt": "To repeat a block exactly 5 times, choose",
+          "correctAnswer": "for i in range(5):",
+          "correctIndex": 0,
+          "answers": ["for i in range(5):", "while i == 5:", "if i < 5:", "return i * 5"]
+        },
+        {
+          "id": 3,
+          "prompt": "To loop until user_input equals 'q', use",
+          "correctAnswer": "while user_input != 'q':",
+          "correctIndex": 3,
+          "answers": ["for user_input in 'q':", "if user_input == 'q':", "for i in range(user_input):", "while user_input != 'q':"]
+        },
+        {
+          "id": 4,
+          "prompt": "To choose among several grade ranges, use",
+          "correctAnswer": "if/elif/else",
+          "correctIndex": 2,
+          "answers": ["while loop", "single if only", "if/elif/else", "no condition at all"]
+        },
+        {
+          "id": 5,
+          "prompt": "To process each name in a list names, use",
+          "correctAnswer": "for name in names:",
+          "correctIndex": 1,
+          "answers": ["while names:", "for name in names:", "if names:", "names()"]
+        },
+        {
+          "id": 6,
+          "prompt": "To validate that age is between 0 and 120 inclusive, use",
+          "correctAnswer": "if 0 <= age <= 120:",
+          "correctIndex": 0,
+          "answers": ["if 0 <= age <= 120:", "for age in range(120):", "while age:", "print(age in range)"]
+        },
+        {
+          "id": 7,
+          "prompt": "To keep asking for input until it is not empty, use",
+          "correctAnswer": "while input_str == '':",
+          "correctIndex": 3,
+          "answers": ["if input_str == '':", "for input_str in '':", "return input_str", "while input_str == '':"]
+        },
+        {
+          "id": 8,
+          "prompt": "To add up values in nums, a simple approach is",
+          "correctAnswer": "for n in nums: total += n",
+          "correctIndex": 2,
+          "answers": ["if n in nums: total += n", "while nums: total += nums", "for n in nums: total += n", "return sum then loop"]
+        },
+        {
+          "id": 9,
+          "prompt": "To run a menu until the user chooses exit, use",
+          "correctAnswer": "while choice != 'exit':",
+          "correctIndex": 1,
+          "answers": ["for choice in 'exit':", "while choice != 'exit':", "if choice == 'exit':", "for i in range(choice)"]
+        },
+        {
+          "id": 10,
+          "prompt": "To check exactly one of several mutually exclusive cases, use",
+          "correctAnswer": "if/elif/else chain",
+          "correctIndex": 0,
+          "answers": ["if/elif/else chain", "many separate if statements", "no conditions", "infinite loop"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Error-Handling Strategy (Intro)",
+      "description": "Plan for invalid input and exceptional cases at design time (conceptual, not language-specific APIs).",
+      "genprompt": "Generate MCQs (4 options) on identifying invalid inputs, choosing safe fallbacks, and designing clear error messages for entry-level students.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A good first step when handling user input is to",
+          "correctAnswer": "Validate that the input meets expected rules",
+          "correctIndex": 2,
+          "answers": ["Assume it is correct", "Ignore it for speed", "Validate that the input meets expected rules", "Store it without checks"]
+        },
+        {
+          "id": 2,
+          "prompt": "If a function needs a number but receives text, the safest design is to",
+          "correctAnswer": "Show a clear message and ask again",
+          "correctIndex": 0,
+          "answers": ["Show a clear message and ask again", "Crash the program", "Save the bad value", "Return a random number"]
+        },
+        {
+          "id": 3,
+          "prompt": "A clear error message should",
+          "correctAnswer": "Explain what went wrong and how to fix it",
+          "correctIndex": 1,
+          "answers": ["Be in code words only", "Explain what went wrong and how to fix it", "Reveal passwords", "Blame the user"]
+        },
+        {
+          "id": 4,
+          "prompt": "When a file is missing, a reasonable fallback is to",
+          "correctAnswer": "Inform the user and allow choosing another file",
+          "correctIndex": 3,
+          "answers": ["End the OS", "Overwrite random files", "Ignore silently", "Inform the user and allow choosing another file"]
+        },
+        {
+          "id": 5,
+          "prompt": "Designing for errors early helps mainly to",
+          "correctAnswer": "Avoid crashes and confusing behavior",
+          "correctIndex": 0,
+          "answers": ["Avoid crashes and confusing behavior", "Remove all tests", "Hide all warnings", "Prevent any user input"]
+        },
+        {
+          "id": 6,
+          "prompt": "If a calculation might divide by zero, the design should",
+          "correctAnswer": "Check the divisor before dividing",
+          "correctIndex": 2,
+          "answers": ["Ignore it", "Let it crash", "Check the divisor before dividing", "Delete the feature"]
+        },
+        {
+          "id": 7,
+          "prompt": "For invalid menu choices, a good pattern is to",
+          "correctAnswer": "Show a friendly message and re-display the menu",
+          "correctIndex": 1,
+          "answers": ["Exit without warning", "Show a friendly message and re-display the menu", "Erase all data", "Disable the menu"]
+        },
+        {
+          "id": 8,
+          "prompt": "When an input value is out of range, the program should",
+          "correctAnswer": "Reject it and request a valid value",
+          "correctIndex": 3,
+          "answers": ["Accept and continue", "Change it silently", "Log off the user", "Reject it and request a valid value"]
+        },
+        {
+          "id": 9,
+          "prompt": "A safe default value is useful when",
+          "correctAnswer": "Input is missing and you need a predictable behavior",
+          "correctIndex": 0,
+          "answers": ["Input is missing and you need a predictable behavior", "You want random results", "You must expose secrets", "You want to skip validation"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which design helps users recover from mistakes?",
+          "correctAnswer": "Allow undo or confirmation before destructive actions",
+          "correctIndex": 2,
+          "answers": ["Delete without warning", "Hide all options", "Allow undo or confirmation before destructive actions", "Force restart on every error"]
+        }
+      ]
+    }
+  ]
+},
+        {
+  "id": 5,
+  "name": "Code Programs",
+  "description": "Implement solutions clearly and correctly using basic syntax, style, variables, control structures, functions, and collections.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Syntax and Style",
+      "description": "Follow naming, indentation, and commenting conventions for readable code.",
+      "genprompt": "Create MCQs (4 options) identifying clear vs. unclear names, indentation basics, comment purpose, and consistent style at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which variable name is most readable and descriptive for a test score?",
+          "correctAnswer": "testScore",
+          "correctIndex": 2,
+          "answers": ["t", "x1", "testScore", "s123"]
+        },
+        {
+          "id": 2,
+          "prompt": "Consistent indentation in code primarily helps with",
+          "correctAnswer": "Readability and avoiding logic mistakes",
+          "correctIndex": 1,
+          "answers": ["Running faster", "Readability and avoiding logic mistakes", "Uploading to the cloud", "Lower memory use"]
+        },
+        {
+          "id": 3,
+          "prompt": "A comment in code should mainly",
+          "correctAnswer": "Explain why something is done",
+          "correctIndex": 0,
+          "answers": ["Explain why something is done", "Repeat obvious code", "Hide errors", "Increase file size"]
+        },
+        {
+          "id": 4,
+          "prompt": "Which is the clearest constant name for maximum students?",
+          "correctAnswer": "MAX_STUDENTS",
+          "correctIndex": 3,
+          "answers": ["m", "num", "stud", "MAX_STUDENTS"]
+        },
+        {
+          "id": 5,
+          "prompt": "Mixed naming styles in one project (camelCase, snake_case) usually",
+          "correctAnswer": "Reduces consistency and clarity",
+          "correctIndex": 2,
+          "answers": ["Improves performance", "Is required by compilers", "Reduces consistency and clarity", "Prevents bugs automatically"]
+        },
+        {
+          "id": 6,
+          "prompt": "Trailing spaces and random tabs in files mostly",
+          "correctAnswer": "Create style noise and merge conflicts",
+          "correctIndex": 0,
+          "answers": ["Create style noise and merge conflicts", "Speed up the CPU", "Secure the code", "Add new features"]
+        },
+        {
+          "id": 7,
+          "prompt": "Choose the most readable function name to compute an average:",
+          "correctAnswer": "computeAverage",
+          "correctIndex": 1,
+          "answers": ["ca", "computeAverage", "doIt", "work"]
+        },
+        {
+          "id": 8,
+          "prompt": "Good style guides typically recommend",
+          "correctAnswer": "Consistent naming and spacing rules",
+          "correctIndex": 2,
+          "answers": ["Random capitalization", "Tabs in some lines, spaces in others", "Consistent naming and spacing rules", "No comments at all"]
+        },
+        {
+          "id": 9,
+          "prompt": "A long line of code with multiple tasks should be",
+          "correctAnswer": "Split into smaller steps or helper functions",
+          "correctIndex": 3,
+          "answers": ["Left as-is", "Commented only", "Renamed variables only", "Split into smaller steps or helper functions"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which is a common benefit of a linter/formatter?",
+          "correctAnswer": "Automatic, consistent code style",
+          "correctIndex": 0,
+          "answers": ["Automatic, consistent code style", "Free hosting", "Faster Wi-Fi", "Unlimited storage"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Variables and Expressions",
+      "description": "Declare variables, use expressions, and understand basic operator rules.",
+      "genprompt": "Generate MCQs (4 options) evaluating short expressions and basic precedence at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "If x=2 and y=3, what is x+y*2?",
+          "correctAnswer": "8",
+          "correctIndex": 1,
+          "answers": ["10", "8", "12", "7"]
+        },
+        {
+          "id": 2,
+          "prompt": "If a=10, which updates a to 11?",
+          "correctAnswer": "a = a + 1",
+          "correctIndex": 0,
+          "answers": ["a = a + 1", "a = a - 1", "a = 1 + 1", "a == a + 1"]
+        },
+        {
+          "id": 3,
+          "prompt": "The expression 3 * (2 + 4) evaluates to",
+          "correctAnswer": "18",
+          "correctIndex": 2,
+          "answers": ["14", "9", "18", "24"]
+        },
+        {
+          "id": 4,
+          "prompt": "Which operator compares two values for equality in most languages?",
+          "correctAnswer": "==",
+          "correctIndex": 3,
+          "answers": ["=", "+=", "!=", "=="]
+        },
+        {
+          "id": 5,
+          "prompt": "If n=5, n*=2 changes n to",
+          "correctAnswer": "10",
+          "correctIndex": 0,
+          "answers": ["10", "7", "2", "25"]
+        },
+        {
+          "id": 6,
+          "prompt": "Which is a boolean expression?",
+          "correctAnswer": "age >= 18",
+          "correctIndex": 1,
+          "answers": ["age + 18", "age >= 18", "'18'", "18"]
+        },
+        {
+          "id": 7,
+          "prompt": "Given x=8, x/2 + 3 equals",
+          "correctAnswer": "7",
+          "correctIndex": 2,
+          "answers": ["11", "5", "7", "4"]
+        },
+        {
+          "id": 8,
+          "prompt": "Parentheses in expressions are used to",
+          "correctAnswer": "Control the order of evaluation",
+          "correctIndex": 3,
+          "answers": ["Add comments", "Create variables", "Increase speed", "Control the order of evaluation"]
+        },
+        {
+          "id": 9,
+          "prompt": "If price=20 and tax=5, total=price+tax gives",
+          "correctAnswer": "25",
+          "correctIndex": 0,
+          "answers": ["25", "205", "15", "5"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which operator means 'not equal' in many languages?",
+          "correctAnswer": "!=",
+          "correctIndex": 2,
+          "answers": ["<>", "==", "!=", "==="]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Control Structures",
+      "description": "Write simple if/elif/else and for/while loops for common tasks.",
+      "genprompt": "Write MCQs (4 options) asking for correct outputs or next values after small single-line snippets.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "To run code when score is at least 60, use",
+          "correctAnswer": "if score >= 60:",
+          "correctIndex": 1,
+          "answers": ["if score > 60 then", "if score >= 60:", "score if 60", "while score >= 60:"]
+        },
+        {
+          "id": 2,
+          "prompt": "To repeat an action exactly 3 times, choose",
+          "correctAnswer": "for i in range(3):",
+          "correctIndex": 0,
+          "answers": ["for i in range(3):", "while i == 3:", "if i < 3:", "loop 3 -> i"]
+        },
+        {
+          "id": 3,
+          "prompt": "To loop until name is 'q', use",
+          "correctAnswer": "while name != 'q':",
+          "correctIndex": 3,
+          "answers": ["for name in 'q':", "if name == 'q':", "for i in name:", "while name != 'q':"]
+        },
+        {
+          "id": 4,
+          "prompt": "To choose one of several grade ranges, use",
+          "correctAnswer": "if/elif/else",
+          "correctIndex": 2,
+          "answers": ["only if", "while loop", "if/elif/else", "print only"]
+        },
+        {
+          "id": 5,
+          "prompt": "To visit each number in nums, use",
+          "correctAnswer": "for n in nums:",
+          "correctIndex": 1,
+          "answers": ["if nums:", "for n in nums:", "while nums:", "nums()"]
+        },
+        {
+          "id": 6,
+          "prompt": "If count starts at 0, after count += 1 the value is",
+          "correctAnswer": "1",
+          "correctIndex": 0,
+          "answers": ["1", "0", "2", "-1"]
+        },
+        {
+          "id": 7,
+          "prompt": "To skip the rest of the current loop iteration, use",
+          "correctAnswer": "continue",
+          "correctIndex": 3,
+          "answers": ["stop", "break", "next", "continue"]
+        },
+        {
+          "id": 8,
+          "prompt": "To exit a loop early when a condition is met, use",
+          "correctAnswer": "break",
+          "correctIndex": 2,
+          "answers": ["continue", "return", "break", "skip"]
+        },
+        {
+          "id": 9,
+          "prompt": "A loop that never ends is called",
+          "correctAnswer": "An infinite loop",
+          "correctIndex": 1,
+          "answers": ["A timed loop", "An infinite loop", "A counted loop", "A batch loop"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which line adds each x in data to total?",
+          "correctAnswer": "for x in data: total += x",
+          "correctIndex": 0,
+          "answers": ["for x in data: total += x", "if x in data: total = x", "while data: x += total", "total = sum then loop"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Functions and Parameters",
+      "description": "Define and call functions, pass arguments, and use return values.",
+      "genprompt": "Produce MCQs (4 options) on parameter vs. argument, default parameters, return values, and function-call substitution at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which keyword defines a function in Python?",
+          "correctAnswer": "def",
+          "correctIndex": 2,
+          "answers": ["func", "define", "def", "call"]
+        },
+        {
+          "id": 2,
+          "prompt": "In sum(a,b), a and b are",
+          "correctAnswer": "Parameters in the function definition",
+          "correctIndex": 0,
+          "answers": ["Parameters in the function definition", "Return values", "Global variables", "File names"]
+        },
+        {
+          "id": 3,
+          "prompt": "In call sum(2,3), the values 2 and 3 are",
+          "correctAnswer": "Arguments passed to the function",
+          "correctIndex": 1,
+          "answers": ["Defaults", "Arguments passed to the function", "Exceptions", "Keywords"]
+        },
+        {
+          "id": 4,
+          "prompt": "A return statement",
+          "correctAnswer": "Ends the function and sends back a value",
+          "correctIndex": 3,
+          "answers": ["Starts a loop", "Prints to screen", "Defines parameters", "Ends the function and sends back a value"]
+        },
+        {
+          "id": 5,
+          "prompt": "If add(2,3) returns 5, then x = add(2,3) sets x to",
+          "correctAnswer": "5",
+          "correctIndex": 0,
+          "answers": ["5", "add", "2", "3"]
+        },
+        {
+          "id": 6,
+          "prompt": "A default parameter value is used when",
+          "correctAnswer": "No argument is provided for that parameter",
+          "correctIndex": 2,
+          "answers": ["Callers pass too many values", "The function returns None", "No argument is provided for that parameter", "The program ends"]
+        },
+        {
+          "id": 7,
+          "prompt": "Which is a correct call to greet(name) for 'Ava'?",
+          "correctAnswer": "greet('Ava')",
+          "correctIndex": 1,
+          "answers": ["greet = 'Ava'", "greet('Ava')", "greet['Ava']", "greet{'Ava'}"]
+        },
+        {
+          "id": 8,
+          "prompt": "If a function has multiple return statements,",
+          "correctAnswer": "The first one reached ends the function",
+          "correctIndex": 3,
+          "answers": ["All are executed", "The last one wins", "It prints them", "The first one reached ends the function"]
+        },
+        {
+          "id": 9,
+          "prompt": "A function with no explicit return in Python returns",
+          "correctAnswer": "None",
+          "correctIndex": 0,
+          "answers": ["None", "0", "False", "Error"]
+        },
+        {
+          "id": 10,
+          "prompt": "Function-call substitution means",
+          "correctAnswer": "Replacing a call with the value it returns",
+          "correctIndex": 2,
+          "answers": ["Inlining all code", "Replacing variables with names", "Replacing a call with the value it returns", "Deleting the function"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Collections (Lists and Dictionaries)",
+      "description": "Create and access lists/dictionaries and perform basic updates.",
+      "genprompt": "Generate MCQs (4 options) about indexing, simple slicing, key access, adding/replacing values, and KeyError basics.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which literal creates an empty list?",
+          "correctAnswer": "[]",
+          "correctIndex": 1,
+          "answers": ["{}", "[]", "()", "set()"]
+        },
+        {
+          "id": 2,
+          "prompt": "Given nums=[2,4,6], nums[1] is",
+          "correctAnswer": "4",
+          "correctIndex": 0,
+          "answers": ["4", "2", "6", "IndexError"]
+        },
+        {
+          "id": 3,
+          "prompt": "Given names=['A','B','C'], names[-1] is",
+          "correctAnswer": "C",
+          "correctIndex": 2,
+          "answers": ["A", "B", "C", "IndexError"]
+        },
+        {
+          "id": 4,
+          "prompt": "Given d={'x':1}, d['x'] evaluates to",
+          "correctAnswer": "1",
+          "correctIndex": 3,
+          "answers": ["'x'", "KeyError", "['x']", "1"]
+        },
+        {
+          "id": 5,
+          "prompt": "To add a new key 'y' with value 3 to d, do",
+          "correctAnswer": "d['y'] = 3",
+          "correctIndex": 1,
+          "answers": ["d.add('y',3)", "d['y'] = 3", "d('y')=3", "d.key='y':3"]
+        },
+        {
+          "id": 6,
+          "prompt": "Accessing d['z'] when 'z' is not a key will",
+          "correctAnswer": "Raise a KeyError",
+          "correctIndex": 0,
+          "answers": ["Raise a KeyError", "Return 0", "Return ''", "Create the key automatically"]
+        },
+        {
+          "id": 7,
+          "prompt": "Given a=[10,20,30,40], a[1:3] yields",
+          "correctAnswer": "[20, 30]",
+          "correctIndex": 2,
+          "answers": ["[10, 40]", "[30, 40]", "[20, 30]", "[10, 20, 30]"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which test checks if 'id' is a key in d?",
+          "correctAnswer": "'id' in d",
+          "correctIndex": 3,
+          "answers": ["id in d.values()", "d.contains('id')", "d.has(id)", "'id' in d"]
+        },
+        {
+          "id": 9,
+          "prompt": "Given nums=[1,2,3], after nums[0]=9 the list is",
+          "correctAnswer": "[9, 2, 3]",
+          "correctIndex": 0,
+          "answers": ["[9, 2, 3]", "[1, 2, 3, 9]", "[1, 9, 2, 3]", "[2, 3]"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which structure best maps student names to grades?",
+          "correctAnswer": "Dictionary",
+          "correctIndex": 2,
+          "answers": ["List", "Tuple", "Dictionary", "String"]
+        }
+      ]
+    }
+  ]
+},
+        {
+  "id": 6,
+  "name": "Test Programs",
+  "description": "Plan and execute tests, compare expected vs. actual results, and report defects for correction.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Testing Fundamentals",
+      "description": "Understand the purpose of testing and basic terminology.",
+      "genprompt": "Create MCQs (4 options) on why we test, defect vs. failure, expected vs. actual, pass/fail criteria, and reproducibility.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "The primary goal of software testing is to",
+          "correctAnswer": "Find defects before users do",
+          "correctIndex": 0,
+          "answers": ["Find defects before users do", "Prove the code is perfect", "Replace documentation", "Speed up the CPU"]
+        },
+        {
+          "id": 2,
+          "prompt": "A defect (bug) is best described as",
+          "correctAnswer": "An error in the code or design that can cause failure",
+          "correctIndex": 1,
+          "answers": ["A user complaint", "An error in the code or design that can cause failure", "A new feature request", "A hardware upgrade"]
+        },
+        {
+          "id": 3,
+          "prompt": "A test passes when",
+          "correctAnswer": "Actual result matches expected result",
+          "correctIndex": 2,
+          "answers": ["Code compiles", "Screens look nice", "Actual result matches expected result", "The author says it is done"]
+        },
+        {
+          "id": 4,
+          "prompt": "A failure is when the software",
+          "correctAnswer": "Behaves differently from its specification",
+          "correctIndex": 3,
+          "answers": ["Runs on a new OS", "Uses memory", "Has comments removed", "Behaves differently from its specification"]
+        },
+        {
+          "id": 5,
+          "prompt": "Reproducible means a tester can",
+          "correctAnswer": "Make the problem happen again with the same steps",
+          "correctIndex": 0,
+          "answers": ["Make the problem happen again with the same steps", "Guess the cause without steps", "Fix the code automatically", "Change the requirements"]
+        },
+        {
+          "id": 6,
+          "prompt": "Which item belongs in a test result?",
+          "correctAnswer": "Observed actual output",
+          "correctIndex": 1,
+          "answers": ["The author’s opinion of style", "Observed actual output", "Team lunch menu", "Hardware purchase list"]
+        },
+        {
+          "id": 7,
+          "prompt": "Testing early in the project usually",
+          "correctAnswer": "Reduces cost of fixing defects",
+          "correctIndex": 2,
+          "answers": ["Increases scope creep", "Prevents scheduling", "Reduces cost of fixing defects", "Replaces design work"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which item is necessary to judge pass/fail?",
+          "correctAnswer": "A clear expected result",
+          "correctIndex": 3,
+          "answers": ["A colorful UI", "Many comments", "A long code file", "A clear expected result"]
+        },
+        {
+          "id": 9,
+          "prompt": "Which best helps others fix a bug?",
+          "correctAnswer": "Exact steps to reproduce and observed output",
+          "correctIndex": 0,
+          "answers": ["Exact steps to reproduce and observed output", "Personal opinions only", "Screenshots without context", "Deleting the feature"]
+        },
+        {
+          "id": 10,
+          "prompt": "Which statement about testing is true?",
+          "correctAnswer": "It increases confidence but cannot prove absence of bugs",
+          "correctIndex": 1,
+          "answers": ["It proves code has no bugs", "It increases confidence but cannot prove absence of bugs", "It is only needed at the end", "It replaces requirements"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Test Case Design",
+      "description": "Create simple test cases with inputs, steps, and expected outcomes.",
+      "genprompt": "Create MCQs (4 options) on inputs, preconditions, steps, expected results, edge cases, and equivalence at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A good test case includes",
+          "correctAnswer": "Input values, steps, and expected result",
+          "correctIndex": 2,
+          "answers": ["Developer biography", "Code formatting rules", "Input values, steps, and expected result", "Hardware schematics"]
+        },
+        {
+          "id": 2,
+          "prompt": "Preconditions describe",
+          "correctAnswer": "What must be true before the test starts",
+          "correctIndex": 0,
+          "answers": ["What must be true before the test starts", "What to eat at lunch", "How to compile code", "Team roles"]
+        },
+        {
+          "id": 3,
+          "prompt": "Edge cases focus on",
+          "correctAnswer": "Values at the limits of valid ranges",
+          "correctIndex": 3,
+          "answers": ["Random topics", "Only average inputs", "UI colors", "Values at the limits of valid ranges"]
+        },
+        {
+          "id": 4,
+          "prompt": "Equivalence partitioning means",
+          "correctAnswer": "Choosing representative inputs from groups that behave similarly",
+          "correctIndex": 1,
+          "answers": ["Testing every possible number", "Choosing representative inputs from groups that behave similarly", "Ignoring extreme inputs", "Only testing happy paths"]
+        },
+        {
+          "id": 5,
+          "prompt": "Which is a clear expected result?",
+          "correctAnswer": "System displays 'Saved' and record count increases by 1",
+          "correctIndex": 2,
+          "answers": ["Looks fine", "It works better", "System displays 'Saved' and record count increases by 1", "The page is long"]
+        },
+        {
+          "id": 6,
+          "prompt": "Negative testing checks",
+          "correctAnswer": "How the system handles invalid inputs",
+          "correctIndex": 3,
+          "answers": ["Graphics quality", "Network speed", "Only valid inputs", "How the system handles invalid inputs"]
+        },
+        {
+          "id": 7,
+          "prompt": "A test step is",
+          "correctAnswer": "An action the tester performs in order",
+          "correctIndex": 0,
+          "answers": ["An action the tester performs in order", "The bug itself", "A refactor plan", "A random screenshot"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which pair best represents input and expected output?",
+          "correctAnswer": "Input: 0; Expected: show 'cannot divide by zero'",
+          "correctIndex": 1,
+          "answers": ["Input: blue; Expected: bigger text", "Input: 0; Expected: show 'cannot divide by zero'", "Input: 10; Expected: nicer UI", "Input: none; Expected: random"]
+        },
+        {
+          "id": 9,
+          "prompt": "Happy path testing focuses on",
+          "correctAnswer": "Typical valid inputs and normal operation",
+          "correctIndex": 2,
+          "answers": ["Only errors", "Only UI color", "Typical valid inputs and normal operation", "Only extreme values"]
+        },
+        {
+          "id": 10,
+          "prompt": "A clear test ID is useful because it",
+          "correctAnswer": "Lets teams reference the same case unambiguously",
+          "correctIndex": 0,
+          "answers": ["Lets teams reference the same case unambiguously", "Makes code faster", "Changes requirements", "Replaces bug reports"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Levels of Testing",
+      "description": "Differentiate unit, integration, system, and acceptance testing at a high level.",
+      "genprompt": "Create MCQs (4 options) defining unit vs. integration vs. system vs. acceptance tests with simple examples.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Unit testing focuses on",
+          "correctAnswer": "Individual functions or small modules in isolation",
+          "correctIndex": 1,
+          "answers": ["Full system with users", "Individual functions or small modules in isolation", "Hardware installation", "Only the database"]
+        },
+        {
+          "id": 2,
+          "prompt": "Integration testing checks",
+          "correctAnswer": "How components work together",
+          "correctIndex": 2,
+          "answers": ["Keyboard layouts", "One function alone", "How components work together", "Only page colors"]
+        },
+        {
+          "id": 3,
+          "prompt": "System testing evaluates",
+          "correctAnswer": "The entire application end-to-end",
+          "correctIndex": 0,
+          "answers": ["The entire application end-to-end", "A single variable", "Only documentation", "A code comment"]
+        },
+        {
+          "id": 4,
+          "prompt": "Acceptance testing is usually performed to",
+          "correctAnswer": "Verify the system meets user needs before release",
+          "correctIndex": 3,
+          "answers": ["Improve CPU speed", "Refactor code style", "Merge branches", "Verify the system meets user needs before release"]
+        },
+        {
+          "id": 5,
+          "prompt": "Which is most like a unit test?",
+          "correctAnswer": "Check that add(2,3) returns 5",
+          "correctIndex": 0,
+          "answers": ["Check that add(2,3) returns 5", "Verify login + dashboard + export flow", "Run with 100 users at once", "Review the color theme"]
+        },
+        {
+          "id": 6,
+          "prompt": "Which is most like integration testing?",
+          "correctAnswer": "Login service works with user database",
+          "correctIndex": 2,
+          "answers": ["Print a value", "Rename a variable", "Login service works with user database", "Change font size"]
+        },
+        {
+          "id": 7,
+          "prompt": "Which best fits system testing?",
+          "correctAnswer": "Simulate user tasks across the whole app",
+          "correctIndex": 1,
+          "answers": ["Check a helper function", "Simulate user tasks across the whole app", "Edit a README", "Count lines of code"]
+        },
+        {
+          "id": 8,
+          "prompt": "Acceptance testing success is defined by",
+          "correctAnswer": "Passing agreed-upon acceptance criteria",
+          "correctIndex": 3,
+          "answers": ["File size", "Developer preference", "Download count", "Passing agreed-upon acceptance criteria"]
+        },
+        {
+          "id": 9,
+          "prompt": "Which test level is usually fastest to run?",
+          "correctAnswer": "Unit tests",
+          "correctIndex": 0,
+          "answers": ["Unit tests", "System tests", "Manual demos", "Acceptance tests"]
+        },
+        {
+          "id": 10,
+          "prompt": "A smoke test is used to",
+          "correctAnswer": "Quickly check core features are not obviously broken",
+          "correctIndex": 1,
+          "answers": ["Measure CPU heat", "Quickly check core features are not obviously broken", "Replace unit tests", "Tune graphics"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Test Data and Environments",
+      "description": "Prepare appropriate data and run tests in consistent environments.",
+      "genprompt": "Create MCQs (4 options) on sample vs. production data, fixtures, resetting state, and consistency of test environments.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Using realistic but safe test data helps to",
+          "correctAnswer": "Find issues similar to real usage without exposing secrets",
+          "correctIndex": 2,
+          "answers": ["Speed up Wi-Fi", "Hide all bugs", "Find issues similar to real usage without exposing secrets", "Replace requirements"]
+        },
+        {
+          "id": 2,
+          "prompt": "A test fixture is",
+          "correctAnswer": "A known setup of data or state used for tests",
+          "correctIndex": 0,
+          "answers": ["A hardware bracket", "A known setup of data or state used for tests", "A design template", "A code formatter"]
+        },
+        {
+          "id": 3,
+          "prompt": "Resetting the database before tests mainly ensures",
+          "correctAnswer": "Tests do not interfere with each other",
+          "correctIndex": 1,
+          "answers": ["Faster graphics", "Tests do not interfere with each other", "Better fonts", "Unlimited storage"]
+        },
+        {
+          "id": 4,
+          "prompt": "Mixing test and production data is risky because",
+          "correctAnswer": "Sensitive data could leak or be changed",
+          "correctIndex": 3,
+          "answers": ["It helps speed", "It improves style", "It increases colors", "Sensitive data could leak or be changed"]
+        },
+        {
+          "id": 5,
+          "prompt": "Consistent test environments are important to",
+          "correctAnswer": "Reduce false failures due to configuration differences",
+          "correctIndex": 0,
+          "answers": ["Reduce false failures due to configuration differences", "Guarantee no bugs ever", "Avoid writing tests", "Eliminate documentation"]
+        },
+        {
+          "id": 6,
+          "prompt": "Which is a safe practice for credentials in tests?",
+          "correctAnswer": "Use test accounts with limited permissions",
+          "correctIndex": 2,
+          "answers": ["Share real admin passwords", "Hard-code production keys", "Use test accounts with limited permissions", "Post secrets to chats"]
+        },
+        {
+          "id": 7,
+          "prompt": "Seeding data means",
+          "correctAnswer": "Loading known records before tests run",
+          "correctIndex": 1,
+          "answers": ["Encrypting test logs", "Loading known records before tests run", "Deleting all tables", "Blocking network"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which environment is best for student testing?",
+          "correctAnswer": "A separate test system not used by real users",
+          "correctIndex": 3,
+          "answers": ["Live production only", "Personal social media", "Random laptops", "A separate test system not used by real users"]
+        },
+        {
+          "id": 9,
+          "prompt": "Controlling random values in tests helps by",
+          "correctAnswer": "Making results repeatable",
+          "correctIndex": 0,
+          "answers": ["Making results repeatable", "Increasing file size", "Hiding bugs", "Generating secrets"]
+        },
+        {
+          "id": 10,
+          "prompt": "When a test depends on the current date, a good idea is to",
+          "correctAnswer": "Fix or mock the date for predictable results",
+          "correctIndex": 2,
+          "answers": ["Use production time only", "Skip the test", "Fix or mock the date for predictable results", "Change time zones randomly"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Debugging and Reporting (Intro)",
+      "description": "Use simple techniques to isolate issues and write clear bug reports.",
+      "genprompt": "Create MCQs (4 options) on reproduce, isolate, inspect (logs/prints), minimal examples, and writing a clear bug report.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "The first step in debugging a new issue is usually to",
+          "correctAnswer": "Reproduce the problem consistently",
+          "correctIndex": 1,
+          "answers": ["Rewrite the app", "Reproduce the problem consistently", "Change the OS", "Delete the tests"]
+        },
+        {
+          "id": 2,
+          "prompt": "Isolating a bug means",
+          "correctAnswer": "Reducing the code or inputs to the smallest case that fails",
+          "correctIndex": 0,
+          "answers": ["Adding more features", "Reducing the code or inputs to the smallest case that fails", "Ignoring logs", "Switching languages"]
+        },
+        {
+          "id": 3,
+          "prompt": "Print statements or logs help by",
+          "correctAnswer": "Showing the values and flow during execution",
+          "correctIndex": 3,
+          "answers": ["Changing UI colors", "Speeding hardware", "Hiding errors", "Showing the values and flow during execution"]
+        },
+        {
+          "id": 4,
+          "prompt": "A minimal reproducible example should",
+          "correctAnswer": "Contain only the code needed to trigger the bug",
+          "correctIndex": 2,
+          "answers": ["Include all project files", "Use secret data", "Contain only the code needed to trigger the bug", "Skip steps"]
+        },
+        {
+          "id": 5,
+          "prompt": "Which item is most useful in a bug report?",
+          "correctAnswer": "Exact steps, expected vs. actual, environment details",
+          "correctIndex": 1,
+          "answers": ["A single emoji", "Exact steps, expected vs. actual, environment details", "Personal jokes", "Unrelated screenshots"]
+        },
+        {
+          "id": 6,
+          "prompt": "If a test sometimes passes and sometimes fails, it is likely",
+          "correctAnswer": "Flaky due to timing or state issues",
+          "correctIndex": 0,
+          "answers": ["Flaky due to timing or state issues", "Perfectly stable", "A style concern only", "Caused by fonts"]
+        },
+        {
+          "id": 7,
+          "prompt": "Which question helps diagnose a defect?",
+          "correctAnswer": "What changed since it last worked?",
+          "correctIndex": 2,
+          "answers": ["Who is to blame?", "Why is the UI blue?", "What changed since it last worked?", "Can we ship without tests?"]
+        },
+        {
+          "id": 8,
+          "prompt": "Stepping through code in a debugger lets you",
+          "correctAnswer": "Execute one line at a time and inspect variables",
+          "correctIndex": 3,
+          "answers": ["Compile faster", "Encrypt passwords", "Change licensing", "Execute one line at a time and inspect variables"]
+        },
+        {
+          "id": 9,
+          "prompt": "When you cannot reproduce a reported bug, you should",
+          "correctAnswer": "Ask for more precise steps and environment info",
+          "correctIndex": 1,
+          "answers": ["Close it immediately", "Ask for more precise steps and environment info", "Blame the user", "Delete all tests"]
+        },
+        {
+          "id": 10,
+          "prompt": "Clear severity in a bug report helps teams",
+          "correctAnswer": "Prioritize fixes appropriately",
+          "correctIndex": 0,
+          "answers": ["Prioritize fixes appropriately", "Buy new hardware", "Skip testing", "Remove requirements"]
+        }
+      ]
+    }
+  ]
+},
+        {
+  "id": 7,
+  "name": "Maintain Programs and Implement Change Management Procedures",
+  "description": "Apply change control, use version control, refactor safely, validate releases, and keep documentation/configuration accurate.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Change Management Basics",
+      "description": "Understand requests for change (RFC), impact analysis, approvals, and tracking.",
+      "genprompt": "Create MCQs (4 options) on change requests, impact/risk, prioritization, approvals, and traceability at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "The main purpose of a change request (RFC) is to",
+          "correctAnswer": "Formally propose a modification and capture its details",
+          "correctIndex": 2,
+          "answers": ["Assign homework", "Speed up the CPU", "Formally propose a modification and capture its details", "Remove documentation"]
+        },
+        {
+          "id": 2,
+          "prompt": "Impact analysis asks",
+          "correctAnswer": "What parts of the system and users are affected by the change",
+          "correctIndex": 1,
+          "answers": ["Who wrote the code originally", "What parts of the system and users are affected by the change", "Which language is coolest", "How many comments exist"]
+        },
+        {
+          "id": 3,
+          "prompt": "A low-risk change is most likely to be",
+          "correctAnswer": "Small, well-understood, and easy to roll back",
+          "correctIndex": 0,
+          "answers": ["Small, well-understood, and easy to roll back", "Huge and urgent", "Unclear and untested", "Unrelated to requirements"]
+        },
+        {
+          "id": 4,
+          "prompt": "Prioritizing changes mainly helps teams",
+          "correctAnswer": "Work on the most valuable or urgent items first",
+          "correctIndex": 3,
+          "answers": ["Write fewer tests", "Avoid version control", "Remove approvals", "Work on the most valuable or urgent items first"]
+        },
+        {
+          "id": 5,
+          "prompt": "A change control board (CCB) typically",
+          "correctAnswer": "Reviews and approves or rejects proposed changes",
+          "correctIndex": 1,
+          "answers": ["Writes all code", "Reviews and approves or rejects proposed changes", "Sells licenses", "Chooses UI colors only"]
+        },
+        {
+          "id": 6,
+          "prompt": "Traceability in change management means",
+          "correctAnswer": "You can link a change to its request, code, tests, and release",
+          "correctIndex": 0,
+          "answers": ["You can link a change to its request, code, tests, and release", "You can guess who changed it", "You can delete history", "You can skip documentation"]
+        },
+        {
+          "id": 7,
+          "prompt": "A rollback plan is used to",
+          "correctAnswer": "Return the system to a known good state if a change fails",
+          "correctIndex": 2,
+          "answers": ["Change the budget", "Rewrite all features", "Return the system to a known good state if a change fails", "Remove backups"]
+        },
+        {
+          "id": 8,
+          "prompt": "Which item should be in a simple RFC?",
+          "correctAnswer": "Reason for change and expected outcome",
+          "correctIndex": 1,
+          "answers": ["Team lunch menu", "Reason for change and expected outcome", "Random screenshots", "Personal opinions only"]
+        },
+        {
+          "id": 9,
+          "prompt": "Scheduling changes during low-usage periods helps to",
+          "correctAnswer": "Reduce impact on users if issues occur",
+          "correctIndex": 0,
+          "answers": ["Reduce impact on users if issues occur", "Guarantee no bugs", "Eliminate testing", "Replace approvals"]
+        },
+        {
+          "id": 10,
+          "prompt": "After implementing a change, the best next step is to",
+          "correctAnswer": "Verify results against acceptance criteria and update records",
+          "correctIndex": 3,
+          "answers": ["Delete the branch", "Ignore feedback", "Turn off monitoring", "Verify results against acceptance criteria and update records"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Version Control & Branching (Intro)",
+      "description": "Use basic Git concepts to track, branch, merge, and review changes.",
+      "genprompt": "Create MCQs (4 options) on commits, diffs, branches, pull requests, merge conflicts, and tags at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A commit in version control is best described as",
+          "correctAnswer": "A saved snapshot of changes with a message",
+          "correctIndex": 2,
+          "answers": ["A compiled binary", "A bug report", "A saved snapshot of changes with a message", "A hardware upgrade"]
+        },
+        {
+          "id": 2,
+          "prompt": "A branch is used to",
+          "correctAnswer": "Work on changes without affecting the main line",
+          "correctIndex": 1,
+          "answers": ["Delete history", "Work on changes without affecting the main line", "Rename the repository", "Hide tests"]
+        },
+        {
+          "id": 3,
+          "prompt": "A pull request (merge request) is",
+          "correctAnswer": "A request to review and merge a branch into another",
+          "correctIndex": 0,
+          "answers": ["A request to review and merge a branch into another", "A request to delete the repo", "A new programming language", "A deployment script"]
+        },
+        {
+          "id": 4,
+          "prompt": "A merge conflict happens when",
+          "correctAnswer": "Two changes edit the same lines differently",
+          "correctIndex": 3,
+          "answers": ["Files are large", "Tests are long", "Commits are many", "Two changes edit the same lines differently"]
+        },
+        {
+          "id": 5,
+          "prompt": "A good commit message should",
+          "correctAnswer": "Briefly explain what and why",
+          "correctIndex": 1,
+          "answers": ["Include memes", "Briefly explain what and why", "List every file size", "Be blank"]
+        },
+        {
+          "id": 6,
+          "prompt": "A tag in version control typically marks",
+          "correctAnswer": "A specific release or milestone",
+          "correctIndex": 0,
+          "answers": ["A specific release or milestone", "A random commit", "A deleted branch", "A private note"]
+        },
+        {
+          "id": 7,
+          "prompt": "Diff tools help by",
+          "correctAnswer": "Showing what changed between versions",
+          "correctIndex": 2,
+          "answers": ["Compiling faster", "Encrypting code", "Showing what changed between versions", "Buying licenses"]
+        },
+        {
+          "id": 8,
+          "prompt": "Before merging to main, you should",
+          "correctAnswer": "Ensure tests pass and get a code review",
+          "correctIndex": 1,
+          "answers": ["Force push and hope", "Ensure tests pass and get a code review", "Delete the branch first", "Ignore conflicts"]
+        },
+        {
+          "id": 9,
+          "prompt": "Small, frequent commits are preferred because they",
+          "correctAnswer": "Make changes easier to review and roll back",
+          "correctIndex": 3,
+          "answers": ["Increase file size", "Hide mistakes", "Skip reviews", "Make changes easier to review and roll back"]
+        },
+        {
+          "id": 10,
+          "prompt": "To get latest changes from remote without losing local work, use",
+          "correctAnswer": "Pull and resolve any conflicts carefully",
+          "correctIndex": 0,
+          "answers": ["Pull and resolve any conflicts carefully", "Delete your branch", "Overwrite the repo", "Turn off version control"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Refactoring & Technical Debt",
+      "description": "Improve code structure without changing behavior; recognize and reduce technical debt.",
+      "genprompt": "Create MCQs (4 options) on reasons to refactor, safe refactors, code smells, and debt tradeoffs at an entry level.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Refactoring means",
+          "correctAnswer": "Changing code structure without changing behavior",
+          "correctIndex": 1,
+          "answers": ["Adding new features", "Changing code structure without changing behavior", "Removing tests", "Switching languages"]
+        },
+        {
+          "id": 2,
+          "prompt": "A common reason to refactor is to",
+          "correctAnswer": "Improve readability and maintainability",
+          "correctIndex": 0,
+          "answers": ["Improve readability and maintainability", "Increase file size", "Hide bugs", "Break the API on purpose"]
+        },
+        {
+          "id": 3,
+          "prompt": "“Technical debt” refers to",
+          "correctAnswer": "Extra work caused by quick/poor design choices",
+          "correctIndex": 2,
+          "answers": ["Financial loans", "Hardware costs", "Extra work caused by quick/poor design choices", "User fees"]
+        },
+        {
+          "id": 4,
+          "prompt": "Which is a safe refactor example?",
+          "correctAnswer": "Extract duplicated code into a helper function with tests",
+          "correctIndex": 3,
+          "answers": ["Rename files randomly", "Remove all comments", "Inline everything", "Extract duplicated code into a helper function with tests"]
+        },
+        {
+          "id": 5,
+          "prompt": "A “code smell” is",
+          "correctAnswer": "A sign that code may need refactoring",
+          "correctIndex": 1,
+          "answers": ["A runtime error", "A sign that code may need refactoring", "A hardware warning", "A network issue"]
+        },
+        {
+          "id": 6,
+          "prompt": "To reduce risk during refactoring, you should",
+          "correctAnswer": "Run tests after each small change",
+          "correctIndex": 0,
+          "answers": ["Run tests after each small change", "Change everything at once", "Skip code review", "Disable backups"]
+        },
+        {
+          "id": 7,
+          "prompt": "Paying down technical debt usually",
+          "correctAnswer": "Lowers future maintenance effort",
+          "correctIndex": 2,
+          "answers": ["Increases bugs forever", "Prevents releases", "Lowers future maintenance effort", "Hides requirements"]
+        },
+        {
+          "id": 8,
+          "prompt": "Duplicated code across files often suggests",
+          "correctAnswer": "Create a reusable function or module",
+          "correctIndex": 1,
+          "answers": ["Keep copying it", "Create a reusable function or module", "Delete features", "Avoid documentation"]
+        },
+        {
+          "id": 9,
+          "prompt": "A risky refactor is one that",
+          "correctAnswer": "Changes behavior without tests to catch issues",
+          "correctIndex": 0,
+          "answers": ["Changes behavior without tests to catch issues", "Uses clearer names", "Breaks long functions into small ones", "Removes dead code after review"]
+        },
+        {
+          "id": 10,
+          "prompt": "Before refactoring, a good practice is to",
+          "correctAnswer": "Ensure you have tests that verify behavior",
+          "correctIndex": 3,
+          "answers": ["Turn off source control", "Ignore deadlines", "Delete comments first", "Ensure you have tests that verify behavior"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Regression Testing & Release Readiness",
+      "description": "Verify that new changes don’t break existing features and prepare a clean release.",
+      "genprompt": "Create MCQs (4 options) on regression tests, smoke tests, release notes, semantic versioning (intro), and sign-off.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Regression testing focuses on",
+          "correctAnswer": "Checking that existing features still work after changes",
+          "correctIndex": 2,
+          "answers": ["Only new features", "Only UI colors", "Checking that existing features still work after changes", "Only performance"]
+        },
+        {
+          "id": 2,
+          "prompt": "A smoke test is used to",
+          "correctAnswer": "Quickly verify core functions are not obviously broken",
+          "correctIndex": 0,
+          "answers": ["Quickly verify core functions are not obviously broken", "Measure CPU heat", "Replace all testing", "Change licenses"]
+        },
+        {
+          "id": 3,
+          "prompt": "Release notes should include",
+          "correctAnswer": "Key changes, fixes, and known issues",
+          "correctIndex": 1,
+          "answers": ["All source code", "Key changes, fixes, and known issues", "Private passwords", "All internal chat logs"]
+        },
+        {
+          "id": 4,
+          "prompt": "Semantic version 1.4.2 usually means",
+          "correctAnswer": "Major=1, Minor=4, Patch=2",
+          "correctIndex": 3,
+          "answers": ["Major=4, Minor=2, Patch=1", "Major=2, Minor=1, Patch=4", "Major=1, Minor=2, Patch=4", "Major=1, Minor=4, Patch=2"]
+        },
+        {
+          "id": 5,
+          "prompt": "Before release sign-off, a team should confirm",
+          "correctAnswer": "Tests pass and criteria are met",
+          "correctIndex": 0,
+          "answers": ["Tests pass and criteria are met", "Only code style changed", "New bugs were added", "Docs are hidden"]
+        },
+        {
+          "id": 6,
+          "prompt": "A hotfix release is typically for",
+          "correctAnswer": "Urgent fixes to critical issues",
+          "correctIndex": 2,
+          "answers": ["New features only", "Changing colors", "Urgent fixes to critical issues", "Marketing pages"]
+        },
+        {
+          "id": 7,
+          "prompt": "Automated tests in a release pipeline help to",
+          "correctAnswer": "Catch issues consistently before deployment",
+          "correctIndex": 1,
+          "answers": ["Slow everything down", "Catch issues consistently before deployment", "Hide failures", "Replace backups"]
+        },
+        {
+          "id": 8,
+          "prompt": "A rollback during release means",
+          "correctAnswer": "Revert to the previous stable version",
+          "correctIndex": 3,
+          "answers": ["Turn off servers", "Delete the repo", "Skip tests", "Revert to the previous stable version"]
+        },
+        {
+          "id": 9,
+          "prompt": "Release candidate (RC) means",
+          "correctAnswer": "A build that could be final if no major issues are found",
+          "correctIndex": 0,
+          "answers": ["A build that could be final if no major issues are found", "A random nightly build", "A prototype with no tests", "A private branch only"]
+        },
+        {
+          "id": 10,
+          "prompt": "After release, monitoring is important to",
+          "correctAnswer": "Detect problems in real usage quickly",
+          "correctIndex": 2,
+          "answers": ["Write fewer tests", "Avoid user feedback", "Detect problems in real usage quickly", "Disable logs"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Documentation & Configuration Management",
+      "description": "Keep user/developer docs accurate; manage environment files and backups.",
+      "genprompt": "Create MCQs (4 options) on updating docs with changes, README/CHANGELOG use, configuration vs. code, environment separation, and backups/restore basics.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "User documentation should be updated when",
+          "correctAnswer": "Features or behavior change",
+          "correctIndex": 1,
+          "answers": ["Only at project end", "Features or behavior change", "Never", "When colors change only"]
+        },
+        {
+          "id": 2,
+          "prompt": "A README typically provides",
+          "correctAnswer": "Overview, setup instructions, and basic usage",
+          "correctIndex": 3,
+          "answers": ["Private passwords", "Internal gossip", "All test data", "Overview, setup instructions, and basic usage"]
+        },
+        {
+          "id": 3,
+          "prompt": "A CHANGELOG is used to",
+          "correctAnswer": "List noteworthy changes across versions",
+          "correctIndex": 0,
+          "answers": ["List noteworthy changes across versions", "Store binary assets", "Keep secrets", "Replace bug reports"]
+        },
+        {
+          "id": 4,
+          "prompt": "Configuration belongs in",
+          "correctAnswer": "Externalized settings (e.g., environment variables) not hard-coded",
+          "correctIndex": 2,
+          "answers": ["Every function body", "Random comments", "Externalized settings (e.g., environment variables) not hard-coded", "The logo file"]
+        },
+        {
+          "id": 5,
+          "prompt": "Separating dev/test/prod environments helps to",
+          "correctAnswer": "Prevent accidental changes to real user data",
+          "correctIndex": 1,
+          "answers": ["Slow teams down", "Prevent accidental changes to real user data", "Hide defects", "Delete history"]
+        },
+        {
+          "id": 6,
+          "prompt": "A secure practice for secrets is to",
+          "correctAnswer": "Store them outside the codebase and restrict access",
+          "correctIndex": 3,
+          "answers": ["Commit to Git", "Share in chats", "Print to logs", "Store them outside the codebase and restrict access"]
+        },
+        {
+          "id": 7,
+          "prompt": "Backups are useful only if",
+          "correctAnswer": "They can be restored and are tested periodically",
+          "correctIndex": 0,
+          "answers": ["They can be restored and are tested periodically", "They are very large", "They have funny names", "They are never used"]
+        },
+        {
+          "id": 8,
+          "prompt": "When documenting a new option, include",
+          "correctAnswer": "What it does and valid values/examples",
+          "correctIndex": 2,
+          "answers": ["Only internal jokes", "Source code history", "What it does and valid values/examples", "Random screenshots"]
+        },
+        {
+          "id": 9,
+          "prompt": "Configuration drift happens when",
+          "correctAnswer": "Environments slowly become different over time",
+          "correctIndex": 1,
+          "answers": ["Tests are flaky", "Environments slowly become different over time", "Files are backed up", "Branches are merged"]
+        },
+        {
+          "id": 10,
+          "prompt": "A quick way to help new contributors is to provide",
+          "correctAnswer": "Clear setup steps and prerequisites in the docs",
+          "correctIndex": 0,
+          "answers": ["Clear setup steps and prerequisites in the docs", "Only long videos", "No instructions", "Private notes only"]
+        }
+      ]
+    }
+  ]
+},
+        {
+  "id": 8,
+  "name": "Complete User Documentation and Technical Writing",
+  "description": "Plan, write, and maintain clear user and developer documentation with correct structure, style, and accuracy.",
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Audience and Purpose",
+      "description": "Identify the intended reader and choose the right scope, tone, and depth.",
+      "genprompt": "Create MCQs (4 options) on audience identification, goals, prerequisites, scope, tone, and choosing the right level of detail.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Before writing documentation, the first step is to",
+          "correctAnswer": "Identify who the audience is and what they need",
+          "correctIndex": 2,
+          "answers": [
+            "Pick a random template",
+            "Write the longest possible guide",
+            "Identify who the audience is and what they need",
+            "Skip planning to save time"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "A beginner audience usually needs",
+          "correctAnswer": "More step-by-step guidance and definitions",
+          "correctIndex": 1,
+          "answers": [
+            "Only reference tables",
+            "More step-by-step guidance and definitions",
+            "Deep internal architecture details",
+            "Raw source code only"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Prerequisites in docs should state",
+          "correctAnswer": "What tools/knowledge the reader must have first",
+          "correctIndex": 0,
+          "answers": [
+            "What tools/knowledge the reader must have first",
+            "Your favorite programming jokes",
+            "The project budget",
+            "The school calendar"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Scope creep in documentation happens when",
+          "correctAnswer": "Content expands beyond the defined goals for the audience",
+          "correctIndex": 3,
+          "answers": [
+            "You add headings",
+            "You shorten examples",
+            "You fix typos",
+            "Content expands beyond the defined goals for the audience"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Tone for end-user help should be",
+          "correctAnswer": "Clear, friendly, and direct",
+          "correctIndex": 1,
+          "answers": [
+            "Sarcastic and informal",
+            "Clear, friendly, and direct",
+            "Overly technical at all times",
+            "Aggressive and urgent"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "The main purpose of user documentation is to",
+          "correctAnswer": "Help users accomplish tasks successfully",
+          "correctIndex": 2,
+          "answers": [
+            "Replace all testing",
+            "Show off complex vocabulary",
+            "Help users accomplish tasks successfully",
+            "Hide product limitations"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "For a quick-start guide, prioritize",
+          "correctAnswer": "Minimal steps to reach a working result",
+          "correctIndex": 0,
+          "answers": [
+            "Minimal steps to reach a working result",
+            "A history of the company",
+            "Every configuration option",
+            "Legal contracts"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Advanced users typically prefer",
+          "correctAnswer": "Concise references and configuration details",
+          "correctIndex": 3,
+          "answers": [
+            "Motivational quotes",
+            "Full marketing copy",
+            "Only screenshots",
+            "Concise references and configuration details"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "Stating out-of-scope topics helps because it",
+          "correctAnswer": "Sets expectations and avoids confusion",
+          "correctIndex": 1,
+          "answers": [
+            "Adds humor",
+            "Sets expectations and avoids confusion",
+            "Increases file size",
+            "Eliminates all questions"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "A good audience definition includes",
+          "correctAnswer": "Skill level, goals, and context of use",
+          "correctIndex": 0,
+          "answers": [
+            "Skill level, goals, and context of use",
+            "Only the author’s bio",
+            "A list of fonts",
+            "Random tips"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Structure and Clarity",
+      "description": "Organize content with headings, navigation, and consistent sections.",
+      "genprompt": "Create MCQs (4 options) about headings, overview vs. detail, tables of contents, consistent section patterns, and chunking information.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Which heading order is most logical for a how-to?",
+          "correctAnswer": "Overview → Prerequisites → Steps → Troubleshooting",
+          "correctIndex": 1,
+          "answers": [
+            "Troubleshooting → Steps → Overview",
+            "Overview → Prerequisites → Steps → Troubleshooting",
+            "Steps → Overview → Prerequisites",
+            "Overview only"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "A table of contents helps users",
+          "correctAnswer": "Find topics quickly and navigate",
+          "correctIndex": 2,
+          "answers": [
+            "Change system settings",
+            "Write code faster",
+            "Find topics quickly and navigate",
+            "Translate languages"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Chunking information means",
+          "correctAnswer": "Breaking content into small, focused sections",
+          "correctIndex": 0,
+          "answers": [
+            "Breaking content into small, focused sections",
+            "Removing all headings",
+            "Using one very long paragraph",
+            "Hiding details"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Consistent section patterns (like Intro/Steps/Notes) are useful because they",
+          "correctAnswer": "Help readers know where to find information",
+          "correctIndex": 3,
+          "answers": [
+            "Increase jargon",
+            "Hide prerequisites",
+            "Remove navigation",
+            "Help readers know where to find information"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Which sentence is clearest?",
+          "correctAnswer": "Click Save to store your changes",
+          "correctIndex": 1,
+          "answers": [
+            "It is possible that saving might be something you want",
+            "Click Save to store your changes",
+            "Users should consider the saving mechanics",
+            "Saving can be executed in various modalities"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "A good introduction to a page should",
+          "correctAnswer": "Explain what the page covers and outcomes",
+          "correctIndex": 0,
+          "answers": [
+            "Explain what the page covers and outcomes",
+            "List unrelated facts",
+            "Repeat the title only",
+            "Show jokes"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Cross-linking related pages mainly",
+          "correctAnswer": "Improves navigation and reduces duplication",
+          "correctIndex": 2,
+          "answers": [
+            "Increases file size",
+            "Removes context",
+            "Improves navigation and reduces duplication",
+            "Breaks headings"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Which item belongs in a page header/front matter for docs?",
+          "correctAnswer": "Title and brief summary",
+          "correctIndex": 3,
+          "answers": [
+            "Private passwords",
+            "Class seating chart",
+            "Marketing slogans only",
+            "Title and brief summary"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "Redundant content across pages should be handled by",
+          "correctAnswer": "Linking to a single source of truth",
+          "correctIndex": 1,
+          "answers": [
+            "Copy-pasting everywhere",
+            "Linking to a single source of truth",
+            "Deleting all references",
+            "Ignoring inconsistencies"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "The main benefit of consistent terminology is",
+          "correctAnswer": "Readers learn terms once and recognize them elsewhere",
+          "correctIndex": 0,
+          "answers": [
+            "Readers learn terms once and recognize them elsewhere",
+            "It adds mystery",
+            "It hides meaning",
+            "It reduces searchability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Procedures and Tutorials",
+      "description": "Write accurate step-by-step instructions with clear outcomes and troubleshooting.",
+      "genprompt": "Create MCQs (4 options) on writing steps, ordering, action verbs, expected results, warnings, tips, and troubleshooting entries.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Good procedural steps typically start with",
+          "correctAnswer": "An action verb like Click or Enter",
+          "correctIndex": 1,
+          "answers": [
+            "A joke",
+            "An action verb like Click or Enter",
+            "A long history lesson",
+            "A legal disclaimer only"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "Each step should include",
+          "correctAnswer": "The action and expected result when needed",
+          "correctIndex": 2,
+          "answers": [
+            "Slang and emojis",
+            "Multiple tasks in one step",
+            "The action and expected result when needed",
+            "Random screenshots"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Numbered lists are best when",
+          "correctAnswer": "Order matters for the procedure",
+          "correctIndex": 0,
+          "answers": [
+            "Order matters for the procedure",
+            "You want a glossary",
+            "You are listing definitions",
+            "You are writing marketing copy"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "A troubleshooting entry should",
+          "correctAnswer": "Name the symptom, likely cause, and fix",
+          "correctIndex": 3,
+          "answers": [
+            "Blame the reader",
+            "Hide errors",
+            "Repeat the overview",
+            "Name the symptom, likely cause, and fix"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "Warnings in procedures are used to",
+          "correctAnswer": "Prevent risky actions that could cause loss or harm",
+          "correctIndex": 0,
+          "answers": [
+            "Prevent risky actions that could cause loss or harm",
+            "Fill space",
+            "Replace all steps",
+            "Hide limitations"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "Placeholders like <USERNAME> should be",
+          "correctAnswer": "Explained so readers know what to substitute",
+          "correctIndex": 2,
+          "answers": [
+            "Left unexplained",
+            "Hidden in comments",
+            "Explained so readers know what to substitute",
+            "Written in random symbols"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "If a step may take several minutes, you should",
+          "correctAnswer": "Tell the reader the expected duration",
+          "correctIndex": 1,
+          "answers": [
+            "Say nothing to keep it short",
+            "Tell the reader the expected duration",
+            "Remove the step",
+            "Add unrelated tips"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Screenshots in tutorials should",
+          "correctAnswer": "Highlight relevant areas and hide sensitive data",
+          "correctIndex": 3,
+          "answers": [
+            "Show entire desktop with clutter",
+            "Include passwords",
+            "Use tiny unreadable text",
+            "Highlight relevant areas and hide sensitive data"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "After completing steps, include a section that",
+          "correctAnswer": "Confirms expected end state or success criteria",
+          "correctIndex": 0,
+          "answers": [
+            "Confirms expected end state or success criteria",
+            "Deletes the app",
+            "Asks for reviews only",
+            "Lists unrelated features"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "When two paths are possible (Windows/Mac), you should",
+          "correctAnswer": "Separate steps clearly for each path",
+          "correctIndex": 1,
+          "answers": [
+            "Mix them in one list",
+            "Separate steps clearly for each path",
+            "Ignore one platform",
+            "Use only screenshots"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Examples, References, and Style",
+      "description": "Create helpful examples, concise references, and follow a style guide.",
+      "genprompt": "Create MCQs (4 options) on minimal working examples, inputs/outputs, reference formatting, term definitions, and applying a style guide.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "A minimal working example is valuable because it",
+          "correctAnswer": "Shows the smallest complete case that works",
+          "correctIndex": 2,
+          "answers": [
+            "Uses the most files",
+            "Is intentionally incomplete",
+            "Shows the smallest complete case that works",
+            "Removes context without reason"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "Good examples should include",
+          "correctAnswer": "Inputs, steps, and expected outputs",
+          "correctIndex": 0,
+          "answers": [
+            "Inputs, steps, and expected outputs",
+            "Only screenshots",
+            "Only marketing text",
+            "Unrelated anecdotes"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "A glossary entry should",
+          "correctAnswer": "Define a term in clear, simple language",
+          "correctIndex": 1,
+          "answers": [
+            "Use undefined jargon",
+            "Define a term in clear, simple language",
+            "Be intentionally vague",
+            "Contain jokes"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Reference pages should prioritize",
+          "correctAnswer": "Accurate, concise facts and parameters",
+          "correctIndex": 3,
+          "answers": [
+            "Narrative stories",
+            "Personal opinions",
+            "Large background sections",
+            "Accurate, concise facts and parameters"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "A style guide helps documentation by",
+          "correctAnswer": "Keeping tone and formatting consistent",
+          "correctIndex": 1,
+          "answers": [
+            "Making pages longer",
+            "Keeping tone and formatting consistent",
+            "Removing headings",
+            "Adding secrets"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "When including command examples, you should",
+          "correctAnswer": "Clearly distinguish user input from output",
+          "correctIndex": 0,
+          "answers": [
+            "Clearly distinguish user input from output",
+            "Mix both in one line without labels",
+            "Hide expected results",
+            "Use random punctuation"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "Example data should be",
+          "correctAnswer": "Safe and non-sensitive",
+          "correctIndex": 2,
+          "answers": [
+            "Real passwords",
+            "Private student records",
+            "Safe and non-sensitive",
+            "Unrelated memes"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "When defining options/flags, include",
+          "correctAnswer": "What it does and valid values",
+          "correctIndex": 1,
+          "answers": [
+            "Only a nickname",
+            "What it does and valid values",
+            "A random example",
+            "Nothing; readers must guess"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "If two terms mean the same thing, choose one and",
+          "correctAnswer": "Use it consistently across the docs",
+          "correctIndex": 3,
+          "answers": [
+            "Alternate randomly",
+            "Avoid both terms",
+            "Use both in the same sentence",
+            "Use it consistently across the docs"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "Inline notes like Tip/Note/Warning are used to",
+          "correctAnswer": "Call attention to important details",
+          "correctIndex": 0,
+          "answers": [
+            "Call attention to important details",
+            "Replace the steps",
+            "Increase page length only",
+            "Hide requirements"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Review, Accessibility, and Maintenance",
+      "description": "Edit for clarity, check accessibility, and keep docs up to date with changes.",
+      "genprompt": "Create MCQs (4 options) on peer review, plain language, alt text, color contrast, versioning, changelogs, and updating docs with releases.",
+      "questions": [
+        {
+          "id": 1,
+          "prompt": "Peer review of docs mainly helps to",
+          "correctAnswer": "Catch unclear steps and errors",
+          "correctIndex": 1,
+          "answers": [
+            "Add more jokes",
+            "Catch unclear steps and errors",
+            "Increase file size",
+            "Remove headings"
+          ]
+        },
+        {
+          "id": 2,
+          "prompt": "Plain language means",
+          "correctAnswer": "Using simple, direct words the audience understands",
+          "correctIndex": 0,
+          "answers": [
+            "Using simple, direct words the audience understands",
+            "Adding complex jargon",
+            "Writing as fast as possible",
+            "Using unexplained acronyms"
+          ]
+        },
+        {
+          "id": 3,
+          "prompt": "Alternative text (alt text) for images should",
+          "correctAnswer": "Briefly describe the important content of the image",
+          "correctIndex": 2,
+          "answers": [
+            "Repeat the filename",
+            "Be left blank always",
+            "Briefly describe the important content of the image",
+            "Show passwords"
+          ]
+        },
+        {
+          "id": 4,
+          "prompt": "Color-only cues in docs are risky because",
+          "correctAnswer": "Some readers may not perceive color differences",
+          "correctIndex": 3,
+          "answers": [
+            "They load slowly",
+            "They make pages shorter",
+            "They always look better",
+            "Some readers may not perceive color differences"
+          ]
+        },
+        {
+          "id": 5,
+          "prompt": "When software changes, docs should be",
+          "correctAnswer": "Updated promptly to match new behavior",
+          "correctIndex": 0,
+          "answers": [
+            "Updated promptly to match new behavior",
+            "Ignored if tests pass",
+            "Deleted until stable",
+            "Left as historical only"
+          ]
+        },
+        {
+          "id": 6,
+          "prompt": "Screenshots should be reviewed to",
+          "correctAnswer": "Remove or blur sensitive information",
+          "correctIndex": 2,
+          "answers": [
+            "Increase file size",
+            "Add watermarks only",
+            "Remove or blur sensitive information",
+            "Lower resolution until unreadable"
+          ]
+        },
+        {
+          "id": 7,
+          "prompt": "A changelog helps readers by",
+          "correctAnswer": "Summarizing what changed between versions",
+          "correctIndex": 1,
+          "answers": [
+            "Storing backups",
+            "Summarizing what changed between versions",
+            "Compiling the code",
+            "Replacing tutorials"
+          ]
+        },
+        {
+          "id": 8,
+          "prompt": "Link checking in docs is important to",
+          "correctAnswer": "Prevent broken navigation for readers",
+          "correctIndex": 0,
+          "answers": [
+            "Prevent broken navigation for readers",
+            "Increase bandwidth",
+            "Add marketing",
+            "Hide references"
+          ]
+        },
+        {
+          "id": 9,
+          "prompt": "Documentation version labels should match",
+          "correctAnswer": "The software version the docs describe",
+          "correctIndex": 3,
+          "answers": [
+            "Random dates",
+            "Author initials",
+            "A nickname only",
+            "The software version the docs describe"
+          ]
+        },
+        {
+          "id": 10,
+          "prompt": "The best time to review docs for accuracy is",
+          "correctAnswer": "Before release and after notable changes",
+          "correctIndex": 2,
+          "answers": [
+            "Never",
+            "Only at project start",
+            "Before release and after notable changes",
+            "Only when users complain"
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+      ]
+    }
+  ]
+}

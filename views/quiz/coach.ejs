@@ -1,0 +1,47 @@
+<%
+  const safeQuizName = (typeof quiz !== 'undefined' && quiz && quiz.name) ? quiz.name : 'Quiz';
+  let breadcrumb;
+  if (typeof classItem !== 'undefined' && classItem && classItem.id) {
+    breadcrumb = '<a href="/classes">Classes</a> &rarr; <a href="/classes/' + classItem.id + '">' + classItem.name + '</a> &rarr; ' + safeQuizName + ' &rarr; AI Coach';
+  } else {
+    breadcrumb = safeQuizName + ' &rarr; AI Coach';
+  }
+%>
+<%- include('../partials/teacher-header', { title: 'AI Coach - ' + safeQuizName, user, course: null, breadcrumb }) %>
+<h1>AI Coach for <%= safeQuizName %></h1>
+
+<% if (course && course.name) { %>
+<p>Course: <strong><%= course.name %></strong></p>
+<% } %>
+
+<% if (attempt && attempt.total_questions != null) { %>
+<p>
+    Your score on this attempt:
+    <strong><%= attempt.correct_questions || 0 %> / <%= attempt.total_questions || 0 %></strong>
+    (<%= attempt.score != null ? attempt.score.toFixed(1) : '0.0' %>%)
+</p>
+<% } %>
+
+<div class="ai-coach-plan">
+    <% if (typeof plan === 'string') { %>
+        <%- plan %>
+    <% } else { %>
+        <p>The AI coach was unable to generate a plan.</p>
+    <% } %>
+</div>
+
+<p>
+    <% if (attempt && attempt.is_progress_quiz) { %>
+        <a href="/progress/<%= attempt.id %>/results" class="btn btn-secondary">Back to results</a>
+    <% } else if (classItem && classItem.id && quiz && quiz.id && attempt && attempt.id) { %>
+        <a href="/classes/<%= classItem.id %>/quizzes/<%= quiz.id %>/results/<%= attempt.id %>" class="btn btn-secondary">Back to results</a>
+    <% } else if (!attempt && course && course.id) { %>
+        <a href="/courses/<%= course.id %>/mastery" class="btn btn-secondary">Back to mastery</a>
+    <% } %>
+    <% if (course && course.id) { %>
+        <a href="/courses/<%= course.id %>/mastery" class="btn btn-secondary">View my mastery</a>
+    <% } %>
+</p>
+
+<%- include('../partials/footer') %>
+

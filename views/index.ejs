@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head', { title: 'QuizBank' }) %>
+</head>
+<body>
+    <%- include('partials/nav', { user: user }) %>
+    <main class="page">
+        <h1>Hello, <%- user %></h1>
+        <p><a href="/courses" class="btn">My Courses</a> <a href="/logout" class="btn btn-secondary">Logout</a></p>
+    </main>
+    <%- include('partials/footer') %>

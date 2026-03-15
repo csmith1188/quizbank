@@ -1,0 +1,27 @@
+<%- include('../partials/teacher-header', { title: 'Preview: ' + quiz.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/quizzes">Quizzes</a> &rarr; <a href="/courses/' + course.id + '/quizzes/' + quiz.id + '/edit">' + quiz.name + '</a> &rarr; Preview' }) %>
+<h1>Preview: <%= quiz.name %></h1>
+<p>
+    <%= questions.length %> question(s).
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/edit" class="btn">Back to editor</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export" class="btn">Export QTI zip</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-kahoot" class="btn">Export Kahoot XLSX</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-gimkit" class="btn">Export Gimkit CSV</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-blooket" class="btn">Export Blooket CSV</a>
+</p>
+<% if (questions.length === 0) { %>
+<p>No questions in this quiz. Add items in the quiz editor.</p>
+<% } else { %>
+<ol>
+<% questions.forEach(function(q, i) { %>
+    <li>
+        <p><strong><%= q.prompt %></strong></p>
+        <ul>
+        <% (q.answers || []).forEach(function(a, j) { %>
+            <li><%= j === q.correctIndex ? '✓ ' : '' %><%= a %></li>
+        <% }); %>
+        </ul>
+    </li>
+<% }); %>
+</ol>
+<% } %>
+<%- include('../partials/footer') %>

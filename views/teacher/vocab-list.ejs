@@ -1,0 +1,39 @@
+<%- include('../partials/teacher-header', { title: 'Vocabulary - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Vocabulary' }) %>
+<h1>Vocabulary List</h1>
+<p><a href="/courses/<%= course.id %>/vocab/new" class="btn">New term</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<% if (terms.length === 0) { %>
+<p>No vocabulary terms. <a href="/courses/<%= course.id %>/vocab/new">Add one</a>.</p>
+<% } else { %>
+<div class="vocab-accordion">
+<% terms.forEach(function(t) { %>
+    <details class="vocab-details" id="vocab-<%= t.id %>">
+        <summary class="vocab-summary">
+            <span class="vocab-term"><%= t.term %></span>
+            <span class="vocab-definition-preview"><%= t.definition || '—' %></span>
+        </summary>
+        <div class="vocab-content">
+            <form method="post" action="/courses/<%= course.id %>/vocab/<%= t.id %>" class="vocab-edit-form">
+                <div class="field-row">
+                    <label>Term <input type="text" name="term" value="<%= t.term %>" required /></label>
+                    <button type="submit" class="btn btn-small">Save</button>
+                </div>
+                <label style="margin-top: 0.5rem;">Definition <textarea name="definition" rows="3" class="textarea-definition"><%= t.definition || '' %></textarea></label>
+            </form>
+            <form method="post" action="/courses/<%= course.id %>/vocab/<%= t.id %>/delete" style="display:inline; margin-top: 0.75rem;">
+                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+            </form>
+        </div>
+    </details>
+<% }); %>
+</div>
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('vocab-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+})();
+</script>
+<% } %>
+<%- include('../partials/footer') %>
