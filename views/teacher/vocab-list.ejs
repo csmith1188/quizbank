@@ -19,8 +19,14 @@
                 </div>
                 <label style="margin-top: 0.5rem;">Definition <textarea name="definition" rows="3" class="textarea-definition"><%= t.definition || '' %></textarea></label>
             </form>
-            <form method="post" action="/courses/<%= course.id %>/vocab/<%= t.id %>/delete" style="display:inline; margin-top: 0.75rem;">
-                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+            <form method="post"
+                  action="/courses/<%= course.id %>/vocab/<%= t.id %>/delete"
+                  style="display:inline; margin-top: 0.75rem;">
+                <button type="submit"
+                        class="btn btn-small btn-danger"
+                        onclick="return confirm('Delete this vocab term from the course? This cannot be undone.');">
+                    Delete
+                </button>
             </form>
         </div>
     </details>

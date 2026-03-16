@@ -12,6 +12,7 @@ const {
     getCoachContext
 } = require('../lib/quiz-attempts');
 const { getImprovementPlan } = require('../lib/ai-coach');
+const multer = require('multer');
 
 const router = express.Router();
 
@@ -102,6 +103,690 @@ router.get('/courses', requireTeacher, async (req, res) => {
     res.render('teacher/courses', { user: req.session.user, courses });
 });
 
+// Simple in-memory import storage keyed by a random token
+const importStore = new Map();
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+
+function generateImportToken() {
+    return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+}
+
+router.get('/courses/:courseId/import', requireCourseOwner, (req, res) => {
+    res.render('teacher/import-form', {
+        user: req.session.user,
+        course: req.course,
+        error: null
+    });
+});
+
+router.post('/courses/:courseId/import', requireCourseOwner, upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.render('teacher/import-form', {
+            user: req.session.user,
+            course: req.course,
+            error: 'Please upload an .xlsx file using the provided template.'
+        });
+    }
+    const filename = req.file.originalname || '';
+    if (!/\.xlsx$/i.test(filename)) {
+        return res.render('teacher/import-form', {
+            user: req.session.user,
+            course: req.course,
+            error: 'Only .xlsx files generated from the template are supported right now.'
+        });
+    }
+
+    let workbook;
+    try {
+        workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(req.file.buffer);
+    } catch (err) {
+        console.error('Import parse error:', err);
+        return res.render('teacher/import-form', {
+            user: req.session.user,
+            course: req.course,
+            error: 'Could not read this Excel file. Please make sure it matches the template.'
+        });
+    }
+
+    const sheets = [];
+
+    function collectRows(sheet) {
+        if (!sheet) return { headers: [], rows: [] };
+        const headerRow = sheet.getRow(1);
+        const headers = [];
+        headerRow.eachCell((cell, colNumber) => {
+            const v = (cell.value || '').toString().trim();
+            headers[colNumber - 1] = v;
+        });
+        const rows = [];
+        sheet.eachRow((row, rowNumber) => {
+            if (rowNumber === 1) return;
+            const values = {};
+            let nonEmpty = false;
+            headers.forEach((h, idx) => {
+                const cell = row.getCell(idx + 1);
+                let v = cell.value;
+                if (v && typeof v === 'object' && v.text) v = v.text;
+                if (v == null) v = '';
+                v = v.toString().trim();
+                if (v !== '') nonEmpty = true;
+                values[h || ('col' + (idx + 1))] = v;
+            });
+            if (nonEmpty) {
+                rows.push({ rowNumber, values });
+            }
+        });
+        return { headers, rows };
+    }
+
+    const sheet1 = workbook.worksheets[0];
+    const sheet2 = workbook.worksheets[1];
+    const sheet3 = workbook.worksheets[2];
+
+    if (sheet1) {
+        const data = collectRows(sheet1);
+        if (data.rows.length) {
+            sheets.push({
+                index: 1,
+                name: sheet1.name,
+                type: 'structure',
+                headers: data.headers,
+                rows: data.rows
+            });
+        }
+    }
+    if (sheet2) {
+        const data = collectRows(sheet2);
+        if (data.rows.length) {
+            sheets.push({
+                index: 2,
+                name: sheet2.name,
+                type: 'vocab',
+                headers: data.headers,
+                rows: data.rows
+            });
+        }
+    }
+    if (sheet3) {
+        const data = collectRows(sheet3);
+        if (data.rows.length) {
+            sheets.push({
+                index: 3,
+                name: sheet3.name,
+                type: 'questions',
+                headers: data.headers,
+                rows: data.rows
+            });
+        }
+    }
+
+    if (!sheets.length) {
+        return res.render('teacher/import-form', {
+            user: req.session.user,
+            course: req.course,
+            error: 'No data rows were found in any sheet. Please add data before uploading.'
+        });
+    }
+
+    const token = generateImportToken();
+    importStore.set(token, {
+        courseId: req.courseId,
+        uploadedAt: Date.now(),
+        sheets
+    });
+
+    res.render('teacher/import-review', {
+        user: req.session.user,
+        course: req.course,
+        token,
+        sheets
+    });
+});
+
+router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req, res) => {
+    const token = (req.body && req.body.token) || '';
+    const includeStructure = !!(req.body && req.body.include_structure);
+    const includeVocab = !!(req.body && req.body.include_vocab);
+    const includeQuestions = !!(req.body && req.body.include_questions);
+
+    const stored = importStore.get(token);
+    if (!stored || stored.courseId !== req.courseId) {
+        return res.render('teacher/import-form', {
+            user: req.session.user,
+            course: req.course,
+            error: 'Import session expired. Please upload the template again.'
+        });
+    }
+
+    // Clean up the token once used
+    importStore.delete(token);
+
+    const results = [];
+    const taskKeyToTaskId = new Map(); // user Task ID/Number from Course sheet -> DB task id
+
+    function addResultForType(type, name, status, stats) {
+        results.push({
+            type,
+            name,
+            status,
+            inserted: (stats && stats.inserted) || 0,
+            updated: (stats && stats.updated) || 0,
+            duplicates: (stats && stats.duplicates) || 0,
+            total: (stats && stats.total) || 0,
+            errors: (stats && stats.errors) || []
+        });
+    }
+
+    function normalizeKey(s) {
+        return (s || '')
+            .toString()
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, ' ');
+    }
+
+    function getField(values, aliases) {
+        const keys = Object.keys(values || {});
+        const want = aliases.map(normalizeKey);
+        for (const key of keys) {
+            const nk = normalizeKey(key);
+            if (want.includes(nk)) {
+                return values[key];
+            }
+        }
+        return '';
+    }
+
+    async function withTransaction(fn) {
+        await run('BEGIN');
+        try {
+            const result = await fn();
+            await run('COMMIT');
+            return result;
+        } catch (err) {
+            try {
+                await run('ROLLBACK');
+            } catch (e) {
+                // ignore rollback errors
+            }
+            throw err;
+        }
+    }
+
+    async function importStructureSheet(sheet) {
+        const stats = {
+            inserted: 0,
+            updated: 0,
+            duplicates: 0,
+            total: sheet.rows.length,
+            errors: []
+        };
+
+        if (!sheet.headers || !sheet.headers.length || !sheet.rows.length) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Sheet appears to have no headers or data rows.'
+            });
+            return { status: 'failed', stats };
+        }
+
+        const hasTaskName = sheet.headers.some(h => normalizeKey(h) === normalizeKey('Task Name'));
+        if (!hasTaskName) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Required column "Task Name" is missing.'
+            });
+            return { status: 'failed', stats };
+        }
+
+        const rowErrors = [];
+        sheet.rows.forEach(r => {
+            const values = r.values || {};
+            const taskName = getField(values, ['Task Name']);
+            if (!taskName) {
+                rowErrors.push({
+                    rowNumber: r.rowNumber,
+                    message: 'Task Name is required.'
+                });
+            }
+        });
+
+        if (rowErrors.length) {
+            stats.errors = rowErrors;
+            return { status: 'failed', stats };
+        }
+
+        try {
+            await withTransaction(async () => {
+                for (const r of sheet.rows) {
+                    const values = r.values || {};
+                    const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
+                    const unitName = getField(values, ['Unit Name']);
+                    const taskName = getField(values, ['Task Name']);
+                    const taskTarget = getField(values, ['Task Target', 'Target']);
+
+                    let unitId = null;
+                    if (unitName) {
+                        const existingUnit = await get(
+                            'SELECT id FROM units WHERE course_id = ? AND name = ?',
+                            [req.courseId, unitName]
+                        );
+                        if (existingUnit) {
+                            unitId = existingUnit.id;
+                        } else {
+                            const maxOrder = await get(
+                                'SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM units WHERE course_id = ?',
+                                [req.courseId]
+                            );
+                            await run(
+                                'INSERT INTO units (course_id, name, sort_order) VALUES (?, ?, ?)',
+                                [req.courseId, unitName, maxOrder.n]
+                            );
+                            const row = await get(
+                                'SELECT id FROM units WHERE course_id = ? AND name = ? ORDER BY id DESC LIMIT 1',
+                                [req.courseId, unitName]
+                            );
+                            unitId = row ? row.id : null;
+                            stats.inserted += 1;
+                        }
+                    }
+
+                    const task = await get(
+                        'SELECT id, name, target FROM tasks WHERE course_id = ? AND name = ? AND (target IS ? OR target = ?)',
+                        [req.courseId, taskName, taskTarget || null, taskTarget || null]
+                    );
+
+                    let taskId;
+                    if (task) {
+                        // Treat as duplicate if identical; we do not change existing tasks here.
+                        stats.duplicates += 1;
+                        taskId = task.id;
+                    } else {
+                        const maxOrderTask = await get(
+                            'SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM tasks WHERE course_id = ?',
+                            [req.courseId]
+                        );
+                        await run(
+                            'INSERT INTO tasks (course_id, name, target, sort_order) VALUES (?, ?, ?, ?)',
+                            [req.courseId, taskName, taskTarget || null, maxOrderTask.n]
+                        );
+                        const row = await get(
+                            'SELECT id FROM tasks WHERE course_id = ? AND name = ? ORDER BY id DESC LIMIT 1',
+                            [req.courseId, taskName]
+                        );
+                        taskId = row ? row.id : null;
+                        stats.inserted += 1;
+                    }
+
+                    // Record mapping from user Task ID/Number (from Course sheet) to DB task id
+                    if (taskKeyRaw && taskId) {
+                        const key = taskKeyRaw.toString().trim();
+                        if (key) {
+                            taskKeyToTaskId.set(key, taskId);
+                        }
+                    }
+
+                    if (unitId && taskId) {
+                        await run(
+                            'INSERT OR IGNORE INTO unit_tasks (unit_id, task_id, sort_order) VALUES (?, ?, (SELECT COALESCE(MAX(sort_order), -1) + 1 FROM unit_tasks WHERE unit_id = ?))',
+                            [unitId, taskId, unitId]
+                        );
+                    }
+                }
+            });
+        } catch (err) {
+            console.error('Error importing structure sheet:', err);
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Unexpected error while writing data: ' + (err.message || err.toString())
+            });
+            return { status: 'failed', stats };
+        }
+
+        return { status: 'ok', stats };
+    }
+
+    async function importVocabSheet(sheet) {
+        const stats = {
+            inserted: 0,
+            updated: 0,
+            duplicates: 0,
+            total: sheet.rows.length,
+            errors: []
+        };
+
+        if (!sheet.headers || !sheet.headers.length || !sheet.rows.length) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Sheet appears to have no headers or data rows.'
+            });
+            return { status: 'failed', stats };
+        }
+
+        const hasTerm = sheet.headers.some(h => normalizeKey(h) === normalizeKey('Word') || normalizeKey(h) === normalizeKey('Term'));
+        if (!hasTerm) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Required column "Word" (or Term) is missing.'
+            });
+            return { status: 'failed', stats };
+        }
+        const hasTaskRef = sheet.headers.some(
+            h => normalizeKey(h) === normalizeKey('Task ID') || normalizeKey(h) === normalizeKey('Task Number')
+        );
+
+        const rowErrors = [];
+        sheet.rows.forEach(r => {
+            const values = r.values || {};
+            const term = getField(values, ['Word', 'Term']);
+            if (!term) {
+                rowErrors.push({
+                    rowNumber: r.rowNumber,
+                    message: 'Vocab word is required.'
+                });
+            }
+
+            if (hasTaskRef) {
+                const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
+                const key = (taskKeyRaw || '').toString().trim();
+                if (key) {
+                    // When a task identifier is present on the vocab sheet, it should
+                    // correspond to a Task ID defined on the Course sheet (preferred)
+                    // or, if not present there, to an existing task name in the course.
+                    let taskId = taskKeyToTaskId.get(key) || null;
+                    if (!taskId) {
+                        // Fallback: interpret the key as a task name.
+                        rowErrors.push({
+                            rowNumber: r.rowNumber,
+                            message:
+                                'Task identifier "' +
+                                key +
+                                '" does not match any Task ID from the Course sheet. It is treated as a label only for now.'
+                        });
+                    }
+                }
+            }
+        });
+
+        if (rowErrors.length) {
+            stats.errors = rowErrors;
+            return { status: 'failed', stats };
+        }
+
+        try {
+            await withTransaction(async () => {
+                for (const r of sheet.rows) {
+                    const values = r.values || {};
+                    const term = getField(values, ['Word', 'Term']);
+                    let definition = getField(values, ['Definition', 'Meaning']);
+                    definition = (definition || '').trim();
+
+                    const existing = await get(
+                        'SELECT id FROM vocab_terms WHERE course_id = ? AND term = ?',
+                        [req.courseId, term]
+                    );
+                    if (existing) {
+                        await run(
+                            'UPDATE vocab_terms SET definition = ? WHERE id = ?',
+                            [definition || null, existing.id]
+                        );
+                        stats.updated += 1;
+                    } else {
+                        const maxOrder = await get(
+                            'SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM vocab_terms WHERE course_id = ?',
+                            [req.courseId]
+                        );
+                        await run(
+                            'INSERT INTO vocab_terms (course_id, term, definition, sort_order) VALUES (?, ?, ?, ?)',
+                            [req.courseId, term, definition || null, maxOrder.n]
+                        );
+                        stats.inserted += 1;
+                    }
+                }
+            });
+        } catch (err) {
+            console.error('Error importing vocab sheet:', err);
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Unexpected error while writing data: ' + (err.message || err.toString())
+            });
+            return { status: 'failed', stats };
+        }
+
+        return { status: 'ok', stats };
+    }
+
+    async function importQuestionsSheet(sheet) {
+        const stats = {
+            inserted: 0,
+            updated: 0,
+            duplicates: 0,
+            total: sheet.rows.length,
+            errors: []
+        };
+
+        if (!sheet.headers || !sheet.headers.length || !sheet.rows.length) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Sheet appears to have no headers or data rows.'
+            });
+            return { status: 'failed', stats };
+        }
+
+        const hasTaskId = sheet.headers.some(h => normalizeKey(h) === normalizeKey('Task ID') || normalizeKey(h) === normalizeKey('Task Number'));
+        const hasPrompt = sheet.headers.some(h => normalizeKey(h) === normalizeKey('Question') || normalizeKey(h) === normalizeKey('Prompt'));
+        if (!hasTaskId || !hasPrompt) {
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Required columns "Task ID/Task Number" and "Question" (or Prompt) are missing.'
+            });
+            return { status: 'failed', stats };
+        }
+
+        // Resolve a task from the user-provided task identifier.
+        // First, prefer Task IDs defined on the Course import sheet (taskKeyToTaskId).
+        // If not found there, treat the key as either a numeric DB id/1-based number
+        // or a task name within this course.
+        const taskCache = new Map();
+
+        async function resolveTaskId(taskKeyRaw) {
+            const key = (taskKeyRaw || '').toString().trim();
+            if (!key) return null;
+            if (taskCache.has(key)) return taskCache.get(key);
+
+            // Prefer mapping established from the Course sheet
+            let mapped = taskKeyToTaskId.get(key) || null;
+            if (mapped) {
+                taskCache.set(key, mapped);
+                return mapped;
+            }
+
+            let row = null;
+
+            // Try numeric interpretations first: DB id or sort_order-based "task number"
+            const n = parseInt(key, 10);
+            if (!Number.isNaN(n)) {
+                row = await get(
+                    'SELECT id FROM tasks WHERE id = ? AND course_id = ?',
+                    [n, req.courseId]
+                );
+                if (!row) {
+                    // Treat n as 1-based task number mapped to sort_order
+                    const sortOrder = n > 0 ? n - 1 : n;
+                    row = await get(
+                        'SELECT id FROM tasks WHERE sort_order = ? AND course_id = ?',
+                        [sortOrder, req.courseId]
+                    );
+                }
+            }
+
+            // Fallback: match by task name
+            if (!row) {
+                row = await get(
+                    'SELECT id FROM tasks WHERE name = ? AND course_id = ?',
+                    [key, req.courseId]
+                );
+            }
+
+            const id = row ? row.id : null;
+            taskCache.set(key, id);
+            return id;
+        }
+
+        const rowErrors = [];
+        for (const r of sheet.rows) {
+            const values = r.values || {};
+            const taskIdRaw = getField(values, ['Task ID', 'Task Number']);
+            const prompt = getField(values, ['Question', 'Prompt']);
+            const answers = [];
+            for (let i = 1; i <= 6; i++) {
+                const label = i === 1 ? 'Answer 1' : 'Answer ' + i;
+                const v = getField(values, [label]);
+                if (v) answers.push(v);
+            }
+
+            const rowNum = r.rowNumber;
+            if (!prompt) {
+                rowErrors.push({
+                    rowNumber: rowNum,
+                    message: 'Question text is required.'
+                });
+                continue;
+            }
+            if (!answers.length) {
+                rowErrors.push({
+                    rowNumber: rowNum,
+                    message: 'At least one answer is required.'
+                });
+                continue;
+            }
+
+            const taskId = await resolveTaskId(taskIdRaw);
+            if (!taskId) {
+                rowErrors.push({
+                    rowNumber: rowNum,
+                    message: 'Task identifier "' + taskIdRaw + '" does not match any task in this course.'
+                });
+                continue;
+            }
+        }
+
+        if (rowErrors.length) {
+            stats.errors = rowErrors;
+            return { status: 'failed', stats };
+        }
+
+        try {
+            await withTransaction(async () => {
+                for (const r of sheet.rows) {
+                    const values = r.values || {};
+                    const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
+                    const taskId = await resolveTaskId(taskKeyRaw);
+                    if (!taskId) {
+                        throw new Error('Task identifier "' + taskKeyRaw + '" does not match any task in this course.');
+                    }
+                    const prompt = getField(values, ['Question', 'Prompt']);
+                    const answers = [];
+                    for (let i = 1; i <= 6; i++) {
+                        const label = i === 1 ? 'Answer 1' : 'Answer ' + i;
+                        const v = getField(values, [label]);
+                        if (v) answers.push(v);
+                    }
+
+                    let correctIndex = null;
+                    const correctIndexRaw = getField(values, ['Correct Index', 'Correct Option']);
+                    const correctAnswerText = getField(values, ['Correct Answer']);
+
+                    if (correctIndexRaw) {
+                        const n = parseInt(correctIndexRaw, 10);
+                        if (Number.isFinite(n)) {
+                            // Treat both 0-based and 1-based, but clamp.
+                            const zeroBased = n > 0 ? n - 1 : n;
+                            if (zeroBased >= 0 && zeroBased < answers.length) {
+                                correctIndex = zeroBased;
+                            }
+                        }
+                    }
+
+                    if (correctIndex == null && correctAnswerText) {
+                        const idx = answers.findIndex(a => a === correctAnswerText);
+                        if (idx >= 0) {
+                            correctIndex = idx;
+                        }
+                    }
+
+                    if (correctIndex == null) {
+                        throw new Error(
+                            'Could not determine correct answer for row ' + r.rowNumber + ' (question: ' + prompt + ').'
+                        );
+                    }
+
+                    const correctAnswer = answers[correctIndex] || '';
+
+                    const existing = await get(
+                        'SELECT id FROM questions WHERE task_id = ? AND prompt = ?',
+                        [taskId, prompt]
+                    );
+                    if (existing) {
+                        await run(
+                            'UPDATE questions SET answers = ?, correct_answer = ?, correct_index = ? WHERE id = ?',
+                            [JSON.stringify(answers), correctAnswer, correctIndex, existing.id]
+                        );
+                        stats.updated += 1;
+                    } else {
+                        await run(
+                            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers) VALUES (?, ?, ?, ?, ?)',
+                            [taskId, prompt, correctAnswer, correctIndex, JSON.stringify(answers)]
+                        );
+                        stats.inserted += 1;
+                    }
+                }
+            });
+        } catch (err) {
+            console.error('Error importing questions sheet:', err);
+            stats.errors.push({
+                rowNumber: 1,
+                message: 'Unexpected error while writing data: ' + (err.message || err.toString())
+            });
+            return { status: 'failed', stats };
+        }
+
+        return { status: 'ok', stats };
+    }
+
+    for (const sheet of stored.sheets) {
+        const wants =
+            (sheet.type === 'structure' && includeStructure) ||
+            (sheet.type === 'vocab' && includeVocab) ||
+            (sheet.type === 'questions' && includeQuestions);
+
+        if (!wants) {
+            addResultForType(sheet.type, sheet.name, 'skipped', null);
+            continue;
+        }
+
+        if (sheet.type === 'structure') {
+            const { status, stats } = await importStructureSheet(sheet);
+            addResultForType(sheet.type, sheet.name, status, stats);
+        } else if (sheet.type === 'vocab') {
+            const { status, stats } = await importVocabSheet(sheet);
+            addResultForType(sheet.type, sheet.name, status, stats);
+        } else if (sheet.type === 'questions') {
+            const { status, stats } = await importQuestionsSheet(sheet);
+            addResultForType(sheet.type, sheet.name, status, stats);
+        } else {
+            addResultForType(sheet.type, sheet.name, 'skipped', null);
+        }
+    }
+
+    res.render('teacher/import-result', {
+        user: req.session.user,
+        course: req.course,
+        results
+    });
+});
+
 router.get('/courses/new', (req, res) => {
     res.render('teacher/course-form', { user: req.session.user, course: null });
 });
@@ -114,6 +799,11 @@ router.post('/courses', async (req, res) => {
     await run('INSERT INTO courses (owner_id, name, is_public, sort_order) VALUES (?, ?, ?, ?)', [userId, name.trim(), is_public ? 1 : 0, maxOrder.n]);
     const row = await get('SELECT id FROM courses ORDER BY id DESC LIMIT 1');
     res.redirect('/courses/' + row.id);
+});
+
+router.post('/courses/:id/delete', requireCourseOwner, async (req, res) => {
+    await run('DELETE FROM courses WHERE id = ?', [req.courseId]);
+    res.redirect('/courses');
 });
 
 router.get('/courses/:id/edit', requireCourseOwner, (req, res) => {
@@ -222,6 +912,15 @@ router.post('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res
     } else {
         res.redirect('/courses/' + req.courseId + '/tasks#task-' + taskId);
     }
+});
+
+router.post('/courses/:courseId/tasks/:tid/delete', requireCourseOwner, async (req, res) => {
+    const taskId = parseInt(req.params.tid);
+    const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
+    if (task) {
+        await run('DELETE FROM tasks WHERE id = ?', [taskId]);
+    }
+    res.redirect('/courses/' + req.courseId + '/tasks');
 });
 
 router.get('/courses/:courseId/tasks/:tid/questions/new', requireCourseOwner, (req, res) => {
@@ -551,6 +1250,15 @@ router.post('/courses/:courseId/units/:uid', requireCourseOwner, async (req, res
     const { name } = req.body || {};
     if (name !== undefined) await run('UPDATE units SET name = ? WHERE id = ?', [name.trim(), unitId]);
     res.redirect('/courses/' + req.courseId + '/units#unit-' + unitId);
+});
+
+router.post('/courses/:courseId/units/:uid/delete', requireCourseOwner, async (req, res) => {
+    const unitId = parseInt(req.params.uid);
+    const unit = await get('SELECT id FROM units WHERE id = ? AND course_id = ?', [unitId, req.courseId]);
+    if (unit) {
+        await run('DELETE FROM units WHERE id = ?', [unitId]);
+    }
+    res.redirect('/courses/' + req.courseId + '/units');
 });
 
 router.post('/courses/:courseId/units/:uid/tasks', requireCourseOwner, async (req, res) => {

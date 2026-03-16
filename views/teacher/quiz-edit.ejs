@@ -27,8 +27,14 @@
             <td><%= idx + 1 %></td>
             <td><%= qq.prompt && qq.prompt.length > 80 ? qq.prompt.substring(0, 80) + '...' : (qq.prompt || '') %></td>
             <td>
-                <form method="post" action="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/items/<%= qq.id %>/delete" style="display:inline;" onsubmit="return confirm('Remove this question from the quiz?');">
-                    <button type="submit" class="btn btn-small btn-danger">Remove</button>
+                <form method="post"
+                      action="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/items/<%= qq.id %>/delete"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-small btn-danger"
+                            onclick="return confirm('Remove this question from the quiz?');">
+                        Remove
+                    </button>
                 </form>
             </td>
         </tr>

@@ -28,6 +28,15 @@
                 <label>Unit name <input type="text" name="name" value="<%= u.name %>" required /></label>
                 <button type="submit" class="btn btn-small">Save name</button>
             </form>
+            <form method="post"
+                  action="/courses/<%= course.id %>/units/<%= u.id %>/delete"
+                  style="margin:0.5rem 0 0.75rem 0;">
+                <button type="submit"
+                        class="btn btn-small btn-danger"
+                        onclick="return confirm('Delete this unit and its task/vocab associations? This cannot be undone.');">
+                    Delete unit
+                </button>
+            </form>
 
             <h3>Tasks in this unit</h3>
             <% if (u.unitTasks.length > 0) { %>
@@ -39,8 +48,14 @@
                         <td><%= (t.task_sort_order != null ? t.task_sort_order : 0) + 1 %></td>
                         <td><a href="/courses/<%= course.id %>/tasks/<%= t.task_id %>"><%= t.name %></a></td>
                         <td>
-                            <form method="post" action="/courses/<%= course.id %>/units/<%= u.id %>/tasks/<%= t.task_id %>/remove" style="display:inline;">
-                                <button type="submit" class="btn btn-small btn-danger">Remove</button>
+                            <form method="post"
+                                  action="/courses/<%= course.id %>/units/<%= u.id %>/tasks/<%= t.task_id %>/remove"
+                                  style="display:inline;">
+                                <button type="submit"
+                                        class="btn btn-small btn-danger"
+                                        onclick="return confirm('Remove this task from the unit? The task itself will not be deleted.');">
+                                    Remove
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -67,8 +82,14 @@
                         <td><%= v.term %></td>
                         <td><%= v.definition || '—' %></td>
                         <td>
-                            <form method="post" action="/courses/<%= course.id %>/units/<%= u.id %>/vocab/<%= v.vocab_term_id %>/remove" style="display:inline;">
-                                <button type="submit" class="btn btn-small btn-danger">Remove</button>
+                            <form method="post"
+                                  action="/courses/<%= course.id %>/units/<%= u.id %>/vocab/<%= v.vocab_term_id %>/remove"
+                                  style="display:inline;">
+                                <button type="submit"
+                                        class="btn btn-small btn-danger"
+                                        onclick="return confirm('Remove this vocab term from the unit? The term will remain in the course.');">
+                                    Remove
+                                </button>
                             </form>
                         </td>
                     </tr>

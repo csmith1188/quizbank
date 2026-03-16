@@ -53,8 +53,14 @@
                     <a href="/courses/<%= course.id %>/tasks/<%= task.id %>" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
-            <form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this question?');">
-                <button type="submit" class="btn btn-danger">Delete question</button>
+            <form method="post"
+                  action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>/delete"
+                  style="display:inline;">
+                <button type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Delete this question?');">
+                    Delete question
+                </button>
             </form>
         </div>
     </details>

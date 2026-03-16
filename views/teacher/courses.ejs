@@ -1,8 +1,9 @@
 <%- include('../partials/teacher-header', { title: 'My Courses', user }) %>
 <h1>My Courses</h1>
 <p><a href="/courses/new" class="btn">New Course</a></p>
+
 <% if (courses.length === 0) { %>
-<p>No courses yet. <a href="/courses/new">Create one</a> or run <code>npm run import-9th</code> to import from 9th.json.</p>
+<p>No courses yet.</p>
 <% } else { %>
 <div class="course-accordion reorderable-list" data-reorder-url="/api/courses/reorder">
 <% courses.forEach(function(c, idx) { %>
@@ -23,6 +24,7 @@
             <span class="course-name"><%= c.name %></span>
             <a href="/courses/<%= c.id %>" class="btn btn-small course-open-btn" onclick="event.stopPropagation()">Open</a>
         </summary>
+
         <div class="course-content">
             <p class="course-full-summary">
                 <%= c.taskCount %> task<%= c.taskCount !== 1 ? 's' : '' %>,
@@ -30,6 +32,7 @@
                 <%= c.vocabCount %> vocab term<%= c.vocabCount !== 1 ? 's' : '' %>,
                 <%= c.quizCount %> quiz<%= c.quizCount !== 1 ? 'zes' : '' %>.
             </p>
+
             <form method="post" action="/courses/<%= c.id %>" class="course-edit-form">
                 <div class="field-row">
                     <label>Name <input type="text" name="name" value="<%= c.name %>" required /></label>
@@ -37,10 +40,19 @@
                 </div>
                 <label style="margin-top: 0.5rem;"><input type="checkbox" name="is_public" value="1" <%= c.is_public ? 'checked' : '' %> /> Public</label>
             </form>
+
+            <form method="post"
+                  action="/courses/<%= c.id %>/delete"
+                  style="margin-top:0.5rem;"
+                  onsubmit="return confirm('Delete this course and all of its units, tasks, vocab, and quizzes? This cannot be undone.');">
+                <button type="submit" class="btn btn-small btn-danger">Delete course</button>
+            </form>
+        </div>
     </details>
 <% }); %>
 </div>
 <% } %>
+
 <script>
 (function() {
     var hash = window.location.hash;
@@ -50,4 +62,5 @@
     }
 })();
 </script>
+
 <%- include('../partials/footer') %>

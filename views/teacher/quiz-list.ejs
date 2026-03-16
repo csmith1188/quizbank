@@ -37,8 +37,14 @@
                 <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-kahoot" class="btn btn-small btn-secondary">Kahoot XLSX</a>
                 <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-gimkit" class="btn btn-small btn-secondary">Gimkit CSV</a>
                 <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-blooket" class="btn btn-small btn-secondary">Blooket CSV</a>
-                <form method="post" action="/courses/<%= course.id %>/quizzes/<%= q.id %>/delete" style="display:inline;">
-                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                <form method="post"
+                      action="/courses/<%= course.id %>/quizzes/<%= q.id %>/delete"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-small btn-danger"
+                            onclick="return confirm('Delete this quiz and its assigned questions? This cannot be undone.');">
+                        Delete
+                    </button>
                 </form>
             </p>
         </div>

@@ -33,6 +33,15 @@
                     <a href="/courses/<%= course.id %>/tasks/<%= t.id %>" class="btn btn-secondary">Edit questions</a>
                 </div>
             </form>
+            <form method="post"
+                  action="/courses/<%= course.id %>/tasks/<%= t.id %>/delete"
+                  style="margin-top:0.5rem;">
+                <button type="submit"
+                        class="btn btn-small btn-danger"
+                        onclick="return confirm('Delete this task and all of its questions? This cannot be undone.');">
+                    Delete task
+                </button>
+            </form>
         </div>
     </details>
 <% }); %>

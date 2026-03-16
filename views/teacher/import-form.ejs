@@ -1,0 +1,36 @@
+<%- include('../partials/teacher-header', { title: course.name + ' – Import', user, course }) %>
+
+<h1>Import from Excel/CSV</h1>
+
+<p>
+    Download the latest template here:
+    <a href="/upload_template.xlsx" download>upload_template.xlsx</a>
+</p>
+<p>
+    For a working example, here is a 10th Grade Python course:
+    <a href="/10th_import.xlsx" download>10th_import.xlsx</a>
+</p>
+
+<p class="text-muted">
+    The template has three sheets: Courses/Units/Tasks, Vocabulary, and Questions.
+    You can upload the filled-in workbook here and choose which parts to import.
+    Nothing will be changed until you confirm on the next screen.
+</p>
+
+<% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<form action="/courses/<%= course.id %>/import" method="post" enctype="multipart/form-data" style="margin-top:1rem;">
+    <div class="field-row">
+        <label for="file"><strong>Template file (.xlsx)</strong></label>
+        <input type="file" id="file" name="file" accept=".xlsx" required>
+    </div>
+    <div class="field-row">
+        <button type="submit" class="btn">Upload &amp; scan</button>
+        <a href="/courses/<%= course.id %>" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<%- include('../partials/footer') %>
+

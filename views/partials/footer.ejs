@@ -85,6 +85,32 @@
         initAiCoachButtons();
     }
 })();
+
+(function () {
+    function initConfirmForms() {
+        var forms = document.querySelectorAll('form[data-confirm]');
+        if (!forms.length) return;
+        forms.forEach(function (form) {
+            if (form._confirmBound) return;
+            form._confirmBound = true;
+            form.addEventListener('submit', function (e) {
+                var msg = form.getAttribute('data-confirm') || 'Are you sure?';
+                if (!window.confirm(msg)) {
+                    e.preventDefault();
+                    e.returnValue = false;
+                    return false;
+                }
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initConfirmForms);
+    } else {
+        initConfirmForms();
+    }
+})();
+
 </script>
 
 </body>
