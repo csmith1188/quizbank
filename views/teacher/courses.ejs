@@ -40,7 +40,7 @@
                 </div>
                 <label style="margin-top: 0.5rem;"><input type="checkbox" name="is_public" value="1" <%= c.is_public ? 'checked' : '' %> /> Public</label>
             </form>
-
+            <a href="/courses/<%= c.id %>/export-template" class="btn btn-small" onclick="event.stopPropagation()">Download Excel</a>
             <form method="post"
                   action="/courses/<%= c.id %>/delete"
                   style="margin-top:0.5rem;"

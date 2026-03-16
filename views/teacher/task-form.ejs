@@ -3,6 +3,7 @@
 <form method="post" action="<%= task ? '/courses/' + course.id + '/tasks/' + task.id : '/courses/' + course.id + '/tasks' %>">
     <label>Name <input type="text" name="name" value="<%= task ? task.name : '' %>" required /></label>
     <label>Target <textarea name="target" class="textarea-target"><%= task ? (task.target || '') : '' %></textarea></label>
+    <label>Description <textarea name="description" rows="3" class="textarea-target"><%= task ? (task.description || '') : '' %></textarea></label>
     <div class="actions">
         <button type="submit" class="btn">Save</button>
         <a href="/courses/<%= course.id %>/tasks<%= task ? '/' + task.id : '' %>" class="btn btn-secondary">Cancel</a>

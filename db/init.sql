@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     name VARCHAR(255) NOT NULL,
     target TEXT,
     description TEXT,
+    task_number INTEGER,
     sort_order INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (course_id) REFERENCES courses(id)
 );

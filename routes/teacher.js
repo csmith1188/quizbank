@@ -103,6 +103,260 @@ router.get('/courses', requireTeacher, async (req, res) => {
     res.render('teacher/courses', { user: req.session.user, courses });
 });
 
+// Download a pre-populated Excel template for a specific course
+router.get('/courses/:courseId/export-template', requireCourseOwner, async (req, res) => {
+    const templatePath = path.join(__dirname, '..', 'public', 'upload_template.xlsx');
+
+    function normalizeKey(s) {
+        return (s || '')
+            .toString()
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, ' ');
+    }
+
+    function findColumn(headerRow, aliases) {
+        if (!headerRow) return null;
+        const want = aliases.map(normalizeKey);
+        let col = null;
+        headerRow.eachCell((cell, colNumber) => {
+            const v = (cell.value || '').toString();
+            if (want.includes(normalizeKey(v)) && col == null) {
+                col = colNumber;
+            }
+        });
+        return col;
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    try {
+        await workbook.xlsx.readFile(templatePath);
+    } catch (err) {
+        console.error('Export template read error:', err);
+        return res.status(500).send('Template file is missing or unreadable.');
+    }
+
+    const sheet1 = workbook.worksheets[0] || null;
+    const sheet2 = workbook.worksheets[1] || null;
+    const sheet3 = workbook.worksheets[2] || null;
+
+    function clearDataRows(ws) {
+        if (!ws) return;
+        if (ws.rowCount > 1) {
+            ws.spliceRows(2, ws.rowCount - 1);
+        }
+    }
+
+    clearDataRows(sheet1);
+    clearDataRows(sheet2);
+    clearDataRows(sheet3);
+
+    const courseId = req.courseId;
+
+    try {
+        // Sheet 1: Units / Tasks
+        if (sheet1) {
+            const headerRow = sheet1.getRow(1);
+            const colUnitId = findColumn(headerRow, ['unit id']);
+            const colUnitName = findColumn(headerRow, ['unit name']);
+            const colTaskId = findColumn(headerRow, ['task id', 'task number']);
+            const colTaskName = findColumn(headerRow, ['task name']);
+            const colTaskDescription = findColumn(headerRow, ['task description']);
+            const colTaskTarget = findColumn(headerRow, ['task target', 'target']);
+
+            const rows = await all(
+                `SELECT
+                     ut.unit_id,
+                     u.name AS unit_name,
+                     u.sort_order AS unit_sort_order,
+                     t.id AS task_id,
+                     t.name AS task_name,
+                     t.target AS task_target,
+                     t.description AS task_description,
+                     t.sort_order AS task_sort_order,
+                     t.task_number
+                 FROM tasks t
+                 LEFT JOIN unit_tasks ut ON ut.task_id = t.id
+                 LEFT JOIN units u ON ut.unit_id = u.id
+                 WHERE t.course_id = ?
+                 ORDER BY u.sort_order IS NULL, u.sort_order, u.id, t.sort_order, t.id`,
+                [courseId]
+            );
+
+            const headerCount = headerRow.cellCount || 0;
+            (rows || []).forEach(r => {
+                const data = new Array(headerCount).fill('');
+
+                // Unit ID = visible "Unit Number" (sort_order + 1)
+                if (colUnitId) {
+                    if (typeof r.unit_sort_order === 'number') {
+                        data[colUnitId - 1] = r.unit_sort_order + 1;
+                    } else {
+                        data[colUnitId - 1] = '';
+                    }
+                }
+
+                if (colUnitName) data[colUnitName - 1] = r.unit_name || '';
+
+                // Task ID = stored Task Number when present, otherwise sort_order + 1
+                if (colTaskId) {
+                    if (typeof r.task_number === 'number' && r.task_number > 0) {
+                        data[colTaskId - 1] = r.task_number;
+                    } else if (typeof r.task_sort_order === 'number') {
+                        data[colTaskId - 1] = r.task_sort_order + 1;
+                    } else {
+                        data[colTaskId - 1] = '';
+                    }
+                }
+
+                if (colTaskName) data[colTaskName - 1] = r.task_name || '';
+
+                if (colTaskDescription) {
+                    data[colTaskDescription - 1] = r.task_description || '';
+                }
+
+                if (colTaskTarget) data[colTaskTarget - 1] = r.task_target || '';
+                sheet1.addRow(data);
+            });
+        }
+
+        // Sheet 2: Vocab
+        if (sheet2) {
+            const headerRow = sheet2.getRow(1);
+            const colUnitId = findColumn(headerRow, ['unit id']);
+            const colTerm = findColumn(headerRow, ['word', 'term', 'vocab word']);
+            const colDefinition = findColumn(headerRow, ['definition', 'meaning']);
+
+            // If a vocab term appears in multiple units, we assign the lowest unit sort_order.
+            const vocabRows = await all(
+                `SELECT
+                     v.id,
+                     v.term,
+                     v.definition,
+                     v.sort_order,
+                     MIN(u.sort_order) AS unit_sort_order
+                 FROM vocab_terms v
+                 LEFT JOIN unit_vocab uv ON uv.vocab_term_id = v.id
+                 LEFT JOIN units u ON u.id = uv.unit_id
+                 WHERE v.course_id = ?
+                 GROUP BY v.id, v.term, v.definition, v.sort_order
+                 ORDER BY v.sort_order, v.id`,
+                [courseId]
+            );
+
+            const headerCount = headerRow.cellCount || 0;
+            (vocabRows || []).forEach(v => {
+                const data = new Array(headerCount).fill('');
+
+                if (colUnitId) {
+                    if (typeof v.unit_sort_order === 'number') {
+                        data[colUnitId - 1] = v.unit_sort_order + 1;
+                    } else {
+                        data[colUnitId - 1] = '';
+                    }
+                }
+
+                if (colTerm) data[colTerm - 1] = v.term || '';
+                if (colDefinition) data[colDefinition - 1] = v.definition || '';
+                sheet2.addRow(data);
+            });
+        }
+
+        // Sheet 3: Questions by Task ID
+        if (sheet3) {
+            const headerRow = sheet3.getRow(1);
+            const colTaskId = findColumn(headerRow, ['task id', 'task number']);
+            const colPrompt = findColumn(headerRow, ['question', 'prompt']);
+            const colCorrectAnswer = findColumn(headerRow, ['correct answer']);
+            const colCorrectIndex = findColumn(headerRow, ['correct index', 'correct option']);
+
+            // Answer columns: Answer 1..6
+            const answerCols = [];
+            for (let i = 1; i <= 6; i++) {
+                const col = findColumn(headerRow, [i === 1 ? 'answer 1' : 'answer ' + i]);
+                answerCols.push(col);
+            }
+
+            const questionRows = await all(
+                `SELECT q.id,
+                        q.prompt,
+                        q.correct_answer,
+                        q.correct_index,
+                        q.answers,
+                        q.task_id,
+                        t.sort_order AS task_sort_order,
+                        t.task_number
+                 FROM questions q
+                 JOIN tasks t ON q.task_id = t.id
+                 WHERE t.course_id = ?
+                 ORDER BY q.id`,
+                [courseId]
+            );
+
+            const headerCount = headerRow.cellCount || 0;
+            (questionRows || []).forEach(q => {
+                const answers = typeof q.answers === 'string'
+                    ? (q.answers ? JSON.parse(q.answers) : [])
+                    : (q.answers || []);
+                const data = new Array(headerCount).fill('');
+
+                // Task ID in the Questions sheet should match the user-visible Task Number.
+                if (colTaskId) {
+                    if (typeof q.task_number === 'number' && q.task_number > 0) {
+                        data[colTaskId - 1] = q.task_number;
+                    } else if (typeof q.task_sort_order === 'number') {
+                        data[colTaskId - 1] = q.task_sort_order + 1;
+                    } else {
+                        data[colTaskId - 1] = '';
+                    }
+                }
+                if (colPrompt) data[colPrompt - 1] = q.prompt || '';
+
+                answers.forEach((ans, idx) => {
+                    if (idx < answerCols.length && answerCols[idx]) {
+                        data[answerCols[idx] - 1] = ans;
+                    }
+                });
+
+                let correctIndex = typeof q.correct_index === 'number' ? q.correct_index : 0;
+                if (!Number.isFinite(correctIndex) || correctIndex < 0) correctIndex = 0;
+                const correctText =
+                    (answers && answers[correctIndex] != null)
+                        ? answers[correctIndex]
+                        : (q.correct_answer || '');
+
+                if (colCorrectAnswer) data[colCorrectAnswer - 1] = correctText;
+                if (colCorrectIndex) {
+                    // Export as 1-based index for readability
+                    data[colCorrectIndex - 1] = (correctIndex + 1);
+                }
+
+                sheet3.addRow(data);
+            });
+        }
+
+        const safeName = (req.course && req.course.name ? req.course.name : 'course')
+            .replace(/[^a-zA-Z0-9_-]/g, '_');
+        const filename = 'course_' + courseId + '_template_' + safeName + '.xlsx';
+
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            'attachment; filename="' + filename + '"'
+        );
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (err) {
+        console.error('Error building export template for course', courseId, err);
+        if (!res.headersSent) {
+            res.status(500).send('Failed to build export template for this course.');
+        }
+    }
+});
+
 // Simple in-memory import storage keyed by a random token
 const importStore = new Map();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
@@ -365,6 +619,11 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                     const unitName = getField(values, ['Unit Name']);
                     const taskName = getField(values, ['Task Name']);
                     const taskTarget = getField(values, ['Task Target', 'Target']);
+                    const taskDescription = getField(values, ['Task Description']);
+
+                    // Parse incoming Task Number from the spreadsheet once per row.
+                    const taskNumberRaw = taskKeyRaw != null ? String(taskKeyRaw).trim() : '';
+                    const incomingNumber = taskNumberRaw ? parseInt(taskNumberRaw, 10) : null;
 
                     let unitId = null;
                     if (unitName) {
@@ -393,23 +652,63 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                     }
 
                     const task = await get(
-                        'SELECT id, name, target FROM tasks WHERE course_id = ? AND name = ? AND (target IS ? OR target = ?)',
+                        'SELECT id, name, target, description, task_number FROM tasks WHERE course_id = ? AND name = ? AND (target IS ? OR target = ?)',
                         [req.courseId, taskName, taskTarget || null, taskTarget || null]
                     );
 
                     let taskId;
                     if (task) {
-                        // Treat as duplicate if identical; we do not change existing tasks here.
-                        stats.duplicates += 1;
                         taskId = task.id;
+
+                        // Decide whether this row is effectively a duplicate.
+                        const existingDesc = (task.description || '').trim();
+                        const incomingDesc = (taskDescription || '').trim();
+                        const existingNumber = typeof task.task_number === 'number' ? task.task_number : null;
+
+                        const isSameDescription = existingDesc === incomingDesc || (!existingDesc && !incomingDesc);
+                        const isSameNumber = (
+                            (existingNumber == null && (incomingNumber == null || Number.isNaN(incomingNumber))) ||
+                            (existingNumber != null && incomingNumber != null && existingNumber === incomingNumber)
+                        );
+
+                        if (isSameDescription && isSameNumber) {
+                            // Treat as duplicate; nothing to change.
+                            stats.duplicates += 1;
+                        } else {
+                            // Update description / task_number from the sheet when they differ.
+                            let newNumber = existingNumber;
+                            if (incomingNumber != null && !Number.isNaN(incomingNumber) && incomingNumber > 0) {
+                                newNumber = incomingNumber;
+                            }
+                            await run(
+                                'UPDATE tasks SET description = ?, task_number = ? WHERE id = ?',
+                                [incomingDesc || null, newNumber, taskId]
+                            );
+                            stats.updated += 1;
+                        }
                     } else {
                         const maxOrderTask = await get(
                             'SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM tasks WHERE course_id = ?',
                             [req.courseId]
                         );
+                        // Prefer explicit Task Number from the sheet; otherwise fall back
+                        // to a sensible default based on sort order.
+                        let taskNumber = null;
+                        if (incomingNumber != null && !Number.isNaN(incomingNumber) && incomingNumber > 0) {
+                            taskNumber = incomingNumber;
+                        } else {
+                            taskNumber = maxOrderTask.n + 1;
+                        }
                         await run(
-                            'INSERT INTO tasks (course_id, name, target, sort_order) VALUES (?, ?, ?, ?)',
-                            [req.courseId, taskName, taskTarget || null, maxOrderTask.n]
+                            'INSERT INTO tasks (course_id, name, target, description, task_number, sort_order) VALUES (?, ?, ?, ?, ?, ?)',
+                            [
+                                req.courseId,
+                                taskName,
+                                taskTarget || null,
+                                (taskDescription || '').trim() || null,
+                                taskNumber,
+                                maxOrderTask.n
+                            ]
                         );
                         const row = await get(
                             'SELECT id FROM tasks WHERE course_id = ? AND name = ? ORDER BY id DESC LIMIT 1',
@@ -802,7 +1101,78 @@ router.post('/courses', async (req, res) => {
 });
 
 router.post('/courses/:id/delete', requireCourseOwner, async (req, res) => {
-    await run('DELETE FROM courses WHERE id = ?', [req.courseId]);
+    const courseId = req.courseId;
+    try {
+        // 1) Clean up mastery for students in any class that had this course.
+        const classRows = await all(
+            'SELECT DISTINCT class_id FROM class_courses WHERE course_id = ?',
+            [courseId]
+        );
+        if (classRows && classRows.length) {
+            const classIds = classRows.map(r => r.class_id);
+            const placeholders = classIds.map(() => '?').join(',');
+            const studentRows = await all(
+                `SELECT DISTINCT user_id
+                 FROM class_members
+                 WHERE class_id IN (${placeholders}) AND role = 'student'`,
+                classIds
+            );
+            const studentIds = (studentRows || []).map(r => r.user_id);
+            if (studentIds.length) {
+                const studentPlaceholders = studentIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM task_mastery
+                     WHERE course_id = ?
+                       AND user_id IN (${studentPlaceholders})`,
+                    [courseId, ...studentIds]
+                );
+            }
+        }
+
+        // 2) Delete quiz attempts (answers cascade via FK) for quizzes in this course.
+        const quizRows = await all('SELECT id FROM quizzes WHERE course_id = ?', [courseId]);
+        if (quizRows && quizRows.length) {
+            const quizIds = quizRows.map(r => r.id);
+            const quizPlaceholders = quizIds.map(() => '?').join(',');
+            await run(
+                `DELETE FROM quiz_attempts WHERE quiz_id IN (${quizPlaceholders})`,
+                quizIds
+            );
+        }
+
+        // 3) Delete questions (and any quiz_questions that reference them) for tasks in this course.
+        const taskRows = await all('SELECT id FROM tasks WHERE course_id = ?', [courseId]);
+        if (taskRows && taskRows.length) {
+            const taskIds = taskRows.map(r => r.id);
+            const taskPlaceholders = taskIds.map(() => '?').join(',');
+            const questionRows = await all(
+                `SELECT id FROM questions WHERE task_id IN (${taskPlaceholders})`,
+                taskIds
+            );
+            if (questionRows && questionRows.length) {
+                const questionIds = questionRows.map(r => r.id);
+                const qPlaceholders = questionIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM quiz_questions WHERE question_id IN (${qPlaceholders})`,
+                    questionIds
+                );
+                await run(
+                    `DELETE FROM questions WHERE id IN (${qPlaceholders})`,
+                    questionIds
+                );
+            }
+        }
+
+        // 4) Delete tasks, units, vocab, and quizzes for this course.
+        await run('DELETE FROM tasks WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM vocab_terms WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM units WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM quizzes WHERE course_id = ?', [courseId]);
+    } catch (err) {
+        console.error('Error cleaning up task_mastery when deleting course', courseId, err);
+    }
+
+    await run('DELETE FROM courses WHERE id = ?', [courseId]);
     res.redirect('/courses');
 });
 
@@ -852,7 +1222,10 @@ router.get('/courses/:courseId/questions/search', requireCourseOwner, async (req
 });
 
 router.get('/courses/:courseId/tasks', requireCourseOwner, async (req, res) => {
-    const tasks = await all('SELECT id, name, target, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id', [req.courseId]);
+    const tasks = await all(
+        'SELECT id, name, target, description, task_number, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
+        [req.courseId]
+    );
     if (tasks.length > 0) {
         const taskIds = tasks.map(t => t.id);
         const placeholders = taskIds.map(() => '?').join(',');
@@ -869,17 +1242,23 @@ router.get('/courses/:courseId/tasks/new', requireCourseOwner, (req, res) => {
 });
 
 router.post('/courses/:courseId/tasks', requireCourseOwner, async (req, res) => {
-    const { name, target } = req.body || {};
+    const { name, target, description } = req.body || {};
     if (!name || !name.trim()) return res.redirect('/courses/' + req.courseId + '/tasks/new');
     const maxOrder = await get('SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM tasks WHERE course_id = ?', [req.courseId]);
-    await run('INSERT INTO tasks (course_id, name, target, sort_order) VALUES (?, ?, ?, ?)', [req.courseId, name.trim(), (target || '').trim(), maxOrder.n]);
+    await run(
+        'INSERT INTO tasks (course_id, name, target, description, sort_order) VALUES (?, ?, ?, ?, ?)',
+        [req.courseId, name.trim(), (target || '').trim(), (description || '').trim() || null, maxOrder.n]
+    );
     const row = await get('SELECT id FROM tasks ORDER BY id DESC LIMIT 1');
     res.redirect('/courses/' + req.courseId + '/tasks/' + row.id);
 });
 
 router.get('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res) => {
     const taskId = parseInt(req.params.tid);
-    const task = await get('SELECT id, name, target, sort_order FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
+    const task = await get(
+        'SELECT id, name, target, description, task_number, sort_order FROM tasks WHERE id = ? AND course_id = ?',
+        [taskId, req.courseId]
+    );
     if (!task) return res.redirect('/courses/' + req.courseId + '/tasks');
     const questions = await all('SELECT id, prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? ORDER BY id', [taskId]);
     const questionsParsed = questions.map(q => ({ ...q, answers: typeof q.answers === 'string' ? JSON.parse(q.answers) : q.answers }));
@@ -890,7 +1269,7 @@ router.post('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res
     const taskId = parseInt(req.params.tid);
     const task = await get('SELECT id, sort_order FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (!task) return res.redirect('/courses/' + req.courseId + '/tasks');
-    const { name, target, task_number } = req.body || {};
+    const { name, target, description, task_number } = req.body || {};
     const currentOrder = task.sort_order != null ? task.sort_order : 0;
     const newOrder = task_number != null ? Math.max(0, parseInt(task_number, 10) - 1) : null;
     if (newOrder !== null && newOrder !== currentOrder) {
@@ -903,8 +1282,11 @@ router.post('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res
         }
         await run('UPDATE tasks SET sort_order = ? WHERE id = ?', [newOrder, taskId]);
     }
-    if (name !== undefined || target !== undefined) {
-        await run('UPDATE tasks SET name = ?, target = ? WHERE id = ?', [(name || '').trim(), (target || '').trim(), taskId]);
+    if (name !== undefined || target !== undefined || description !== undefined) {
+        await run(
+            'UPDATE tasks SET name = ?, target = ?, description = ? WHERE id = ?',
+            [(name || '').trim(), (target || '').trim(), (description || '').trim() || null, taskId]
+        );
     }
     const referer = req.get('Referer') || '';
     if (referer.indexOf('/tasks/' + taskId) !== -1 && referer.indexOf('/questions') === -1) {
@@ -918,7 +1300,37 @@ router.post('/courses/:courseId/tasks/:tid/delete', requireCourseOwner, async (r
     const taskId = parseInt(req.params.tid);
     const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (task) {
-        await run('DELETE FROM tasks WHERE id = ?', [taskId]);
+        try {
+            // Delete quiz_questions that reference any questions for this task
+            const questionRows = await all(
+                'SELECT id FROM questions WHERE task_id = ?',
+                [taskId]
+            );
+            if (questionRows && questionRows.length) {
+                const questionIds = questionRows.map(r => r.id);
+                const qPlaceholders = questionIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM quiz_questions WHERE question_id IN (${qPlaceholders})`,
+                    questionIds
+                );
+                await run(
+                    `DELETE FROM questions WHERE id IN (${qPlaceholders})`,
+                    questionIds
+                );
+            }
+
+            // Remove mastery rows tied to this specific task.
+            await run(
+                'DELETE FROM task_mastery WHERE course_id = ? AND task_id = ?',
+                [req.courseId, taskId]
+            );
+
+            // Remove any unit-task associations and finally the task itself.
+            await run('DELETE FROM unit_tasks WHERE task_id = ?', [taskId]);
+            await run('DELETE FROM tasks WHERE id = ?', [taskId]);
+        } catch (err) {
+            console.error('Error cascading deletes when deleting task', { courseId: req.courseId, taskId, err: err.message });
+        }
     }
     res.redirect('/courses/' + req.courseId + '/tasks');
 });
@@ -1002,15 +1414,23 @@ router.get('/courses/:courseId/mastery', requireLogin, async (req, res) => {
     if (!course) return res.redirect('/classes');
 
     const rows = await all(
-        `SELECT tm.task_id, tm.mastery,
-                t.name as task_name, u.id as unit_id, u.name as unit_name, u.sort_order as unit_order, t.sort_order as task_order
-         FROM task_mastery tm
-         JOIN tasks t ON tm.task_id = t.id
+        `SELECT t.id as task_id,
+                COALESCE(tm.mastery, 0) as mastery,
+                t.name as task_name,
+                u.id as unit_id,
+                u.name as unit_name,
+                u.sort_order as unit_order,
+                t.sort_order as task_order
+         FROM tasks t
          LEFT JOIN unit_tasks ut ON ut.task_id = t.id
          LEFT JOIN units u ON ut.unit_id = u.id
-         WHERE tm.user_id = ? AND tm.course_id = ?
+         LEFT JOIN task_mastery tm
+                ON tm.task_id = t.id
+               AND tm.user_id = ?
+               AND tm.course_id = ?
+         WHERE t.course_id = ?
          ORDER BY unit_order, unit_id, task_order, t.id`,
-        [userId, courseId]
+        [userId, courseId, courseId]
     );
 
     const units = {};
@@ -1843,7 +2263,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
     );
     const assignedQuizIds = new Set(assignedQuizzes.map(r => r.quiz_id));
 
-    // Build per-student mastery overview for this class (using the first assigned course, if any)
+    // Build per-student mastery overview for this class across all assigned courses
     const students = await all(
         `SELECT u.id, u.username, u.formbar_id
          FROM class_members cm
@@ -1855,73 +2275,123 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
 
     let studentMastery = [];
     if (students.length && assignedCourseIds.size > 0) {
-        const courseId = Array.from(assignedCourseIds)[0];
+        const courseIds = Array.from(assignedCourseIds);
         const studentIds = students.map(s => s.id);
-        const placeholders = studentIds.map(() => '?').join(',');
 
-        // Get all tasks for this course so overall mastery can be based
-        // on the entire course, not just tasks with mastery records.
+        const coursePlaceholders = courseIds.map(() => '?').join(',');
+        const studentPlaceholders = studentIds.map(() => '?').join(',');
+
+        // Precompute total task counts per course so overall mastery can
+        // be based on all tasks, not just those with mastery records.
         const allTasks = await all(
-            'SELECT id FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
-            [courseId]
+            `SELECT id, course_id
+             FROM tasks
+             WHERE course_id IN (${coursePlaceholders})
+             ORDER BY course_id, sort_order, id`,
+            courseIds
         );
-        const totalTaskCount = allTasks.length;
+        const tasksByCourse = {};
+        (allTasks || []).forEach(r => {
+            if (!tasksByCourse[r.course_id]) tasksByCourse[r.course_id] = 0;
+            tasksByCourse[r.course_id] += 1;
+        });
+
+        // Map course_id -> name for display
+        const courseMeta = {};
+        (courses || []).forEach(c => {
+            if (assignedCourseIds.has(c.id)) {
+                courseMeta[c.id] = { id: c.id, name: c.name };
+            }
+        });
 
         const masteryRows = await all(
-            `SELECT tm.user_id, tm.task_id, tm.mastery,
+            `SELECT tm.user_id, tm.course_id, tm.task_id, tm.mastery,
                     t.name as task_name, u.id as unit_id, u.name as unit_name,
                     u.sort_order as unit_order, t.sort_order as task_order
              FROM task_mastery tm
              JOIN tasks t ON tm.task_id = t.id
              LEFT JOIN unit_tasks ut ON ut.task_id = t.id
              LEFT JOIN units u ON ut.unit_id = u.id
-             WHERE tm.course_id = ? AND tm.user_id IN (${placeholders})
-             ORDER BY tm.user_id, unit_order, unit_id, task_order, t.id`,
-            [courseId, ...studentIds]
+             WHERE tm.course_id IN (${coursePlaceholders})
+               AND tm.user_id IN (${studentPlaceholders})
+             ORDER BY tm.user_id, tm.course_id, unit_order, unit_id, task_order, t.id`,
+            [...courseIds, ...studentIds]
         );
 
         const byStudent = {};
-        masteryRows.forEach(r => {
+        (masteryRows || []).forEach(r => {
             if (!byStudent[r.user_id]) {
                 byStudent[r.user_id] = {
+                    courses: {}
+                };
+            }
+            const s = byStudent[r.user_id];
+            if (!s.courses[r.course_id]) {
+                s.courses[r.course_id] = {
+                    id: r.course_id,
+                    name: (courseMeta[r.course_id] && courseMeta[r.course_id].name) || ('Course ' + r.course_id),
                     units: {},
                     totalMastery: 0,
                     masteryCount: 0
                 };
             }
-            const s = byStudent[r.user_id];
+            const c = s.courses[r.course_id];
             const unitId = r.unit_id || 0;
             const unitName = r.unit_name || 'Ungrouped';
-            if (!s.units[unitId]) {
-                s.units[unitId] = {
+            if (!c.units[unitId]) {
+                c.units[unitId] = {
                     id: r.unit_id,
                     name: unitName,
                     tasks: []
                 };
             }
-            const m = r.mastery || 0;
-            s.units[unitId].tasks.push({
+            const u = c.units[unitId];
+            const m = typeof r.mastery === 'number' ? r.mastery : 0;
+            u.tasks.push({
                 taskId: r.task_id,
                 taskName: r.task_name,
                 mastery: m,
                 attempts: null,
                 taskOrder: r.task_order
             });
-            s.totalMastery += m;
-            s.masteryCount += 1;
+            c.totalMastery += m;
+            c.masteryCount += 1;
         });
 
         studentMastery = students.map(st => {
             const s = byStudent[st.id];
-            const units = s ? Object.values(s.units) : [];
-            const denominator = totalTaskCount > 0 ? totalTaskCount : (s ? s.masteryCount : 0);
+            const coursesForStudent = [];
+            let totalMasteryAll = 0;
+            let totalTasksAll = 0;
+
+            if (s && s.courses) {
+                Object.values(s.courses).forEach(c => {
+                    const courseTaskCount = tasksByCourse[c.id] || c.masteryCount || 0;
+                    const courseOverall =
+                        c.totalMastery > 0 && courseTaskCount > 0
+                            ? c.totalMastery / courseTaskCount
+                            : 0;
+                    coursesForStudent.push({
+                        id: c.id,
+                        name: c.name,
+                        overallMastery: courseOverall,
+                        units: Object.values(c.units)
+                    });
+                    totalMasteryAll += c.totalMastery;
+                    totalTasksAll += courseTaskCount;
+                });
+            }
+
             const overall =
-                s && denominator > 0 ? s.totalMastery / denominator : 0;
+                totalTasksAll > 0 && totalMasteryAll > 0
+                    ? totalMasteryAll / totalTasksAll
+                    : 0;
+
             return {
                 id: st.id,
                 name: st.username,
                 overallMastery: overall,
-                units,
+                courses: coursesForStudent,
                 formbarId: st.formbar_id
             };
         });
@@ -1930,7 +2400,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
             id: st.id,
             name: st.username,
             overallMastery: 0,
-            units: [],
+            courses: [],
             formbarId: st.formbar_id
         }));
     }
@@ -1962,6 +2432,26 @@ router.post('/classes/:classId/courses', requireLogin, requireClassTeacher, asyn
             [classId, courseId, userId]
         );
     } else if (action === 'unassign') {
+        // When a course is removed from a class, clear any mastery
+        // for students in that class for that course.
+        try {
+            const studentRows = await all(
+                'SELECT user_id FROM class_members WHERE class_id = ? AND role = ?',
+                [classId, 'student']
+            );
+            const studentIds = (studentRows || []).map(r => r.user_id);
+            if (studentIds.length) {
+                const placeholders = studentIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM task_mastery
+                     WHERE course_id = ?
+                       AND user_id IN (${placeholders})`,
+                    [courseId, ...studentIds]
+                );
+            }
+        } catch (err) {
+            console.error('Error cleaning up task_mastery when unassigning course', { classId, courseId, err: err.message });
+        }
         await run('DELETE FROM class_courses WHERE class_id = ? AND course_id = ?', [classId, courseId]);
     }
     res.redirect('/classes/' + classId);

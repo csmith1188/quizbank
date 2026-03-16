@@ -139,7 +139,7 @@ router.get('/course/:courseId', async (req, res) => {
         [courseId]
     );
     const tasks = await all(
-        'SELECT id, name, target, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
+        'SELECT id, name, target, description, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
         [courseId]
     );
     const quizzes = await all(
@@ -157,6 +157,7 @@ router.get('/course/:courseId', async (req, res) => {
             id: t.id,
             name: t.name,
             target: t.target,
+            description: t.description || null,
             sort_order: t.sort_order
         })),
         quizzes: quizzes.map(q => ({ id: q.id, name: q.name, sort_order: q.sort_order }))
@@ -234,14 +235,14 @@ router.get('/course/:courseId/unit/:unitId', async (req, res) => {
     const taskRefs = await all('SELECT task_id, sort_order FROM unit_tasks WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const vocabRefs = await all('SELECT vocab_term_id, sort_order FROM unit_vocab WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const taskIds = taskRefs.map(r => r.task_id);
-    const tasks = taskIds.length ? await all('SELECT id, name, target FROM tasks WHERE id IN (' + taskIds.map(() => '?').join(',') + ')', taskIds) : [];
+    const tasks = taskIds.length ? await all('SELECT id, name, target, description FROM tasks WHERE id IN (' + taskIds.map(() => '?').join(',') + ')', taskIds) : [];
     const vocabIds = vocabRefs.map(r => r.vocab_term_id);
     const vocab = vocabIds.length ? await all('SELECT id, term, definition FROM vocab_terms WHERE id IN (' + vocabIds.map(() => '?').join(',') + ')', vocabIds) : [];
     res.json({
         id: unit.id,
         name: unit.name,
         sort_order: unit.sort_order,
-        tasks: tasks.map(t => ({ id: t.id, name: t.name, target: t.target })),
+        tasks: tasks.map(t => ({ id: t.id, name: t.name, target: t.target, description: t.description || null })),
         vocab: vocab.map(v => ({ id: v.id, term: v.term, definition: v.definition || null }))
     });
 });
@@ -251,7 +252,7 @@ router.get('/course/:courseId/task/:taskId', async (req, res) => {
     const taskId = parseInt(req.params.taskId);
     const { allowed } = await canReadCourse(courseId, req);
     if (!allowed) return res.status(403).json({ error: 'Forbidden' });
-    const task = await get('SELECT id, course_id, name, target FROM tasks WHERE id = ? AND course_id = ?', [taskId, courseId]);
+    const task = await get('SELECT id, course_id, name, target, description FROM tasks WHERE id = ? AND course_id = ?', [taskId, courseId]);
     if (!task) return res.status(404).json({ error: 'Task not found' });
     const course = await get('SELECT id, name FROM courses WHERE id = ?', [courseId]);
     res.json({
@@ -487,7 +488,80 @@ router.patch('/courses/:id', requireCourseOwner, async (req, res) => {
 });
 
 router.delete('/courses/:id', requireCourseOwner, async (req, res) => {
-    await run('DELETE FROM courses WHERE id = ?', [req.courseId]);
+    const courseId = req.courseId;
+
+    try {
+        // 1) Remove mastery for this course for any students in any class
+        //    that had the course assigned.
+        const classRows = await all(
+            'SELECT DISTINCT class_id FROM class_courses WHERE course_id = ?',
+            [courseId]
+        );
+        if (classRows && classRows.length) {
+            const classIds = classRows.map(r => r.class_id);
+            const placeholders = classIds.map(() => '?').join(',');
+            const studentRows = await all(
+                `SELECT DISTINCT user_id
+                 FROM class_members
+                 WHERE class_id IN (${placeholders}) AND role = 'student'`,
+                classIds
+            );
+            const studentIds = (studentRows || []).map(r => r.user_id);
+            if (studentIds.length) {
+                const studentPlaceholders = studentIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM task_mastery
+                     WHERE course_id = ?
+                       AND user_id IN (${studentPlaceholders})`,
+                    [courseId, ...studentIds]
+                );
+            }
+        }
+
+        // 2) Delete quiz attempts (answers cascade) for quizzes in this course.
+        const quizRows = await all('SELECT id FROM quizzes WHERE course_id = ?', [courseId]);
+        if (quizRows && quizRows.length) {
+            const quizIds = quizRows.map(r => r.id);
+            const quizPlaceholders = quizIds.map(() => '?').join(',');
+            await run(
+                `DELETE FROM quiz_attempts WHERE quiz_id IN (${quizPlaceholders})`,
+                quizIds
+            );
+        }
+
+        // 3) Delete questions (and quiz_questions) for tasks in this course.
+        const taskRows = await all('SELECT id FROM tasks WHERE course_id = ?', [courseId]);
+        if (taskRows && taskRows.length) {
+            const taskIds = taskRows.map(r => r.id);
+            const taskPlaceholders = taskIds.map(() => '?').join(',');
+            const questionRows = await all(
+                `SELECT id FROM questions WHERE task_id IN (${taskPlaceholders})`,
+                taskIds
+            );
+            if (questionRows && questionRows.length) {
+                const questionIds = questionRows.map(r => r.id);
+                const qPlaceholders = questionIds.map(() => '?').join(',');
+                await run(
+                    `DELETE FROM quiz_questions WHERE question_id IN (${qPlaceholders})`,
+                    questionIds
+                );
+                await run(
+                    `DELETE FROM questions WHERE id IN (${qPlaceholders})`,
+                    questionIds
+                );
+            }
+        }
+
+        // 4) Delete tasks, vocab, units, and quizzes for this course.
+        await run('DELETE FROM tasks WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM vocab_terms WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM units WHERE course_id = ?', [courseId]);
+        await run('DELETE FROM quizzes WHERE course_id = ?', [courseId]);
+    } catch (err) {
+        console.error('Error cleaning up task_mastery via API when deleting course', courseId, err);
+    }
+
+    await run('DELETE FROM courses WHERE id = ?', [courseId]);
     res.status(204).send();
 });
 
@@ -506,11 +580,14 @@ router.put('/courses/reorder', async (req, res) => {
 });
 
 router.post('/courses/:courseId/tasks', requireCourseOwner, async (req, res) => {
-    const { name, target } = req.body || {};
+    const { name, target, description } = req.body || {};
     if (!name) return res.status(400).json({ error: 'name required' });
     const maxOrder = await get('SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM tasks WHERE course_id = ?', [req.courseId]);
-    await run('INSERT INTO tasks (course_id, name, target, sort_order) VALUES (?, ?, ?, ?)', [req.courseId, name, target || null, maxOrder.n]);
-    const row = await get('SELECT id, course_id, name, target, sort_order FROM tasks ORDER BY id DESC LIMIT 1');
+    await run(
+        'INSERT INTO tasks (course_id, name, target, description, sort_order) VALUES (?, ?, ?, ?, ?)',
+        [req.courseId, name, target || null, (description || '').trim() || null, maxOrder.n]
+    );
+    const row = await get('SELECT id, course_id, name, target, description, sort_order FROM tasks ORDER BY id DESC LIMIT 1');
     res.status(201).json(row);
 });
 
@@ -518,16 +595,17 @@ router.patch('/courses/:courseId/tasks/:taskId', requireCourseOwner, async (req,
     const taskId = parseInt(req.params.taskId);
     const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (!task) return res.status(404).json({ error: 'Task not found' });
-    const { name, target, sort_order } = req.body || {};
+    const { name, target, description, sort_order } = req.body || {};
     const updates = [];
     const params = [];
     if (name !== undefined) { updates.push('name = ?'); params.push(name); }
     if (target !== undefined) { updates.push('target = ?'); params.push(target); }
+    if (description !== undefined) { updates.push('description = ?'); params.push((description || '').trim() || null); }
     if (sort_order !== undefined) { updates.push('sort_order = ?'); params.push(parseInt(sort_order)); }
     if (!updates.length) return res.status(400).json({ error: 'No fields to update' });
     params.push(taskId);
     await run('UPDATE tasks SET ' + updates.join(', ') + ' WHERE id = ?', params);
-    const row = await get('SELECT id, course_id, name, target, sort_order FROM tasks WHERE id = ?', [taskId]);
+    const row = await get('SELECT id, course_id, name, target, description, sort_order FROM tasks WHERE id = ?', [taskId]);
     res.json(row);
 });
 

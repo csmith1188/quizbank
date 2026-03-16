@@ -9,7 +9,11 @@
     <details class="task-details unit-details" id="task-<%= t.id %>" data-id="<%= t.id %>">
         <summary class="unit-summary">
             <span class="reorderable-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
-            <span class="unit-order" data-prefix="Task "><%= (t.sort_order != null ? t.sort_order : idx) + 1 %></span>
+            <span class="unit-order" data-prefix="Task ">
+                <%= (typeof t.task_number === 'number' && t.task_number > 0)
+                    ? t.task_number
+                    : (t.sort_order != null ? t.sort_order : idx) + 1 %>
+            </span>
             <button
                 type="button"
                 class="btn btn-small copy-id-btn"
@@ -25,9 +29,10 @@
         </summary>
         <div class="unit-content">
             <form method="post" action="/courses/<%= course.id %>/tasks/<%= t.id %>">
-                <label>Task # <input type="number" name="task_number" min="1" value="<%= (t.sort_order != null ? t.sort_order : idx) + 1 %>" required /></label>
+                <label>Task # <input type="number" name="task_number" min="1" value="<%= (typeof t.task_number === 'number' && t.task_number > 0) ? t.task_number : (t.sort_order != null ? t.sort_order : idx) + 1 %>" required /></label>
                 <label>Name <input type="text" name="name" value="<%= t.name %>" required /></label>
                 <label>Target <textarea name="target" class="textarea-target"><%= t.target || '' %></textarea></label>
+                <label>Description <textarea name="description" rows="3" class="textarea-target"><%= t.description || '' %></textarea></label>
                 <div class="actions">
                     <button type="submit" class="btn">Save</button>
                     <a href="/courses/<%= course.id %>/tasks/<%= t.id %>" class="btn btn-secondary">Edit questions</a>

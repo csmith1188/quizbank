@@ -109,58 +109,73 @@
                 </span>
             </summary>
             <div class="quiz-list-content">
-                <% if (!s.units || s.units.length === 0) { %>
+                <% if (!s.courses || s.courses.length === 0) { %>
                     <p><em>No mastery data yet for this student.</em></p>
                 <% } else { %>
-                    <%
-                        // Determine the maximum number of tasks in any unit (by sort order)
-                        var maxTasks = 0;
-                        s.units.forEach(function(u) {
-                            var len = (u.tasks || []).length;
-                            if (len > maxTasks) maxTasks = len;
-                        });
-                    %>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Unit</th>
-                                <% for (var col = 1; col <= maxTasks; col++) { %>
-                                    <th>Task <%= col %></th>
-                                <% } %>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% s.units.forEach(function(u) { 
-                                var tasksSorted = (u.tasks || []).slice().sort(function(a, b) {
-                                    var sa = (a.taskOrder != null ? a.taskOrder : 0);
-                                    var sb = (b.taskOrder != null ? b.taskOrder : 0);
-                                    return sa - sb || a.taskId - b.taskId;
+                    <% s.courses.forEach(function(c) { %>
+                        <section class="student-course-mastery">
+                            <h3>
+                                <span><%= c.name %></span>
+                                <span class="quiz-list-meta">
+                                    Course mastery:
+                                    <strong><%= Math.round((c.overallMastery || 0) * 100) %>%</strong>
+                                </span>
+                            </h3>
+                            <%
+                                // Determine the maximum number of tasks in any unit (by sort order) for this course
+                                var maxTasks = 0;
+                                (c.units || []).forEach(function(u) {
+                                    var len = (u.tasks || []).length;
+                                    if (len > maxTasks) maxTasks = len;
                                 });
                             %>
-                                <tr>
-                                    <td><%= u.name %></td>
-                                    <% for (var col = 0; col < maxTasks; col++) { 
-                                        var cell = tasksSorted[col];
-                                        if (!cell) { %>
-                                            <td>-</td>
-                                        <% } else { 
-                                            var pct = Math.round((cell.mastery || 0) * 100);
-                                            var tooltip = 'Task ' + (col + 1) + ': ' + cell.taskName;
+                            <% if (maxTasks === 0) { %>
+                                <p><em>No mastery data yet for this course.</em></p>
+                            <% } else { %>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Unit</th>
+                                            <% for (var col = 1; col <= maxTasks; col++) { %>
+                                                <th>Task <%= col %></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% (c.units || []).forEach(function(u) { 
+                                            var tasksSorted = (u.tasks || []).slice().sort(function(a, b) {
+                                                var sa = (a.taskOrder != null ? a.taskOrder : 0);
+                                                var sb = (b.taskOrder != null ? b.taskOrder : 0);
+                                                return sa - sb || a.taskId - b.taskId;
+                                            });
                                         %>
-                                            <td title="<%= tooltip %>">
-                                                <div class="mastery-bar">
-                                                    <div class="mastery-bar-fill" style="width:<%= pct %>%"></div>
-                                                </div>
-                                                <span><%= pct %>%</span>
-                                                <br>
-                                                <span><%= cell.attempts %> q</span>
-                                            </td>
-                                        <% } %>
-                                    <% } %>
-                                </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                                            <tr>
+                                                <td><%= u.name %></td>
+                                                <% for (var col = 0; col < maxTasks; col++) { 
+                                                    var cell = tasksSorted[col];
+                                                    if (!cell) { %>
+                                                        <td>-</td>
+                                                    <% } else { 
+                                                        var pct = Math.round((cell.mastery || 0) * 100);
+                                                        var tooltip = 'Task ' + (col + 1) + ': ' + cell.taskName;
+                                                    %>
+                                                        <td title="<%= tooltip %>">
+                                                            <div class="mastery-bar">
+                                                                <div class="mastery-bar-fill" style="width:<%= pct %>%"></div>
+                                                            </div>
+                                                            <span><%= pct %>%</span>
+                                                            <br>
+                                                            <span><%= cell.attempts %> q</span>
+                                                        </td>
+                                                    <% } %>
+                                                <% } %>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            <% } %>
+                        </section>
+                    <% }); %>
                 <% } %>
             </div>
         </details>

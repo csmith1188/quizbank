@@ -1,6 +1,8 @@
 <%- include('../partials/teacher-header', { title: task.name + ' - ' + course.name, user, course }) %>
 <h1>
-    Task <%= (task.sort_order != null ? task.sort_order : 0) + 1 %>: <%= task.name %>
+    Task <%= (typeof task.task_number === 'number' && task.task_number > 0)
+        ? task.task_number
+        : (task.sort_order != null ? task.sort_order : 0) + 1 %>: <%= task.name %>
     <button
         type="button"
         class="btn btn-small copy-id-btn"
@@ -12,9 +14,10 @@
     </button>
 </h1>
 <form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>">
-    <label>Task # <input type="number" name="task_number" min="1" value="<%= (task.sort_order != null ? task.sort_order : 0) + 1 %>" required /></label>
+    <label>Task # <input type="number" name="task_number" min="1" value="<%= (typeof task.task_number === 'number' && task.task_number > 0) ? task.task_number : (task.sort_order != null ? task.sort_order : 0) + 1 %>" required /></label>
     <label>Name <input type="text" name="name" value="<%= task.name %>" required /></label>
     <label>Target <textarea name="target" class="textarea-target"><%= task.target || '' %></textarea></label>
+    <label>Description <textarea name="description" rows="3" class="textarea-target"><%= task.description || '' %></textarea></label>
     <div class="actions"><button type="submit" class="btn">Save task</button></div>
 </form>
 
