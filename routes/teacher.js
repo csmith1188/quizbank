@@ -1766,8 +1766,8 @@ router.get('/courses/:courseId/questions', requireCourseOwner, async (req, res) 
 
 router.get('/courses/:courseId/generator/tasks', requireCourseOwner, async (req, res) => {
     const unitIdParam = req.query.unitId;
-    // Count ALL questions marked 'good' for this task (no limit)
-    const goodCountSubquery = "(SELECT COUNT(*) FROM questions q WHERE q.task_id = t.id AND q.quality = 'good')";
+    // Count ALL questions for this task (no per-question quality column required)
+    const goodCountSubquery = '(SELECT COUNT(*) FROM questions q WHERE q.task_id = t.id)';
     const goodCountExpr = goodCountSubquery + ' AS good_count';
     if (unitIdParam === 'all' || !unitIdParam) {
         const tasks = await all(
@@ -1790,22 +1790,19 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (
     if (!taskId) return res.status(400).json({ error: 'taskId required' });
     const task = await get('SELECT id, name, target, description FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (!task) return res.status(404).json({ error: 'Task not found' });
-    const goodRows = await all(
-        "SELECT prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? AND quality = 'good' ORDER BY RANDOM() LIMIT 10",
+    const exampleRows = await all(
+        'SELECT prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? ORDER BY RANDOM() LIMIT 20',
         [taskId]
     );
-    const badRows = await all(
-        "SELECT prompt, correct_answer, correct_index, answers, quality_reason FROM questions WHERE task_id = ? AND quality = 'bad' ORDER BY RANDOM() LIMIT 10",
-        [taskId]
-    );
-    const goodExamples = goodRows.map(r => ({
+    const parsedExamples = exampleRows.map(r => ({
         ...r,
         answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
     }));
-    const badExamples = badRows.map(r => ({
-        ...r,
-        answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
-    }));
+    // Split the sampled questions into two buckets to preserve the generateQuestions signature,
+    // even though we no longer distinguish "good" vs "bad" by a column.
+    const midpoint = Math.min(parsedExamples.length, 10);
+    const goodExamples = parsedExamples.slice(0, midpoint);
+    const badExamples = parsedExamples.slice(midpoint);
     try {
         const generateQuestions = require('../lib/question-generator').generateQuestions;
         const additionalContext = (req.body && req.body.additionalContext && String(req.body.additionalContext).trim()) || undefined;
