@@ -1160,7 +1160,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
         const totalTaskCount = allTasks.length;
 
         const masteryRows = await all(
-            `SELECT tm.user_id, tm.task_id, tm.mastery, tm.attempts,
+            `SELECT tm.user_id, tm.task_id, tm.mastery,
                     t.name as task_name, u.id as unit_id, u.name as unit_name,
                     u.sort_order as unit_order, t.sort_order as task_order
              FROM task_mastery tm
@@ -1196,7 +1196,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
                 taskId: r.task_id,
                 taskName: r.task_name,
                 mastery: m,
-                attempts: r.attempts,
+                attempts: null,
                 taskOrder: r.task_order
             });
             s.totalMastery += m;
