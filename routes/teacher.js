@@ -1810,7 +1810,7 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (
             task: { name: task.name, target: task.target, description: task.description },
             goodExamples,
             badExamples,
-            count: 5,
+            count: 10,
             additionalContext
         });
         res.json(questions);
