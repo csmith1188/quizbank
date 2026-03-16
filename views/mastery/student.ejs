@@ -29,6 +29,9 @@
 <form method="post" action="/courses/<%= course.id %>/progress-test" style="display:inline;">
     <button type="submit" class="btn">Start progress test</button>
 </form>
+<form method="post" action="/courses/<%= course.id %>/overall-test" style="display:inline; margin-left:0.5rem;">
+    <button type="submit" class="btn btn-secondary">Start overall knowledge test</button>
+</form>
 <a href="/courses/<%= course.id %>/mastery/coach" class="btn btn-secondary ai-coach-btn" style="margin-left:0.5rem;">Ask the AI Coach for next steps</a>
 <% } %>
 

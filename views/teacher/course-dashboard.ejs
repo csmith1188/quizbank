@@ -18,4 +18,84 @@
     <li><strong>Quizzes</strong> — <a href="/courses/<%= course.id %>/quizzes">Quizzes</a> (<%= quizzes.length %>)</li>
     <li><strong>Questions</strong> — <a href="/courses/<%= course.id %>/questions">Question generator</a></li>
 </ul>
+
+<hr>
+
+<section style="margin-top: 1.5rem;">
+    <h2>Question search</h2>
+    <p>Find questions in this course by text in the prompt.</p>
+    <div class="field-row" style="max-width: 32rem;">
+        <input
+            type="text"
+            id="question-search-input"
+            placeholder="Search question prompts..."
+            style="flex:1; padding:0.5rem; border:1px solid #ccc; border-radius:4px;"
+        >
+        <button type="button" id="question-search-btn" class="btn" style="margin-left:0.5rem;">Search</button>
+    </div>
+    <div id="question-search-results" class="text-muted" style="margin-top: 1rem;"></div>
+</section>
+
+<script>
+(function() {
+    var courseId = <%= course.id %>;
+    var input = document.getElementById('question-search-input');
+    var btn = document.getElementById('question-search-btn');
+    var resultsEl = document.getElementById('question-search-results');
+
+    function escapeHtml(s) {
+        if (s == null) return '';
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+    }
+
+    function renderResults(list) {
+        if (!Array.isArray(list) || !list.length) {
+            resultsEl.innerHTML = '<p class="text-muted">No matching questions found.</p>';
+            return;
+        }
+        var html = '<table><thead><tr><th>Prompt</th><th>Task</th><th></th></tr></thead><tbody>';
+        list.forEach(function(row) {
+            var prompt = (row.prompt || '').slice(0, 120);
+            if ((row.prompt || '').length > 120) prompt += '…';
+            var taskName = row.task_name || ('Task ' + row.task_id);
+            var editHref = '/courses/' + courseId + '/tasks/' + row.task_id + '/questions/' + row.id;
+            html += '<tr>' +
+                '<td>' + escapeHtml(prompt) + '</td>' +
+                '<td>' + escapeHtml(taskName) + '</td>' +
+                '<td><a class="btn btn-small" href="' + editHref + '">Edit</a></td>' +
+                '</tr>';
+        });
+        html += '</tbody></table>';
+        resultsEl.innerHTML = html;
+    }
+
+    function doSearch() {
+        var q = (input.value || '').trim();
+        if (!q) {
+            resultsEl.innerHTML = '<p class="text-muted">Enter text to search question prompts.</p>';
+            return;
+        }
+        resultsEl.innerHTML = '<p class="text-muted">Searching…</p>';
+        fetch('/courses/' + courseId + '/questions/search?q=' + encodeURIComponent(q), {
+            credentials: 'same-origin'
+        })
+            .then(function(r) { return r.json(); })
+            .then(function(list) { renderResults(list); })
+            .catch(function() {
+                resultsEl.innerHTML = '<p class="text-muted" style="color:#c00;">Search failed.</p>';
+            });
+    }
+
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', function(ev) {
+        if (ev.key === 'Enter') {
+            ev.preventDefault();
+            doSearch();
+        }
+    });
+})();
+</script>
+
 <%- include('../partials/footer') %>

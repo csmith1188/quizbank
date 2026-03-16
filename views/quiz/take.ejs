@@ -23,6 +23,8 @@
         var href;
         if (typeof classItem !== 'undefined' && classItem && classItem.id && attempt && attempt.quiz_id) {
             href = '/classes/' + classItem.id + '/quizzes/' + attempt.quiz_id + '/take/' + dot.index + '?attemptId=' + attempt.id;
+        } else if (typeof attemptType !== 'undefined' && attemptType === 'overall' && attempt && attempt.id) {
+            href = '/overall/' + attempt.id + '/take/' + dot.index;
         } else if (attempt && attempt.id) {
             href = '/progress/' + attempt.id + '/take/' + dot.index;
         } else {
@@ -34,7 +36,13 @@
 </p>
 <% } %>
 
-<form method="post" action="<%= (typeof classItem !== 'undefined' && classItem && classItem.id && attempt && attempt.quiz_id) ? ('/classes/' + classItem.id + '/quizzes/' + attempt.quiz_id + '/take/' + index) : ('/progress/' + (attempt ? attempt.id : '') + '/take/' + index) %>">
+<form method="post" action="<%=
+  (typeof classItem !== 'undefined' && classItem && classItem.id && attempt && attempt.quiz_id)
+    ? ('/classes/' + classItem.id + '/quizzes/' + attempt.quiz_id + '/take/' + index)
+    : (typeof attemptType !== 'undefined' && attemptType === 'overall' && attempt && attempt.id)
+      ? ('/overall/' + attempt.id + '/take/' + index)
+      : ('/progress/' + (attempt ? attempt.id : '') + '/take/' + index)
+%>">
     <input type="hidden" name="attemptId" value="<%= attempt.id %>">
     <p><strong><%= question.prompt %></strong></p>
     <ul>

@@ -56,10 +56,11 @@ function requireLogin(req, res, next) {
 
 // All /courses routes are teacher-only (except explicit student routes added later)
 router.use('/courses', (req, res, next) => {
-    // Allow student mastery/progress routes to pass through; they do their own checks
+    // Allow student mastery/progress/overall routes to pass through; they do their own checks
     if (req.method === 'GET' && /^\/\d+\/mastery$/.test(req.path)) return next();
     if (req.method === 'GET' && /^\/\d+\/mastery\/coach$/.test(req.path)) return next();
     if (req.method === 'POST' && /^\/\d+\/progress-test/.test(req.path)) return next();
+    if (req.method === 'POST' && /^\/\d+\/overall-test/.test(req.path)) return next();
     return requireTeacher(req, res, next);
 });
 
@@ -139,6 +140,25 @@ router.get('/courses/:id', requireCourseOwner, async (req, res) => {
         vocabCount: vocabCount.c,
         quizzes
     });
+});
+
+// AJAX endpoint: search questions in this course by prompt text (partial match).
+router.get('/courses/:courseId/questions/search', requireCourseOwner, async (req, res) => {
+    const courseId = req.courseId;
+    const q = (req.query && req.query.q ? String(req.query.q) : '').trim();
+    if (!q) return res.json([]);
+
+    const like = '%' + q.replace(/%/g, '\\%').replace(/_/g, '\\_') + '%';
+    const rows = await all(
+        `SELECT q.id, q.prompt, q.task_id, t.name AS task_name
+         FROM questions q
+         JOIN tasks t ON q.task_id = t.id
+         WHERE t.course_id = ? AND q.prompt LIKE ? ESCAPE '\\'
+         ORDER BY q.id DESC
+         LIMIT 50`,
+        [courseId, like]
+    );
+    res.json(rows || []);
 });
 
 router.get('/courses/:courseId/tasks', requireCourseOwner, async (req, res) => {
@@ -435,6 +455,36 @@ router.post('/courses/:courseId/progress-test', requireLogin, async (req, res) =
         res.redirect('/progress/' + attempt.id + '/take/1');
     } catch (err) {
         console.error('Error creating progress test:', err.message);
+        res.redirect('/courses/' + courseId + '/mastery');
+    }
+});
+
+// Create an "Overall Knowledge" test attempt for the current student in the first matching class.
+router.post('/courses/:courseId/overall-test', requireLogin, async (req, res) => {
+    const courseId = parseInt(req.params.courseId);
+    const userId = req.session.userId;
+    if (!userId || !courseId) return res.redirect('/classes');
+
+    const classRow = await get(
+        `SELECT DISTINCT c.id, c.name
+         FROM classes c
+         JOIN class_members cm ON cm.class_id = c.id
+         JOIN class_courses cc ON cc.class_id = c.id
+         WHERE cm.user_id = ? AND cc.course_id = ?
+         ORDER BY c.sort_order, c.id
+         LIMIT 1`,
+        [userId, courseId]
+    );
+    if (!classRow) {
+        return res.redirect('/classes');
+    }
+
+    const { createOverallAttempt } = require('../lib/progress-quiz');
+    try {
+        const attempt = await createOverallAttempt(userId, classRow.id, courseId);
+        res.redirect('/overall/' + attempt.id + '/take/1');
+    } catch (err) {
+        console.error('Error creating overall knowledge test:', err.message);
         res.redirect('/courses/' + courseId + '/mastery');
     }
 });

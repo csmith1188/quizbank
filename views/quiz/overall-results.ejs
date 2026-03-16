@@ -1,0 +1,73 @@
+<%- include('../partials/teacher-header', { title: 'Overall Knowledge Test Results', user, course, breadcrumb: (classItem ? ('<a href="/classes">Classes</a> &rarr; ' + classItem.name + ' &rarr; Overall Knowledge') : 'Overall Knowledge') }) %>
+<h1>Overall Knowledge Test Results</h1>
+
+<% if (course) { %>
+  <p>Course: <strong><%= course.name %></strong></p>
+<% } %>
+
+<p>
+  Score:
+  <strong><%= Math.round((attempt.correct_questions || 0) * 100 / (attempt.total_questions || 1)) %>%</strong>
+  (<%= attempt.correct_questions %> / <%= attempt.total_questions %> questions correct)
+</p>
+
+<h2>Weakest units (top 3)</h2>
+<% if (!worstUnits || !worstUnits.length) { %>
+  <p><em>No unit-level data available.</em></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Unit</th>
+        <th>Questions</th>
+        <th>Missed</th>
+        <th>% Correct</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% worstUnits.forEach(function(u) { %>
+        <tr>
+          <td><%= u.name %></td>
+          <td><%= u.total %></td>
+          <td><%= u.missed %></td>
+          <td><%= Math.round((u.pctCorrect || 0) * 100) %>%</td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+<% } %>
+
+<h2>Weakest tasks (top 10)</h2>
+<% if (!worstTasks || !worstTasks.length) { %>
+  <p><em>No task-level data available.</em></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Questions</th>
+        <th>Missed</th>
+        <th>% Correct</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% worstTasks.forEach(function(t) { %>
+        <tr>
+          <td><%= t.name %></td>
+          <td><%= t.total %></td>
+          <td><%= t.missed %></td>
+          <td><%= Math.round((t.pctCorrect || 0) * 100) %>%</td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+<% } %>
+
+<p style="margin-top: 1rem;">
+  <a href="/overall/<%= attempt.id %>/coach" class="btn btn-secondary ai-coach-btn">Ask the AI Coach about these weak points</a>
+</p>
+
+<p><a href="/classes" class="btn btn-secondary">Back to classes</a></p>
+
+<%- include('../partials/footer') %>
+
