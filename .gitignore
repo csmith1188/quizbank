@@ -1,5 +1,5 @@
 /node_modules
 /db/database.db
-/.env
+.env
 /.cursor
 /.vscode
