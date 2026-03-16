@@ -1095,6 +1095,14 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
         const studentIds = students.map(s => s.id);
         const placeholders = studentIds.map(() => '?').join(',');
 
+        // Get all tasks for this course so overall mastery can be based
+        // on the entire course, not just tasks with mastery records.
+        const allTasks = await all(
+            'SELECT id FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
+            [courseId]
+        );
+        const totalTaskCount = allTasks.length;
+
         const masteryRows = await all(
             `SELECT tm.user_id, tm.task_id, tm.mastery, tm.attempts,
                     t.name as task_name, u.id as unit_id, u.name as unit_name,
@@ -1142,8 +1150,9 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
         studentMastery = students.map(st => {
             const s = byStudent[st.id];
             const units = s ? Object.values(s.units) : [];
+            const denominator = totalTaskCount > 0 ? totalTaskCount : (s ? s.masteryCount : 0);
             const overall =
-                s && s.masteryCount > 0 ? s.totalMastery / s.masteryCount : 0;
+                s && denominator > 0 ? s.totalMastery / denominator : 0;
             return {
                 id: st.id,
                 name: st.username,
