@@ -1,6 +1,10 @@
 <%- include('../partials/teacher-header', { title: 'Question Generator - ' + course.name, user, course,
     breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Question generator' }) %>
 
+<p><a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+
+<div id="question-generator-root" data-course-id="<%= course.id %>">
+
     <section style="margin-top: 1rem; margin-bottom: 1.5rem;">
         <h1>Question search</h1>
         <p>Find existing questions in this course by text in the prompt.</p>
@@ -13,7 +17,6 @@
     </section>
 
     <h1>Question Generator</h1>
-    <p><a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
 
     <div class="generator-controls">
         <label>Unit
@@ -57,7 +60,8 @@
 
     <script>
         (function () {
-            var courseId = <%= course.id %>;
+            var rootEl = document.getElementById('question-generator-root');
+            var courseId = rootEl ? parseInt(rootEl.getAttribute('data-course-id'), 10) : null;
             var selectedTaskId = null;
             var tasksCache = [];
 
@@ -249,7 +253,30 @@
                             badBtn.className = 'btn btn-small btn-danger';
                             badBtn.textContent = 'Bad';
                             badBtn.style.marginLeft = '0.5rem';
-                            badBtn.addEventListener('click', function () { saveQuestion(card, q, 'bad'); });
+                            badBtn.addEventListener('click', function () {
+                                var existing = card.querySelector('textarea.bad-reason');
+                                if (!existing) {
+                                    var reasonLabel = document.createElement('label');
+                                    reasonLabel.style.display = 'block';
+                                    reasonLabel.style.marginTop = '0.5rem';
+                                    reasonLabel.textContent = 'Why is this question bad?';
+                                    var reasonBox = document.createElement('textarea');
+                                    reasonBox.className = 'bad-reason';
+                                    reasonBox.rows = 3;
+                                    reasonBox.style.width = '100%';
+                                    reasonBox.style.marginTop = '0.25rem';
+                                    reasonBox.style.border = '1px solid #ccc';
+                                    reasonBox.style.borderRadius = '4px';
+                                    reasonBox.style.padding = '0.4rem';
+                                    reasonLabel.appendChild(reasonBox);
+                                    card.appendChild(reasonLabel);
+                                    badBtn.textContent = 'Save as bad';
+                                    reasonBox.focus();
+                                    return;
+                                }
+                                var reasonText = existing.value || '';
+                                saveQuestion(card, q, 'bad', reasonText);
+                            });
                             actions.appendChild(goodBtn);
                             actions.appendChild(badBtn);
                             card.appendChild(actions);
@@ -262,7 +289,7 @@
                     });
             });
 
-            function saveQuestion(card, q, quality) {
+            function saveQuestion(card, q, quality, badReason) {
                 var body = {
                     prompt: q.prompt || '',
                     correctAnswer: q.correct_answer || '',
@@ -270,6 +297,9 @@
                     answers: Array.isArray(q.answers) ? q.answers : [],
                     quality: quality
                 };
+                if (quality === 'bad' && typeof badReason === 'string') {
+                    body.badReason = badReason;
+                }
                 fetch('/courses/' + courseId + '/tasks/' + selectedTaskId + '/questions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -294,4 +324,5 @@
             }
         })();
     </script>
-    <%- include('../partials/footer') %>
+</div>
+<%- include('../partials/footer') %>

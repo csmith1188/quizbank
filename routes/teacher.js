@@ -233,7 +233,7 @@ router.post('/courses/:courseId/tasks/:tid/questions', requireCourseOwner, async
     const taskId = parseInt(req.params.tid);
     const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (!task) return res.redirect('/courses/' + req.courseId + '/tasks');
-    const { prompt, correctAnswer, correctIndex, answers, quality } = req.body || {};
+    const { prompt, correctAnswer, correctIndex, answers, quality, badReason } = req.body || {};
     const ans = typeof answers === 'string' ? (answers.trim() ? answers.split(/\n/).map(s => s.trim()).filter(Boolean) : []) : (answers || []);
     const idx = parseInt(correctIndex) || 0;
 
@@ -251,8 +251,8 @@ router.post('/courses/:courseId/tasks/:tid/questions', requireCourseOwner, async
             }
         }
         await run(
-            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, quality, ai) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), quality, 1]
+            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), quality, (badReason || null), 1]
         );
         const row = await get('SELECT id FROM questions ORDER BY id DESC LIMIT 1');
         return res.status(201).json({ id: row.id });
@@ -667,11 +667,17 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (
         [taskId]
     );
     const badRows = await all(
-        "SELECT prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? AND quality = 'bad' ORDER BY RANDOM() LIMIT 10",
+        "SELECT prompt, correct_answer, correct_index, answers, quality_reason FROM questions WHERE task_id = ? AND quality = 'bad' ORDER BY RANDOM() LIMIT 10",
         [taskId]
     );
-    const goodExamples = goodRows.map(r => ({ ...r, answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers }));
-    const badExamples = badRows.map(r => ({ ...r, answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers }));
+    const goodExamples = goodRows.map(r => ({
+        ...r,
+        answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
+    }));
+    const badExamples = badRows.map(r => ({
+        ...r,
+        answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
+    }));
     try {
         const generateQuestions = require('../lib/question-generator').generateQuestions;
         const additionalContext = (req.body && req.body.additionalContext && String(req.body.additionalContext).trim()) || undefined;
