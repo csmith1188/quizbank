@@ -43,10 +43,12 @@ async function migrate() {
         correct_answer TEXT NOT NULL,
         correct_index INTEGER NOT NULL,
         answers TEXT NOT NULL,
+        quality TEXT,
+        quality_reason TEXT,
         ai INTEGER DEFAULT 0,
         FOREIGN KEY (task_id) REFERENCES tasks(id)
     )`);
-    await run('INSERT INTO questions_new (id, task_id, prompt, correct_answer, correct_index, answers, ai) SELECT id, task_id, prompt, correct_answer, correct_index, answers, ai FROM questions');
+    await run('INSERT INTO questions_new (id, task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai) SELECT id, task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai FROM questions');
     await run('DROP TABLE questions');
     await run('ALTER TABLE questions_new RENAME TO questions');
     await run('CREATE INDEX IF NOT EXISTS idx_questions_task ON questions(task_id)');

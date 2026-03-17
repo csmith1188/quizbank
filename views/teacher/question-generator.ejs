@@ -234,9 +234,16 @@
                             card.appendChild(prompt);
                             var answers = Array.isArray(q.answers) ? q.answers : [];
                             if (answers.length) {
-                                var ansEl = document.createElement('p');
-                                ansEl.innerHTML = '<strong>Answers:</strong> ' + answers.map(escapeHtml).join(' | ');
-                                card.appendChild(ansEl);
+                                var ansTitle = document.createElement('p');
+                                ansTitle.innerHTML = '<strong>Answers:</strong>';
+                                card.appendChild(ansTitle);
+                                var ansList = document.createElement('ul');
+                                answers.forEach(function (ans) {
+                                    var li = document.createElement('li');
+                                    li.innerHTML = escapeHtml(ans);
+                                    ansList.appendChild(li);
+                                });
+                                card.appendChild(ansList);
                             }
                             var correct = document.createElement('p');
                             correct.innerHTML = '<strong>Correct:</strong> ' + escapeHtml(q.correct_answer || '') + ' (index ' + (q.correct_index != null ? q.correct_index : 0) + ')';
