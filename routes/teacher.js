@@ -1791,18 +1791,15 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (
     const task = await get('SELECT id, name, target, description FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
     if (!task) return res.status(404).json({ error: 'Task not found' });
     const exampleRows = await all(
-        'SELECT prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? ORDER BY RANDOM() LIMIT 20',
+        'SELECT prompt, correct_answer, correct_index, answers, quality, quality_reason FROM questions WHERE task_id = ? AND quality IN (\'good\', \'bad\') ORDER BY RANDOM() LIMIT 20',
         [taskId]
     );
     const parsedExamples = exampleRows.map(r => ({
         ...r,
         answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
     }));
-    // Split the sampled questions into two buckets to preserve the generateQuestions signature,
-    // even though we no longer distinguish "good" vs "bad" by a column.
-    const midpoint = Math.min(parsedExamples.length, 10);
-    const goodExamples = parsedExamples.slice(0, midpoint);
-    const badExamples = parsedExamples.slice(midpoint);
+    const goodExamples = parsedExamples.filter(r => r.quality === 'good');
+    const badExamples = parsedExamples.filter(r => r.quality === 'bad');
     try {
         const generateQuestions = require('../lib/question-generator').generateQuestions;
         const additionalContext = (req.body && req.body.additionalContext && String(req.body.additionalContext).trim()) || undefined;
