@@ -138,7 +138,7 @@ router.get('/progress/:attemptId/results', requireLogin, async (req, res) => {
 
     const answerRows = await all(
         `SELECT qaa.id, qaa.question_id, qaa.chosen_index, qaa.is_correct,
-                q.prompt, q.answers, q.correct_index
+                q.prompt, q.answers
          FROM quiz_attempt_answers qaa
          JOIN questions q ON qaa.question_id = q.id
          WHERE qaa.attempt_id = ?

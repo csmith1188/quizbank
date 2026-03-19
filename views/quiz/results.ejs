@@ -88,7 +88,7 @@
 <h2>Per question</h2>
 <table>
     <thead>
-        <tr><th>#</th><th>Question</th><th>Your answer</th><th>Correct answer</th><th>Result</th></tr>
+        <tr><th>#</th><th>Question</th><th>Your answer</th><th>Result</th></tr>
     </thead>
     <tbody>
     <% (answers || []).forEach(function(a, idx) { %>
@@ -100,13 +100,6 @@
                     <%= (a.answers && a.answers[parseInt(a.chosen_index)]) ? a.answers[parseInt(a.chosen_index)] : '(no answer)' %>
                 <% } else { %>
                     (no answer)
-                <% } %>
-            </td>
-            <td>
-                <% if (a.correct_index != null && !Number.isNaN(parseInt(a.correct_index))) { %>
-                    <%= (a.answers && a.answers[parseInt(a.correct_index)]) ? a.answers[parseInt(a.correct_index)] : '(unknown)' %>
-                <% } else { %>
-                    (unknown)
                 <% } %>
             </td>
             <td><%= a.is_correct ? 'Correct' : 'Incorrect' %></td>
