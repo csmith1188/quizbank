@@ -113,7 +113,9 @@ router.get('/course/:courseId', async (req, res) => {
                      FROM questions q
                      JOIN tasks t ON q.task_id = t.id
                      JOIN courses c ON t.course_id = c.id
-                     WHERE q.id IN (${placeholders}) AND c.id = ?`,
+                     WHERE q.id IN (${placeholders})
+                       AND c.id = ?
+                       AND COALESCE(q.quality, '') != 'bad'`,
                     [...ids, courseId]
                 );
                 questions = rows.map(r =>
@@ -275,7 +277,9 @@ router.get('/course/:courseId/question/:questionId', async (req, res) => {
          FROM questions q
          JOIN tasks t ON q.task_id = t.id
          JOIN courses c ON t.course_id = c.id
-         WHERE q.id = ? AND c.id = ?`,
+         WHERE q.id = ?
+           AND c.id = ?
+           AND COALESCE(q.quality, '') != 'bad'`,
         [questionId, courseId]
     );
     if (!row) return res.status(404).json({ error: 'Question not found' });
@@ -297,7 +301,9 @@ async function getQuestionsForUnit(unitId, courseId) {
          JOIN unit_tasks ut ON ut.task_id = t.id
          JOIN units u ON ut.unit_id = u.id
          JOIN courses c ON t.course_id = c.id
-         WHERE u.id = ? AND c.id = ?`,
+         WHERE u.id = ?
+           AND c.id = ?
+           AND COALESCE(q.quality, '') != 'bad'`,
         [unitId, courseId]
     );
     return rows.map(r =>
@@ -317,7 +323,9 @@ async function getQuestionsForTask(taskId, courseId) {
          FROM questions q
          JOIN tasks t ON q.task_id = t.id
          JOIN courses c ON t.course_id = c.id
-         WHERE q.task_id = ? AND c.id = ?`,
+         WHERE q.task_id = ?
+           AND c.id = ?
+           AND COALESCE(q.quality, '') != 'bad'`,
         [taskId, courseId]
     );
     return rows.map(r =>
@@ -336,7 +344,8 @@ async function getAllQuestionsForCourse(courseId) {
          FROM questions q
          JOIN tasks t ON q.task_id = t.id
          JOIN courses c ON t.course_id = c.id
-         WHERE c.id = ?`,
+         WHERE c.id = ?
+           AND COALESCE(q.quality, '') != 'bad'`,
         [courseId]
     );
     return rows.map(r =>
@@ -423,7 +432,9 @@ router.get('/course/:courseId/pick/:number', async (req, res) => {
                  FROM questions q
                  JOIN tasks t ON q.task_id = t.id
                  JOIN courses c ON t.course_id = c.id
-                 WHERE q.id IN (${placeholders}) AND c.id = ?`,
+                 WHERE q.id IN (${placeholders})
+                   AND c.id = ?
+                   AND COALESCE(q.quality, '') != 'bad'`,
                 [...ids, courseId]
             );
             questions = rows.map(r =>

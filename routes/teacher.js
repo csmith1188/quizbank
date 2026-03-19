@@ -774,9 +774,15 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
         const hasTaskRef = sheet.headers.some(
             h => normalizeKey(h) === normalizeKey('Task ID') || normalizeKey(h) === normalizeKey('Task Number')
         );
+        const hasUnitRef = sheet.headers.some(
+            h =>
+                normalizeKey(h) === normalizeKey('Unit ID') ||
+                normalizeKey(h) === normalizeKey('Unit Number') ||
+                normalizeKey(h) === normalizeKey('Unit Name')
+        );
 
         const rowErrors = [];
-        sheet.rows.forEach(r => {
+        for (const r of sheet.rows) {
             const values = r.values || {};
             const term = getField(values, ['Word', 'Term']);
             if (!term) {
@@ -806,7 +812,24 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                     }
                 }
             }
-        });
+
+            if (hasUnitRef) {
+                const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
+                const unitKey = (unitKeyRaw || '').toString().trim();
+                if (unitKey) {
+                    const byId = Number.isFinite(parseInt(unitKey, 10))
+                        ? await get('SELECT id FROM units WHERE course_id = ? AND id = ?', [req.courseId, parseInt(unitKey, 10)])
+                        : null;
+                    const byName = await get('SELECT id FROM units WHERE course_id = ? AND name = ?', [req.courseId, unitKey]);
+                    if (!byId && !byName) {
+                        rowErrors.push({
+                            rowNumber: r.rowNumber,
+                            message: 'Unit reference "' + unitKey + '" does not match any unit in this course.'
+                        });
+                    }
+                }
+            }
+        }
 
         if (rowErrors.length) {
             stats.errors = rowErrors;
@@ -825,11 +848,13 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                         'SELECT id FROM vocab_terms WHERE course_id = ? AND term = ?',
                         [req.courseId, term]
                     );
+                    let vocabId = null;
                     if (existing) {
                         await run(
                             'UPDATE vocab_terms SET definition = ? WHERE id = ?',
                             [definition || null, existing.id]
                         );
+                        vocabId = existing.id;
                         stats.updated += 1;
                     } else {
                         const maxOrder = await get(
@@ -840,7 +865,68 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                             'INSERT INTO vocab_terms (course_id, term, definition, sort_order) VALUES (?, ?, ?, ?)',
                             [req.courseId, term, definition || null, maxOrder.n]
                         );
+                        const inserted = await get(
+                            'SELECT id FROM vocab_terms WHERE course_id = ? AND term = ? ORDER BY id DESC LIMIT 1',
+                            [req.courseId, term]
+                        );
+                        vocabId = inserted ? inserted.id : null;
                         stats.inserted += 1;
+                    }
+
+                    // Associate uploaded vocab to units.
+                    // Priority:
+                    // 1) Explicit unit reference columns (Unit ID/Unit Number/Unit Name)
+                    // 2) Unit(s) inferred from Task ID/Task Number mapping from Course sheet
+                    if (vocabId) {
+                        const unitIds = [];
+
+                        const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
+                        const unitKey = (unitKeyRaw || '').toString().trim();
+                        if (unitKey) {
+                            const unitIdNum = parseInt(unitKey, 10);
+                            if (!Number.isNaN(unitIdNum)) {
+                                const unitById = await get(
+                                    'SELECT id FROM units WHERE course_id = ? AND id = ?',
+                                    [req.courseId, unitIdNum]
+                                );
+                                if (unitById) unitIds.push(unitById.id);
+                            }
+                            const unitByName = await get(
+                                'SELECT id FROM units WHERE course_id = ? AND name = ?',
+                                [req.courseId, unitKey]
+                            );
+                            if (unitByName && !unitIds.includes(unitByName.id)) {
+                                unitIds.push(unitByName.id);
+                            }
+                        } else {
+                            const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
+                            const taskKey = (taskKeyRaw || '').toString().trim();
+                            if (taskKey) {
+                                const mappedTaskId = taskKeyToTaskId.get(taskKey) || null;
+                                if (mappedTaskId) {
+                                    const unitRows = await all(
+                                        'SELECT unit_id FROM unit_tasks WHERE task_id = ? ORDER BY sort_order, unit_id',
+                                        [mappedTaskId]
+                                    );
+                                    (unitRows || []).forEach(ur => {
+                                        if (ur.unit_id != null && !unitIds.includes(ur.unit_id)) {
+                                            unitIds.push(ur.unit_id);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        for (const unitId of unitIds) {
+                            const maxUnitOrder = await get(
+                                'SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM unit_vocab WHERE unit_id = ?',
+                                [unitId]
+                            );
+                            await run(
+                                'INSERT OR IGNORE INTO unit_vocab (unit_id, vocab_term_id, sort_order) VALUES (?, ?, ?)',
+                                [unitId, vocabId, maxUnitOrder.n]
+                            );
+                        }
                     }
                 }
             });
@@ -1260,7 +1346,10 @@ router.get('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res)
         [taskId, req.courseId]
     );
     if (!task) return res.redirect('/courses/' + req.courseId + '/tasks');
-    const questions = await all('SELECT id, prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? ORDER BY id', [taskId]);
+    const questions = await all(
+        "SELECT id, prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? AND COALESCE(quality, '') != 'bad' ORDER BY id",
+        [taskId]
+    );
     const questionsParsed = questions.map(q => ({ ...q, answers: typeof q.answers === 'string' ? JSON.parse(q.answers) : q.answers }));
     res.render('teacher/task-edit', { user: req.session.user, course: req.course, task, questions: questionsParsed });
 });

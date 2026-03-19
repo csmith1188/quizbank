@@ -46,9 +46,10 @@
 <% } %>
 
 <h3>Add questions</h3>
-<p>Choose a unit or task; questions are picked <strong>now</strong> (all or a random number) and added to the quiz.</p>
+<p>Choose a course, unit, or task; questions are picked <strong>now</strong> (all or a random number) and added to the quiz.</p>
 <form id="addItemForm">
-    <label>Source type <select name="source_type" id="sourceTypeSelect"><option value="unit">Unit</option><option value="task">Task</option></select></label>
+    <label>Source type <select name="source_type" id="sourceTypeSelect"><option value="course">Course</option><option value="unit">Unit</option><option value="task">Task</option></select></label>
+    <div id="courseSource"><label>Course <select name="course_id" id="courseIdSelect"><option value="<%= course.id %>"><%= course.name %></option></select></label></div>
     <label>Unit <select name="source_id" id="sourceIdSelect">
         <% units.forEach(function(u) { %><option value="<%= u.id %>"><%= u.name %></option><% }); %>
     </select></label>
@@ -61,21 +62,29 @@
 (function() {
     var form = document.getElementById('addItemForm');
     var sourceTypeSelect = document.getElementById('sourceTypeSelect');
+    var courseSource = document.getElementById('courseSource');
+    var courseIdSelect = document.getElementById('courseIdSelect');
     var sourceIdSelect = document.getElementById('sourceIdSelect');
     var taskSource = document.getElementById('taskSource');
     var taskIdSelect = document.getElementById('taskIdSelect');
     var pickMode = document.getElementById('pickModeSelect');
     var countLabel = document.getElementById('countLabel');
     sourceTypeSelect.addEventListener('change', function() {
-        var isUnit = this.value === 'unit';
+        var sourceType = this.value;
+        var isCourse = sourceType === 'course';
+        var isUnit = sourceType === 'unit';
+        courseSource.style.display = isCourse ? 'block' : 'none';
         sourceIdSelect.parentNode.style.display = isUnit ? 'block' : 'none';
-        taskSource.style.display = isUnit ? 'none' : 'block';
+        taskSource.style.display = sourceType === 'task' ? 'block' : 'none';
     });
     pickMode.addEventListener('change', function() { countLabel.style.display = this.value === 'random' ? 'block' : 'none'; });
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         var sourceType = sourceTypeSelect.value;
-        var sourceId = sourceType === 'unit' ? parseInt(sourceIdSelect.value) : parseInt(taskIdSelect.value);
+        var sourceId =
+            sourceType === 'course'
+                ? parseInt(courseIdSelect.value)
+                : (sourceType === 'unit' ? parseInt(sourceIdSelect.value) : parseInt(taskIdSelect.value));
         var pickModeVal = pickMode.value;
         var count = pickModeVal === 'random' ? parseInt(form.querySelector('[name="count"]').value) || 10 : null;
         var body = JSON.stringify({ source_type: sourceType, source_id: sourceId, pick_mode: pickModeVal, count: count });
@@ -85,6 +94,7 @@
                 else r.json().then(function(err) { alert(err.error || 'Failed to add questions'); });
             });
     });
+    sourceTypeSelect.dispatchEvent(new Event('change'));
 })();
 </script>
 

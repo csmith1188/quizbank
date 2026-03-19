@@ -1,12 +1,6 @@
-- Bad questions are added to the task
-
 - Merkert was in Upper Class. Why?
 
-- Vocab uploaded are not assocaited with unit id
-
 - Mastery Intensity per course per class
-
-- Quiz from course, unit, or task
 
 - Student create temporary quiz
 
