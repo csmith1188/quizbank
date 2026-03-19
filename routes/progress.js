@@ -467,4 +467,3 @@ router.get('/progress/:attemptId/coach', requireLogin, async (req, res) => {
 });
 
 module.exports = router;
-
