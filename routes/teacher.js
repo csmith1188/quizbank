@@ -518,6 +518,7 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
 
     const results = [];
     const taskKeyToTaskId = new Map(); // user Task ID/Number from Course sheet -> DB task id
+    const unitKeyToUnitId = new Map(); // user Unit ID/Number from Course sheet -> DB unit id
 
     function addResultForType(type, name, status, stats) {
         results.push({
@@ -615,6 +616,7 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
             await withTransaction(async () => {
                 for (const r of sheet.rows) {
                     const values = r.values || {};
+                    const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number']);
                     const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
                     const unitName = getField(values, ['Unit Name']);
                     const taskName = getField(values, ['Task Name']);
@@ -648,6 +650,14 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                             );
                             unitId = row ? row.id : null;
                             stats.inserted += 1;
+                        }
+                    }
+
+                    // Record mapping from user Unit ID/Number (from Course sheet) to DB unit id
+                    if (unitKeyRaw && unitId) {
+                        const unitKey = unitKeyRaw.toString().trim();
+                        if (unitKey) {
+                            unitKeyToUnitId.set(unitKey, unitId);
                         }
                     }
 
@@ -817,11 +827,15 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                 const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
                 const unitKey = (unitKeyRaw || '').toString().trim();
                 if (unitKey) {
+                    const mappedUnitId = unitKeyToUnitId.get(unitKey) || null;
+                    const byMapped = mappedUnitId
+                        ? await get('SELECT id FROM units WHERE course_id = ? AND id = ?', [req.courseId, mappedUnitId])
+                        : null;
                     const byId = Number.isFinite(parseInt(unitKey, 10))
                         ? await get('SELECT id FROM units WHERE course_id = ? AND id = ?', [req.courseId, parseInt(unitKey, 10)])
                         : null;
                     const byName = await get('SELECT id FROM units WHERE course_id = ? AND name = ?', [req.courseId, unitKey]);
-                    if (!byId && !byName) {
+                    if (!byMapped && !byId && !byName) {
                         rowErrors.push({
                             rowNumber: r.rowNumber,
                             message: 'Unit reference "' + unitKey + '" does not match any unit in this course.'
@@ -883,6 +897,10 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                         const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
                         const unitKey = (unitKeyRaw || '').toString().trim();
                         if (unitKey) {
+                            const mappedUnitId = unitKeyToUnitId.get(unitKey) || null;
+                            if (mappedUnitId && !unitIds.includes(mappedUnitId)) {
+                                unitIds.push(mappedUnitId);
+                            }
                             const unitIdNum = parseInt(unitKey, 10);
                             if (!Number.isNaN(unitIdNum)) {
                                 const unitById = await get(
