@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS class_courses (
     class_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
     assigned_by INTEGER,
+    mastery_intensity TEXT NOT NULL DEFAULT 'standard',
     assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (class_id, course_id),
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,

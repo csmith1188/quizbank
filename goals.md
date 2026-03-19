@@ -1,6 +1,6 @@
-- Merkert was in Upper Class. Why?
+- Time column with automatic Time estimation by character length
 
-- Mastery Intensity per course per class
+- Merkert was in Upper Class. Why?
 
 - Student create temporary quiz
 

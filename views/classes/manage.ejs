@@ -34,13 +34,38 @@
 <h3>Assigned courses</h3>
 <ul>
     <% courses.forEach(function(c) { if (assignedCourseIds.has(c.id)) { %>
-        <li>
-            <strong><%= c.name %></strong>
-            <form method="post" action="/classes/<%= classItem.id %>/courses" style="display:inline;">
+        <li style="margin-bottom: 1rem;">
+            <div><strong><%= c.name %></strong></div>
+            <div style="margin-top: 0.35rem;">
+                <form method="post" action="/classes/<%= classItem.id %>/courses" style="display:inline;">
+                <input type="hidden" name="course_id" value="<%= c.id %>">
+                <input type="hidden" name="action" value="set-intensity">
+                <label style="display:inline-block; margin:0 0.5rem 0 0;">
+                    Mastery intensity:
+                    <input
+                        type="range"
+                        name="mastery_intensity_slider"
+                        min="0"
+                        max="2"
+                        step="1"
+                        value="<%= (masteryIntensityByCourse && masteryIntensityByCourse[c.id] === 'relaxed') ? 0 : (masteryIntensityByCourse && masteryIntensityByCourse[c.id] === 'intense' ? 2 : 1) %>"
+                        oninput="this.nextElementSibling.value = (this.value === '0' ? 'relaxed' : (this.value === '2' ? 'intense' : 'standard'))"
+                        onchange="this.form.submit()"
+                    >
+                    <input type="hidden" name="mastery_intensity" value="<%= (masteryIntensityByCourse && masteryIntensityByCourse[c.id]) ? masteryIntensityByCourse[c.id] : 'standard' %>">
+                </label>
+                <span class="text-muted" style="font-size:0.9rem;">
+                    <%= (masteryIntensityByCourse && masteryIntensityByCourse[c.id] === 'relaxed') ? 'Relaxed (5)' : (masteryIntensityByCourse && masteryIntensityByCourse[c.id] === 'intense' ? 'Intense (20)' : 'Standard (10)') %>
+                </span>
+            </form>
+            </div>
+            <div style="margin-top: 0.35rem;">
+                <form method="post" action="/classes/<%= classItem.id %>/courses" style="display:inline;">
                 <input type="hidden" name="course_id" value="<%= c.id %>">
                 <input type="hidden" name="action" value="unassign">
                 <button type="submit" class="btn btn-small btn-secondary">Unassign</button>
             </form>
+            </div>
         </li>
     <% } }); %>
 </ul>

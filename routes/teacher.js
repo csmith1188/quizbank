@@ -2345,10 +2345,14 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
         [userId]
     );
     const assignedCourses = await all(
-        'SELECT course_id FROM class_courses WHERE class_id = ?',
+        "SELECT course_id, COALESCE(mastery_intensity, 'standard') as mastery_intensity FROM class_courses WHERE class_id = ?",
         [classId]
     );
     const assignedCourseIds = new Set(assignedCourses.map(r => r.course_id));
+    const masteryIntensityByCourse = {};
+    assignedCourses.forEach(r => {
+        masteryIntensityByCourse[r.course_id] = (r.mastery_intensity || 'standard').toLowerCase();
+    });
 
     const quizzes = await all(
         `SELECT q.id, q.name, q.course_id
@@ -2511,6 +2515,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
         classItem,
         courses,
         assignedCourseIds,
+        masteryIntensityByCourse,
         quizzes,
         assignedQuizIds,
         studentMastery
@@ -2520,7 +2525,7 @@ router.get('/classes/:classId', requireLogin, requireClassTeacher, async (req, r
 router.post('/classes/:classId/courses', requireLogin, requireClassTeacher, async (req, res) => {
     const classId = parseInt(req.params.classId);
     const userId = req.session.userId;
-    const { course_id, action } = req.body || {};
+    const { course_id, action, mastery_intensity } = req.body || {};
     const courseId = parseInt(course_id);
     if (!courseId) return res.redirect('/classes/' + classId);
 
@@ -2529,8 +2534,17 @@ router.post('/classes/:classId/courses', requireLogin, requireClassTeacher, asyn
 
     if (action === 'assign') {
         await run(
-            'INSERT OR IGNORE INTO class_courses (class_id, course_id, assigned_by) VALUES (?, ?, ?)',
+            "INSERT OR IGNORE INTO class_courses (class_id, course_id, assigned_by, mastery_intensity) VALUES (?, ?, ?, 'standard')",
             [classId, courseId, userId]
+        );
+    } else if (action === 'set-intensity') {
+        const allowed = new Set(['relaxed', 'standard', 'intense']);
+        const intensity = allowed.has((mastery_intensity || '').toLowerCase())
+            ? mastery_intensity.toLowerCase()
+            : 'standard';
+        await run(
+            'UPDATE class_courses SET mastery_intensity = ? WHERE class_id = ? AND course_id = ?',
+            [intensity, classId, courseId]
         );
     } else if (action === 'unassign') {
         // When a course is removed from a class, clear any mastery
