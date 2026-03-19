@@ -1,0 +1,77 @@
+<%
+  const safeCourseName = (typeof course !== 'undefined' && course && course.name) ? course.name : 'Course';
+%>
+<%- include('../partials/teacher-header', { title: 'My Mastery - ' + safeCourseName, user, course, breadcrumb: safeCourseName + ' &rarr; Mastery' }) %>
+<h1>My mastery for <%= safeCourseName %></h1>
+
+<%
+  var overallSum = 0;
+  var overallCount = 0;
+  if (units && units.length) {
+    units.forEach(function(u) {
+      (u.tasks || []).forEach(function(t) {
+        if (typeof t.mastery === 'number') {
+          overallSum += t.mastery;
+          overallCount += 1;
+        }
+      });
+    });
+  }
+  var overallPct = overallCount > 0 ? Math.round((overallSum / overallCount) * 100) : 0;
+%>
+
+<p>
+  Overall mastery:
+  <strong><%= overallPct %>%</strong>
+</p>
+
+<% if (typeof course !== 'undefined' && course && course.id) { %>
+<form method="post" action="/courses/<%= course.id %>/progress-test" style="display:inline;">
+    <button type="submit" class="btn">Start progress test</button>
+</form>
+<form method="post" action="/courses/<%= course.id %>/overall-test" style="display:inline; margin-left:0.5rem;">
+    <button type="submit" class="btn btn-secondary">Start overall knowledge test</button>
+</form>
+<a href="/courses/<%= course.id %>/mastery/coach" class="btn btn-secondary ai-coach-btn" style="margin-left:0.5rem;">Ask the AI Coach for next steps</a>
+<% } %>
+
+<% if (!units || units.length === 0) { %>
+<p>No mastery data yet. Take some quizzes to start building mastery.</p>
+<% } else { %>
+    <% units.forEach(function(u) { %>
+        <section class="mastery-unit">
+            <h2><%= u.name %></h2>
+            <% if (!u.tasks || u.tasks.length === 0) { %>
+                <p><em>No tasks in this unit.</em></p>
+            <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Mastery</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% u.tasks.forEach(function(t) { %>
+                    <tr>
+                        <td><%= t.taskName %></td>
+                        <td>
+                            <% var pct = Math.round((t.mastery || 0) * 100); %>
+                            <div class="mastery-bar">
+                                <div class="mastery-bar-fill" style="width:<%= pct %>%"></div>
+                            </div>
+                            <span><%= pct %>%</span>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+            <% } %>
+        </section>
+    <% }); %>
+<% } %>
+
+<p><a href="/classes" class="btn btn-secondary">Back to classes</a></p>
+
+<%- include('../partials/footer') %>
+

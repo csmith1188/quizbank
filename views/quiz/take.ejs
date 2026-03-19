@@ -1,0 +1,71 @@
+<%
+  const safeQuizName = (typeof quiz !== 'undefined' && quiz && quiz.name) ? quiz.name : 'Quiz';
+  let breadcrumb;
+  if (typeof classItem !== 'undefined' && classItem && classItem.id) {
+    breadcrumb = '<a href="/classes">Classes</a> &rarr; <a href="/classes/' + classItem.id + '">' + classItem.name + '</a> &rarr; ' + safeQuizName + ' &rarr; Question ' + index + ' of ' + total;
+  } else {
+    breadcrumb = safeQuizName + ' &rarr; Question ' + index + ' of ' + total;
+  }
+%>
+<%- include('../partials/teacher-header', { title: 'Take Quiz - ' + safeQuizName, user, course: null, breadcrumb }) %>
+<h1><%= safeQuizName %></h1>
+<% if (typeof classItem !== 'undefined' && classItem && classItem.name) { %>
+  <p>Class: <strong><%= classItem.name %></strong></p>
+<% } %>
+<p>Question <strong><%= index %></strong> of <strong><%= total %></strong></p>
+
+<% if (typeof questionDots !== 'undefined' && questionDots && questionDots.length) { %>
+<p>
+    <% questionDots.forEach(function(dot) { 
+        var isCurrent = dot.index === index;
+        var isAnswered = dot.answered;
+        var emoji = isCurrent ? '🟢' : (isAnswered ? '🔵' : '🔴');
+        var href;
+        if (typeof classItem !== 'undefined' && classItem && classItem.id && attempt && attempt.quiz_id) {
+            href = '/classes/' + classItem.id + '/quizzes/' + attempt.quiz_id + '/take/' + dot.index + '?attemptId=' + attempt.id;
+        } else if (typeof attemptType !== 'undefined' && attemptType === 'overall' && attempt && attempt.id) {
+            href = '/overall/' + attempt.id + '/take/' + dot.index;
+        } else if (attempt && attempt.id) {
+            href = '/progress/' + attempt.id + '/take/' + dot.index;
+        } else {
+            href = '#';
+        }
+    %>
+        <a href="<%= href %>" style="text-decoration:none; font-size:1.2em;" title="Question <%= dot.index %>"><%= emoji %></a>
+    <% }); %>
+</p>
+<% } %>
+
+<form method="post" action="<%=
+  (typeof classItem !== 'undefined' && classItem && classItem.id && attempt && attempt.quiz_id)
+    ? ('/classes/' + classItem.id + '/quizzes/' + attempt.quiz_id + '/take/' + index)
+    : (typeof attemptType !== 'undefined' && attemptType === 'overall' && attempt && attempt.id)
+      ? ('/overall/' + attempt.id + '/take/' + index)
+      : ('/progress/' + (attempt ? attempt.id : '') + '/take/' + index)
+%>">
+    <input type="hidden" name="attemptId" value="<%= attempt.id %>">
+    <p><strong><%= question.prompt %></strong></p>
+    <ul>
+        <% (question.answers || []).forEach(function(ans, i) { %>
+            <li>
+                <label>
+                    <input type="radio" name="chosen_index" value="<%= i %>" <%= question.chosenIndex === i ? 'checked' : '' %> />
+                    <%= ans %>
+                </label>
+            </li>
+        <% }); %>
+    </ul>
+
+    <div class="actions">
+        <% if (index > 1) { %>
+            <button type="submit" name="nav" value="prev" class="btn btn-secondary">Previous</button>
+        <% } %>
+        <% if (index < total) { %>
+            <button type="submit" name="nav" value="next" class="btn">Next</button>
+        <% } else { %>
+            <button type="submit" name="nav" value="submit" class="btn btn-danger">Submit quiz</button>
+        <% } %>
+    </div>
+</form>
+
+<%- include('../partials/footer') %>

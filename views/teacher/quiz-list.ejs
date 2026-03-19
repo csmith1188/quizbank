@@ -1,0 +1,64 @@
+<%- include('../partials/teacher-header', { title: 'Quizzes - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Quizzes' }) %>
+<h1>Quizzes</h1>
+<p><a href="/courses/<%= course.id %>/quizzes/new" class="btn">New Quiz</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<% if (quizzes.length === 0) { %>
+<p>No quizzes. <a href="/courses/<%= course.id %>/quizzes/new">Create one</a>.</p>
+<% } else { %>
+<div class="quiz-list-accordion reorderable-list" data-reorder-url="/api/courses/<%= course.id %>/quizzes/reorder">
+<% quizzes.forEach(function(q, idx) { %>
+    <details class="quiz-list-details" id="quiz-<%= q.id %>" data-id="<%= q.id %>">
+        <summary class="quiz-list-summary">
+            <span class="reorderable-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+            <span class="unit-order" data-prefix=""><%= (q.sort_order != null ? q.sort_order : idx) + 1 %></span>
+            <button
+                type="button"
+                class="btn btn-small copy-id-btn"
+                data-copy-id="<%= q.id %>"
+                aria-label="Copy quiz id to clipboard"
+                title="Copy quiz id to clipboard"
+                onclick="event.stopPropagation();"
+            >
+                ⧉
+            </button>
+            <span class="quiz-list-name"><%= q.name %></span>
+            <span class="quiz-list-meta"><%= new Date(q.created_at).toLocaleDateString() %></span>
+            <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/edit" class="btn btn-small quiz-list-open-btn" onclick="event.stopPropagation()">Open</a>
+        </summary>
+        <div class="quiz-list-content">
+            <form method="post" action="/courses/<%= course.id %>/quizzes/<%= q.id %>" class="quiz-list-edit-form field-row">
+                <input type="hidden" name="from" value="list" />
+                <label>Name <input type="text" name="name" value="<%= q.name %>" required /></label>
+                <button type="submit" class="btn btn-small">Save name</button>
+            </form>
+            <p class="quiz-list-actions">
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/edit" class="btn btn-small">Edit items</a>
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/preview" class="btn btn-small btn-secondary">Preview</a>
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export" class="btn btn-small btn-secondary">Export QTI</a>
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-kahoot" class="btn btn-small btn-secondary">Kahoot XLSX</a>
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-gimkit" class="btn btn-small btn-secondary">Gimkit CSV</a>
+                <a href="/courses/<%= course.id %>/quizzes/<%= q.id %>/export-blooket" class="btn btn-small btn-secondary">Blooket CSV</a>
+                <form method="post"
+                      action="/courses/<%= course.id %>/quizzes/<%= q.id %>/delete"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-small btn-danger"
+                            onclick="return confirm('Delete this quiz and its assigned questions? This cannot be undone.');">
+                        Delete
+                    </button>
+                </form>
+            </p>
+        </div>
+    </details>
+<% }); %>
+</div>
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('quiz-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+})();
+</script>
+<% } %>
+<%- include('../partials/footer') %>

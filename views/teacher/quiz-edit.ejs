@@ -1,0 +1,109 @@
+<%- include('../partials/teacher-header', { title: quiz.name + ' - Edit - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/quizzes">Quizzes</a> &rarr; ' + quiz.name }) %>
+<h1>
+    Quiz: <%= quiz.name %>
+    <button
+        type="button"
+        class="btn btn-small copy-id-btn"
+        data-copy-id="<%= quiz.id %>"
+        aria-label="Copy quiz id to clipboard"
+        title="Copy quiz id to clipboard"
+    >
+        ⧉
+    </button>
+</h1>
+<form method="post" action="/courses/<%= course.id %>/quizzes/<%= quiz.id %>">
+    <label>Name <input type="text" name="name" value="<%= quiz.name %>" required /></label>
+    <div class="actions"><button type="submit" class="btn">Save name</button></div>
+</form>
+
+<h2>Questions in this quiz</h2>
+<p>This quiz is a fixed list of questions. Add questions below (they are picked from the chosen unit or task at add time). Drag rows to reorder.</p>
+<% if (quizQuestions && quizQuestions.length > 0) { %>
+<table data-reorder-url="/api/courses/<%= course.id %>/quizzes/<%= quiz.id %>/items/reorder">
+    <thead><tr><th>#</th><th>Question</th><th>Actions</th></tr></thead>
+    <tbody>
+    <% quizQuestions.forEach(function(qq, idx) { %>
+        <tr data-id="<%= qq.id %>">
+            <td><%= idx + 1 %></td>
+            <td><%= qq.prompt && qq.prompt.length > 80 ? qq.prompt.substring(0, 80) + '...' : (qq.prompt || '') %></td>
+            <td>
+                <form method="post"
+                      action="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/items/<%= qq.id %>/delete"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-small btn-danger"
+                            onclick="return confirm('Remove this question from the quiz?');">
+                        Remove
+                    </button>
+                </form>
+            </td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+<% } else { %>
+<p>No questions yet. Add some below.</p>
+<% } %>
+
+<h3>Add questions</h3>
+<p>Choose a course, unit, or task; questions are picked <strong>now</strong> (all or a random number) and added to the quiz.</p>
+<form id="addItemForm">
+    <label>Source type <select name="source_type" id="sourceTypeSelect"><option value="course">Course</option><option value="unit">Unit</option><option value="task">Task</option></select></label>
+    <div id="courseSource"><label>Course <select name="course_id" id="courseIdSelect"><option value="<%= course.id %>"><%= course.name %></option></select></label></div>
+    <label>Unit <select name="source_id" id="sourceIdSelect">
+        <% units.forEach(function(u) { %><option value="<%= u.id %>"><%= u.name %></option><% }); %>
+    </select></label>
+    <div id="taskSource" style="display:none;"><label>Task <select name="task_id" id="taskIdSelect"><% tasks.forEach(function(t) { %><option value="<%= t.id %>"><%= t.name %></option><% }); %></select></label></div>
+    <label>Pick <select name="pick_mode" id="pickModeSelect"><option value="all">All questions</option><option value="random">Random N</option></select></label>
+    <label id="countLabel" style="display:none;">Count <input type="number" name="count" min="1" value="10" /></label>
+    <button type="submit" class="btn">Add questions</button>
+</form>
+<script>
+(function() {
+    var form = document.getElementById('addItemForm');
+    var sourceTypeSelect = document.getElementById('sourceTypeSelect');
+    var courseSource = document.getElementById('courseSource');
+    var courseIdSelect = document.getElementById('courseIdSelect');
+    var sourceIdSelect = document.getElementById('sourceIdSelect');
+    var taskSource = document.getElementById('taskSource');
+    var taskIdSelect = document.getElementById('taskIdSelect');
+    var pickMode = document.getElementById('pickModeSelect');
+    var countLabel = document.getElementById('countLabel');
+    sourceTypeSelect.addEventListener('change', function() {
+        var sourceType = this.value;
+        var isCourse = sourceType === 'course';
+        var isUnit = sourceType === 'unit';
+        courseSource.style.display = isCourse ? 'block' : 'none';
+        sourceIdSelect.parentNode.style.display = isUnit ? 'block' : 'none';
+        taskSource.style.display = sourceType === 'task' ? 'block' : 'none';
+    });
+    pickMode.addEventListener('change', function() { countLabel.style.display = this.value === 'random' ? 'block' : 'none'; });
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var sourceType = sourceTypeSelect.value;
+        var sourceId =
+            sourceType === 'course'
+                ? parseInt(courseIdSelect.value)
+                : (sourceType === 'unit' ? parseInt(sourceIdSelect.value) : parseInt(taskIdSelect.value));
+        var pickModeVal = pickMode.value;
+        var count = pickModeVal === 'random' ? parseInt(form.querySelector('[name="count"]').value) || 10 : null;
+        var body = JSON.stringify({ source_type: sourceType, source_id: sourceId, pick_mode: pickModeVal, count: count });
+        fetch('/api/courses/<%= course.id %>/quizzes/<%= quiz.id %>/items', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, credentials: 'same-origin' })
+            .then(function(r) {
+                if (r.ok) location.reload();
+                else r.json().then(function(err) { alert(err.error || 'Failed to add questions'); });
+            });
+    });
+    sourceTypeSelect.dispatchEvent(new Event('change'));
+})();
+</script>
+
+<p>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/preview" class="btn">Preview quiz</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export" class="btn">Export to Blackboard/Schoology (QTI zip)</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-kahoot" class="btn">Export as Kahoot session (XLSX)</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-gimkit" class="btn">Export as Gimkit set (CSV)</a>
+    <a href="/courses/<%= course.id %>/quizzes/<%= quiz.id %>/export-blooket" class="btn">Export as Blooket set (CSV)</a>
+    <a href="/courses/<%= course.id %>/quizzes" class="btn btn-secondary">Back to quizzes</a>
+</p>
+<%- include('../partials/footer') %>

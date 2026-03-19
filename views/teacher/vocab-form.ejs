@@ -1,0 +1,11 @@
+<%- include('../partials/teacher-header', { title: (term ? 'Edit' : 'New') + ' term - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; <a href="/courses/' + course.id + '/vocab">Vocabulary</a> &rarr; ' + (term ? 'Edit' : 'New') }) %>
+<h1><%= term ? 'Edit term' : 'New term' %></h1>
+<form method="post" action="<%= term ? '/courses/' + course.id + '/vocab/' + term.id : '/courses/' + course.id + '/vocab' %>">
+    <label>Term <input type="text" name="term" value="<%= term ? term.term : '' %>" required /></label>
+    <label>Definition <textarea name="definition" rows="3" class="textarea-definition"><%= term && term.definition ? term.definition : '' %></textarea></label>
+    <div class="actions">
+        <button type="submit" class="btn">Save</button>
+        <a href="/courses/<%= course.id %>/vocab" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+<%- include('../partials/footer') %>

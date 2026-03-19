@@ -1,4 +1,8 @@
 /node_modules
-/db/database.sqlite
-/.env
-/services/BBconverters/exports
+/db/database.db
+/db/sessions.db
+.env
+/.cursor
+/.vscode
+/context
+/imports

@@ -1,0 +1,66 @@
+<%- include('../partials/teacher-header', { title: 'My Courses', user }) %>
+<h1>My Courses</h1>
+<p><a href="/courses/new" class="btn">New Course</a></p>
+
+<% if (courses.length === 0) { %>
+<p>No courses yet.</p>
+<% } else { %>
+<div class="course-accordion reorderable-list" data-reorder-url="/api/courses/reorder">
+<% courses.forEach(function(c, idx) { %>
+    <details class="course-details" id="course-<%= c.id %>" data-id="<%= c.id %>">
+        <summary class="course-summary">
+            <span class="reorderable-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+            <span class="course-order" data-prefix=""><%= (c.sort_order != null ? c.sort_order : idx) + 1 %></span>
+            <button
+                type="button"
+                class="btn btn-small copy-id-btn"
+                data-copy-id="<%= c.id %>"
+                aria-label="Copy course id to clipboard"
+                title="Copy course id to clipboard"
+                onclick="event.stopPropagation();"
+            >
+                ⧉
+            </button>
+            <span class="course-name"><%= c.name %></span>
+            <a href="/courses/<%= c.id %>" class="btn btn-small course-open-btn" onclick="event.stopPropagation()">Open</a>
+        </summary>
+
+        <div class="course-content">
+            <p class="course-full-summary">
+                <%= c.taskCount %> task<%= c.taskCount !== 1 ? 's' : '' %>,
+                <%= c.unitCount %> unit<%= c.unitCount !== 1 ? 's' : '' %>,
+                <%= c.vocabCount %> vocab term<%= c.vocabCount !== 1 ? 's' : '' %>,
+                <%= c.quizCount %> quiz<%= c.quizCount !== 1 ? 'zes' : '' %>.
+            </p>
+
+            <form method="post" action="/courses/<%= c.id %>" class="course-edit-form">
+                <div class="field-row">
+                    <label>Name <input type="text" name="name" value="<%= c.name %>" required /></label>
+                    <button type="submit" class="btn btn-small">Save</button>
+                </div>
+                <label style="margin-top: 0.5rem;"><input type="checkbox" name="is_public" value="1" <%= c.is_public ? 'checked' : '' %> /> Public</label>
+            </form>
+            <a href="/courses/<%= c.id %>/export-template" class="btn btn-small" onclick="event.stopPropagation()">Download Excel</a>
+            <form method="post"
+                  action="/courses/<%= c.id %>/delete"
+                  style="margin-top:0.5rem;"
+                  onsubmit="return confirm('Delete this course and all of its units, tasks, vocab, and quizzes? This cannot be undone.');">
+                <button type="submit" class="btn btn-small btn-danger">Delete course</button>
+            </form>
+        </div>
+    </details>
+<% }); %>
+</div>
+<% } %>
+
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('course-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+})();
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,115 @@
+<%- include('../partials/teacher-header', { title: course.name + ' – Review import', user, course }) %>
+
+<h1>Review import</h1>
+
+<p>
+    The uploaded workbook was read successfully. Below is a summary of what can be imported,
+    followed by a preview of each sheet. Select which sheet types you want to include.
+    If a sheet fails validation on the next step, no data from that sheet will be written.
+</p>
+
+<% 
+    var totalRows = 0;
+    var byType = { structure: 0, vocab: 0, questions: 0, other: 0 };
+    (sheets || []).forEach(function(s) {
+        totalRows += s.rows.length;
+        if (s.type === 'structure') byType.structure += s.rows.length;
+        else if (s.type === 'vocab') byType.vocab += s.rows.length;
+        else if (s.type === 'questions') byType.questions += s.rows.length;
+        else byType.other += s.rows.length;
+    });
+%>
+
+<section class="card" style="margin-top:1rem; padding:1rem;">
+    <h2>Summary</h2>
+    <ul>
+        <li><strong>Total rows detected</strong>: <%= totalRows %></li>
+        <li><strong>Units and Tasks</strong>: <%= byType.structure %></li>
+        <li><strong>Vocabulary</strong>: <%= byType.vocab %></li>
+        <li><strong>Questions</strong>: <%= byType.questions %></li>
+        <% if (byType.other) { %>
+            <li><strong>Other sheets</strong>: <%= byType.other %></li>
+        <% } %>
+    </ul>
+</section>
+
+<form action="/courses/<%= course.id %>/import/confirm" method="post" style="margin-top:1rem;">
+    <input type="hidden" name="token" value="<%= token %>">
+
+    <% sheets.forEach(function(sheet, idx) { 
+        var sample = sheet.rows.slice(0, 5);
+        var headers = sheet.headers || [];
+    %>
+        <section class="card" style="margin-top:1rem; padding:1rem;">
+            <h2 style="margin-bottom:0.25rem;">
+                <%= sheet.name %>
+                <span class="text-muted" style="font-size:0.9rem;">
+                    —
+                    <% if (sheet.type === 'structure') { %>
+                        Units and Tasks
+                    <% } else if (sheet.type === 'vocab') { %>
+                        Vocabulary
+                    <% } else if (sheet.type === 'questions') { %>
+                        Questions
+                    <% } else { %>
+                        <%= sheet.type %>
+                    <% } %>
+                </span>
+            </h2>
+            <p class="text-muted" style="margin:0 0 0.25rem 0;">
+                <strong><%= sheet.rows.length %></strong> data row(s) detected.
+            </p>
+            <label style="display:inline-flex; align-items:center; gap:0.35rem; margin-top:0.25rem;">
+                <input
+                    type="checkbox"
+                    name="include_<%= sheet.type %>"
+                    value="1"
+                    checked
+                >
+                <span class="text-muted">Include this sheet</span>
+            </label>
+
+            <% if (!sample.length) { %>
+                <p class="text-muted" style="margin-top:0.5rem;">No data rows found in this sheet.</p>
+            <% } else { %>
+                <div style="overflow:auto; margin-top:0.75rem;">
+                    <table class="table table-compact">
+                        <thead>
+                            <tr>
+                                <th class="text-muted">#</th>
+                                <% headers.forEach(function(h) { %>
+                                    <th><%= h || '(unnamed column)' %></th>
+                                <% }); %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% sample.forEach(function(r, i) { %>
+                                <tr>
+                                    <td class="text-muted"><%= r.rowNumber %></td>
+                                    <% headers.forEach(function(h) { 
+                                        var v = (r.values && Object.prototype.hasOwnProperty.call(r.values, h)) ? r.values[h] : '';
+                                    %>
+                                        <td><%= v %></td>
+                                    <% }); %>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <% if (sheet.rows.length > sample.length) { %>
+                        <p class="text-muted" style="margin-top:0.25rem;">
+                            Showing first <%= sample.length %> of <%= sheet.rows.length %> row(s).
+                        </p>
+                    <% } %>
+                </div>
+            <% } %>
+        </section>
+    <% }); %>
+
+    <div class="field-row" style="margin-top:1rem;">
+        <button type="submit" class="btn">Validate &amp; import</button>
+        <a href="/courses/<%= course.id %>" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<%- include('../partials/footer') %>
+

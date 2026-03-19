@@ -1,0 +1,53 @@
+<%- include('../partials/teacher-header', { title: 'Class Mastery - ' + classItem.name, user, course: null, breadcrumb: '<a href=\"/classes\">Classes</a> &rarr; ' + classItem.name + ' &rarr; Mastery' }) %>
+<h1>Mastery for <%= classItem.name %></h1>
+
+<%
+  var overallPct = (typeof overallMastery === 'number')
+      ? Math.round((overallMastery || 0) * 100)
+      : 0;
+%>
+<p>
+  Overall class mastery:
+  <strong><%= overallPct %>%</strong>
+</p>
+
+<% if (!units || units.length === 0) { %>
+<p>No mastery data yet for this class.</p>
+<% } else { %>
+    <% units.forEach(function(u) { %>
+        <section class="mastery-unit">
+            <h2><%= u.name %></h2>
+            <% if (!u.tasks || u.tasks.length === 0) { %>
+                <p><em>No tasks in this unit.</em></p>
+            <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Avg mastery</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% u.tasks.forEach(function(t) { %>
+                    <tr>
+                        <td><%= t.taskName %></td>
+                        <td><%= Math.round((t.avgMastery || 0) * 100) %>%</td>
+                        <td><%= Math.round((t.minMastery || 0) * 100) %>%</td>
+                        <td><%= Math.round((t.maxMastery || 0) * 100) %>%</td>
+                        <td><%= t.studentCount %></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+            <% } %>
+        </section>
+    <% }); %>
+<% } %>
+
+<p><a href="/classes" class="btn btn-secondary">Back to classes</a></p>
+
+<%- include('../partials/footer') %>
+

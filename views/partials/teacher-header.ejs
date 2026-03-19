@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('head', { title: typeof title !== 'undefined' ? title : 'QuizBank' }) %>
+</head>
+<body>
+    <%- include('nav', { user: typeof user !== 'undefined' ? user : '', course: typeof course !== 'undefined' ? course : null }) %>
+    <main class="page">

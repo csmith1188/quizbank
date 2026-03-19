@@ -1,0 +1,64 @@
+<%- include('../partials/teacher-header', { title: course.name + ' – Import results', user, course }) %>
+
+<h1>Import results</h1>
+
+<p>
+    Below is a summary of what was imported for each sheet type. Sheets with validation errors were not written.
+</p>
+
+<% if (!results || !results.length) { %>
+    <p class="text-muted">No import results to show.</p>
+<% } else { %>
+    <% results.forEach(function(r) { %>
+        <section style="margin-top:1.5rem;">
+            <h2>
+                <% if (r.type === 'structure') { %>
+                    Units and Tasks
+                <% } else if (r.type === 'vocab') { %>
+                    Vocabulary
+                <% } else if (r.type === 'questions') { %>
+                    Questions
+                <% } else { %>
+                    <%= r.type %>
+                <% } %>
+                <span class="text-muted">— sheet "<%= r.name %>"</span>
+            </h2>
+
+            <% if (r.status === 'skipped') { %>
+                <p class="text-muted">This sheet was not selected for import.</p>
+            <% } else if (r.status === 'failed') { %>
+                <p class="text-muted" style="color:#c00;">
+                    Import failed for this sheet. No rows were written.
+                </p>
+            <% } else if (r.status === 'ok') { %>
+                <p>
+                    Imported <strong><%= r.inserted || 0 %></strong> new,
+                    updated <strong><%= r.updated || 0 %></strong>,
+                    skipped <strong><%= r.duplicates || 0 %></strong> duplicates
+                    out of <strong><%= r.total || 0 %></strong> rows.
+                </p>
+            <% } %>
+
+            <% if (r.errors && r.errors.length) { %>
+                <details style="margin-top:0.5rem;">
+                    <summary><strong><%= r.errors.length %></strong> validation error(s)</summary>
+                    <ul>
+                        <% r.errors.forEach(function(e) { %>
+                            <li>
+                                Row <%= e.rowNumber %>:
+                                <%= e.message %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </details>
+            <% } %>
+        </section>
+    <% }); %>
+<% } %>
+
+<div style="margin-top:2rem;">
+    <a href="/courses/<%= course.id %>" class="btn">Back to course</a>
+</div>
+
+<%- include('../partials/footer') %>
+

@@ -1,0 +1,11 @@
+<%- include('../partials/teacher-header', { title: course ? 'Edit Course' : 'New Course', user }) %>
+<h1><%= course ? 'Edit Course' : 'New Course' %></h1>
+<form method="post" action="<%= course ? '/courses/' + course.id : '/courses' %>">
+    <label>Name <input type="text" name="name" value="<%= course ? (course.name || '') : '' %>" required /></label>
+    <label><input type="checkbox" name="is_public" value="1" <%= course && course.is_public ? 'checked' : '' %> /> Public</label>
+    <div class="actions">
+        <button type="submit" class="btn"><%= course ? 'Save' : 'Create' %></button>
+        <a href="<%= course ? '/courses' : '/courses' %>" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+<%- include('../partials/footer') %>

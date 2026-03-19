@@ -1,28 +1,29 @@
 {
-  "name": "quizbank-api",
+  "name": "formbarboilerplate",
   "version": "1.0.0",
-  "description": "API for quiz bank hierarchy",
-  "main": "src/index.js",
+  "main": "app.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon src/index.js",
-    "create-db": "node db/database-init.js"
+    "init-db": "node db/init-db.js",
+    "migrate": "node db/migrate-all.js",
+    "import-9th": "node scripts/import-9th.js"
   },
+  "author": "C. Smith",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "archiver": "^7.0.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "ejs": "^3.1.10",
-    "express": "^4.18.2",
-    "express-rate-limit": "^7.1.5",
-    "express-session": "^1.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2",
-    "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7",
-    "xlsx": "^0.18.5"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+    "axios": "^1.13.6",
+    "connect-sqlite3": "^0.9.16",
+    "dotenv": "^17.3.1",
+    "ejs": "^5.0.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "openai": "^6.29.0",
+    "socket.io-client": "^4.8.3",
+    "sqlite3": "^5.1.7"
   }
 }

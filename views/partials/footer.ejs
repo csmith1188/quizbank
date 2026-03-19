@@ -1,5 +1,117 @@
-<footer class="footer">
-    <div>Quizbanks &copy; <%= new Date().getFullYear() %> | All rights reserved.</div>
-</footer>
+</main>
+
+<script>
+(function () {
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function (resolve, reject) {
+            try {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    function initCopyIdButtons() {
+        var buttons = document.querySelectorAll('.copy-id-btn[data-copy-id]');
+        if (!buttons.length) return;
+        buttons.forEach(function (btn) {
+            if (btn._copyIdBound) return;
+            btn._copyIdBound = true;
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var id = btn.getAttribute('data-copy-id');
+                if (!id) return;
+                var originalTitle = btn.getAttribute('title') || 'Copy id to clipboard';
+                copyToClipboard(id)
+                    .then(function () {
+                        btn.setAttribute('title', 'Copied!');
+                        btn.classList.add('copied');
+                        setTimeout(function () {
+                            btn.setAttribute('title', originalTitle);
+                            btn.classList.remove('copied');
+                        }, 1500);
+                    })
+                    .catch(function () {
+                        alert('Unable to copy id to clipboard');
+                    });
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCopyIdButtons);
+    } else {
+        initCopyIdButtons();
+    }
+})();
+
+(function () {
+    function initAiCoachButtons() {
+        var buttons = document.querySelectorAll('a.ai-coach-btn');
+        if (!buttons.length) return;
+        buttons.forEach(function (btn) {
+            if (btn._aiCoachBound) return;
+            btn._aiCoachBound = true;
+            btn.addEventListener('click', function (e) {
+                if (btn._aiCoachClicked) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                btn._aiCoachClicked = true;
+                btn.classList.add('disabled');
+                btn.setAttribute('aria-disabled', 'true');
+                btn.style.pointerEvents = 'none';
+                btn.textContent = 'Generating...';
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAiCoachButtons);
+    } else {
+        initAiCoachButtons();
+    }
+})();
+
+(function () {
+    function initConfirmForms() {
+        var forms = document.querySelectorAll('form[data-confirm]');
+        if (!forms.length) return;
+        forms.forEach(function (form) {
+            if (form._confirmBound) return;
+            form._confirmBound = true;
+            form.addEventListener('submit', function (e) {
+                var msg = form.getAttribute('data-confirm') || 'Are you sure?';
+                if (!window.confirm(msg)) {
+                    e.preventDefault();
+                    e.returnValue = false;
+                    return false;
+                }
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initConfirmForms);
+    } else {
+        initConfirmForms();
+    }
+})();
+
+</script>
+
 </body>
 </html>

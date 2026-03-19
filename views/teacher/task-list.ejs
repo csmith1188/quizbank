@@ -1,0 +1,64 @@
+<%- include('../partials/teacher-header', { title: 'Tasks - ' + course.name, user, course }) %>
+<h1>Task List</h1>
+<p><a href="/courses/<%= course.id %>/tasks/new" class="btn">New Task</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<% if (tasks.length === 0) { %>
+<p>No tasks. <a href="/courses/<%= course.id %>/tasks/new">Add one</a>.</p>
+<% } else { %>
+<div class="task-accordion reorderable-list" data-reorder-url="/api/courses/<%= course.id %>/tasks/reorder" data-renumber="false">
+<% tasks.forEach(function(t, idx) { %>
+    <details class="task-details unit-details" id="task-<%= t.id %>" data-id="<%= t.id %>">
+        <summary class="unit-summary">
+            <span class="reorderable-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+            <span class="unit-order" data-prefix="Task ">
+                <%= (typeof t.task_number === 'number' && t.task_number > 0)
+                    ? t.task_number
+                    : (t.sort_order != null ? t.sort_order : idx) + 1 %>
+            </span>
+            <button
+                type="button"
+                class="btn btn-small copy-id-btn"
+                data-copy-id="<%= t.id %>"
+                aria-label="Copy task id to clipboard"
+                title="Copy task id to clipboard"
+                onclick="event.stopPropagation();"
+            >
+                ⧉
+            </button>
+            <span class="unit-name"><%= t.name %></span>
+            <% if (t.questionCount != null) { %><span class="unit-meta"><%= t.questionCount %> question<%= t.questionCount !== 1 ? 's' : '' %></span><% } %>
+        </summary>
+        <div class="unit-content">
+            <form method="post" action="/courses/<%= course.id %>/tasks/<%= t.id %>">
+                <label>Task # <input type="number" name="task_number" min="1" value="<%= (typeof t.task_number === 'number' && t.task_number > 0) ? t.task_number : (t.sort_order != null ? t.sort_order : idx) + 1 %>" required /></label>
+                <label>Name <input type="text" name="name" value="<%= t.name %>" required /></label>
+                <label>Target <textarea name="target" class="textarea-target"><%= t.target || '' %></textarea></label>
+                <label>Description <textarea name="description" rows="3" class="textarea-target"><%= t.description || '' %></textarea></label>
+                <div class="actions">
+                    <button type="submit" class="btn">Save</button>
+                    <a href="/courses/<%= course.id %>/tasks/<%= t.id %>" class="btn btn-secondary">Edit questions</a>
+                </div>
+            </form>
+            <form method="post"
+                  action="/courses/<%= course.id %>/tasks/<%= t.id %>/delete"
+                  style="margin-top:0.5rem;">
+                <button type="submit"
+                        class="btn btn-small btn-danger"
+                        onclick="return confirm('Delete this task and all of its questions? This cannot be undone.');">
+                    Delete task
+                </button>
+            </form>
+        </div>
+    </details>
+<% }); %>
+</div>
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('task-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+})();
+</script>
+<% } %>
+<%- include('../partials/footer') %>

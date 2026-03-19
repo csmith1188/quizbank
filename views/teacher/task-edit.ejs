@@ -1,0 +1,136 @@
+<%- include('../partials/teacher-header', { title: task.name + ' - ' + course.name, user, course }) %>
+<h1>
+    Task <%= (typeof task.task_number === 'number' && task.task_number > 0)
+        ? task.task_number
+        : (task.sort_order != null ? task.sort_order : 0) + 1 %>: <%= task.name %>
+    <button
+        type="button"
+        class="btn btn-small copy-id-btn"
+        data-copy-id="<%= task.id %>"
+        aria-label="Copy task id to clipboard"
+        title="Copy task id to clipboard"
+    >
+        ⧉
+    </button>
+</h1>
+<form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>">
+    <label>Task # <input type="number" name="task_number" min="1" value="<%= (typeof task.task_number === 'number' && task.task_number > 0) ? task.task_number : (task.sort_order != null ? task.sort_order : 0) + 1 %>" required /></label>
+    <label>Name <input type="text" name="name" value="<%= task.name %>" required /></label>
+    <label>Target <textarea name="target" class="textarea-target"><%= task.target || '' %></textarea></label>
+    <label>Description <textarea name="description" rows="3" class="textarea-target"><%= task.description || '' %></textarea></label>
+    <div class="actions"><button type="submit" class="btn">Save task</button></div>
+</form>
+
+<h2>Questions</h2>
+<p><a href="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/new" class="btn">Add question</a></p>
+<% if (questions.length === 0) { %>
+<p class="text-muted">No questions yet.</p>
+<% } else { %>
+<div class="question-accordion">
+<% questions.forEach(function(q, idx) { %>
+    <details class="question-details unit-details" id="question-<%= q.id %>">
+        <summary class="unit-summary">
+            <button
+                type="button"
+                class="btn btn-small copy-id-btn"
+                data-copy-id="<%= q.id %>"
+                aria-label="Copy question id to clipboard"
+                title="Copy question id to clipboard"
+                onclick="event.stopPropagation();"
+            >
+                ⧉
+            </button>
+            <span class="unit-name"><%= q.prompt.substring(0, 50) %><%= q.prompt.length > 50 ? '...' : '' %></span>
+            <span class="unit-meta"><%= q.correct_index >= 0 && q.answers && q.answers[q.correct_index] ? q.answers[q.correct_index] : q.correct_answer %></span>
+        </summary>
+        <div class="unit-content">
+            <form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>" class="question-form-with-radios" data-question-id="<%= q.id %>">
+                <label>Prompt <textarea name="prompt" class="textarea-prompt" required><%= q.prompt %></textarea></label>
+                <label>Answers (one per line) <textarea name="answers" rows="4" class="textarea-answers answers-source" placeholder="First answer&#10;Second answer&#10;..."><%= q.answers && q.answers.length ? q.answers.join('\n') : '' %></textarea></label>
+                <input type="hidden" name="correctIndex" class="correct-index-input" value="<%= q.correct_index %>" />
+                <input type="hidden" name="correctAnswer" class="correct-answer-text" value="<%= q.correct_answer %>" />
+                <div class="correct-answer-radios-label">Correct answer</div>
+                <div class="correct-answer-radios"></div>
+                <div class="actions">
+                    <button type="submit" class="btn">Save</button>
+                    <a href="/courses/<%= course.id %>/tasks/<%= task.id %>" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+            <form method="post"
+                  action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>/delete"
+                  style="display:inline;">
+                <button type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Delete this question?');">
+                    Delete question
+                </button>
+            </form>
+        </div>
+    </details>
+<% }); %>
+</div>
+<% } %>
+<script>
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('question-') === 1) {
+        var el = document.getElementById(hash.slice(1));
+        if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+    function parseAnswers(text) {
+        if (!text || typeof text !== 'string') return [];
+        return text.split(/\r?\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+    }
+    function buildRadios(form) {
+        var ta = form.querySelector('.answers-source');
+        var container = form.querySelector('.correct-answer-radios');
+        var hidden = form.querySelector('.correct-index-input');
+        var correctText = form.querySelector('.correct-answer-text');
+        var answers = parseAnswers(ta ? ta.value : '');
+        var currentIndex = hidden ? parseInt(hidden.value, 10) || 0 : 0;
+        container.innerHTML = '';
+        if (answers.length === 0) {
+            if (hidden) hidden.value = '0';
+            return;
+        }
+        var selectedIndex = -1;
+        if (correctText && correctText.value.trim()) {
+            var match = correctText.value.trim();
+            for (var i = 0; i < answers.length; i++) {
+                if (answers[i] === match) { selectedIndex = i; break; }
+            }
+        }
+        if (selectedIndex < 0 && currentIndex >= 0 && currentIndex < answers.length) selectedIndex = currentIndex;
+        if (selectedIndex < 0) selectedIndex = 0;
+        answers.forEach(function(ans, i) {
+            var label = document.createElement('label');
+            label.style.display = 'block';
+            label.style.marginBottom = '0.25rem';
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'correctIndexRadio_' + (form.getAttribute('data-question-id') || form.action || Math.random());
+            radio.value = i;
+            radio.checked = (i === selectedIndex);
+            radio.addEventListener('change', function() {
+                if (hidden) hidden.value = radio.value;
+                if (correctText) correctText.value = answers[parseInt(radio.value, 10)];
+            });
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(' ' + ans));
+            container.appendChild(label);
+        });
+        if (hidden) hidden.value = String(selectedIndex);
+        if (correctText && !correctText.value.trim() && answers[selectedIndex]) correctText.value = answers[selectedIndex];
+    }
+    function initForm(form) {
+        var ta = form.querySelector('.answers-source');
+        if (ta) {
+            ta.addEventListener('blur', function() { buildRadios(form); });
+            buildRadios(form);
+        }
+    }
+    document.querySelectorAll('.question-form-with-radios').forEach(initForm);
+})();
+</script>
+<p><a href="/courses/<%= course.id %>/tasks" class="btn btn-secondary">Back to task list</a></p>
+<%- include('../partials/footer') %>
