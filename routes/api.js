@@ -55,42 +55,8 @@ function getRandomItems(arr, count) {
     return shuffled.slice(0, n);
 }
 
-async function canReadCourse(courseId, req) {
-    const course = await get('SELECT id, name, owner_id, is_public FROM courses WHERE id = ?', [courseId]);
-    if (!course) return { allowed: false, course: null };
-    if (course.is_public) return { allowed: true, course };
-    const userId = req.session && req.session.userId;
-    const apiKey = req.query.api_key || (req.headers.authorization && req.headers.authorization.replace(/^Bearer\s+/i, ''));
-    if (userId && parseInt(userId) === course.owner_id) return { allowed: true, course };
-    if (apiKey && process.env.API_KEY && apiKey === process.env.API_KEY) return { allowed: true, course };
-    return { allowed: false, course };
-}
-
-async function canReadUnit(unitId, req) {
-    const unit = await get('SELECT id, course_id, name, sort_order FROM units WHERE id = ?', [unitId]);
-    if (!unit) return { allowed: false, unit: null, course: null };
-    const { allowed, course } = await canReadCourse(unit.course_id, req);
-    return { allowed, unit, course };
-}
-
-async function canReadTask(taskId, req) {
-    const task = await get('SELECT id, course_id, name, target, description FROM tasks WHERE id = ?', [taskId]);
-    if (!task) return { allowed: false, task: null, course: null };
-    const { allowed, course } = await canReadCourse(task.course_id, req);
-    return { allowed, task, course };
-}
-
-async function canReadQuestion(questionId, req) {
-    const row = await get(
-        `SELECT q.id, q.task_id, t.course_id
-         FROM questions q
-         JOIN tasks t ON q.task_id = t.id
-         WHERE q.id = ?`,
-        [questionId]
-    );
-    if (!row) return { allowed: false, question: null, course: null };
-    const { allowed, course } = await canReadCourse(row.course_id, req);
-    return { allowed, question: row, course };
+async function getCourseById(courseId) {
+    return await get('SELECT id, name, owner_id, is_public, sort_order FROM courses WHERE id = ?', [courseId]);
 }
 
 // List all public courses with id, name, and sort_order
@@ -114,12 +80,8 @@ router.get('/course', async (req, res) => {
 // Course details, or pick questions from a course when ?pick=X is present
 router.get('/course/:courseId', async (req, res) => {
     const courseId = parseInt(req.params.courseId);
-    const { allowed, course } = await canReadCourse(courseId, req);
-    if (!allowed || !course) {
-        return res
-            .status(course ? 403 : 404)
-            .json({ error: course ? 'Forbidden' : 'Course not found' });
-    }
+    const course = await getCourseById(courseId);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
 
     // Question picking: /api/course/:courseId?pick=X[&student=formbarId][&class=formbarClassId]
     const pickParam = req.query.pick != null ? parseInt(req.query.pick, 10) : null;
@@ -242,6 +204,10 @@ router.get('/course/:courseId', async (req, res) => {
         'SELECT id, name, target, description, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id',
         [courseId]
     );
+    const vocab = await all(
+        'SELECT id, term, definition, sort_order FROM vocab_terms WHERE course_id = ? ORDER BY sort_order, id',
+        [courseId]
+    );
     const quizzes = await all(
         'SELECT id, name, sort_order FROM quizzes WHERE course_id = ? ORDER BY sort_order, id',
         [courseId]
@@ -260,6 +226,12 @@ router.get('/course/:courseId', async (req, res) => {
             description: t.description || null,
             sort_order: t.sort_order
         })),
+        vocab: vocab.map(v => ({
+            id: v.id,
+            term: v.term,
+            definition: v.definition || null,
+            sort_order: v.sort_order
+        })),
         quizzes: quizzes.map(q => ({ id: q.id, name: q.name, sort_order: q.sort_order }))
     });
 });
@@ -267,8 +239,8 @@ router.get('/course/:courseId', async (req, res) => {
 // Public course vocab: all vocab terms in a course
 router.get('/course/:courseId/vocab', async (req, res) => {
     const courseId = parseInt(req.params.courseId);
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
+    const course = await getCourseById(courseId);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
 
     try {
         const rows = await all(
@@ -295,8 +267,8 @@ router.get('/course/:courseId/vocab', async (req, res) => {
 // Public course units list
 router.get('/course/:courseId/unit', async (req, res) => {
     const courseId = parseInt(req.params.courseId);
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
+    const course = await getCourseById(courseId);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
 
     try {
         const rows = await all(
@@ -313,8 +285,8 @@ router.get('/course/:courseId/unit', async (req, res) => {
 // Public course quizzes list
 router.get('/course/:courseId/quiz', async (req, res) => {
     const courseId = parseInt(req.params.courseId);
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
+    const course = await getCourseById(courseId);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
 
     try {
         const rows = await all(
@@ -330,8 +302,8 @@ router.get('/course/:courseId/quiz', async (req, res) => {
 
 router.get('/unit/:unitId', async (req, res) => {
     const unitId = parseInt(req.params.unitId);
-    const { allowed, unit } = await canReadUnit(unitId, req);
-    if (!allowed) return res.status(unit ? 403 : 404).json({ error: unit ? 'Forbidden' : 'Unit not found' });
+    const unit = await get('SELECT id, course_id, name, sort_order FROM units WHERE id = ?', [unitId]);
+    if (!unit) return res.status(404).json({ error: 'Unit not found' });
     const taskRefs = await all('SELECT task_id, sort_order FROM unit_tasks WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const vocabRefs = await all('SELECT vocab_term_id, sort_order FROM unit_vocab WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const taskIds = taskRefs.map(r => r.task_id);
@@ -349,8 +321,10 @@ router.get('/unit/:unitId', async (req, res) => {
 
 router.get('/task/:taskId', async (req, res) => {
     const taskId = parseInt(req.params.taskId);
-    const { allowed, task, course } = await canReadTask(taskId, req);
-    if (!allowed) return res.status(task ? 403 : 404).json({ error: task ? 'Forbidden' : 'Task not found' });
+    const task = await get('SELECT id, course_id, name, target, description FROM tasks WHERE id = ?', [taskId]);
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+    const course = await get('SELECT id, name FROM courses WHERE id = ?', [task.course_id]);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
     res.json({
         id: task.id,
         name: task.name,
@@ -361,8 +335,6 @@ router.get('/task/:taskId', async (req, res) => {
 
 router.get('/question/:questionId', async (req, res) => {
     const questionId = parseInt(req.params.questionId);
-    const { allowed, question } = await canReadQuestion(questionId, req);
-    if (!allowed) return res.status(question ? 403 : 404).json({ error: question ? 'Forbidden' : 'Question not found' });
     const row = await get(
         `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
                 q.task_id, t.name AS task_name,
@@ -448,24 +420,24 @@ async function getAllQuestionsForCourse(courseId) {
 
 router.get('/unit/:unitId/questions', async (req, res) => {
     const unitId = parseInt(req.params.unitId);
-    const { allowed, unit } = await canReadUnit(unitId, req);
-    if (!allowed) return res.status(unit ? 403 : 404).json({ error: unit ? 'Forbidden' : 'Unit not found' });
+    const unit = await get('SELECT id FROM units WHERE id = ?', [unitId]);
+    if (!unit) return res.status(404).json({ error: 'Unit not found' });
     const questions = await getQuestionsForUnit(unitId);
     res.json(questions);
 });
 
 router.get('/task/:taskId/questions', async (req, res) => {
     const taskId = parseInt(req.params.taskId);
-    const { allowed, task } = await canReadTask(taskId, req);
-    if (!allowed) return res.status(task ? 403 : 404).json({ error: task ? 'Forbidden' : 'Task not found' });
+    const task = await get('SELECT id FROM tasks WHERE id = ?', [taskId]);
+    if (!task) return res.status(404).json({ error: 'Task not found' });
     const questions = await getQuestionsForTask(taskId);
     res.json(questions);
 });
 
 router.get('/unit/:unitId/vocab', async (req, res) => {
     const unitId = parseInt(req.params.unitId);
-    const { allowed, unit } = await canReadUnit(unitId, req);
-    if (!allowed) return res.status(unit ? 403 : 404).json({ error: unit ? 'Forbidden' : 'Unit not found' });
+    const unit = await get('SELECT id FROM units WHERE id = ?', [unitId]);
+    if (!unit) return res.status(404).json({ error: 'Unit not found' });
     try {
         const rows = await all(
             `SELECT v.id, v.term, v.definition, uv.sort_order
