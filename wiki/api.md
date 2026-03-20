@@ -157,6 +157,7 @@ Generation notes:
 - **GET** `/api/course/:id/vocab`
 
 Returns all vocab terms for the given course.
+Supports optional random picking with `?pick=N` (capped by `MAX_PICK`).
 
 Response:
 
@@ -203,7 +204,7 @@ Response:
 
 #### Unit details
 
-- **GET** `/api/course/:courseId/unit/:unitId`
+- **GET** `/api/unit/:unitId`
 
 Returns tasks and vocab for a specific unit within a course.
 
@@ -233,17 +234,24 @@ Response:
 
 #### Unit questions
 
-- **GET** `/api/course/:courseId/unit/:unitId/questions`
+- **GET** `/api/unit/:unitId/questions`
 
 Returns all questions for the tasks in a given unit.
 
 Each question is in the standard shape documented above; `hierarchy.course`, `hierarchy.unit`, and `hierarchy.task` are all populated.
 
+#### Unit vocab
+
+- **GET** `/api/unit/:unitId/vocab`
+
+Returns vocab terms associated to the unit (`unit_vocab`).
+Supports optional random picking with `?pick=N` (capped by `MAX_PICK`).
+
 ### Task
 
 #### Task details
 
-- **GET** `/api/course/:courseId/task/:taskId`
+- **GET** `/api/task/:taskId`
 
 Returns basic metadata for a single task and its containing course.
 
@@ -262,7 +270,7 @@ Response:
 
 #### Task questions
 
-- **GET** `/api/course/:courseId/task/:taskId/questions`
+- **GET** `/api/task/:taskId/questions`
 
 Returns all questions for a specific task in a course.
 
@@ -293,7 +301,7 @@ At present there is **no unauthenticated public shortcut** like `/api/quiz/:id` 
 
 #### Single question by id
 
-- **GET** `/api/course/:courseId/question/:questionId`
+- **GET** `/api/question/:questionId`
 
 Returns a single question, including hierarchy.
 

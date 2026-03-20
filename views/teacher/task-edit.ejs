@@ -6,7 +6,7 @@
     <button
         type="button"
         class="btn btn-small copy-id-btn"
-        data-copy-text="/api/course/<%= course.id %>/task/<%= task.id %>"
+        data-copy-text="/api/task/<%= task.id %>"
         aria-label="Copy task API call to clipboard"
         title="Copy task API call to clipboard"
     >
@@ -33,7 +33,7 @@
             <button
                 type="button"
                 class="btn btn-small copy-id-btn"
-                data-copy-text="/api/course/<%= course.id %>/question/<%= q.id %>"
+                data-copy-text="/api/question/<%= q.id %>"
                 aria-label="Copy question API call to clipboard"
                 title="Copy question API call to clipboard"
                 onclick="event.stopPropagation();"
