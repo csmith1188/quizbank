@@ -4,9 +4,9 @@
     <button
         type="button"
         class="btn btn-small copy-id-btn"
-        data-copy-id="<%= quiz.id %>"
-        aria-label="Copy quiz id to clipboard"
-        title="Copy quiz id to clipboard"
+        data-copy-text="/api/course/<%= course.id %>/quiz/<%= quiz.id %>"
+        aria-label="Copy quiz API call to clipboard"
+        title="Copy quiz API call to clipboard"
     >
         ⧉
     </button>

@@ -8,6 +8,8 @@ const session = require('express-session');
 const { io } = require('socket.io-client');
 const SQLiteStore = require('connect-sqlite3')(session);
 const { db, get, run } = require('./lib/db');
+const { createRateLimiter } = require('./lib/rate-limit');
+const config = require('./lib/config');
 
 // Database is opened in lib/db.js
 
@@ -15,17 +17,38 @@ const { db, get, run } = require('./lib/db');
 const PORT = process.env.PORT || 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'your_secret_key';
 const AUTH_URL = process.env.AUTH_URL || 'http://localhost:420/oauth';
-const THIS_URL = process.env.THIS_URL || `http://localhost:${PORT}`;
+const RAW_THIS_URL = process.env.THIS_URL || `http://localhost:${PORT}`;
 const API_KEY = process.env.API_KEY || 'your_api_key';
+
+function normalizeThisUrlBase(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return `http://localhost:${PORT}`;
+    const noTrailingSlash = raw.replace(/\/+$/, '');
+    return noTrailingSlash.replace(/\/login$/i, '');
+}
+
+function ensureLoginPath(urlBase) {
+    const base = String(urlBase || '').replace(/\/+$/, '');
+    return base + '/login';
+}
+
+const THIS_URL = normalizeThisUrlBase(RAW_THIS_URL);
+const LOGIN_REDIRECT_URL = ensureLoginPath(THIS_URL);
+const apiRateLimiter = createRateLimiter({
+    windowMs: config.apiRateLimitWindowMs,
+    max: config.apiRateLimitMax,
+    message: 'Too many API requests, please try again shortly'
+});
 
 // Debug: log env on startup
 console.log('[DEBUG] Env loaded:', {
     PORT,
     AUTH_URL,
     THIS_URL,
+    LOGIN_REDIRECT_URL,
     SESSION_SECRET_SET: !!SESSION_SECRET,
     API_KEY_SET: !!API_KEY,
-    oauthRedirectUrl: `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(THIS_URL)}`
+    oauthRedirectUrl: `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(LOGIN_REDIRECT_URL)}`
 });
 
 // Middleware
@@ -33,6 +56,10 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+    res.locals.thisUrl = THIS_URL;
+    next();
+});
 
 app.use(session({
     store: new SQLiteStore({ db: 'sessions.db', dir: './db' }),
@@ -63,7 +90,7 @@ app.use((req, res, next) => {
 
 // Debug endpoint first - no auth, for testing
 app.get('/debug', async (req, res) => {
-    const oauthUrl = `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(THIS_URL)}`;
+    const oauthUrl = `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(LOGIN_REDIRECT_URL)}`;
     let fetchResult = { status: null, ok: null, error: null };
     try {
         const resp = await fetch(oauthUrl, { redirect: 'manual' });
@@ -72,20 +99,20 @@ app.get('/debug', async (req, res) => {
         fetchResult.error = e.message;
     }
     res.json({
-        env: { PORT, AUTH_URL, THIS_URL, oauthUrl },
+        env: { PORT, AUTH_URL, THIS_URL, LOGIN_REDIRECT_URL, oauthUrl },
         session: req.session ? { user: req.session.user, userId: req.session.userId } : null,
         fetchOAuth: fetchResult
     });
 });
 
 const apiRouter = require('./routes/api');
-app.use('/api', apiRouter);
+app.use('/api', apiRateLimiter, apiRouter);
 const progressRouter = require('./routes/progress');
 app.use(progressRouter);
 
 // Login/logout must be before isAuthenticated middleware to avoid redirect loops
 app.get('/login', async (req, res) => {
-    const oauthUrl = `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(THIS_URL)}`;
+    const oauthUrl = `${AUTH_URL}/oauth?redirectURL=${encodeURIComponent(LOGIN_REDIRECT_URL)}`;
     console.log('[DEBUG] GET /login', { hasToken: !!req.query.token, sessionUser: !!req.session?.user, queryKeys: Object.keys(req.query || {}) });
 
     if (req.query.token) {

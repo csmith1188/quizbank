@@ -13,6 +13,8 @@ const {
 } = require('../lib/quiz-attempts');
 const { getImprovementPlan } = require('../lib/ai-coach');
 const multer = require('multer');
+const { createRateLimiter } = require('../lib/rate-limit');
+const config = require('../lib/config');
 
 const router = express.Router();
 
@@ -77,11 +79,15 @@ router.get('/courses', requireTeacher, async (req, res) => {
     if (courses.length > 0) {
         const courseIds = courses.map(c => c.id);
         const placeholders = courseIds.map(() => '?').join(',');
-        const [taskCounts, unitCounts, vocabCounts, quizCounts] = await Promise.all([
+        const [taskCounts, unitCounts, vocabCounts, quizCounts, goodQuestionCounts] = await Promise.all([
             all('SELECT course_id, COUNT(*) as c FROM tasks WHERE course_id IN (' + placeholders + ') GROUP BY course_id', courseIds),
             all('SELECT course_id, COUNT(*) as c FROM units WHERE course_id IN (' + placeholders + ') GROUP BY course_id', courseIds),
             all('SELECT course_id, COUNT(*) as c FROM vocab_terms WHERE course_id IN (' + placeholders + ') GROUP BY course_id', courseIds),
-            all('SELECT course_id, COUNT(*) as c FROM quizzes WHERE course_id IN (' + placeholders + ') GROUP BY course_id', courseIds)
+            all('SELECT course_id, COUNT(*) as c FROM quizzes WHERE course_id IN (' + placeholders + ') GROUP BY course_id', courseIds),
+            all(
+                "SELECT t.course_id, COUNT(*) as c FROM questions q JOIN tasks t ON q.task_id = t.id WHERE t.course_id IN (" + placeholders + ") AND COALESCE(q.quality, '') != 'bad' GROUP BY t.course_id",
+                courseIds
+            )
         ]);
         const byCourse = (rows, key) => {
             const o = {};
@@ -92,12 +98,14 @@ router.get('/courses', requireTeacher, async (req, res) => {
         const unitBy = byCourse(unitCounts, 'course_id');
         const vocabBy = byCourse(vocabCounts, 'course_id');
         const quizBy = byCourse(quizCounts, 'course_id');
+        const goodBy = byCourse(goodQuestionCounts, 'course_id');
         courses = courses.map(c => ({
             ...c,
             taskCount: taskBy[c.id] || 0,
             unitCount: unitBy[c.id] || 0,
             vocabCount: vocabBy[c.id] || 0,
-            quizCount: quizBy[c.id] || 0
+            quizCount: quizBy[c.id] || 0,
+            goodQuestionCount: goodBy[c.id] || 0
         }));
     }
     res.render('teacher/courses', { user: req.session.user, courses });
@@ -360,6 +368,11 @@ router.get('/courses/:courseId/export-template', requireCourseOwner, async (req,
 // Simple in-memory import storage keyed by a random token
 const importStore = new Map();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+const questionGenerateLimiter = createRateLimiter({
+    windowMs: config.questionGenerateRateLimitWindowMs,
+    max: config.questionGenerateRateLimitMax,
+    message: 'Too many question generation requests, please wait a minute'
+});
 
 function generateImportToken() {
     return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
@@ -1201,7 +1214,7 @@ router.post('/courses', async (req, res) => {
     const maxOrder = await get('SELECT COALESCE(MAX(sort_order), -1) + 1 as n FROM courses WHERE owner_id = ?', [userId]);
     await run('INSERT INTO courses (owner_id, name, is_public, sort_order) VALUES (?, ?, ?, ?)', [userId, name.trim(), is_public ? 1 : 0, maxOrder.n]);
     const row = await get('SELECT id FROM courses ORDER BY id DESC LIMIT 1');
-    res.redirect('/courses/' + row.id);
+    res.redirect('/courses#course-' + row.id);
 });
 
 router.post('/courses/:id/delete', requireCourseOwner, async (req, res) => {
@@ -1280,30 +1293,11 @@ router.post('/courses/:id/delete', requireCourseOwner, async (req, res) => {
     res.redirect('/courses');
 });
 
-router.get('/courses/:id/edit', requireCourseOwner, (req, res) => {
-    res.render('teacher/course-form', { user: req.session.user, course: req.course });
-});
-
 router.post('/courses/:id', requireCourseOwner, async (req, res) => {
     const { name, is_public } = req.body || {};
     if (!name || !name.trim()) return res.redirect('/courses');
     await run('UPDATE courses SET name = ?, is_public = ? WHERE id = ?', [name.trim(), is_public ? 1 : 0, req.courseId]);
     res.redirect('/courses#course-' + req.courseId);
-});
-
-router.get('/courses/:id', requireCourseOwner, async (req, res) => {
-    const tasks = await all('SELECT id, name, sort_order FROM tasks WHERE course_id = ? ORDER BY sort_order, id', [req.courseId]);
-    const units = await all('SELECT id, name, sort_order FROM units WHERE course_id = ? ORDER BY sort_order, id', [req.courseId]);
-    const vocabCount = await get('SELECT COUNT(*) as c FROM vocab_terms WHERE course_id = ?', [req.courseId]);
-    const quizzes = await all('SELECT id, name, sort_order, created_at FROM quizzes WHERE course_id = ? ORDER BY sort_order, id', [req.courseId]);
-    res.render('teacher/course-dashboard', {
-        user: req.session.user,
-        course: req.course,
-        tasks,
-        units,
-        vocabCount: vocabCount.c,
-        quizzes
-    });
 });
 
 // AJAX endpoint: search questions in this course by prompt text (partial match).
@@ -1868,7 +1862,12 @@ router.post('/courses/:courseId/vocab/:vid/delete', requireCourseOwner, async (r
 
 router.get('/courses/:courseId/questions', requireCourseOwner, async (req, res) => {
     const units = await all('SELECT id, name, sort_order FROM units WHERE course_id = ? ORDER BY sort_order, id', [req.courseId]);
-    res.render('teacher/question-generator', { user: req.session.user, course: req.course, units });
+    res.render('teacher/question-generator', {
+        user: req.session.user,
+        course: req.course,
+        units,
+        generatorRoundCount: config.questionGeneratorRoundCount
+    });
 });
 
 router.get('/courses/:courseId/generator/tasks', requireCourseOwner, async (req, res) => {
@@ -1892,7 +1891,7 @@ router.get('/courses/:courseId/generator/tasks', requireCourseOwner, async (req,
     res.json(tasks.map(t => ({ ...t, good_count: Number(t.good_count) || 0 })));
 });
 
-router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (req, res) => {
+router.post('/courses/:courseId/questions/generate', requireCourseOwner, questionGenerateLimiter, async (req, res) => {
     const taskId = parseInt(req.body && req.body.taskId, 10);
     if (!taskId) return res.status(400).json({ error: 'taskId required' });
     const task = await get('SELECT id, name, target, description FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
@@ -1914,7 +1913,7 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, async (
             task: { name: task.name, target: task.target, description: task.description },
             goodExamples,
             badExamples,
-            count: 10,
+            count: config.questionGeneratorRoundCount,
             additionalContext
         });
         res.json(questions);

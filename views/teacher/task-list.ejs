@@ -1,6 +1,6 @@
 <%- include('../partials/teacher-header', { title: 'Tasks - ' + course.name, user, course }) %>
 <h1>Task List</h1>
-<p><a href="/courses/<%= course.id %>/tasks/new" class="btn">New Task</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<p><a href="/courses/<%= course.id %>/tasks/new" class="btn">New Task</a> <a href="/courses#course-<%= course.id %>" class="btn btn-secondary">Back to courses</a></p>
 <% if (tasks.length === 0) { %>
 <p>No tasks. <a href="/courses/<%= course.id %>/tasks/new">Add one</a>.</p>
 <% } else { %>
@@ -17,9 +17,9 @@
             <button
                 type="button"
                 class="btn btn-small copy-id-btn"
-                data-copy-id="<%= t.id %>"
-                aria-label="Copy task id to clipboard"
-                title="Copy task id to clipboard"
+                data-copy-text="/api/course/<%= course.id %>/task/<%= t.id %>"
+                aria-label="Copy task API call to clipboard"
+                title="Copy task API call to clipboard"
                 onclick="event.stopPropagation();"
             >
                 ⧉

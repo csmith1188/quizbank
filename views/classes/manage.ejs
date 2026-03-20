@@ -4,9 +4,9 @@
     <button
         type="button"
         class="btn btn-small copy-id-btn"
-        data-copy-id="<%= classItem.formbar_class_id || classItem.id %>"
-        aria-label="Copy class external id to clipboard"
-        title="Copy class external id to clipboard"
+        data-copy-text="/api/classes/<%= classItem.formbar_class_id || classItem.id %>"
+        aria-label="Copy class API call to clipboard"
+        title="Copy class API call to clipboard"
     >
         ⧉
     </button>
@@ -120,9 +120,9 @@
                 <button
                     type="button"
                     class="btn btn-small copy-id-btn"
-                    data-copy-id="<%= s.formbarId || s.id %>"
-                    aria-label="Copy student external id to clipboard"
-                    title="Copy student external id to clipboard"
+                    data-copy-text="/api/students/<%= s.formbarId || s.id %>"
+                    aria-label="Copy student API call to clipboard"
+                    title="Copy student API call to clipboard"
                     onclick="event.stopPropagation();"
                 >
                     ⧉

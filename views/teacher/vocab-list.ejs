@@ -1,6 +1,6 @@
 <%- include('../partials/teacher-header', { title: 'Vocabulary - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Vocabulary' }) %>
 <h1>Vocabulary List</h1>
-<p><a href="/courses/<%= course.id %>/vocab/new" class="btn">New term</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<p><a href="/courses/<%= course.id %>/vocab/new" class="btn">New term</a> <a href="/courses#course-<%= course.id %>" class="btn btn-secondary">Back to courses</a></p>
 <% if (terms.length === 0) { %>
 <p>No vocabulary terms. <a href="/courses/<%= course.id %>/vocab/new">Add one</a>.</p>
 <% } else { %>

@@ -1,9 +1,18 @@
 const express = require('express');
 const { get, all, run } = require('../lib/db');
+const { generateQuestions } = require('../lib/question-generator');
+const { createRateLimiter } = require('../lib/rate-limit');
+const config = require('../lib/config');
 
 const router = express.Router();
 
-const MAX_PICK = 20;
+const MAX_PICK = config.apiPickMax;
+const MAX_GENERATE = config.apiGenerateMax;
+const questionGenerateLimiter = createRateLimiter({
+    windowMs: config.questionGenerateRateLimitWindowMs,
+    max: config.questionGenerateRateLimitMax,
+    message: 'Too many question generation requests, please wait a minute'
+});
 
 async function resolveUserIdFromParam(studentParam) {
     if (!studentParam) return null;
@@ -132,6 +141,68 @@ router.get('/course/:courseId', async (req, res) => {
         } catch (err) {
             console.error('Error picking questions for course via API:', err);
             return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    // Question generation: /api/course/:courseId?generate[=X][&task=taskId][&context=...]
+    // Only used when "pick" is not present.
+    if (req.query.pick == null && req.query.generate != null) {
+        let generationLimited = false;
+        await new Promise((resolve) => {
+            questionGenerateLimiter(req, res, () => {
+                generationLimited = true;
+                resolve();
+            });
+            if (!generationLimited && res.headersSent) resolve();
+        });
+        if (!generationLimited) return;
+
+        const requestedGenerate = parseInt(req.query.generate, 10);
+        const count = Number.isFinite(requestedGenerate) && requestedGenerate > 0
+            ? Math.min(MAX_GENERATE, requestedGenerate)
+            : MAX_GENERATE;
+        const taskParam = parseInt(req.query.task || req.query.taskId, 10);
+        const additionalContext = req.query.context != null ? String(req.query.context).trim() : '';
+
+        try {
+            let task;
+            if (Number.isFinite(taskParam) && taskParam > 0) {
+                task = await get(
+                    'SELECT id, name, target, description FROM tasks WHERE id = ? AND course_id = ?',
+                    [taskParam, courseId]
+                );
+            } else {
+                task = await get(
+                    'SELECT id, name, target, description FROM tasks WHERE course_id = ? ORDER BY sort_order, id LIMIT 1',
+                    [courseId]
+                );
+            }
+            if (!task) {
+                return res.status(404).json({ error: 'Task not found for generation' });
+            }
+
+            const exampleRows = await all(
+                'SELECT prompt, correct_answer, correct_index, answers, quality, quality_reason FROM questions WHERE task_id = ? AND quality IN (\'good\', \'bad\') ORDER BY RANDOM() LIMIT 20',
+                [task.id]
+            );
+            const parsedExamples = exampleRows.map(r => ({
+                ...r,
+                answers: typeof r.answers === 'string' ? JSON.parse(r.answers || '[]') : r.answers
+            }));
+            const goodExamples = parsedExamples.filter(r => r.quality === 'good');
+            const badExamples = parsedExamples.filter(r => r.quality === 'bad');
+
+            const questions = await generateQuestions({
+                task: { name: task.name, target: task.target, description: task.description },
+                goodExamples,
+                badExamples,
+                count,
+                additionalContext: additionalContext || undefined
+            });
+            return res.json(questions);
+        } catch (err) {
+            console.error('Error generating questions for course via API:', err);
+            return res.status(500).json({ error: err.message || 'Generation failed' });
         }
     }
 
@@ -376,82 +447,6 @@ router.get('/course/:courseId/task/:taskId/questions', async (req, res) => {
     if (!task) return res.status(404).json({ error: 'Task not found' });
     const questions = await getQuestionsForTask(taskId, courseId);
     res.json(questions);
-});
-
-router.get('/course/:courseId/unit/:unitId/pick/:number', async (req, res) => {
-    const courseId = parseInt(req.params.courseId);
-    const unitId = parseInt(req.params.unitId);
-    const count = Math.min(MAX_PICK, Math.max(0, parseInt(req.params.number) || 0));
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
-    const unit = await get('SELECT id FROM units WHERE id = ? AND course_id = ?', [unitId, courseId]);
-    if (!unit) return res.status(404).json({ error: 'Unit not found' });
-    const questions = await getQuestionsForUnit(unitId, courseId);
-    const selected = getRandomItems(questions, count);
-    res.json(selected);
-});
-
-router.get('/course/:courseId/task/:taskId/pick/:number', async (req, res) => {
-    const courseId = parseInt(req.params.courseId);
-    const taskId = parseInt(req.params.taskId);
-    const count = Math.min(MAX_PICK, Math.max(0, parseInt(req.params.number) || 0));
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
-    const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, courseId]);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
-    const questions = await getQuestionsForTask(taskId, courseId);
-    const selected = getRandomItems(questions, count);
-    res.json(selected);
-});
-
-router.get('/course/:courseId/pick/:number', async (req, res) => {
-    const courseId = parseInt(req.params.courseId);
-    const count = Math.min(MAX_PICK, Math.max(0, parseInt(req.params.number) || 0));
-    const { allowed } = await canReadCourse(courseId, req);
-    if (!allowed) return res.status(403).json({ error: 'Forbidden' });
-    const studentId = await resolveUserIdFromParam(req.query.student);
-    const classId = await resolveClassIdFromParam(req.query.class);
-
-    if (classId != null) {
-        return res
-            .status(400)
-            .json({ error: 'Class-weighted picking is not implemented yet for this endpoint' });
-    }
-
-    try {
-        let questions;
-        if (studentId != null) {
-            const { pickProgressQuestions } = require('../lib/progress-quiz');
-            const ids = await pickProgressQuestions(studentId, courseId, count);
-            if (!ids.length) return res.json([]);
-            const placeholders = ids.map(() => '?').join(',');
-            const rows = await all(
-                `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
-                        q.task_id, t.name as task_name,
-                        c.id as course_id, c.name as course_name
-                 FROM questions q
-                 JOIN tasks t ON q.task_id = t.id
-                 JOIN courses c ON t.course_id = c.id
-                 WHERE q.id IN (${placeholders})
-                   AND c.id = ?
-                   AND COALESCE(q.quality, '') != 'bad'`,
-                [...ids, courseId]
-            );
-            questions = rows.map(r =>
-                rowToQuestion(r, {
-                    course: { id: r.course_id, name: r.course_name },
-                    task: { id: r.task_id, name: r.task_name }
-                })
-            );
-        } else {
-            const allQuestions = await getAllQuestionsForCourse(courseId);
-            questions = getRandomItems(allQuestions, count);
-        }
-        res.json(questions);
-    } catch (err) {
-        console.error('Error picking questions for course via /pick API:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
 });
 
 async function requireCourseOwner(req, res, next) {

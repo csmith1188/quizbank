@@ -6,6 +6,7 @@ All endpoints below are mounted under the `/api` prefix, as configured in `app.j
 - Responses are JSON.
 - Errors use HTTP status codes with a body of the form `{ "error": "message" }`.
 - Any resource with a `sort_order` column in the database exposes it in the API payload.
+- Questions marked bad are excluded from read/query endpoints (`COALESCE(quality, '') != 'bad'`).
 
 Authentication / access:
 
@@ -13,6 +14,12 @@ Authentication / access:
 - Private courses can be accessed by their owner via session, or by providing a valid API key via:
   - Query: `?api_key=YOUR_KEY`
   - Header: `Authorization: Bearer YOUR_KEY`
+
+Rate limits:
+
+- Global API limiter on all `/api/*`: **120 requests / 60 seconds** per key (session user, API key, or IP fallback).
+- Question generation limiter: **12 requests / 60 seconds** per key.
+- On limit hit, API returns `429` with `Retry-After` plus `X-RateLimit-*` headers.
 
 ---
 
@@ -39,12 +46,12 @@ Response:
 ]
 ```
 
-#### Course details or course-level question picking
+#### Course details, question picking, or question generation
 
 - **GET** `/api/course/:id`
 - `:id` is a single course id (e.g. `1`).
 
-If **no `pick` query param** is present, you get course metadata:
+If neither `pick` nor `generate` is present, you get course metadata:
 
 ```json
 {
@@ -76,7 +83,7 @@ If a **`pick` query param is present**, the same endpoint returns **questions in
 
 Parameters:
 
-- `pick` (required for picking): integer, number of questions requested (capped by `MAX_PICK`, currently 20).
+- `pick` (required for picking): integer, number of questions requested (capped by `MAX_PICK`, currently **25**).
 - `student` (optional): integer student id. When present, question selection uses the same **mastery-weighted algorithm** as the Progress Test (`lib/progress-quiz.js`).
 - `class` (optional): integer class id. Currently **not supported** on this endpoint and will return `400`.
 
@@ -127,6 +134,24 @@ Notes:
 - The `hierarchy` object may omit `unit` when the question cannot be associated with a specific unit; `course` and `task` are always present for questions tied to tasks.
 - `ai` is `true` for AI-generated questions (based on the `questions.ai` column) and `false` otherwise.
 
+If `pick` is absent and **`generate` query param is present**, this endpoint returns generated questions (not saved to DB):
+
+- `GET /api/course/1?generate=10`
+- `GET /api/course/1?generate=10&task=3`
+- `GET /api/course/1?generate=10&task=3&context=Focus%20on%20scenario-based%20questions`
+
+Generation parameters:
+
+- `generate` (optional value): requested question count, capped at **10**.
+- `task` or `taskId` (optional): task context source. If omitted, first task in course by `sort_order, id` is used.
+- `context` (optional): extra prompt instructions passed as additional context.
+
+Generation notes:
+
+- Runs only when `pick` is **not** present.
+- Uses the same generation logic as the teacher question generator.
+- Returns generated questions only; does not insert/update DB records.
+
 #### Course vocab
 
 - **GET** `/api/course/:id/vocab`
@@ -174,23 +199,6 @@ Response:
 ]
 ```
 
-#### Course-level random picking (legacy path)
-
-- **GET** `/api/course/:id/pick/:number`
-
-Equivalent in behavior to `GET /api/course/:id?pick=X`, but uses a path segment for `number` instead of a query param.
-
-- `number` is capped by `MAX_PICK` (20).
-- Optional `student` query param enables mastery-weighted selection using `pickProgressQuestions`.
-- Optional `class` is currently not supported (400).
-
-Examples:
-
-- `/api/course/1/pick/5`
-- `/api/course/1/pick/5?student=123`
-
----
-
 ### Unit
 
 #### Unit details
@@ -231,19 +239,6 @@ Returns all questions for the tasks in a given unit.
 
 Each question is in the standard shape documented above; `hierarchy.course`, `hierarchy.unit`, and `hierarchy.task` are all populated.
 
-#### Unit-level random picking
-
-- **GET** `/api/course/:courseId/unit/:unitId/pick/:number`
-
-Returns `number` random questions from the unit.
-
-Notes:
-
-- `number` is capped by `MAX_PICK` (20).
-- Currently this endpoint only supports **uniform random** picking; there is no `student`/`class` weighting here.
-
----
-
 ### Task
 
 #### Task details
@@ -272,16 +267,6 @@ Response:
 Returns all questions for a specific task in a course.
 
 Questions use the standard question shape; `hierarchy.course` and `hierarchy.task` are populated.
-
-#### Task-level random picking
-
-- **GET** `/api/course/:courseId/task/:taskId/pick/:number`
-
-Returns `number` random questions from that task (capped at `MAX_PICK`).
-
-Currently this endpoint uses uniform random sampling and does **not** support `student`/`class` weighting.
-
----
 
 ### Quiz
 
@@ -361,12 +346,10 @@ For endpoints that support question picking, the `pick` param controls how many 
 
 - `/api/course/1?pick=10`
 - `/api/course/1?pick=10&student=123`
-- `/api/course/1/pick/10`
-- `/api/course/1/pick/10?student=123`
 
 Rules:
 
-- `pick` / `number` is capped by `MAX_PICK` (20).
+- `pick` is capped by `MAX_PICK` (**25**).
 - If **no `student` or `class`** is provided, questions are selected using uniform random sampling without replacement.
 - If `student` is provided at the **course** level, selection is **mastery-weighted** using the same algorithm as the Progress Test:
   - Logic lives in `lib/progress-quiz.js` (`pickProgressQuestions`).
@@ -378,12 +361,8 @@ Rules:
 
 - **Implemented**:
   - `/api/course/:id?pick=X&student=Y`
-  - `/api/course/:id/pick/:number?student=Y`
 - **Random only**:
   - `/api/course/:id?pick=X` (no `student`/`class`)
-  - `/api/course/:id/pick/:number` (no `student`/`class`)
-  - `/api/course/:courseId/unit/:unitId/pick/:number`
-  - `/api/course/:courseId/task/:taskId/pick/:number`
 
 Class-level weighting and multi-id (`+`) sources can be layered on top of this using the same patterns as `pickProgressQuestions` plus the existing mastery aggregation queries in `routes/teacher.js`.
 

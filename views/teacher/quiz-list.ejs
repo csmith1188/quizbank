@@ -1,6 +1,6 @@
 <%- include('../partials/teacher-header', { title: 'Quizzes - ' + course.name, user, course, breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Quizzes' }) %>
 <h1>Quizzes</h1>
-<p><a href="/courses/<%= course.id %>/quizzes/new" class="btn">New Quiz</a> <a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<p><a href="/courses/<%= course.id %>/quizzes/new" class="btn">New Quiz</a> <a href="/courses#course-<%= course.id %>" class="btn btn-secondary">Back to courses</a></p>
 <% if (quizzes.length === 0) { %>
 <p>No quizzes. <a href="/courses/<%= course.id %>/quizzes/new">Create one</a>.</p>
 <% } else { %>
@@ -13,9 +13,9 @@
             <button
                 type="button"
                 class="btn btn-small copy-id-btn"
-                data-copy-id="<%= q.id %>"
-                aria-label="Copy quiz id to clipboard"
-                title="Copy quiz id to clipboard"
+                data-copy-text="/api/course/<%= course.id %>/quiz/<%= q.id %>"
+                aria-label="Copy quiz API call to clipboard"
+                title="Copy quiz API call to clipboard"
                 onclick="event.stopPropagation();"
             >
                 ⧉

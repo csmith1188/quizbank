@@ -1,7 +1,7 @@
 <%- include('../partials/teacher-header', { title: 'Question Generator - ' + course.name, user, course,
     breadcrumb: '<a href="/courses/' + course.id + '">' + course.name + '</a> &rarr; Question generator' }) %>
 
-<p><a href="/courses/<%= course.id %>" class="btn btn-secondary">Back to course</a></p>
+<p><a href="/courses#course-<%= course.id %>" class="btn btn-secondary">Back to courses</a></p>
 
 <div id="question-generator-root" data-course-id="<%= course.id %>">
 
@@ -50,7 +50,7 @@
                 style="width: 100%; max-width: 36rem; display: block; margin-top: 0.35rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"></textarea>
         </div>
         <p style="margin-top: 1rem;">
-            <button type="button" id="generate-btn" class="btn" disabled>Generate 10 questions</button>
+            <button type="button" id="generate-btn" class="btn" disabled>Generate <%= generatorRoundCount || 10 %> questions</button>
         </p>
     </div>
 

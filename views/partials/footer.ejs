@@ -2,6 +2,18 @@
 
 <script>
 (function () {
+    var thisUrlBase = <%- JSON.stringify(typeof thisUrl !== 'undefined' ? thisUrl : '') %>;
+
+    function toAbsoluteApiCall(text) {
+        var t = String(text || '').trim();
+        if (!t) return t;
+        if (/^https?:\/\//i.test(t)) return t;
+        if (t.charAt(0) === '/' && thisUrlBase) {
+            return String(thisUrlBase).replace(/\/+$/, '') + t;
+        }
+        return t;
+    }
+
     function copyToClipboard(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             return navigator.clipboard.writeText(text);
@@ -23,7 +35,7 @@
     }
 
     function initCopyIdButtons() {
-        var buttons = document.querySelectorAll('.copy-id-btn[data-copy-id]');
+        var buttons = document.querySelectorAll('.copy-id-btn[data-copy-text], .copy-id-btn[data-copy-id]');
         if (!buttons.length) return;
         buttons.forEach(function (btn) {
             if (btn._copyIdBound) return;
@@ -31,10 +43,11 @@
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var id = btn.getAttribute('data-copy-id');
-                if (!id) return;
-                var originalTitle = btn.getAttribute('title') || 'Copy id to clipboard';
-                copyToClipboard(id)
+                var rawText = btn.getAttribute('data-copy-text') || btn.getAttribute('data-copy-id');
+                var text = toAbsoluteApiCall(rawText);
+                if (!text) return;
+                var originalTitle = btn.getAttribute('title') || 'Copy API call to clipboard';
+                copyToClipboard(text)
                     .then(function () {
                         btn.setAttribute('title', 'Copied!');
                         btn.classList.add('copied');
@@ -44,7 +57,7 @@
                         }, 1500);
                     })
                     .catch(function () {
-                        alert('Unable to copy id to clipboard');
+                        alert('Unable to copy API call to clipboard');
                     });
             });
         });

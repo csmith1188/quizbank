@@ -14,33 +14,34 @@
             <button
                 type="button"
                 class="btn btn-small copy-id-btn"
-                data-copy-id="<%= c.id %>"
-                aria-label="Copy course id to clipboard"
-                title="Copy course id to clipboard"
+                data-copy-text="/api/course/<%= c.id %>"
+                aria-label="Copy course API call to clipboard"
+                title="Copy course API call to clipboard"
                 onclick="event.stopPropagation();"
             >
                 ⧉
             </button>
             <span class="course-name"><%= c.name %></span>
-            <a href="/courses/<%= c.id %>" class="btn btn-small course-open-btn" onclick="event.stopPropagation()">Open</a>
         </summary>
 
         <div class="course-content">
-            <p class="course-full-summary">
-                <%= c.taskCount %> task<%= c.taskCount !== 1 ? 's' : '' %>,
-                <%= c.unitCount %> unit<%= c.unitCount !== 1 ? 's' : '' %>,
-                <%= c.vocabCount %> vocab term<%= c.vocabCount !== 1 ? 's' : '' %>,
-                <%= c.quizCount %> quiz<%= c.quizCount !== 1 ? 'zes' : '' %>.
-            </p>
+            <ul class="links">
+                <li><strong><a href="/courses/<%= c.id %>/tasks">Tasks</a></strong> (<%= c.taskCount %>)</li>
+                <li><strong><a href="/courses/<%= c.id %>/units">Units</a></strong> (<%= c.unitCount %>)</li>
+                <li><strong><a href="/courses/<%= c.id %>/vocab">Vocabulary</a></strong> (<%= c.vocabCount %>)</li>
+                <li><strong><a href="/courses/<%= c.id %>/quizzes">Quizzes</a></strong> (<%= c.quizCount %>)</li>
+                <li><strong><a href="/courses/<%= c.id %>/questions">Questions</a></strong> (<%= c.goodQuestionCount || 0 %>)</li>
+                <li><strong><a href="/courses/<%= c.id %>/import">Import from Excel/CSV</a></strong></li>
+                <li><strong><a href="/courses/<%= c.id %>/export-template" onclick="event.stopPropagation()">Export to Excel</a></strong></li>
+            </ul>
 
             <form method="post" action="/courses/<%= c.id %>" class="course-edit-form">
                 <div class="field-row">
                     <label>Name <input type="text" name="name" value="<%= c.name %>" required /></label>
                     <button type="submit" class="btn btn-small">Save</button>
                 </div>
-                <label style="margin-top: 0.5rem;"><input type="checkbox" name="is_public" value="1" <%= c.is_public ? 'checked' : '' %> /> Public</label>
+                <!-- <label style="margin-top: 0.5rem;"><input type="checkbox" name="is_public" value="1" <%= c.is_public ? 'checked' : '' %> /> Public</label> -->
             </form>
-            <a href="/courses/<%= c.id %>/export-template" class="btn btn-small" onclick="event.stopPropagation()">Download Excel</a>
             <form method="post"
                   action="/courses/<%= c.id %>/delete"
                   style="margin-top:0.5rem;"

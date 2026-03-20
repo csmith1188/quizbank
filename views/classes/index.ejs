@@ -14,9 +14,9 @@
                 <button
                     type="button"
                     class="btn btn-small copy-id-btn"
-                    data-copy-id="<%= c.formbar_class_id || c.id %>"
-                    aria-label="Copy class external id to clipboard"
-                    title="Copy class external id to clipboard"
+                    data-copy-text="/api/classes/<%= c.formbar_class_id || c.id %>"
+                    aria-label="Copy class API call to clipboard"
+                    title="Copy class API call to clipboard"
                     onclick="event.stopPropagation();"
                 >
                     ⧉
@@ -46,7 +46,7 @@
                         <% c.courses.forEach(function(course) { %>
                             <li>
                                 <a
-                                    href="/courses/<%= course.id %><%= c.role === 'teacher' ? '' : '/mastery' %>"
+                                    href="<%= c.role === 'teacher' ? ('/courses#course-' + course.id) : ('/courses/' + course.id + '/mastery') %>"
                                     onclick="event.stopPropagation()"
                                 ><%= course.name %></a>
                             </li>

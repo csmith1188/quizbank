@@ -7,7 +7,7 @@
         <a href="/courses">My Courses</a>
     <% } %>
     <% if (typeof isTeacher !== 'undefined' && isTeacher && typeof course !== 'undefined' && course) { %>
-        >&nbsp;<a href="/courses/<%= course.id %>"><%= course.name %></a>
+        >&nbsp;<a href="/courses#course-<%= course.id %>"><%= course.name %></a>
         >&nbsp;<a href="/courses/<%= course.id %>/tasks">Tasks</a>
         >&nbsp;<a href="/courses/<%= course.id %>/units">Units</a>
         >&nbsp;<a href="/courses/<%= course.id %>/vocab">Vocabulary</a>
