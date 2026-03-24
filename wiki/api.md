@@ -208,7 +208,11 @@ Response:
 
 Returns tasks and vocab for a specific unit within a course.
 
-Response:
+`:unitId` may be a single id or several ids joined with `+`. With multiple ids and **no** `pick` query, the response is a **JSON array** of unit detail objects (same shape as below).
+
+Optional query: **`?pick=N`** — returns **N** random questions (capped by `MAX_PICK`) from the union of non-`bad` questions for all tasks linked to the listed units (via `unit_tasks`). Response is a **JSON array** of questions with `hierarchy.course`, `hierarchy.unit`, and `hierarchy.task`. If the pool is empty, `[]`. If the same question would appear twice (e.g. shared task across units), it is included once.
+
+Response (single unit):
 
 ```json
 {
@@ -236,7 +240,7 @@ Response:
 
 - **GET** `/api/unit/:unitId/questions`
 
-Returns all questions for the tasks in a given unit.
+Returns all questions for the tasks in one unit, or the combined set when `:unitId` lists multiple ids joined with `+` (duplicates removed).
 
 Each question is in the standard shape documented above; `hierarchy.course`, `hierarchy.unit`, and `hierarchy.task` are all populated.
 
@@ -244,7 +248,7 @@ Each question is in the standard shape documented above; `hierarchy.course`, `hi
 
 - **GET** `/api/unit/:unitId/vocab`
 
-Returns vocab terms associated to the unit (`unit_vocab`).
+Returns vocab terms associated to the unit (`unit_vocab`). With multiple unit ids joined with `+`, terms are merged and duplicate vocab ids appear once.
 Supports optional random picking with `?pick=N` (capped by `MAX_PICK`).
 
 ### Task
@@ -255,7 +259,11 @@ Supports optional random picking with `?pick=N` (capped by `MAX_PICK`).
 
 Returns basic metadata for a single task and its containing course.
 
-Response:
+`:taskId` may be a single id or several ids joined with `+` (e.g. `117+118+119+121`). With multiple ids and **no** `pick` query, the response is a **JSON array** of task metadata objects (same shape as below, plus optional `description`).
+
+Optional query: **`?pick=N`** — returns **N** random questions (capped by `MAX_PICK`, same as course picking) drawn from the union of non-`bad` questions for all listed tasks. Response is a **JSON array** of questions in the standard shape (with `hierarchy.course` and `hierarchy.task`). If there are no eligible questions, the response is `[]`.
+
+Single-task response:
 
 ```json
 {
@@ -272,7 +280,7 @@ Response:
 
 - **GET** `/api/task/:taskId/questions`
 
-Returns all questions for a specific task in a course.
+Returns all questions for one task, or for every task when `:taskId` lists multiple ids joined with `+`.
 
 Questions use the standard question shape; `hierarchy.course` and `hierarchy.task` are populated.
 

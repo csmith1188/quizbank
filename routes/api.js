@@ -55,6 +55,14 @@ function getRandomItems(arr, count) {
     return shuffled.slice(0, n);
 }
 
+/** Parse path segment: single id or multiple joined with + (e.g. 117+118+119). */
+function parseJoinedIds(param) {
+    return String(param || '')
+        .split('+')
+        .map(s => parseInt(s.trim(), 10))
+        .filter(n => Number.isFinite(n) && n > 0);
+}
+
 async function getCourseById(courseId) {
     return await get('SELECT id, name, owner_id, is_public, sort_order FROM courses WHERE id = ?', [courseId]);
 }
@@ -300,37 +308,104 @@ router.get('/course/:courseId/quiz', async (req, res) => {
     }
 });
 
-router.get('/unit/:unitId', async (req, res) => {
-    const unitId = parseInt(req.params.unitId);
+async function fetchUnitDetail(unitId) {
     const unit = await get('SELECT id, course_id, name, sort_order FROM units WHERE id = ?', [unitId]);
-    if (!unit) return res.status(404).json({ error: 'Unit not found' });
+    if (!unit) return null;
     const taskRefs = await all('SELECT task_id, sort_order FROM unit_tasks WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const vocabRefs = await all('SELECT vocab_term_id, sort_order FROM unit_vocab WHERE unit_id = ? ORDER BY sort_order', [unitId]);
     const taskIds = taskRefs.map(r => r.task_id);
     const tasks = taskIds.length ? await all('SELECT id, name, target, description FROM tasks WHERE id IN (' + taskIds.map(() => '?').join(',') + ')', taskIds) : [];
     const vocabIds = vocabRefs.map(r => r.vocab_term_id);
     const vocab = vocabIds.length ? await all('SELECT id, term, definition FROM vocab_terms WHERE id IN (' + vocabIds.map(() => '?').join(',') + ')', vocabIds) : [];
-    res.json({
+    return {
         id: unit.id,
         name: unit.name,
         sort_order: unit.sort_order,
         tasks: tasks.map(t => ({ id: t.id, name: t.name, target: t.target, description: t.description || null })),
         vocab: vocab.map(v => ({ id: v.id, term: v.term, definition: v.definition || null }))
-    });
+    };
+}
+
+router.get('/unit/:unitId', async (req, res) => {
+    const unitIds = parseJoinedIds(req.params.unitId);
+    if (!unitIds.length) return res.status(404).json({ error: 'Unit not found' });
+
+    const pickParam = req.query.pick != null ? parseInt(req.query.pick, 10) : null;
+    if (pickParam && pickParam > 0) {
+        const count = Math.min(MAX_PICK, Math.max(0, pickParam));
+        try {
+            const allQuestions = await getQuestionsForUnitIds(unitIds);
+            if (!allQuestions.length) return res.json([]);
+            const questions = getRandomItems(allQuestions, count);
+            return res.json(questions);
+        } catch (err) {
+            console.error('Error picking questions for unit(s) via API:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    if (unitIds.length === 1) {
+        const detail = await fetchUnitDetail(unitIds[0]);
+        if (!detail) return res.status(404).json({ error: 'Unit not found' });
+        return res.json(detail);
+    }
+
+    const details = await Promise.all(unitIds.map(id => fetchUnitDetail(id)));
+    if (details.some(d => d === null)) {
+        return res.status(404).json({ error: 'One or more units not found' });
+    }
+    res.json(details);
 });
 
 router.get('/task/:taskId', async (req, res) => {
-    const taskId = parseInt(req.params.taskId);
-    const task = await get('SELECT id, course_id, name, target, description FROM tasks WHERE id = ?', [taskId]);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
-    const course = await get('SELECT id, name FROM courses WHERE id = ?', [task.course_id]);
-    if (!course) return res.status(404).json({ error: 'Course not found' });
-    res.json({
-        id: task.id,
-        name: task.name,
-        target: task.target,
-        hierarchy: { course: { id: course.id, name: course.name } }
-    });
+    const taskIds = parseJoinedIds(req.params.taskId);
+    if (!taskIds.length) return res.status(404).json({ error: 'Task not found' });
+
+    const pickParam = req.query.pick != null ? parseInt(req.query.pick, 10) : null;
+    if (pickParam && pickParam > 0) {
+        const count = Math.min(MAX_PICK, Math.max(0, pickParam));
+        try {
+            const allQuestions = await getQuestionsForTaskIds(taskIds);
+            if (!allQuestions.length) return res.json([]);
+            const questions = getRandomItems(allQuestions, count);
+            return res.json(questions);
+        } catch (err) {
+            console.error('Error picking questions for task(s) via API:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    if (taskIds.length === 1) {
+        const task = await get('SELECT id, course_id, name, target, description FROM tasks WHERE id = ?', [taskIds[0]]);
+        if (!task) return res.status(404).json({ error: 'Task not found' });
+        const course = await get('SELECT id, name FROM courses WHERE id = ?', [task.course_id]);
+        if (!course) return res.status(404).json({ error: 'Course not found' });
+        return res.json({
+            id: task.id,
+            name: task.name,
+            target: task.target,
+            hierarchy: { course: { id: course.id, name: course.name } }
+        });
+    }
+
+    const placeholders = taskIds.map(() => '?').join(',');
+    const tasks = await all(
+        `SELECT t.id, t.course_id, t.name, t.target, t.description, c.id as course_id, c.name as course_name
+         FROM tasks t
+         JOIN courses c ON c.id = t.course_id
+         WHERE t.id IN (${placeholders})`,
+        taskIds
+    );
+    if (!tasks.length) return res.status(404).json({ error: 'Task not found' });
+    res.json(
+        tasks.map(t => ({
+            id: t.id,
+            name: t.name,
+            target: t.target,
+            description: t.description || null,
+            hierarchy: { course: { id: t.course_id, name: t.course_name } }
+        }))
+    );
 });
 
 router.get('/question/:questionId', async (req, res) => {
@@ -355,6 +430,12 @@ router.get('/question/:questionId', async (req, res) => {
 });
 
 async function getQuestionsForUnit(unitId) {
+    return getQuestionsForUnitIds([unitId]);
+}
+
+async function getQuestionsForUnitIds(unitIds) {
+    if (!unitIds || !unitIds.length) return [];
+    const placeholders = unitIds.map(() => '?').join(',');
     const rows = await all(
         `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
                 q.task_id, t.name as task_name,
@@ -365,11 +446,19 @@ async function getQuestionsForUnit(unitId) {
          JOIN unit_tasks ut ON ut.task_id = t.id
          JOIN units u ON ut.unit_id = u.id
          JOIN courses c ON t.course_id = c.id
-         WHERE u.id = ?
+         WHERE u.id IN (${placeholders})
            AND COALESCE(q.quality, '') != 'bad'`,
-        [unitId]
+        unitIds
     );
-    return rows.map(r =>
+    const seen = new Set();
+    const uniqueRows = [];
+    for (const r of rows) {
+        if (!seen.has(r.id)) {
+            seen.add(r.id);
+            uniqueRows.push(r);
+        }
+    }
+    return uniqueRows.map(r =>
         rowToQuestion(r, {
             course: { id: r.course_id, name: r.course_name },
             unit: { id: r.unit_id, name: r.unit_name },
@@ -379,6 +468,12 @@ async function getQuestionsForUnit(unitId) {
 }
 
 async function getQuestionsForTask(taskId) {
+    return getQuestionsForTaskIds([taskId]);
+}
+
+async function getQuestionsForTaskIds(taskIds) {
+    if (!taskIds || !taskIds.length) return [];
+    const placeholders = taskIds.map(() => '?').join(',');
     const rows = await all(
         `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
                 q.task_id, t.name as task_name,
@@ -386,9 +481,9 @@ async function getQuestionsForTask(taskId) {
          FROM questions q
          JOIN tasks t ON q.task_id = t.id
          JOIN courses c ON t.course_id = c.id
-         WHERE q.task_id = ?
+         WHERE q.task_id IN (${placeholders})
            AND COALESCE(q.quality, '') != 'bad'`,
-        [taskId]
+        taskIds
     );
     return rows.map(r =>
         rowToQuestion(r, {
@@ -419,40 +514,65 @@ async function getAllQuestionsForCourse(courseId) {
 }
 
 router.get('/unit/:unitId/questions', async (req, res) => {
-    const unitId = parseInt(req.params.unitId);
-    const unit = await get('SELECT id FROM units WHERE id = ?', [unitId]);
-    if (!unit) return res.status(404).json({ error: 'Unit not found' });
-    const questions = await getQuestionsForUnit(unitId);
+    const unitIds = parseJoinedIds(req.params.unitId);
+    if (!unitIds.length) return res.status(404).json({ error: 'Unit not found' });
+    const rows = await all(
+        `SELECT id FROM units WHERE id IN (${unitIds.map(() => '?').join(',')})`,
+        unitIds
+    );
+    if (!rows || rows.length !== unitIds.length) {
+        return res.status(404).json({ error: 'One or more units not found' });
+    }
+    const questions = await getQuestionsForUnitIds(unitIds);
     res.json(questions);
 });
 
 router.get('/task/:taskId/questions', async (req, res) => {
-    const taskId = parseInt(req.params.taskId);
-    const task = await get('SELECT id FROM tasks WHERE id = ?', [taskId]);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
-    const questions = await getQuestionsForTask(taskId);
+    const taskIds = parseJoinedIds(req.params.taskId);
+    if (!taskIds.length) return res.status(404).json({ error: 'Task not found' });
+    const rows = await all(
+        `SELECT id FROM tasks WHERE id IN (${taskIds.map(() => '?').join(',')})`,
+        taskIds
+    );
+    if (!rows || rows.length !== taskIds.length) {
+        return res.status(404).json({ error: 'One or more tasks not found' });
+    }
+    const questions = await getQuestionsForTaskIds(taskIds);
     res.json(questions);
 });
 
 router.get('/unit/:unitId/vocab', async (req, res) => {
-    const unitId = parseInt(req.params.unitId);
-    const unit = await get('SELECT id FROM units WHERE id = ?', [unitId]);
-    if (!unit) return res.status(404).json({ error: 'Unit not found' });
+    const unitIds = parseJoinedIds(req.params.unitId);
+    if (!unitIds.length) return res.status(404).json({ error: 'Unit not found' });
+    const unitRows = await all(
+        `SELECT id FROM units WHERE id IN (${unitIds.map(() => '?').join(',')})`,
+        unitIds
+    );
+    if (!unitRows || unitRows.length !== unitIds.length) {
+        return res.status(404).json({ error: 'One or more units not found' });
+    }
     try {
+        const placeholders = unitIds.map(() => '?').join(',');
         const rows = await all(
             `SELECT v.id, v.term, v.definition, uv.sort_order
              FROM unit_vocab uv
              JOIN vocab_terms v ON uv.vocab_term_id = v.id
-             WHERE uv.unit_id = ?
-             ORDER BY uv.sort_order, v.id`,
-            [unitId]
+             WHERE uv.unit_id IN (${placeholders})
+             ORDER BY uv.unit_id, uv.sort_order, v.id`,
+            unitIds
         );
-        const vocab = rows.map(r => ({
-            id: r.id,
-            term: r.term,
-            definition: r.definition || null,
-            sort_order: r.sort_order
-        }));
+        const seen = new Set();
+        const vocab = [];
+        for (const r of rows) {
+            if (seen.has(r.id)) continue;
+            seen.add(r.id);
+            vocab.push({
+                id: r.id,
+                term: r.term,
+                definition: r.definition || null,
+                sort_order: r.sort_order
+            });
+        }
         const pickParam = req.query.pick != null ? parseInt(req.query.pick, 10) : null;
         if (pickParam && pickParam > 0) {
             return res.json(getRandomItems(vocab, pickParam));
