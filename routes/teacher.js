@@ -1143,23 +1143,24 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                     }
 
                     const correctAnswer = answers[correctIndex] || '';
+                    const computedTime = getQuestionTime(prompt, answers);
+                    const importedTimeRaw = getField(values, ['Time', 'Time (sec)', 'Time limit', 'Time limit (sec)']);
+                    const resolvedTime = normalizeQuestionTime(importedTimeRaw, computedTime);
 
                     const existing = await get(
                         'SELECT id FROM questions WHERE task_id = ? AND prompt = ?',
                         [taskId, prompt]
                     );
                     if (existing) {
-                        const computedTime = getQuestionTime(prompt, answers);
                         await run(
                             'UPDATE questions SET answers = ?, correct_answer = ?, correct_index = ?, time = ? WHERE id = ?',
-                            [JSON.stringify(answers), correctAnswer, correctIndex, computedTime, existing.id]
+                            [JSON.stringify(answers), correctAnswer, correctIndex, resolvedTime, existing.id]
                         );
                         stats.updated += 1;
                     } else {
-                        const computedTime = getQuestionTime(prompt, answers);
                         await run(
                             'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, time) VALUES (?, ?, ?, ?, ?, ?)',
-                            [taskId, prompt, correctAnswer, correctIndex, JSON.stringify(answers), computedTime]
+                            [taskId, prompt, correctAnswer, correctIndex, JSON.stringify(answers), resolvedTime]
                         );
                         stats.inserted += 1;
                     }

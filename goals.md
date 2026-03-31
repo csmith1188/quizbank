@@ -1,5 +1,3 @@
-- Time column with automatic Time estimation by character length
-
 - Merkert was in Upper Class. Why?
 
 - Student create temporary quiz
