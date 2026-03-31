@@ -3,6 +3,7 @@ const { get, all, run } = require('../lib/db');
 const { generateQuestions } = require('../lib/question-generator');
 const { createRateLimiter } = require('../lib/rate-limit');
 const config = require('../lib/config');
+const { getQuestionTime, normalizeQuestionTime } = require('../lib/question-time-limit');
 
 const router = express.Router();
 
@@ -43,7 +44,8 @@ function rowToQuestion(row, hierarchy = null) {
         prompt: row.prompt,
         correctAnswer: row.correct_answer,
         correctIndex: row.correct_index,
-        answers: typeof row.answers === 'string' ? JSON.parse(row.answers) : row.answers
+        answers: typeof row.answers === 'string' ? JSON.parse(row.answers) : row.answers,
+        time: row.time != null ? row.time : 30
     };
     if (hierarchy) q.hierarchy = hierarchy;
     return q;
@@ -113,7 +115,7 @@ router.get('/course/:courseId', async (req, res) => {
                 if (!ids.length) return res.json([]);
                 const placeholders = ids.map(() => '?').join(',');
                 const rows = await all(
-                    `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
+                    `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai, q.time,
                             q.task_id, t.name as task_name,
                             c.id as course_id, c.name as course_name
                      FROM questions q
@@ -411,7 +413,7 @@ router.get('/task/:taskId', async (req, res) => {
 router.get('/question/:questionId', async (req, res) => {
     const questionId = parseInt(req.params.questionId);
     const row = await get(
-        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai, q.time,
                 q.task_id, t.name AS task_name,
                 c.id AS course_id, c.name AS course_name
          FROM questions q
@@ -437,7 +439,7 @@ async function getQuestionsForUnitIds(unitIds) {
     if (!unitIds || !unitIds.length) return [];
     const placeholders = unitIds.map(() => '?').join(',');
     const rows = await all(
-        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai, q.time,
                 q.task_id, t.name as task_name,
                 u.id as unit_id, u.name as unit_name,
                 c.id as course_id, c.name as course_name
@@ -475,7 +477,7 @@ async function getQuestionsForTaskIds(taskIds) {
     if (!taskIds || !taskIds.length) return [];
     const placeholders = taskIds.map(() => '?').join(',');
     const rows = await all(
-        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai, q.time,
                 q.task_id, t.name as task_name,
                 c.id as course_id, c.name as course_name
          FROM questions q
@@ -495,7 +497,7 @@ async function getQuestionsForTaskIds(taskIds) {
 
 async function getAllQuestionsForCourse(courseId) {
     const rows = await all(
-        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai,
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.ai, q.time,
                 q.task_id, t.name as task_name,
                 c.id as course_id, c.name as course_name
          FROM questions q
@@ -777,28 +779,37 @@ router.post('/courses/:courseId/tasks/:taskId/questions', requireCourseOwner, as
     const { prompt, correctAnswer, correctIndex, answers } = req.body || {};
     if (!prompt || !answers || !Array.isArray(answers)) return res.status(400).json({ error: 'prompt and answers array required' });
     const idx = correctIndex != null ? parseInt(correctIndex) : 0;
-    await run('INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, ai) VALUES (?, ?, ?, ?, ?, ?)',
-        [taskId, prompt, correctAnswer || '', idx, JSON.stringify(answers), req.body.ai ? 1 : 0]);
-    const row = await get('SELECT id, task_id, prompt, correct_answer, correct_index, answers FROM questions ORDER BY id DESC LIMIT 1');
-    res.status(201).json({ id: row.id, task_id: row.task_id, prompt: row.prompt, correctAnswer: row.correct_answer, correctIndex: row.correct_index, answers: JSON.parse(row.answers) });
+    const computedTime = getQuestionTime(prompt, answers);
+    const time = normalizeQuestionTime(req.body && req.body.time, computedTime);
+    await run('INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, ai, time) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [taskId, prompt, correctAnswer || '', idx, JSON.stringify(answers), req.body.ai ? 1 : 0, time]);
+    const row = await get('SELECT id, task_id, prompt, correct_answer, correct_index, answers, time FROM questions ORDER BY id DESC LIMIT 1');
+    res.status(201).json({ id: row.id, task_id: row.task_id, prompt: row.prompt, correctAnswer: row.correct_answer, correctIndex: row.correct_index, answers: JSON.parse(row.answers), time: row.time });
 });
 
 router.patch('/courses/:courseId/questions/:questionId', requireCourseOwner, async (req, res) => {
     const questionId = parseInt(req.params.questionId);
-    const q = await get('SELECT q.id, q.task_id FROM questions q JOIN tasks t ON q.task_id = t.id WHERE q.id = ? AND t.course_id = ?', [questionId, req.courseId]);
+    const q = await get('SELECT q.id, q.task_id, q.prompt, q.answers FROM questions q JOIN tasks t ON q.task_id = t.id WHERE q.id = ? AND t.course_id = ?', [questionId, req.courseId]);
     if (!q) return res.status(404).json({ error: 'Question not found' });
     const { prompt, correctAnswer, correctIndex, answers } = req.body || {};
+    const effectivePrompt = prompt !== undefined ? prompt : q.prompt;
+    const effectiveAnswers = answers !== undefined
+        ? answers
+        : (typeof q.answers === 'string' ? JSON.parse(q.answers || '[]') : q.answers);
+    const computedTime = getQuestionTime(effectivePrompt, effectiveAnswers);
+    const time = normalizeQuestionTime(req.body && req.body.time, computedTime);
     const updates = [];
     const params = [];
     if (prompt !== undefined) { updates.push('prompt = ?'); params.push(prompt); }
     if (correctAnswer !== undefined) { updates.push('correct_answer = ?'); params.push(correctAnswer); }
     if (correctIndex !== undefined) { updates.push('correct_index = ?'); params.push(parseInt(correctIndex)); }
     if (answers !== undefined) { updates.push('answers = ?'); params.push(JSON.stringify(answers)); }
+    updates.push('time = ?'); params.push(time);
     if (!updates.length) return res.status(400).json({ error: 'No fields to update' });
     params.push(questionId);
     await run('UPDATE questions SET ' + updates.join(', ') + ' WHERE id = ?', params);
-    const row = await get('SELECT id, task_id, prompt, correct_answer, correct_index, answers FROM questions WHERE id = ?', [questionId]);
-    res.json({ id: row.id, task_id: row.task_id, prompt: row.prompt, correctAnswer: row.correct_answer, correctIndex: row.correct_index, answers: JSON.parse(row.answers) });
+    const row = await get('SELECT id, task_id, prompt, correct_answer, correct_index, answers, time FROM questions WHERE id = ?', [questionId]);
+    res.json({ id: row.id, task_id: row.task_id, prompt: row.prompt, correctAnswer: row.correct_answer, correctIndex: row.correct_index, answers: JSON.parse(row.answers), time: row.time });
 });
 
 router.delete('/courses/:courseId/questions/:questionId', requireCourseOwner, async (req, res) => {

@@ -47,6 +47,13 @@
             <form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>" class="question-form-with-radios" data-question-id="<%= q.id %>">
                 <label>Prompt <textarea name="prompt" class="textarea-prompt" required><%= q.prompt %></textarea></label>
                 <label>Answers (one per line) <textarea name="answers" rows="4" class="textarea-answers answers-source" placeholder="First answer&#10;Second answer&#10;..."><%= q.answers && q.answers.length ? q.answers.join('\n') : '' %></textarea></label>
+                <label>Time (seconds)
+                    <select name="time">
+                        <% [15, 30, 60].forEach(function(t) { %>
+                            <option value="<%= t %>" <%= (q.time === t) || (q.time == null && t === 30) ? 'selected' : '' %>><%= t %></option>
+                        <% }) %>
+                    </select>
+                </label>
                 <input type="hidden" name="correctIndex" class="correct-index-input" value="<%= q.correct_index %>" />
                 <input type="hidden" name="correctAnswer" class="correct-answer-text" value="<%= q.correct_answer %>" />
                 <div class="correct-answer-radios-label">Correct answer</div>

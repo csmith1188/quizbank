@@ -3,6 +3,13 @@
 <form method="post" action="<%= question ? '/courses/' + course.id + '/tasks/' + taskId + '/questions/' + question.id : '/courses/' + course.id + '/tasks/' + taskId + '/questions' %>" class="question-form-with-radios">
     <label>Prompt <textarea name="prompt" class="textarea-prompt" required><%= question ? question.prompt : '' %></textarea></label>
     <label>Answers (one per line) <textarea name="answers" rows="4" class="textarea-answers answers-source" placeholder="First answer&#10;Second answer&#10;..."><%= question && question.answers ? question.answers.join('\n') : '' %></textarea></label>
+    <label>Time (seconds)
+        <select name="time">
+            <% [15, 30, 60].forEach(function(t) { %>
+                <option value="<%= t %>" <%= (question && question.time === t) || (!question && t === 30) ? 'selected' : '' %>><%= t %></option>
+            <% }) %>
+        </select>
+    </label>
     <input type="hidden" name="correctIndex" class="correct-index-input" value="<%= question ? question.correct_index : 0 %>" />
     <input type="hidden" name="correctAnswer" class="correct-answer-text" value="<%= question ? question.correct_answer : '' %>" />
     <div class="correct-answer-radios-label">Correct answer</div>

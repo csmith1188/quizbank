@@ -15,6 +15,7 @@ const { getImprovementPlan } = require('../lib/ai-coach');
 const multer = require('multer');
 const { createRateLimiter } = require('../lib/rate-limit');
 const config = require('../lib/config');
+const { getQuestionTime, normalizeQuestionTime } = require('../lib/question-time-limit');
 
 const router = express.Router();
 
@@ -277,6 +278,7 @@ router.get('/courses/:courseId/export-template', requireCourseOwner, async (req,
             const colPrompt = findColumn(headerRow, ['question', 'prompt']);
             const colCorrectAnswer = findColumn(headerRow, ['correct answer']);
             const colCorrectIndex = findColumn(headerRow, ['correct index', 'correct option']);
+            const colTime = findColumn(headerRow, ['time', 'time limit', 'time limit (sec)']);
 
             // Answer columns: Answer 1..6
             const answerCols = [];
@@ -291,6 +293,7 @@ router.get('/courses/:courseId/export-template', requireCourseOwner, async (req,
                         q.correct_answer,
                         q.correct_index,
                         q.answers,
+                        q.time,
                         q.task_id,
                         t.sort_order AS task_sort_order,
                         t.task_number
@@ -338,6 +341,7 @@ router.get('/courses/:courseId/export-template', requireCourseOwner, async (req,
                     // Export as 1-based index for readability
                     data[colCorrectIndex - 1] = (correctIndex + 1);
                 }
+                if (colTime) data[colTime - 1] = q.time || 30;
 
                 sheet3.addRow(data);
             });
@@ -1145,15 +1149,17 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                         [taskId, prompt]
                     );
                     if (existing) {
+                        const computedTime = getQuestionTime(prompt, answers);
                         await run(
-                            'UPDATE questions SET answers = ?, correct_answer = ?, correct_index = ? WHERE id = ?',
-                            [JSON.stringify(answers), correctAnswer, correctIndex, existing.id]
+                            'UPDATE questions SET answers = ?, correct_answer = ?, correct_index = ?, time = ? WHERE id = ?',
+                            [JSON.stringify(answers), correctAnswer, correctIndex, computedTime, existing.id]
                         );
                         stats.updated += 1;
                     } else {
+                        const computedTime = getQuestionTime(prompt, answers);
                         await run(
-                            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers) VALUES (?, ?, ?, ?, ?)',
-                            [taskId, prompt, correctAnswer, correctIndex, JSON.stringify(answers)]
+                            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, time) VALUES (?, ?, ?, ?, ?, ?)',
+                            [taskId, prompt, correctAnswer, correctIndex, JSON.stringify(answers), computedTime]
                         );
                         stats.inserted += 1;
                     }
@@ -1359,7 +1365,7 @@ router.get('/courses/:courseId/tasks/:tid', requireCourseOwner, async (req, res)
     );
     if (!task) return res.redirect('/courses/' + req.courseId + '/tasks');
     const questions = await all(
-        "SELECT id, prompt, correct_answer, correct_index, answers FROM questions WHERE task_id = ? AND COALESCE(quality, '') != 'bad' ORDER BY id",
+        "SELECT id, prompt, correct_answer, correct_index, answers, time FROM questions WHERE task_id = ? AND COALESCE(quality, '') != 'bad' ORDER BY id",
         [taskId]
     );
     const questionsParsed = questions.map(q => ({ ...q, answers: typeof q.answers === 'string' ? JSON.parse(q.answers) : q.answers }));
@@ -1438,7 +1444,7 @@ router.post('/courses/:courseId/tasks/:tid/delete', requireCourseOwner, async (r
 
 router.get('/courses/:courseId/tasks/:tid/questions/new', requireCourseOwner, (req, res) => {
     const taskId = parseInt(req.params.tid);
-    res.render('teacher/question-form', { user: req.session.user, course: req.course, taskId, question: null });
+    res.render('teacher/question-form', { user: req.session.user, course: req.course, taskId, question: null, timeOptions: [15, 30, 60] });
 });
 
 router.post('/courses/:courseId/tasks/:tid/questions', requireCourseOwner, async (req, res) => {
@@ -1448,6 +1454,8 @@ router.post('/courses/:courseId/tasks/:tid/questions', requireCourseOwner, async
     const { prompt, correctAnswer, correctIndex, answers, quality, badReason } = req.body || {};
     const ans = typeof answers === 'string' ? (answers.trim() ? answers.split(/\n/).map(s => s.trim()).filter(Boolean) : []) : (answers || []);
     const idx = parseInt(correctIndex) || 0;
+    const computedTime = getQuestionTime((prompt || '').trim(), ans);
+    const time = normalizeQuestionTime(req.body && req.body.time, computedTime);
 
     if (quality === 'good' || quality === 'bad') {
         if (!prompt || !(prompt + '').trim()) {
@@ -1463,15 +1471,15 @@ router.post('/courses/:courseId/tasks/:tid/questions', requireCourseOwner, async
             }
         }
         await run(
-            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), quality, (badReason || null), 1]
+            'INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, time, quality, quality_reason, ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), time, quality, (badReason || null), 1]
         );
         const row = await get('SELECT id FROM questions ORDER BY id DESC LIMIT 1');
         return res.status(201).json({ id: row.id });
     }
 
-    await run('INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers) VALUES (?, ?, ?, ?, ?)',
-        [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans)]);
+    await run('INSERT INTO questions (task_id, prompt, correct_answer, correct_index, answers, time) VALUES (?, ?, ?, ?, ?, ?)',
+        [taskId, (prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), time]);
     const row = await get('SELECT id FROM questions ORDER BY id DESC LIMIT 1');
     res.redirect('/courses/' + req.courseId + '/tasks/' + taskId + '#question-' + row.id);
 });
@@ -1488,8 +1496,10 @@ router.post('/courses/:courseId/tasks/:tid/questions/:qid', requireCourseOwner, 
     const { prompt, correctAnswer, correctIndex, answers } = req.body || {};
     const ans = typeof answers === 'string' ? (answers.trim() ? answers.split(/\n/).map(s => s.trim()).filter(Boolean) : []) : (answers || []);
     const idx = parseInt(correctIndex) || 0;
-    await run('UPDATE questions SET prompt = ?, correct_answer = ?, correct_index = ?, answers = ? WHERE id = ?',
-        [(prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), questionId]);
+    const computedTime = getQuestionTime((prompt || '').trim(), ans);
+    const time = normalizeQuestionTime(req.body && req.body.time, computedTime);
+    await run('UPDATE questions SET prompt = ?, correct_answer = ?, correct_index = ?, answers = ?, time = ? WHERE id = ?',
+        [(prompt || '').trim(), (correctAnswer || '').trim(), idx, JSON.stringify(ans), time, questionId]);
     res.redirect('/courses/' + req.courseId + '/tasks/' + taskId + '#question-' + questionId);
 });
 
@@ -2018,7 +2028,7 @@ router.get('/courses/:courseId/quizzes/:qid/export-kahoot', requireCourseOwner, 
             answers[2] || '',
             answers[3] || '',
             String(correctIndex + 1),
-            30
+            q.time || 30
         ];
         sheet.addRow(row);
     });
@@ -2148,7 +2158,7 @@ router.get('/courses/:courseId/quizzes/:qid/export-blooket', requireCourseOwner,
         baseCells[3] = answers[1] || '';
         baseCells[4] = answers[2] || '';
         baseCells[5] = answers[3] || '';
-        baseCells[6] = '20'; // default time limit
+        baseCells[6] = String(q.time || 30);
         baseCells[7] = correctValue;
 
         // Pad out to match the template's number of columns

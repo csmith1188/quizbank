@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS questions (
     correct_answer TEXT NOT NULL,
     correct_index INTEGER NOT NULL,
     answers TEXT NOT NULL,
+    time INTEGER NOT NULL DEFAULT 30,
     ai INTEGER DEFAULT 0,
     quality TEXT,
     FOREIGN KEY (task_id) REFERENCES tasks(id)

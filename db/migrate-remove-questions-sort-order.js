@@ -32,6 +32,7 @@ async function hasColumn(table, column) {
 
 async function migrate() {
     const hasSortOrder = await hasColumn('questions', 'sort_order');
+    const hasTime = await hasColumn('questions', 'time');
     if (!hasSortOrder) {
         console.log('questions: sort_order already removed');
         return;
@@ -43,12 +44,17 @@ async function migrate() {
         correct_answer TEXT NOT NULL,
         correct_index INTEGER NOT NULL,
         answers TEXT NOT NULL,
+        time INTEGER NOT NULL DEFAULT 30,
         quality TEXT,
         quality_reason TEXT,
         ai INTEGER DEFAULT 0,
         FOREIGN KEY (task_id) REFERENCES tasks(id)
     )`);
-    await run('INSERT INTO questions_new (id, task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai) SELECT id, task_id, prompt, correct_answer, correct_index, answers, quality, quality_reason, ai FROM questions');
+    if (hasTime) {
+        await run('INSERT INTO questions_new (id, task_id, prompt, correct_answer, correct_index, answers, time, quality, quality_reason, ai) SELECT id, task_id, prompt, correct_answer, correct_index, answers, time, quality, quality_reason, ai FROM questions');
+    } else {
+        await run('INSERT INTO questions_new (id, task_id, prompt, correct_answer, correct_index, answers, time, quality, quality_reason, ai) SELECT id, task_id, prompt, correct_answer, correct_index, answers, 30, quality, quality_reason, ai FROM questions');
+    }
     await run('DROP TABLE questions');
     await run('ALTER TABLE questions_new RENAME TO questions');
     await run('CREATE INDEX IF NOT EXISTS idx_questions_task ON questions(task_id)');

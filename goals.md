@@ -6,6 +6,8 @@
 
 - Poll integration, with task mastery tracking
 
+- Class pick by mastery, increase mastery for class, all by API
+
 - AI generate question from API
 
 - Manage Task Lists seperately?

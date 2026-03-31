@@ -7,7 +7,7 @@
     "start": "node app.js",
     "init-db": "node db/init-db.js",
     "migrate": "node db/migrate-all.js",
-    "import-9th": "node scripts/import-9th.js"
+    "retime-questiondb": "node lib/retime_questiondb.js"
   },
   "author": "C. Smith",
   "license": "ISC",
