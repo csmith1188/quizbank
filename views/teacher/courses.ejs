@@ -21,6 +21,16 @@
             >
                 ⧉
             </button>
+            <button
+                type="button"
+                class="btn btn-small formbar-poll-btn"
+                data-poll-url="/courses/<%= c.id %>/formbar-poll"
+                aria-label="Create Formbar poll from a random course question"
+                title="Create Formbar poll (random question)"
+                onclick="event.stopPropagation();"
+            >
+                ◎
+            </button>
             <span class="course-name"><%= c.name %></span>
         </summary>
 

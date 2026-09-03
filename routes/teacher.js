@@ -4,6 +4,7 @@ const ExcelJS = require('exceljs');
 const fs = require('fs');
 const path = require('path');
 const { syncClassesForUser } = require('../lib/formbar-classes');
+const { createPollFromQuestionForUser } = require('../lib/formbar-polls');
 const {
     getOrCreateActiveAttempt,
     getAttemptQuestions,
@@ -1510,6 +1511,126 @@ router.post('/courses/:courseId/tasks/:tid/questions/:qid/delete', requireCourse
     const q = await get('SELECT q.id FROM questions q JOIN tasks t ON q.task_id = t.id WHERE q.id = ? AND t.course_id = ?', [questionId, req.courseId]);
     if (q) await run('DELETE FROM questions WHERE id = ?', [questionId]);
     res.redirect('/courses/' + req.courseId + '/tasks/' + taskId);
+});
+
+function wantsJsonResponse(req) {
+    return !!(req.xhr
+        || (req.get('Accept') || '').includes('application/json')
+        || (req.get('Content-Type') || '').includes('application/json'));
+}
+
+function parseQuestionAnswers(q) {
+    if (!q) return null;
+    const answers = typeof q.answers === 'string' ? JSON.parse(q.answers) : q.answers;
+    return { ...q, answers };
+}
+
+async function createFormbarPollResponse(req, res, question, redirectUrl) {
+    const wantsJson = wantsJsonResponse(req);
+    const sendError = (status, message) => {
+        if (wantsJson) return res.status(status).json({ ok: false, error: message });
+        return res.status(status).send(message);
+    };
+
+    try {
+        if (!question) return sendError(404, 'No eligible questions found');
+
+        const token = req.session && req.session.token ? req.session.token : {};
+        const formbarId = token.id != null ? token.id : token.sub;
+        if (formbarId == null || formbarId === '') {
+            return sendError(400, 'Your account is not linked to Formbar');
+        }
+
+        const parsed = parseQuestionAnswers(question);
+        const result = await createPollFromQuestionForUser(formbarId, parsed);
+
+        if (wantsJson) {
+            return res.json({
+                ok: true,
+                classId: result.classId,
+                className: result.className || null,
+                questionId: question.id || null
+            });
+        }
+        return res.redirect(redirectUrl || ('/courses/' + req.courseId));
+    } catch (err) {
+        console.error('Error creating Formbar poll:', err.message);
+        const status = err.code === 'NO_ACTIVE_CLASS' ? 400 : (err.response && err.response.status) || 500;
+        let message = err.message || 'Failed to create Formbar poll';
+        if (err.response && err.response.data) {
+            const data = err.response.data;
+            if (typeof data === 'string' && data.trim()) message = data;
+            else if (data.message) message = data.message;
+            else if (data.error) message = data.error;
+        }
+        return sendError(status >= 400 && status < 600 ? status : 500, message);
+    }
+}
+
+router.post('/courses/:courseId/formbar-poll', requireCourseOwner, async (req, res) => {
+    const q = await get(
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.time
+         FROM questions q
+         JOIN tasks t ON q.task_id = t.id
+         WHERE t.course_id = ? AND COALESCE(q.quality, '') != 'bad'
+         ORDER BY RANDOM()
+         LIMIT 1`,
+        [req.courseId]
+    );
+    return createFormbarPollResponse(req, res, q, '/courses#course-' + req.courseId);
+});
+
+router.post('/courses/:courseId/units/:uid/formbar-poll', requireCourseOwner, async (req, res) => {
+    const unitId = parseInt(req.params.uid, 10);
+    const unit = await get('SELECT id FROM units WHERE id = ? AND course_id = ?', [unitId, req.courseId]);
+    if (!unit) {
+        if (wantsJsonResponse(req)) return res.status(404).json({ ok: false, error: 'Unit not found' });
+        return res.redirect('/courses/' + req.courseId + '/units');
+    }
+    const q = await get(
+        `SELECT q.id, q.prompt, q.correct_answer, q.correct_index, q.answers, q.time
+         FROM questions q
+         JOIN tasks t ON q.task_id = t.id
+         JOIN unit_tasks ut ON ut.task_id = t.id
+         WHERE ut.unit_id = ? AND t.course_id = ? AND COALESCE(q.quality, '') != 'bad'
+         ORDER BY RANDOM()
+         LIMIT 1`,
+        [unitId, req.courseId]
+    );
+    return createFormbarPollResponse(req, res, q, '/courses/' + req.courseId + '/units#unit-' + unitId);
+});
+
+router.post('/courses/:courseId/tasks/:tid/formbar-poll', requireCourseOwner, async (req, res) => {
+    const taskId = parseInt(req.params.tid, 10);
+    const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
+    if (!task) {
+        if (wantsJsonResponse(req)) return res.status(404).json({ ok: false, error: 'Task not found' });
+        return res.redirect('/courses/' + req.courseId + '/tasks');
+    }
+    const q = await get(
+        `SELECT id, prompt, correct_answer, correct_index, answers, time
+         FROM questions
+         WHERE task_id = ? AND COALESCE(quality, '') != 'bad'
+         ORDER BY RANDOM()
+         LIMIT 1`,
+        [taskId]
+    );
+    return createFormbarPollResponse(req, res, q, '/courses/' + req.courseId + '/tasks/' + taskId);
+});
+
+router.post('/courses/:courseId/tasks/:tid/questions/:qid/formbar-poll', requireCourseOwner, async (req, res) => {
+    const taskId = parseInt(req.params.tid, 10);
+    const questionId = parseInt(req.params.qid, 10);
+    const task = await get('SELECT id FROM tasks WHERE id = ? AND course_id = ?', [taskId, req.courseId]);
+    if (!task) {
+        if (wantsJsonResponse(req)) return res.status(404).json({ ok: false, error: 'Task not found' });
+        return res.redirect('/courses/' + req.courseId + '/tasks');
+    }
+    const q = await get(
+        "SELECT id, prompt, correct_answer, correct_index, answers, time FROM questions WHERE id = ? AND task_id = ? AND COALESCE(quality, '') != 'bad'",
+        [questionId, taskId]
+    );
+    return createFormbarPollResponse(req, res, q, '/courses/' + req.courseId + '/tasks/' + taskId + '#question-' + questionId);
 });
 
 router.get('/courses/:courseId/mastery', requireLogin, async (req, res) => {

@@ -20,6 +20,16 @@
             >
                 ⧉
             </button>
+            <button
+                type="button"
+                class="btn btn-small formbar-poll-btn"
+                data-poll-url="/courses/<%= course.id %>/units/<%= u.id %>/formbar-poll"
+                aria-label="Create Formbar poll from a random unit question"
+                title="Create Formbar poll (random question)"
+                onclick="event.stopPropagation();"
+            >
+                ◎
+            </button>
             <span class="unit-name"><%= u.name %></span>
             <span class="unit-meta"><%= u.unitTasks.length %> task<%= u.unitTasks.length !== 1 ? 's' : '' %>, <%= u.unitVocab.length %> vocab term<%= u.unitVocab.length !== 1 ? 's' : '' %></span>
         </summary>
@@ -46,7 +56,18 @@
                 <% u.unitTasks.forEach(function(t) { %>
                     <tr data-id="<%= t.task_id %>">
                         <td><%= (t.task_sort_order != null ? t.task_sort_order : 0) + 1 %></td>
-                        <td><a href="/courses/<%= course.id %>/tasks/<%= t.task_id %>"><%= t.name %></a></td>
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-small formbar-poll-btn"
+                                data-poll-url="/courses/<%= course.id %>/tasks/<%= t.task_id %>/formbar-poll"
+                                aria-label="Create Formbar poll from a random question in <%= t.name %>"
+                                title="Create Formbar poll (random question)"
+                            >
+                                ◎
+                            </button>
+                            <a href="/courses/<%= course.id %>/tasks/<%= t.task_id %>"><%= t.name %></a>
+                        </td>
                         <td>
                             <form method="post"
                                   action="/courses/<%= course.id %>/units/<%= u.id %>/tasks/<%= t.task_id %>/remove"

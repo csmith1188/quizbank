@@ -124,6 +124,74 @@
     }
 })();
 
+(function () {
+    function initFormbarPollButtons() {
+        var buttons = document.querySelectorAll('.formbar-poll-btn[data-poll-url]');
+        if (!buttons.length) return;
+        buttons.forEach(function (btn) {
+            if (btn._formbarPollBound) return;
+            btn._formbarPollBound = true;
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (btn.disabled) return;
+                var url = btn.getAttribute('data-poll-url');
+                if (!url) return;
+                var originalTitle = btn.getAttribute('title') || 'Create Formbar poll';
+                var originalLabel = btn.getAttribute('aria-label') || originalTitle;
+                btn.disabled = true;
+                btn.classList.add('busy');
+                btn.setAttribute('title', 'Creating poll...');
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: '{}'
+                })
+                    .then(function (res) {
+                        return res.json().catch(function () { return {}; }).then(function (data) {
+                            return { ok: res.ok, status: res.status, data: data };
+                        });
+                    })
+                    .then(function (result) {
+                        if (!result.ok || !result.data || result.data.ok === false) {
+                            var msg = (result.data && (result.data.error || result.data.message))
+                                || ('Failed to create Formbar poll (' + result.status + ')');
+                            throw new Error(msg);
+                        }
+                        var classLabel = result.data.className
+                            ? (' in ' + result.data.className)
+                            : '';
+                        btn.setAttribute('title', 'Poll created' + classLabel);
+                        btn.classList.add('copied');
+                        setTimeout(function () {
+                            btn.setAttribute('title', originalTitle);
+                            btn.setAttribute('aria-label', originalLabel);
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    })
+                    .catch(function (err) {
+                        alert(err.message || 'Failed to create Formbar poll');
+                        btn.setAttribute('title', originalTitle);
+                    })
+                    .finally(function () {
+                        btn.disabled = false;
+                        btn.classList.remove('busy');
+                    });
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFormbarPollButtons);
+    } else {
+        initFormbarPollButtons();
+    }
+})();
+
 </script>
 
 </body>

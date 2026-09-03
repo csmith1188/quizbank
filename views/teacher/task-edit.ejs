@@ -40,6 +40,16 @@
             >
                 ⧉
             </button>
+            <button
+                type="button"
+                class="btn btn-small formbar-poll-btn"
+                data-poll-url="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>/formbar-poll"
+                aria-label="Create Formbar poll from this question"
+                title="Create Formbar poll"
+                onclick="event.stopPropagation();"
+            >
+                ◎
+            </button>
             <span class="unit-name"><%= q.prompt.substring(0, 50) %><%= q.prompt.length > 50 ? '...' : '' %></span>
             <span class="unit-meta"><%= q.correct_index >= 0 && q.answers && q.answers[q.correct_index] ? q.answers[q.correct_index] : q.correct_answer %></span>
         </summary>
