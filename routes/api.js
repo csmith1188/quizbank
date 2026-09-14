@@ -87,9 +87,10 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         if (!course) return res.status(404).json({ error: 'Course not found' });
 
         const sessionUserId = req.session && req.session.userId;
-        const hasStudentParam = req.query.student != null;
+        const studentParam = req.query.student != null ? req.query.student : req.query.studentId;
+        const hasStudentParam = studentParam != null;
         const requestedUser = hasStudentParam
-            ? await resolveUserByFormbarId(req.query.student)
+            ? await resolveUserByFormbarId(studentParam)
             : null;
         if (hasStudentParam && !requestedUser) {
             return res.status(404).json({ error: 'Student not found by Formbar id' });
