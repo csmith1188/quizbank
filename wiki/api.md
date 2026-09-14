@@ -87,27 +87,6 @@ Parameters:
 - `student` (optional): integer student id. When present, question selection uses the same **mastery-weighted algorithm** as the Progress Test (`lib/progress-quiz.js`).
 - `class` (optional): integer class id. Currently **not supported** on this endpoint and will return `400`.
 
-#### Course mastery
-
-- **GET** `/api/course/:courseId/mastery`
-- Returns the logged-in user's mastery for the course.
-- A course owner may request another student with `?student=formbarId`.
-- The `student` parameter is matched only against `users.formbar_id`, not the local database user ID.
-
-Example response:
-
-```json
-{
-  "course": { "id": 1, "name": "Programming" },
-  "userId": 7,
-  "formbarId": 44,
-  "overallMastery": 0.75,
-  "tasks": [
-    { "id": 3, "name": "Building Linear Flowcharts", "unit": { "id": 1, "name": "Algorithms" }, "mastery": 0.75 }
-  ]
-}
-```
-
 Example response (single question):
 
 ```json

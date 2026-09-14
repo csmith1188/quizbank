@@ -26,13 +26,6 @@ async function resolveUserIdFromParam(studentParam) {
     return row ? row.id : null;
 }
 
-async function resolveUserByFormbarId(studentParam) {
-    if (!studentParam) return null;
-    const formbarId = parseInt(studentParam, 10);
-    if (!Number.isFinite(formbarId) || formbarId <= 0) return null;
-    return await get('SELECT id, formbar_id FROM users WHERE formbar_id = ?', [formbarId]);
-}
-
 async function resolveClassIdFromParam(classParam) {
     if (!classParam) return null;
     const n = parseInt(classParam, 10);
@@ -75,76 +68,6 @@ function parseJoinedIds(param) {
 async function getCourseById(courseId) {
     return await get('SELECT id, name, owner_id, is_public, sort_order FROM courses WHERE id = ?', [courseId]);
 }
-
-router.get('/course/:courseId/mastery', async (req, res) => {
-    const courseId = parseInt(req.params.courseId, 10);
-    if (!Number.isFinite(courseId) || courseId <= 0) {
-        return res.status(400).json({ error: 'Valid course id required' });
-    }
-
-    try {
-        const course = await getCourseById(courseId);
-        if (!course) return res.status(404).json({ error: 'Course not found' });
-
-        const sessionUserId = req.session && req.session.userId;
-        const hasStudentParam = req.query.student != null;
-        const requestedUser = hasStudentParam
-            ? await resolveUserByFormbarId(req.query.student)
-            : null;
-        if (hasStudentParam && !requestedUser) {
-            return res.status(404).json({ error: 'Student not found by Formbar id' });
-        }
-
-        const userId = requestedUser ? requestedUser.id : sessionUserId;
-        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-
-        if (requestedUser && parseInt(userId, 10) !== parseInt(sessionUserId, 10)) {
-            if (!sessionUserId || parseInt(sessionUserId, 10) !== parseInt(course.owner_id, 10)) {
-                return res.status(403).json({ error: 'Only the course owner may request another user\'s mastery' });
-            }
-        }
-
-        const user = await get('SELECT id, formbar_id FROM users WHERE id = ?', [userId]);
-
-        const rows = await all(
-            `SELECT t.id as task_id, t.name as task_name,
-                    COALESCE(tm.mastery, 0) as mastery,
-                    u.id as unit_id, u.name as unit_name,
-                    u.sort_order as unit_order, t.sort_order as task_order
-             FROM tasks t
-             LEFT JOIN task_mastery tm
-                    ON tm.task_id = t.id
-                   AND tm.user_id = ?
-                   AND tm.course_id = ?
-             LEFT JOIN unit_tasks ut ON ut.task_id = t.id
-             LEFT JOIN units u ON ut.unit_id = u.id
-             WHERE t.course_id = ?
-             ORDER BY unit_order, unit_id, task_order, t.id`,
-            [userId, courseId, courseId]
-        );
-
-        const tasks = rows.map(row => ({
-            id: row.task_id,
-            name: row.task_name,
-            unit: row.unit_id ? { id: row.unit_id, name: row.unit_name } : null,
-            mastery: Number(row.mastery) || 0
-        }));
-        const overallMastery = tasks.length
-            ? tasks.reduce((sum, task) => sum + task.mastery, 0) / tasks.length
-            : 0;
-
-        res.json({
-            course: { id: course.id, name: course.name },
-            userId,
-            formbarId: user ? user.formbar_id : null,
-            overallMastery,
-            tasks
-        });
-    } catch (err) {
-        console.error('Error fetching course mastery via API:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 // List all public courses with id, name, and sort_order
 router.get('/course', async (req, res) => {
