@@ -91,7 +91,7 @@ Parameters:
 
 - **GET** `/api/course/:courseId/mastery`
 - Returns the logged-in user's mastery for the course.
-- A course owner may request another student with `?student=formbarId` or `?studentId=formbarId`.
+- Anyone may request another student with `?student=formbarId` or `?studentId=formbarId`.
 - The `student` parameter is matched only against `users.formbar_id`, not the local database user ID.
 
 Example response:

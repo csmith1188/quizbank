@@ -99,13 +99,7 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         const userId = requestedUser ? requestedUser.id : sessionUserId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        if (requestedUser && parseInt(userId, 10) !== parseInt(sessionUserId, 10)) {
-            if (!sessionUserId || parseInt(sessionUserId, 10) !== parseInt(course.owner_id, 10)) {
-                return res.status(403).json({ error: 'Only the course owner may request another user\'s mastery' });
-            }
-        }
-
-        const user = await get('SELECT id, formbar_id FROM users WHERE id = ?', [userId]);
+        const user = await get('SELECT id, username, formbar_id FROM users WHERE id = ?', [userId]);
 
         const rows = await all(
             `SELECT t.id as task_id, t.name as task_name,
@@ -136,6 +130,11 @@ router.get('/course/:courseId/mastery', async (req, res) => {
 
         res.json({
             course: { id: course.id, name: course.name },
+            user: user ? {
+                id: user.id,
+                username: user.username,
+                formbarId: user.formbar_id
+            } : null,
             userId,
             formbarId: user ? user.formbar_id : null,
             overallMastery,
