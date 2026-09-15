@@ -177,6 +177,73 @@ form input[type="checkbox"] { width: auto; margin-right: 0.35rem; }
 
 .correct-answer-radios-label { margin-top: 0.75rem; margin-bottom: 0.35rem; font-weight: 500; }
 .correct-answer-radios label { display: block; margin-bottom: 0.25rem; }
+.correct-answer-radios input[type="radio"] { width: auto; margin-right: 0.4rem; vertical-align: middle; }
+.correct-answer-radios .markdown-inline { display: inline; vertical-align: middle; }
+.correct-answer-radios .markdown-inline p { display: inline; margin: 0; }
+
+.prompt-preview-wrap { margin-top: 0.4rem; }
+.prompt-preview-caption {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+}
+.prompt-preview {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    min-height: 2.5em;
+    max-width: 400px;
+}
+.unit-content .prompt-preview { max-width: none; }
+.prompt-preview.is-empty {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.markdown-body p { margin: 0.4em 0; }
+.markdown-body p:first-child { margin-top: 0; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body ul, .markdown-body ol { margin: 0.4em 0; padding-left: 1.4em; }
+.markdown-body blockquote {
+    margin: 0.4em 0;
+    padding-left: 0.75em;
+    border-left: 3px solid var(--color-border);
+    color: var(--color-text-muted);
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+    margin: 0.5em 0 0.3em;
+    line-height: 1.25;
+    font-weight: 700;
+}
+.markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 0.6em 0;
+}
+.markdown-body pre {
+    overflow-x: auto;
+    padding: 0.5rem 0.6rem;
+    background: #eef2f3;
+    border-radius: var(--radius);
+    margin: 0.4em 0;
+}
+.markdown-body code,
+.markdown-inline code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: #eef2f3;
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+}
+.markdown-body pre code { background: none; padding: 0; }
+.markdown-body img { max-width: 100%; height: auto; }
+.markdown-body a { color: var(--color-primary); }
+.markdown-inline { display: inline; }
+.question-prompt { margin: 0.75rem 0; font-size: 1.05rem; font-weight: 600; }
+.question-prompt strong { font-weight: 700; }
 
 /* Accordion content: inputs full width */
 .unit-content input[type="text"],

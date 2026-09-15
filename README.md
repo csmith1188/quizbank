@@ -42,6 +42,8 @@
   - `GET /api/course/:id?pick=10` (random, max 25)
   - `GET /api/course/:id?pick=10&student=123` (mastery-weighted)
   - `GET /api/course/:id?generate=10&task=5&context=...` (generated only, not saved; max 10)
+- Course mastery (session required; course owner may pass `?student=`):
+  - `GET /api/course/:id/mastery`
 - Access to private course API data requires either:
   - owner session, or
   - `?api_key=...` / `Authorization: Bearer ...`

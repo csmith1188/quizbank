@@ -84,29 +84,8 @@ If a **`pick` query param is present**, the same endpoint returns **questions in
 Parameters:
 
 - `pick` (required for picking): integer, number of questions requested (capped by `MAX_PICK`, currently **25**).
-- `student` (optional): integer student id. When present, question selection uses the same **mastery-weighted algorithm** as the Progress Test (`lib/progress-quiz.js`).
+- `student` (optional): integer student id (`formbar_id` first, then local user id). When present, question selection uses the same **mastery-weighted algorithm** as the Progress Test (`lib/progress-quiz.js`).
 - `class` (optional): integer class id. Currently **not supported** on this endpoint and will return `400`.
-
-#### Course mastery
-
-- **GET** `/api/course/:courseId/mastery`
-- Returns the logged-in user's mastery for the course.
-- Anyone may request another student with `?student=formbarId` or `?studentId=formbarId`.
-- The `student` parameter is matched only against `users.formbar_id`, not the local database user ID.
-
-Example response:
-
-```json
-{
-  "course": { "id": 1, "name": "Programming" },
-  "userId": 7,
-  "formbarId": 44,
-  "overallMastery": 0.75,
-  "tasks": [
-    { "id": 3, "name": "Building Linear Flowcharts", "unit": { "id": 1, "name": "Algorithms" }, "mastery": 0.75 }
-  ]
-}
-```
 
 Example response (single question):
 
@@ -172,6 +151,28 @@ Generation notes:
 - Runs only when `pick` is **not** present.
 - Uses the same generation logic as the teacher question generator.
 - Returns generated questions only; does not insert/update DB records.
+
+#### Course mastery
+
+- **GET** `/api/course/:courseId/mastery`
+- Returns the logged-in user's mastery for the course.
+- A course owner may request another student with `?student=Y`, using the same id resolution as course picking (`formbar_id` first, then local user id).
+- Each task appears once. If a task belongs to multiple units, `unit` is the first unit by sort order.
+- `overallMastery` is the unweighted mean of those unique task scores (tasks with no mastery record count as `0`).
+
+Example response:
+
+```json
+{
+  "course": { "id": 1, "name": "Programming" },
+  "userId": 7,
+  "formbarId": 44,
+  "overallMastery": 0.75,
+  "tasks": [
+    { "id": 3, "name": "Building Linear Flowcharts", "unit": { "id": 1, "name": "Algorithms" }, "mastery": 0.75 }
+  ]
+}
+```
 
 #### Course vocab
 

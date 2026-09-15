@@ -50,12 +50,16 @@
             >
                 ◎
             </button>
-            <span class="unit-name"><%= q.prompt.substring(0, 50) %><%= q.prompt.length > 50 ? '...' : '' %></span>
-            <span class="unit-meta"><%= q.correct_index >= 0 && q.answers && q.answers[q.correct_index] ? q.answers[q.correct_index] : q.correct_answer %></span>
+            <span class="unit-name" data-markdown-src="<%= q.prompt %>" data-markdown-strip="50"><%= q.prompt.substring(0, 50) %><%= q.prompt.length > 50 ? '...' : '' %></span>
+            <span class="unit-meta" data-markdown-src="<%= q.correct_index >= 0 && q.answers && q.answers[q.correct_index] ? q.answers[q.correct_index] : q.correct_answer %>" data-markdown-strip="40"><%= q.correct_index >= 0 && q.answers && q.answers[q.correct_index] ? q.answers[q.correct_index] : q.correct_answer %></span>
         </summary>
         <div class="unit-content">
             <form method="post" action="/courses/<%= course.id %>/tasks/<%= task.id %>/questions/<%= q.id %>" class="question-form-with-radios" data-question-id="<%= q.id %>">
                 <label>Prompt <textarea name="prompt" class="textarea-prompt" required><%= q.prompt %></textarea></label>
+                <div class="prompt-preview-wrap">
+                    <div class="prompt-preview-caption">Preview</div>
+                    <div class="prompt-preview markdown-body" aria-live="polite"></div>
+                </div>
                 <label>Answers (one per line) <textarea name="answers" rows="4" class="textarea-answers answers-source" placeholder="First answer&#10;Second answer&#10;..."><%= q.answers && q.answers.length ? q.answers.join('\n') : '' %></textarea></label>
                 <label>Time (seconds)
                     <select name="time">
@@ -94,9 +98,26 @@
         var el = document.getElementById(hash.slice(1));
         if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
     }
+    function md() {
+        return window.Markdown || null;
+    }
     function parseAnswers(text) {
         if (!text || typeof text !== 'string') return [];
         return text.split(/\r?\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+    }
+    function updatePromptPreview(form) {
+        var ta = form.querySelector('.textarea-prompt');
+        var preview = form.querySelector('.prompt-preview');
+        if (!ta || !preview) return;
+        var value = ta.value || '';
+        if (!value.trim()) {
+            preview.classList.add('is-empty');
+            preview.textContent = 'Preview will appear here';
+            return;
+        }
+        preview.classList.remove('is-empty');
+        if (md()) md().render(preview, value);
+        else preview.textContent = value;
     }
     function buildRadios(form) {
         var ta = form.querySelector('.answers-source');
@@ -133,7 +154,11 @@
                 if (correctText) correctText.value = answers[parseInt(radio.value, 10)];
             });
             label.appendChild(radio);
-            label.appendChild(document.createTextNode(' ' + ans));
+            var text = document.createElement('span');
+            text.className = 'markdown-inline';
+            if (md()) text.innerHTML = md().parseInline(ans);
+            else text.textContent = ans;
+            label.appendChild(text);
             container.appendChild(label);
         });
         if (hidden) hidden.value = String(selectedIndex);
@@ -142,8 +167,14 @@
     function initForm(form) {
         var ta = form.querySelector('.answers-source');
         if (ta) {
+            ta.addEventListener('input', function() { buildRadios(form); });
             ta.addEventListener('blur', function() { buildRadios(form); });
             buildRadios(form);
+        }
+        var prompt = form.querySelector('.textarea-prompt');
+        if (prompt) {
+            prompt.addEventListener('input', function() { updatePromptPreview(form); });
+            updatePromptPreview(form);
         }
     }
     document.querySelectorAll('.question-form-with-radios').forEach(initForm);

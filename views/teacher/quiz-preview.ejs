@@ -14,10 +14,10 @@
 <ol>
 <% questions.forEach(function(q, i) { %>
     <li>
-        <p><strong><%= q.prompt %></strong></p>
+        <div class="question-prompt markdown-body" data-markdown><%= q.prompt %></div>
         <ul>
         <% (q.answers || []).forEach(function(a, j) { %>
-            <li><%= j === q.correctIndex ? '✓ ' : '' %><%= a %></li>
+            <li><%= j === q.correctIndex ? '✓ ' : '' %><span class="markdown-inline" data-markdown="inline"><%= a %></span></li>
         <% }); %>
         </ul>
     </li>
