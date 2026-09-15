@@ -26,13 +26,6 @@ async function resolveUserIdFromParam(studentParam) {
     return row ? row.id : null;
 }
 
-async function resolveUserByFormbarId(studentParam) {
-    if (!studentParam) return null;
-    const formbarId = parseInt(studentParam, 10);
-    if (!Number.isFinite(formbarId) || formbarId <= 0) return null;
-    return await get('SELECT id, formbar_id FROM users WHERE formbar_id = ?', [formbarId]);
-}
-
 async function resolveClassIdFromParam(classParam) {
     if (!classParam) return null;
     const n = parseInt(classParam, 10);
@@ -87,19 +80,18 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         if (!course) return res.status(404).json({ error: 'Course not found' });
 
         const sessionUserId = req.session && req.session.userId;
-        const studentParam = req.query.student != null ? req.query.student : req.query.studentId;
-        const hasStudentParam = studentParam != null;
-        const requestedUser = hasStudentParam
-            ? await resolveUserByFormbarId(studentParam)
+        const hasStudentParam = req.query.student != null;
+        const requestedUserId = hasStudentParam
+            ? await resolveUserIdFromParam(req.query.student)
             : null;
-        if (hasStudentParam && !requestedUser) {
-            return res.status(404).json({ error: 'Student not found by Formbar id' });
+        if (hasStudentParam && !requestedUserId) {
+            return res.status(404).json({ error: 'Student not found' });
         }
 
-        const userId = requestedUser ? requestedUser.id : sessionUserId;
+        const userId = requestedUserId || sessionUserId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        if (requestedUser && parseInt(userId, 10) !== parseInt(sessionUserId, 10)) {
+        if (requestedUserId && parseInt(requestedUserId, 10) !== parseInt(sessionUserId, 10)) {
             if (!sessionUserId || parseInt(sessionUserId, 10) !== parseInt(course.owner_id, 10)) {
                 return res.status(403).json({ error: 'Only the course owner may request another user\'s mastery' });
             }
@@ -124,12 +116,18 @@ router.get('/course/:courseId/mastery', async (req, res) => {
             [userId, courseId, courseId]
         );
 
-        const tasks = rows.map(row => ({
-            id: row.task_id,
-            name: row.task_name,
-            unit: row.unit_id ? { id: row.unit_id, name: row.unit_name } : null,
-            mastery: Number(row.mastery) || 0
-        }));
+        const seenTaskIds = new Set();
+        const tasks = [];
+        for (const row of rows) {
+            if (seenTaskIds.has(row.task_id)) continue;
+            seenTaskIds.add(row.task_id);
+            tasks.push({
+                id: row.task_id,
+                name: row.task_name,
+                unit: row.unit_id ? { id: row.unit_id, name: row.unit_name } : null,
+                mastery: Number(row.mastery) || 0
+            });
+        }
         const overallMastery = tasks.length
             ? tasks.reduce((sum, task) => sum + task.mastery, 0) / tasks.length
             : 0;
