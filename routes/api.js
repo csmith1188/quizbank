@@ -98,9 +98,10 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         if (!course) return res.status(404).json({ error: 'Course not found' });
 
         const sessionUserId = req.session && req.session.userId;
-        const hasStudentParam = req.query.student != null;
+        const studentParam = req.query.student != null ? req.query.student : req.query.studentId;
+        const hasStudentParam = studentParam != null;
         const requestedUserId = hasStudentParam
-            ? await resolveUserIdFromParam(req.query.student)
+            ? await resolveUserIdFromParam(studentParam)
             : null;
         if (hasStudentParam && !requestedUserId) {
             return res.status(404).json({ error: 'Student not found' });
@@ -111,7 +112,7 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         const sessionUser = await get('SELECT id, formbar_id FROM users WHERE id = ?', [sessionUserId]);
         if (!sessionUser) return res.status(401).json({ error: 'Unauthorized' });
 
-        const userId = requestedUser ? requestedUser.id : sessionUser.id;
+        const userId = requestedUserId || sessionUser.id;
         const viewingAnotherUser = userId !== sessionUser.id;
         const canManageCourseMastery = hasTeacherOrManagerAccess(req)
             || await isCourseClassTeacher(sessionUser.id, courseId);
@@ -119,13 +120,7 @@ router.get('/course/:courseId/mastery', async (req, res) => {
             return res.status(403).json({ error: 'Only the student, a teacher, or a manager may view this mastery' });
         }
 
-        if (requestedUserId && parseInt(requestedUserId, 10) !== parseInt(sessionUserId, 10)) {
-            if (!sessionUserId || parseInt(sessionUserId, 10) !== parseInt(course.owner_id, 10)) {
-                return res.status(403).json({ error: 'Only the course owner may request another user\'s mastery' });
-            }
-        }
-
-        const user = await get('SELECT id, formbar_id FROM users WHERE id = ?', [userId]);
+        const user = await get('SELECT id, username, formbar_id FROM users WHERE id = ?', [userId]);
 
         const rows = await all(
             `SELECT t.id as task_id, t.name as task_name,
@@ -510,8 +505,13 @@ router.get('/task/:taskId', async (req, res) => {
     if (!tasks.length) return res.status(404).json({ error: 'Task not found' });
     res.json(
         tasks.map(t => ({
-            id: t.id,
-            name: t.name,
+            user: user ? {
+                id: user.id,
+                username: user.username,
+                formbarId: user.formbar_id
+            } : null,
+            userId,
+            formbarId: user ? user.formbar_id : null,
             target: t.target,
             description: t.description || null,
             hierarchy: { course: { id: t.course_id, name: t.course_name } }
