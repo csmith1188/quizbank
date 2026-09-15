@@ -76,6 +76,24 @@ async function getCourseById(courseId) {
     return await get('SELECT id, name, owner_id, is_public, sort_order FROM courses WHERE id = ?', [courseId]);
 }
 
+function hasTeacherOrManagerAccess(req) {
+    const token = req.session && req.session.token ? req.session.token : {};
+    const permissions = typeof token.permissions === 'number' ? token.permissions : null;
+    return permissions != null && permissions >= 4;
+}
+
+async function isCourseClassTeacher(userId, courseId) {
+    const row = await get(
+        `SELECT 1
+         FROM class_members cm
+         JOIN class_courses cc ON cc.class_id = cm.class_id
+         WHERE cm.user_id = ? AND cm.role = 'teacher' AND cc.course_id = ?
+         LIMIT 1`,
+        [userId, courseId]
+    );
+    return !!row;
+}
+
 router.get('/course/:courseId/mastery', async (req, res) => {
     const courseId = parseInt(req.params.courseId, 10);
     if (!Number.isFinite(courseId) || courseId <= 0) {
@@ -96,8 +114,18 @@ router.get('/course/:courseId/mastery', async (req, res) => {
             return res.status(404).json({ error: 'Student not found by Formbar id' });
         }
 
-        const userId = requestedUser ? requestedUser.id : sessionUserId;
-        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+        if (!sessionUserId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const sessionUser = await get('SELECT id, formbar_id FROM users WHERE id = ?', [sessionUserId]);
+        if (!sessionUser) return res.status(401).json({ error: 'Unauthorized' });
+
+        const userId = requestedUser ? requestedUser.id : sessionUser.id;
+        const viewingAnotherUser = userId !== sessionUser.id;
+        const canManageCourseMastery = hasTeacherOrManagerAccess(req)
+            || await isCourseClassTeacher(sessionUser.id, courseId);
+        if (viewingAnotherUser && !canManageCourseMastery) {
+            return res.status(403).json({ error: 'Only the student, a teacher, or a manager may view this mastery' });
+        }
 
         const user = await get('SELECT id, username, formbar_id FROM users WHERE id = ?', [userId]);
 
