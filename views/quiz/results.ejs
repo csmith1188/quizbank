@@ -94,10 +94,10 @@
     <% (answers || []).forEach(function(a, idx) { %>
         <tr>
             <td><%= idx + 1 %></td>
-            <td><%= a.prompt %></td>
+            <td><span class="markdown-inline" data-markdown="inline"><%= a.prompt %></span></td>
             <td>
                 <% if (a.chosen_index != null && !Number.isNaN(parseInt(a.chosen_index))) { %>
-                    <%= (a.answers && a.answers[parseInt(a.chosen_index)]) ? a.answers[parseInt(a.chosen_index)] : '(no answer)' %>
+                    <span class="markdown-inline" data-markdown="inline"><%= (a.answers && a.answers[parseInt(a.chosen_index)]) ? a.answers[parseInt(a.chosen_index)] : '(no answer)' %></span>
                 <% } else { %>
                     (no answer)
                 <% } %>

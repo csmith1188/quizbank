@@ -17,6 +17,7 @@ const multer = require('multer');
 const { createRateLimiter } = require('../lib/rate-limit');
 const config = require('../lib/config');
 const { getQuestionTime, normalizeQuestionTime } = require('../lib/question-time-limit');
+const { stripQuestionMarkdown } = require('../lib/markdown');
 
 const router = express.Router();
 
@@ -2105,7 +2106,7 @@ router.get('/courses/:courseId/quizzes/:qid/export', requireCourseOwner, async (
     const quiz = await get('SELECT id, name FROM quizzes WHERE id = ? AND course_id = ?', [quizId, req.courseId]);
     if (!quiz) return res.redirect('/courses/' + req.courseId + '/quizzes');
     const { resolveQuizToQuestions } = require('../lib/quiz-resolve');
-    const questions = await resolveQuizToQuestions(req.courseId, quizId);
+    const questions = (await resolveQuizToQuestions(req.courseId, quizId)).map(stripQuestionMarkdown);
     if (!questions.length) {
         return res.redirect('/courses/' + req.courseId + '/quizzes/' + quizId + '/edit');
     }
@@ -2122,7 +2123,7 @@ router.get('/courses/:courseId/quizzes/:qid/export-kahoot', requireCourseOwner, 
     const quiz = await get('SELECT id, name FROM quizzes WHERE id = ? AND course_id = ?', [quizId, req.courseId]);
     if (!quiz) return res.redirect('/courses/' + req.courseId + '/quizzes');
     const { resolveQuizToQuestions } = require('../lib/quiz-resolve');
-    const questions = await resolveQuizToQuestions(req.courseId, quizId);
+    const questions = (await resolveQuizToQuestions(req.courseId, quizId)).map(stripQuestionMarkdown);
     if (!questions.length) {
         return res.redirect('/courses/' + req.courseId + '/quizzes/' + quizId + '/edit');
     }
@@ -2167,7 +2168,7 @@ router.get('/courses/:courseId/quizzes/:qid/export-gimkit', requireCourseOwner, 
     const quiz = await get('SELECT id, name FROM quizzes WHERE id = ? AND course_id = ?', [quizId, req.courseId]);
     if (!quiz) return res.redirect('/courses/' + req.courseId + '/quizzes');
     const { resolveQuizToQuestions } = require('../lib/quiz-resolve');
-    const questions = await resolveQuizToQuestions(req.courseId, quizId);
+    const questions = (await resolveQuizToQuestions(req.courseId, quizId)).map(stripQuestionMarkdown);
     if (!questions.length) {
         return res.redirect('/courses/' + req.courseId + '/quizzes/' + quizId + '/edit');
     }
@@ -2205,7 +2206,7 @@ router.get('/courses/:courseId/quizzes/:qid/export-blooket', requireCourseOwner,
     const quiz = await get('SELECT id, name FROM quizzes WHERE id = ? AND course_id = ?', [quizId, req.courseId]);
     if (!quiz) return res.redirect('/courses/' + req.courseId + '/quizzes');
     const { resolveQuizToQuestions } = require('../lib/quiz-resolve');
-    const questions = await resolveQuizToQuestions(req.courseId, quizId);
+    const questions = (await resolveQuizToQuestions(req.courseId, quizId)).map(stripQuestionMarkdown);
     if (!questions.length) {
         return res.redirect('/courses/' + req.courseId + '/quizzes/' + quizId + '/edit');
     }

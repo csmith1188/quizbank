@@ -44,13 +44,13 @@
       : ('/progress/' + (attempt ? attempt.id : '') + '/take/' + index)
 %>">
     <input type="hidden" name="attemptId" value="<%= attempt.id %>">
-    <p><strong><%= question.prompt %></strong></p>
+    <div class="question-prompt markdown-body" data-markdown><%= question.prompt %></div>
     <ul>
         <% (question.answers || []).forEach(function(ans, i) { %>
             <li>
                 <label>
                     <input type="radio" name="chosen_index" value="<%= i %>" <%= question.chosenIndex === i ? 'checked' : '' %> />
-                    <%= ans %>
+                    <span class="markdown-inline" data-markdown="inline"><%= ans %></span>
                 </label>
             </li>
         <% }); %>
