@@ -12,8 +12,11 @@ Authentication / access:
 
 - Many read-only endpoints are available for **public courses** (`is_public = 1`).
 - Private courses can be accessed by their owner via session, or by providing a valid API key via:
+  - Formbar-compatible header: `API: YOUR_KEY`
   - Query: `?api_key=YOUR_KEY`
   - Header: `Authorization: Bearer YOUR_KEY`
+- API keys are validated by Formbar (`/api/me`) and must belong to a Formbar user already linked to a QuizBank user by `formbar_id`.
+- Course mastery accepts either the logged-in session token, a teacher/manager's Formbar API key when viewing another student, or the student's own Formbar API key when viewing their own mastery.
 
 Rate limits:
 
@@ -155,8 +158,9 @@ Generation notes:
 #### Course mastery
 
 - **GET** `/api/course/:courseId/mastery`
-- Returns the logged-in user's mastery for the course.
-- A course owner may request another student with `?student=Y`, using the same id resolution as course picking (`formbar_id` first, then local user id).
+- Returns the authenticated student's mastery for the course.
+- Teachers and managers may request another enrolled student with `?student=Y`, using the same id resolution as course picking (`formbar_id` first, then local user id).
+- Students may request only their own mastery, and only for a course assigned to one of their classes.
 - Each task appears once. If a task belongs to multiple units, `unit` is the first unit by sort order.
 - `overallMastery` is the unweighted mean of those unique task scores (tasks with no mastery record count as `0`).
 
@@ -166,6 +170,7 @@ Example response:
 {
   "course": { "id": 1, "name": "Programming" },
   "userId": 7,
+  "name": "Student Name",
   "formbarId": 44,
   "overallMastery": 0.75,
   "tasks": [

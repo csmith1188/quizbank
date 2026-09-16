@@ -4,8 +4,10 @@ const { generateQuestions } = require('../lib/question-generator');
 const { createRateLimiter } = require('../lib/rate-limit');
 const config = require('../lib/config');
 const { getQuestionTime, normalizeQuestionTime } = require('../lib/question-time-limit');
+const { apiAuthentication, getAuthenticatedUserId } = require('../lib/formbar-auth');
 
 const router = express.Router();
+router.use(apiAuthentication);
 
 const MAX_PICK = config.apiPickMax;
 const MAX_GENERATE = config.apiGenerateMax;
@@ -24,6 +26,12 @@ async function resolveUserIdFromParam(studentParam) {
         (await get('SELECT id FROM users WHERE formbar_id = ?', [n])) ||
         (await get('SELECT id FROM users WHERE id = ?', [n]));
     return row ? row.id : null;
+}
+
+function isStaff(req) {
+    if (req.apiUser && Number(req.apiUser.permissions) >= 4) return true;
+    const token = req.session && req.session.token ? req.session.token : {};
+    return Number(token.permissions) >= 4;
 }
 
 async function resolveClassIdFromParam(classParam) {
@@ -79,7 +87,7 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         const course = await getCourseById(courseId);
         if (!course) return res.status(404).json({ error: 'Course not found' });
 
-        const sessionUserId = req.session && req.session.userId;
+        const requesterUserId = getAuthenticatedUserId(req);
         const hasStudentParam = req.query.student != null;
         const requestedUserId = hasStudentParam
             ? await resolveUserIdFromParam(req.query.student)
@@ -88,16 +96,25 @@ router.get('/course/:courseId/mastery', async (req, res) => {
             return res.status(404).json({ error: 'Student not found' });
         }
 
-        const userId = requestedUserId || sessionUserId;
+        const userId = requestedUserId || requesterUserId;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        if (requestedUserId && parseInt(requestedUserId, 10) !== parseInt(sessionUserId, 10)) {
-            if (!sessionUserId || parseInt(sessionUserId, 10) !== parseInt(course.owner_id, 10)) {
-                return res.status(403).json({ error: 'Only the course owner may request another user\'s mastery' });
+        if (requestedUserId && parseInt(requestedUserId, 10) !== parseInt(requesterUserId, 10)) {
+            if (!requesterUserId || !isStaff(req)) {
+                return res.status(403).json({ error: 'Only teachers and managers may request another student\'s mastery' });
             }
         }
 
-        const user = await get('SELECT id, formbar_id FROM users WHERE id = ?', [userId]);
+        const user = await get('SELECT id, username, formbar_id FROM users WHERE id = ?', [userId]);
+        if (!user) return res.status(404).json({ error: 'Student not found' });
+        const enrolled = await get(
+            `SELECT cm.user_id
+             FROM class_members cm
+             JOIN class_courses cc ON cc.class_id = cm.class_id
+             WHERE cm.user_id = ? AND cm.role = 'student' AND cc.course_id = ?`,
+            [user.id, courseId]
+        );
+        if (!enrolled) return res.status(403).json({ error: 'Student is not enrolled in this course' });
 
         const rows = await all(
             `SELECT t.id as task_id, t.name as task_name,
@@ -135,6 +152,7 @@ router.get('/course/:courseId/mastery', async (req, res) => {
         res.json({
             course: { id: course.id, name: course.name },
             userId,
+            name: user.username,
             formbarId: user ? user.formbar_id : null,
             overallMastery,
             tasks
@@ -667,14 +685,14 @@ async function requireCourseOwner(req, res, next) {
     if (!courseId) return res.status(400).json({ error: 'Course id required' });
     const course = await get('SELECT owner_id FROM courses WHERE id = ?', [courseId]);
     if (!course) return res.status(404).json({ error: 'Course not found' });
-    const userId = req.session && req.session.userId;
+    const userId = getAuthenticatedUserId(req);
     if (!userId || parseInt(userId) !== course.owner_id) return res.status(403).json({ error: 'Forbidden' });
     req.courseId = courseId;
     next();
 }
 
 router.post('/courses', async (req, res) => {
-    const userId = req.session && req.session.userId;
+    const userId = getAuthenticatedUserId(req);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const { name, is_public } = req.body || {};
     if (!name) return res.status(400).json({ error: 'name required' });
@@ -685,7 +703,7 @@ router.post('/courses', async (req, res) => {
 });
 
 router.get('/courses', async (req, res) => {
-    const userId = req.session && req.session.userId;
+    const userId = getAuthenticatedUserId(req);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const rows = await all('SELECT id, name, is_public, sort_order, created_at FROM courses WHERE owner_id = ? ORDER BY sort_order, id', [userId]);
     res.json(rows);
@@ -785,7 +803,7 @@ router.delete('/courses/:id', requireCourseOwner, async (req, res) => {
 });
 
 router.put('/courses/reorder', async (req, res) => {
-    const userId = req.session && req.session.userId;
+    const userId = getAuthenticatedUserId(req);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const ids = req.body && req.body.ids;
     if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: 'ids array required' });
@@ -948,7 +966,7 @@ router.put('/courses/:courseId/vocab/reorder', requireCourseOwner, async (req, r
 });
 
 router.put('/classes/reorder', async (req, res) => {
-    const userId = req.session && req.session.userId;
+    const userId = getAuthenticatedUserId(req);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const ids = req.body && req.body.ids;
     if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: 'ids array required' });
