@@ -1,8 +1,9 @@
 <%
   const safeCourseName = (typeof course !== 'undefined' && course && course.name) ? course.name : 'Course';
 %>
-<%- include('../partials/teacher-header', { title: 'My Mastery - ' + safeCourseName, user, course, breadcrumb: safeCourseName + ' &rarr; Mastery' }) %>
-<h1>My mastery for <%= safeCourseName %></h1>
+<% const masteryName = (typeof masteryUser !== 'undefined' && masteryUser && masteryUser.username) ? masteryUser.username : 'Student'; %>
+<%- include('../partials/teacher-header', { title: masteryName + ' - Mastery - ' + safeCourseName, user, course, breadcrumb: safeCourseName + ' &rarr; Mastery' }) %>
+<h1><%= masteryName %>'s mastery for <%= safeCourseName %></h1>
 
 <%
   var overallSum = 0;
@@ -25,7 +26,7 @@
   <strong><%= overallPct %>%</strong>
 </p>
 
-<% if (typeof course !== 'undefined' && course && course.id) { %>
+<% if (isOwnMastery && typeof course !== 'undefined' && course && course.id) { %>
 <form method="post" action="/courses/<%= course.id %>/progress-test" style="display:inline;">
     <button type="submit" class="btn">Start progress test</button>
 </form>

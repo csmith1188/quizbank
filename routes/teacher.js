@@ -27,6 +27,14 @@ function isTeacher(req) {
     return perms != null && perms >= 4;
 }
 
+async function resolveUserFromParam(studentParam) {
+    const value = String(studentParam || '').trim();
+    if (!/^\d+$/.test(value)) return null;
+    const id = Number(value);
+    return (await get('SELECT id, username, formbar_id FROM users WHERE formbar_id = ?', [id])) ||
+        (await get('SELECT id, username, formbar_id FROM users WHERE id = ?', [id]));
+}
+
 function requireTeacher(req, res, next) {
     if (!isTeacher(req)) {
         return res.redirect('/classes');
@@ -1636,16 +1644,34 @@ router.post('/courses/:courseId/tasks/:tid/questions/:qid/formbar-poll', require
 
 router.get('/courses/:courseId/mastery', requireLogin, async (req, res) => {
     const courseId = parseInt(req.params.courseId);
-    const userId = req.session.userId;
-    if (!userId || !courseId) return res.redirect('/classes');
+    const requesterId = req.session.userId;
+    if (!requesterId || !courseId) return res.redirect('/classes');
 
-    // Teachers do not have personal mastery; redirect them to classes.
-    if (isTeacher(req)) {
-        return res.redirect('/classes');
-    }
+    const requestedUser = req.query.student != null
+        ? await resolveUserFromParam(req.query.student)
+        : null;
+    if (req.query.student != null && !requestedUser) return res.redirect('/classes');
+    const targetUser = requestedUser || await get(
+        'SELECT id, username, formbar_id FROM users WHERE id = ?',
+        [requesterId]
+    );
+    if (!targetUser) return res.redirect('/classes');
+
+    const viewingAnotherStudent = Number(targetUser.id) !== Number(requesterId);
+    if (viewingAnotherStudent && !isTeacher(req)) return res.redirect('/classes');
+    if (!viewingAnotherStudent && isTeacher(req)) return res.redirect('/classes');
 
     const course = await get('SELECT id, name FROM courses WHERE id = ?', [courseId]);
     if (!course) return res.redirect('/classes');
+
+    const enrolled = await get(
+        `SELECT cm.user_id
+         FROM class_members cm
+         JOIN class_courses cc ON cc.class_id = cm.class_id
+         WHERE cm.user_id = ? AND cm.role = 'student' AND cc.course_id = ?`,
+        [targetUser.id, courseId]
+    );
+    if (!enrolled) return res.redirect('/classes');
 
     const rows = await all(
         `SELECT t.id as task_id,
@@ -1664,7 +1690,7 @@ router.get('/courses/:courseId/mastery', requireLogin, async (req, res) => {
                AND tm.course_id = ?
          WHERE t.course_id = ?
          ORDER BY unit_order, unit_id, task_order, t.id`,
-        [userId, courseId, courseId]
+        [targetUser.id, courseId, courseId]
     );
 
     const units = {};
@@ -1687,6 +1713,8 @@ router.get('/courses/:courseId/mastery', requireLogin, async (req, res) => {
     res.render('mastery/student', {
         user: req.session.user,
         course,
+        masteryUser: targetUser,
+        isOwnMastery: !viewingAnotherStudent,
         units: Object.values(units)
     });
 });
