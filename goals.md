@@ -6,5 +6,7 @@
 - Manage Task Lists seperately?
 - Check API endpoints
 
+- Generator markdown and time estimate
+
 ## Prompts
 - Correct answer not always longest
