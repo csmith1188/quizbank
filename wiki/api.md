@@ -66,6 +66,100 @@ This page lists public courses, then loads random questions from the course you 
 
 Browsers only allow this `fetch` when the HTML is served from the **same origin** as QuizBank (or another origin that QuizBank has allowed). QuizBank does not currently send CORS headers, so a page hosted on a different website will be blocked. In that case, call the API from [Node.js](#tutorial-nodejs) or [Python](#tutorial-python) instead and return the JSON to your page.
 
+#### Step 1. Create the page
+
+Save a file as `quizbank-demo.html` with a course dropdown, a button, and a place to show results. Replace `http://localhost:3000` with your QuizBank host.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>QuizBank demo</title>
+</head>
+<body>
+  <h1>QuizBank demo</h1>
+  <label>
+    Course
+    <select id="course"></select>
+  </label>
+  <button id="load" type="button">Load 5 questions</button>
+  <pre id="out">Loading courses…</pre>
+  <script>
+    const BASE = 'http://localhost:3000/api';
+    const out = document.getElementById('out');
+    const select = document.getElementById('course');
+  </script>
+</body>
+</html>
+```
+
+#### Step 2. Add a JSON helper
+
+Inside the `<script>` tag, add a helper that calls the API and turns error responses into thrown errors.
+
+```javascript
+async function getJson(url) {
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+```
+
+#### Step 3. List public courses
+
+On page load, call `GET /api/course` and fill the dropdown.
+
+```javascript
+async function loadCourses() {
+  const courses = await getJson(BASE + '/course');
+  if (!courses.length) {
+    out.textContent = 'No public courses found.';
+    return;
+  }
+  select.innerHTML = courses.map(function (c) {
+    return '<option value="' + c.id + '">' + c.name + ' (id ' + c.id + ')</option>';
+  }).join('');
+  out.textContent = 'Choose a course, then load questions.';
+}
+
+loadCourses().catch(function (err) {
+  out.textContent = 'Error: ' + err.message +
+    '\nIf this page is not on the same site as QuizBank, use Node.js or Python instead.';
+});
+```
+
+#### Step 4. Pick questions from the selected course
+
+When the button is clicked, call `GET /api/course/:id?pick=5` and show the JSON.
+
+```javascript
+document.getElementById('load').addEventListener('click', async function () {
+  const id = select.value;
+  if (!id) return;
+  out.textContent = 'Loading…';
+  try {
+    const questions = await getJson(BASE + '/course/' + id + '?pick=5');
+    out.textContent = JSON.stringify(questions, null, 2);
+  } catch (err) {
+    out.textContent = 'Error: ' + err.message;
+  }
+});
+```
+
+#### Step 5 (optional). Send an API key
+
+Same-origin only, and only if you are comfortable exposing that key to the page. Prefer keeping keys on a server; the Node.js and Python tutorials do that.
+
+```javascript
+await fetch(BASE + '/course/1/mastery', {
+  headers: { 'Authorization': 'Bearer YOUR_KEY' }
+});
+```
+
+#### Complete HTML example
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -127,19 +221,97 @@ Browsers only allow this `fetch` when the HTML is served from the **same origin*
 </html>
 ```
 
-To send an API key from the browser (same-origin only, and only if you are comfortable exposing that key to the page):
-
-```javascript
-await fetch(BASE + '/course/1/mastery', {
-  headers: { 'Authorization': 'Bearer YOUR_KEY' }
-});
-```
-
-Prefer keeping keys on a server. The Node.js and Python examples below do that.
-
 ### Tutorial: Node.js
 
 Works in Node.js 18+ with built-in `fetch`. Save as `quizbank-demo.js` and run `node quizbank-demo.js`.
+
+#### Step 1. Set the base URL
+
+```javascript
+const BASE = process.env.QUIZBANK_URL || 'http://localhost:3000/api';
+const API_KEY = process.env.QUIZBANK_API_KEY || ''; // optional Formbar key
+```
+
+#### Step 2. Add a request helper
+
+This helper attaches an API key when one is set, parses JSON, and throws on error responses.
+
+```javascript
+async function quizbank(path, options = {}) {
+  const headers = { Accept: 'application/json', ...(options.headers || {}) };
+  if (API_KEY) headers.Authorization = 'Bearer ' + API_KEY;
+
+  const res = await fetch(BASE + path, { ...options, headers });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error((data && data.error) || ('HTTP ' + res.status));
+  }
+  return data;
+}
+```
+
+#### Step 3. List public courses
+
+```javascript
+const courses = await quizbank('/course');
+console.log('Public courses:', courses.map(c => `${c.id}: ${c.name}`));
+```
+
+#### Step 4. Read course details
+
+Use the first public course, or replace `courseId` with an id you already know.
+
+```javascript
+const courseId = courses[0].id;
+const details = await quizbank('/course/' + courseId);
+console.log('Units:', details.units);
+console.log('Tasks:', details.tasks.map(t => `${t.id}: ${t.name}`));
+```
+
+#### Step 5. Pick questions
+
+```javascript
+const questions = await quizbank('/course/' + courseId + '?pick=5');
+questions.forEach((q, i) => {
+  console.log('\n' + (i + 1) + '. ' + q.prompt);
+  (q.answers || []).forEach((a, idx) => {
+    const mark = idx === q.correctIndex ? ' (correct)' : '';
+    console.log('   ' + idx + ': ' + a + mark);
+  });
+});
+```
+
+#### Step 6 (optional). Pick from a unit or several tasks
+
+Join ids with `+`.
+
+```javascript
+const fromUnit = await quizbank('/unit/1?pick=10');
+const fromTasks = await quizbank('/task/117+118+119?pick=10');
+```
+
+#### Step 7 (optional). Generate unsaved questions
+
+Rate-limited. The QuizBank server must have `OPENAI_API_KEY` set.
+
+```javascript
+const generated = await quizbank(
+  '/course/' + courseId + '?generate=5&task=3&context=' +
+  encodeURIComponent('Focus on scenario-based questions')
+);
+console.log(generated);
+```
+
+#### Step 8 (optional). Read course mastery
+
+Requires an API key and an enrolled student.
+
+```javascript
+const mastery = await quizbank('/course/' + courseId + '/mastery?student=123');
+console.log('Overall mastery:', mastery.overallMastery);
+```
+
+#### Complete Node.js example
 
 ```javascript
 const BASE = process.env.QUIZBANK_URL || 'http://localhost:3000/api';
@@ -177,9 +349,13 @@ async function main() {
     });
   });
 
-  // Optional: mastery for an enrolled student (requires API key)
+  // const fromUnit = await quizbank('/unit/1?pick=10');
+  // const fromTasks = await quizbank('/task/117+118+119?pick=10');
+  // const generated = await quizbank(
+  //   '/course/' + courseId + '?generate=5&task=3&context=' +
+  //   encodeURIComponent('Focus on scenario-based questions')
+  // );
   // const mastery = await quizbank('/course/' + courseId + '/mastery?student=123');
-  // console.log('Overall mastery:', mastery.overallMastery);
 }
 
 main().catch((err) => {
@@ -188,26 +364,116 @@ main().catch((err) => {
 });
 ```
 
-Pick from a unit or several tasks by joining ids with `+`:
-
-```javascript
-const fromUnit = await quizbank('/unit/1?pick=10');
-const fromTasks = await quizbank('/task/117+118+119?pick=10');
-```
-
-Generate unsaved questions (rate-limited, requires `OPENAI_API_KEY` on the server):
-
-```javascript
-const generated = await quizbank(
-  '/course/' + courseId + '?generate=5&task=3&context=' +
-  encodeURIComponent('Focus on scenario-based questions')
-);
-console.log(generated);
-```
-
 ### Tutorial: Python
 
 This uses only the Python standard library (3.8+). Save as `quizbank_demo.py` and run `python quizbank_demo.py`.
+
+#### Step 1. Import modules and set the base URL
+
+```python
+import json
+import os
+import urllib.error
+import urllib.parse
+import urllib.request
+
+BASE = os.environ.get("QUIZBANK_URL", "http://localhost:3000/api")
+API_KEY = os.environ.get("QUIZBANK_API_KEY", "")  # optional Formbar key
+```
+
+#### Step 2. Add a request helper
+
+```python
+def quizbank(path):
+    req = urllib.request.Request(
+        BASE + path,
+        headers={"Accept": "application/json"},
+    )
+    if API_KEY:
+        req.add_header("Authorization", "Bearer " + API_KEY)
+
+    try:
+        with urllib.request.urlopen(req) as res:
+            return json.loads(res.read().decode("utf-8"))
+    except urllib.error.HTTPError as err:
+        body = err.read().decode("utf-8", errors="replace")
+        try:
+            message = json.loads(body).get("error") or body
+        except json.JSONDecodeError:
+            message = body
+        raise RuntimeError(f"HTTP {err.code}: {message}") from err
+```
+
+#### Step 3. List public courses
+
+```python
+courses = quizbank("/course")
+print("Public courses:", [(c["id"], c["name"]) for c in courses])
+```
+
+#### Step 4. Read course details
+
+Use the first public course, or replace `course_id` with an id you already know.
+
+```python
+course_id = courses[0]["id"]
+details = quizbank(f"/course/{course_id}")
+print("Units:", details.get("units"))
+print("Tasks:", [(t["id"], t["name"]) for t in details.get("tasks", [])])
+```
+
+#### Step 5. Pick questions
+
+```python
+questions = quizbank(f"/course/{course_id}?pick=5")
+for i, q in enumerate(questions, start=1):
+    print(f"\n{i}. {q['prompt']}")
+    for idx, answer in enumerate(q.get("answers") or []):
+        mark = " (correct)" if idx == q.get("correctIndex") else ""
+        print(f"   {idx}: {answer}{mark}")
+```
+
+#### Step 6 (optional). Pick from a unit or several tasks
+
+```python
+from_unit = quizbank("/unit/1?pick=10")
+from_tasks = quizbank("/task/117+118+119?pick=10")
+```
+
+#### Step 7 (optional). Generate unsaved questions
+
+Rate-limited. The QuizBank server must have `OPENAI_API_KEY` set.
+
+```python
+query = urllib.parse.urlencode({
+    "generate": 5,
+    "task": 3,
+    "context": "Focus on scenario-based questions",
+})
+generated = quizbank(f"/course/{course_id}?{query}")
+```
+
+#### Step 8 (optional). Read course mastery
+
+Requires an API key and an enrolled student.
+
+```python
+mastery = quizbank(f"/course/{course_id}/mastery?student=123")
+print("Overall mastery:", mastery["overallMastery"])
+```
+
+If you prefer the `requests` library instead of `urllib`:
+
+```python
+import requests
+
+BASE = "http://localhost:3000/api"
+res = requests.get(f"{BASE}/course/1", params={"pick": 5}, timeout=30)
+res.raise_for_status()
+questions = res.json()
+```
+
+#### Complete Python example
 
 ```python
 import json
@@ -258,35 +524,19 @@ def main():
             mark = " (correct)" if idx == q.get("correctIndex") else ""
             print(f"   {idx}: {answer}{mark}")
 
-    # Optional: mastery for an enrolled student (requires API key)
+    # from_unit = quizbank("/unit/1?pick=10")
+    # from_tasks = quizbank("/task/117+118+119?pick=10")
+    # query = urllib.parse.urlencode({
+    #     "generate": 5,
+    #     "task": 3,
+    #     "context": "Focus on scenario-based questions",
+    # })
+    # generated = quizbank(f"/course/{course_id}?{query}")
     # mastery = quizbank(f"/course/{course_id}/mastery?student=123")
-    # print("Overall mastery:", mastery["overallMastery"])
 
 
 if __name__ == "__main__":
     main()
-```
-
-If you prefer the `requests` library:
-
-```python
-import requests
-
-BASE = "http://localhost:3000/api"
-res = requests.get(f"{BASE}/course/1", params={"pick": 5}, timeout=30)
-res.raise_for_status()
-questions = res.json()
-```
-
-Generate unsaved questions:
-
-```python
-query = urllib.parse.urlencode({
-    "generate": 5,
-    "task": 3,
-    "context": "Focus on scenario-based questions",
-})
-generated = quizbank(f"/course/{course_id}?{query}")
 ```
 
 ---

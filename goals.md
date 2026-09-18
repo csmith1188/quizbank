@@ -1,4 +1,5 @@
-- Merkert was in Upper Class. Why?
+- Make the public button enable/disable api retrieval. edit to toggle
+- Merkert was in Upper Class. Why? (every teacher is in my current class)
 - Student create temporary quiz
 - Class pick by mastery, increase mastery for class, all by API
 - AI generate question from API
