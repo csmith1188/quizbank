@@ -18,6 +18,18 @@ const { createRateLimiter } = require('../lib/rate-limit');
 const config = require('../lib/config');
 const { getQuestionTime, normalizeQuestionTime } = require('../lib/question-time-limit');
 const { stripQuestionMarkdown } = require('../lib/markdown');
+const { isAllowedFilename, extractTextFromBuffer, countWords } = require('../lib/prompt-file-text');
+const {
+    ensureUploadDir,
+    hashBuffer,
+    writeUploadedFile,
+    validateComboLimits,
+    upsertGenerationPrompt,
+    touchPrompt,
+    buildAdditionalContext,
+    normalizePromptText
+} = require('../lib/prompt-context');
+const { improvePromptText } = require('../lib/prompt-improver');
 
 const router = express.Router();
 
@@ -382,11 +394,27 @@ router.get('/courses/:courseId/export-template', requireCourseOwner, async (req,
 // Simple in-memory import storage keyed by a random token
 const importStore = new Map();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+const promptUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: config.promptFileMaxBytes }
+});
 const questionGenerateLimiter = createRateLimiter({
     windowMs: config.questionGenerateRateLimitWindowMs,
     max: config.questionGenerateRateLimitMax,
     message: 'Too many question generation requests, please wait a minute'
 });
+
+function normalizePromptFilesFromBody(files) {
+    if (!Array.isArray(files)) return [];
+    return files.map((f) => ({
+        contentHash: String(f.contentHash || '').trim(),
+        originalName: String(f.originalName || f.name || 'file').trim() || 'file',
+        storedName: f.storedName ? String(f.storedName) : undefined,
+        mimeType: f.mimeType || f.mime || null,
+        byteSize: Number(f.byteSize) || 0,
+        wordCount: Number(f.wordCount) || 0
+    })).filter((f) => f.contentHash);
+}
 
 function generateImportToken() {
     return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
@@ -2027,8 +2055,164 @@ router.get('/courses/:courseId/questions', requireCourseOwner, async (req, res) 
         user: req.session.user,
         course: req.course,
         units,
-        generatorRoundCount: config.questionGeneratorRoundCount
+        generatorRoundCount: config.questionGeneratorRoundCount,
+        promptLimits: {
+            maxFileBytes: config.promptFileMaxBytes,
+            maxTotalBytes: config.promptFilesTotalMaxBytes,
+            maxWords: config.promptContextMaxWords,
+            maxFiles: config.promptFilesMaxCount
+        }
     });
+});
+
+router.post('/courses/:courseId/prompts/upload', requireCourseOwner, (req, res, next) => {
+    promptUpload.single('file')(req, res, (err) => {
+        if (err) {
+            const msg = err.code === 'LIMIT_FILE_SIZE' ? 'File exceeds size limit.' : (err.message || 'Upload failed');
+            return res.status(400).json({ error: msg });
+        }
+        next();
+    });
+}, async (req, res) => {
+    try {
+        if (!req.file || !req.file.buffer) {
+            return res.status(400).json({ error: 'No file uploaded.' });
+        }
+        const originalName = req.file.originalname || 'file';
+        if (!isAllowedFilename(originalName)) {
+            return res.status(400).json({ error: 'Unsupported file type. Allowed: txt, md, csv, pdf, docx.' });
+        }
+        if (req.file.size > config.promptFileMaxBytes) {
+            return res.status(400).json({ error: 'File exceeds size limit.' });
+        }
+        ensureUploadDir();
+        let extractedText;
+        try {
+            extractedText = await extractTextFromBuffer(req.file.buffer, originalName);
+        } catch (err) {
+            return res.status(400).json({ error: err.message || 'Could not read file text.' });
+        }
+        const contentHash = hashBuffer(req.file.buffer);
+        const wordCount = countWords(extractedText);
+        const storedName = writeUploadedFile({
+            buffer: req.file.buffer,
+            contentHash,
+            originalName,
+            extractedText
+        });
+        res.json({
+            contentHash,
+            originalName,
+            storedName,
+            mimeType: req.file.mimetype || null,
+            byteSize: req.file.size,
+            wordCount
+        });
+    } catch (err) {
+        console.error('Prompt file upload error:', err);
+        res.status(500).json({ error: err.message || 'Upload failed' });
+    }
+});
+
+router.post('/courses/:courseId/prompts/save', requireCourseOwner, async (req, res) => {
+    try {
+        const promptText = normalizePromptText(
+            (req.body && (req.body.promptText != null ? req.body.promptText : req.body.additionalContext)) || ''
+        );
+        const files = normalizePromptFilesFromBody(req.body && req.body.files);
+        if (!promptText && files.length === 0) {
+            return res.status(400).json({ error: 'Nothing to save.' });
+        }
+        const limits = validateComboLimits({ promptText, files });
+        if (!limits.ok) return res.status(400).json({ error: limits.error });
+        const userId = req.session.userId;
+        if (!userId) return res.status(401).json({ error: 'Not authenticated' });
+        const saved = await upsertGenerationPrompt({
+            courseId: req.courseId,
+            userId,
+            promptText,
+            files,
+            pin: true
+        });
+        res.json({ id: saved.id, contentHash: saved.contentHash, pinned: true });
+    } catch (err) {
+        console.error('Prompt save error:', err);
+        res.status(500).json({ error: err.message || 'Save failed' });
+    }
+});
+
+router.get('/courses/:courseId/prompts', requireCourseOwner, async (req, res) => {
+    try {
+        const rows = await all(
+            `SELECT id, prompt_text, last_used_at, created_at
+             FROM generation_prompts
+             WHERE course_id = ? AND pinned = 1
+             ORDER BY last_used_at DESC
+             LIMIT 50`,
+            [req.courseId]
+        );
+        const result = [];
+        for (const row of rows) {
+            const files = await all(
+                'SELECT id, original_name, word_count, byte_size FROM generation_prompt_files WHERE prompt_id = ?',
+                [row.id]
+            );
+            const preview = (row.prompt_text || '').slice(0, 80);
+            result.push({
+                id: row.id,
+                promptPreview: preview + ((row.prompt_text || '').length > 80 ? '…' : ''),
+                promptText: row.prompt_text || '',
+                fileNames: files.map((f) => f.original_name),
+                lastUsedAt: row.last_used_at,
+                createdAt: row.created_at
+            });
+        }
+        res.json(result);
+    } catch (err) {
+        console.error('Prompt list error:', err);
+        res.status(500).json({ error: err.message || 'List failed' });
+    }
+});
+
+router.post('/courses/:courseId/prompts/improve', requireCourseOwner, questionGenerateLimiter, async (req, res) => {
+    try {
+        const promptText = String((req.body && req.body.promptText) || '').trim();
+        const hasFiles = !!(req.body && req.body.hasFiles);
+        if (!promptText) return res.status(400).json({ error: 'Prompt text is required.' });
+        const improved = await improvePromptText(promptText, { hasFiles });
+        res.json({ promptText: improved });
+    } catch (err) {
+        console.error('Prompt improve error:', err);
+        res.status(500).json({ error: err.message || 'Improve failed' });
+    }
+});
+
+router.get('/courses/:courseId/prompts/:promptId', requireCourseOwner, async (req, res) => {
+    try {
+        const promptId = parseInt(req.params.promptId, 10);
+        if (!promptId) return res.status(400).json({ error: 'Invalid prompt id' });
+        const row = await get(
+            'SELECT id, prompt_text, pinned FROM generation_prompts WHERE id = ? AND course_id = ?',
+            [promptId, req.courseId]
+        );
+        if (!row) return res.status(404).json({ error: 'Prompt not found' });
+        await touchPrompt(promptId);
+        const files = await all(
+            `SELECT original_name AS originalName, stored_name AS storedName, mime_type AS mimeType,
+                    byte_size AS byteSize, word_count AS wordCount, content_hash AS contentHash
+             FROM generation_prompt_files WHERE prompt_id = ?`,
+            [promptId]
+        );
+        res.json({
+            id: row.id,
+            promptText: row.prompt_text || '',
+            pinned: !!row.pinned,
+            files
+        });
+    } catch (err) {
+        console.error('Prompt load error:', err);
+        res.status(500).json({ error: err.message || 'Load failed' });
+    }
 });
 
 router.get('/courses/:courseId/generator/tasks', requireCourseOwner, async (req, res) => {
@@ -2068,8 +2252,28 @@ router.post('/courses/:courseId/questions/generate', requireCourseOwner, questio
     const goodExamples = parsedExamples.filter(r => r.quality === 'good');
     const badExamples = parsedExamples.filter(r => r.quality === 'bad');
     try {
+        const promptText = normalizePromptText(
+            (req.body && (req.body.promptText != null
+                ? req.body.promptText
+                : req.body.additionalContext)) || ''
+        );
+        const files = normalizePromptFilesFromBody(req.body && req.body.files);
+        const limits = validateComboLimits({ promptText, files });
+        if (!limits.ok) return res.status(400).json({ error: limits.error });
+
+        const userId = req.session.userId;
+        if (userId && (promptText || files.length)) {
+            await upsertGenerationPrompt({
+                courseId: req.courseId,
+                userId,
+                promptText,
+                files,
+                pin: false
+            });
+        }
+
         const generateQuestions = require('../lib/question-generator').generateQuestions;
-        const additionalContext = (req.body && req.body.additionalContext && String(req.body.additionalContext).trim()) || undefined;
+        const additionalContext = buildAdditionalContext(promptText, files);
         const questions = await generateQuestions({
             task: { name: task.name, target: task.target, description: task.description },
             goodExamples,

@@ -175,6 +175,32 @@ CREATE TABLE IF NOT EXISTS task_mastery (
     UNIQUE(user_id, course_id, task_id)
 );
 
+CREATE TABLE IF NOT EXISTS generation_prompts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    prompt_text TEXT NOT NULL DEFAULT '',
+    content_hash TEXT NOT NULL,
+    pinned INTEGER NOT NULL DEFAULT 0,
+    last_used_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE(course_id, content_hash)
+);
+
+CREATE TABLE IF NOT EXISTS generation_prompt_files (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    prompt_id INTEGER NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    stored_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100),
+    byte_size INTEGER NOT NULL DEFAULT 0,
+    word_count INTEGER NOT NULL DEFAULT 0,
+    content_hash TEXT NOT NULL,
+    FOREIGN KEY (prompt_id) REFERENCES generation_prompts(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_tasks_course ON tasks(course_id);
 CREATE INDEX IF NOT EXISTS idx_questions_task ON questions(task_id);
 CREATE INDEX IF NOT EXISTS idx_vocab_terms_course ON vocab_terms(course_id);
@@ -188,3 +214,7 @@ CREATE INDEX IF NOT EXISTS idx_class_quizzes_quiz ON class_quizzes(quiz_id);
 CREATE INDEX IF NOT EXISTS idx_quiz_attempts_user_class_quiz ON quiz_attempts(user_id, class_id, quiz_id);
 CREATE INDEX IF NOT EXISTS idx_quiz_attempt_answers_attempt ON quiz_attempt_answers(attempt_id);
 CREATE INDEX IF NOT EXISTS idx_task_mastery_user_course_task ON task_mastery(user_id, course_id, task_id);
+CREATE INDEX IF NOT EXISTS idx_generation_prompts_course ON generation_prompts(course_id);
+CREATE INDEX IF NOT EXISTS idx_generation_prompts_last_used ON generation_prompts(last_used_at);
+CREATE INDEX IF NOT EXISTS idx_generation_prompt_files_prompt ON generation_prompt_files(prompt_id);
+CREATE INDEX IF NOT EXISTS idx_generation_prompt_files_hash ON generation_prompt_files(content_hash);

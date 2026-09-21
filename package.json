@@ -21,8 +21,10 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.12.3",
     "multer": "^2.1.1",
     "openai": "^6.29.0",
+    "pdf-parse": "^1.1.1",
     "socket.io-client": "^4.8.3",
     "sqlite3": "^5.1.7"
   }

@@ -43,11 +43,32 @@
                         id="task-details-good-count">0</span></p>
             </div>
         </div>
-        <div style="margin-top: 1rem;">
+        <div style="margin-top: 1rem; max-width: 36rem;">
             <label for="additional-context">Additional prompt context (optional)</label>
             <textarea id="additional-context" rows="3"
                 placeholder="e.g. Focus on safety procedures only, avoid trick questions, use 9th-grade vocabulary…"
-                style="width: 100%; max-width: 36rem; display: block; margin-top: 0.35rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"></textarea>
+                style="width: 100%; display: block; margin-top: 0.35rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"></textarea>
+            <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                <button type="button" id="improve-prompt-btn" class="btn btn-secondary btn-small">Improve prompt</button>
+                <button type="button" id="save-prompt-btn" class="btn btn-secondary btn-small">Save</button>
+                <label class="btn btn-secondary btn-small" style="cursor: pointer; margin: 0;">
+                    Add file
+                    <input type="file" id="prompt-file-input" accept=".txt,.md,.csv,.pdf,.docx,text/plain"
+                        style="display: none;">
+                </label>
+            </div>
+            <div id="prompt-files-list" style="margin-top: 0.5rem;"></div>
+            <p id="prompt-budget" class="text-muted" style="margin-top: 0.35rem; font-size: 0.9rem;"></p>
+            <div style="margin-top: 0.75rem;">
+                <label for="saved-prompts-select">Saved prompts</label>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
+                    <select id="saved-prompts-select" style="flex: 1; padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">— Select a saved prompt —</option>
+                    </select>
+                    <button type="button" id="load-prompt-btn" class="btn btn-secondary btn-small">Load</button>
+                </div>
+            </div>
+            <p id="prompt-context-status" class="text-muted" style="margin-top: 0.35rem; display: none;"></p>
         </div>
         <p style="margin-top: 1rem;">
             <button type="button" id="generate-btn" class="btn" disabled>Generate <%= generatorRoundCount || 10 %> questions</button>
@@ -62,8 +83,15 @@
         (function () {
             var rootEl = document.getElementById('question-generator-root');
             var courseId = rootEl ? parseInt(rootEl.getAttribute('data-course-id'), 10) : null;
+            var promptLimits = {
+                maxFileBytes: <%= (promptLimits && promptLimits.maxFileBytes) || 2097152 %>,
+                maxTotalBytes: <%= (promptLimits && promptLimits.maxTotalBytes) || 5242880 %>,
+                maxWords: <%= (promptLimits && promptLimits.maxWords) || 3000 %>,
+                maxFiles: <%= (promptLimits && promptLimits.maxFiles) || 5 %>
+            };
             var selectedTaskId = null;
             var tasksCache = [];
+            var attachedFiles = [];
 
             var unitSelect = document.getElementById('unit-select');
             var taskList = document.getElementById('task-list');
@@ -76,6 +104,14 @@
             var loadingEl = document.getElementById('generator-loading');
             var errorEl = document.getElementById('generator-error');
             var questionsContainer = document.getElementById('questions-container');
+            var improvePromptBtn = document.getElementById('improve-prompt-btn');
+            var savePromptBtn = document.getElementById('save-prompt-btn');
+            var promptFileInput = document.getElementById('prompt-file-input');
+            var promptFilesList = document.getElementById('prompt-files-list');
+            var promptBudgetEl = document.getElementById('prompt-budget');
+            var savedPromptsSelect = document.getElementById('saved-prompts-select');
+            var loadPromptBtn = document.getElementById('load-prompt-btn');
+            var promptContextStatus = document.getElementById('prompt-context-status');
 
             var searchInput = document.getElementById('question-search-input');
             var searchBtn = document.getElementById('question-search-btn');
@@ -84,6 +120,110 @@
             function showError(msg) {
                 errorEl.textContent = msg || '';
                 errorEl.style.display = msg ? 'block' : 'none';
+            }
+
+            function showPromptStatus(msg, isError) {
+                if (!promptContextStatus) return;
+                if (!msg) {
+                    promptContextStatus.style.display = 'none';
+                    promptContextStatus.textContent = '';
+                    return;
+                }
+                promptContextStatus.style.display = 'block';
+                promptContextStatus.style.color = isError ? '#c00' : '';
+                promptContextStatus.textContent = msg;
+            }
+
+            function countWords(text) {
+                var s = String(text || '').trim();
+                if (!s) return 0;
+                return s.split(/\s+/).filter(Boolean).length;
+            }
+
+            function formatBytes(n) {
+                if (n < 1024) return n + ' B';
+                if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+                return (n / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
+            function updateBudget() {
+                if (!promptBudgetEl) return;
+                var textWords = countWords(additionalContextEl && additionalContextEl.value);
+                var fileWords = 0;
+                var fileBytes = 0;
+                attachedFiles.forEach(function (f) {
+                    fileWords += f.wordCount || 0;
+                    fileBytes += f.byteSize || 0;
+                });
+                promptBudgetEl.textContent =
+                    'Words: ' + (textWords + fileWords) + ' / ' + promptLimits.maxWords +
+                    ' · Files: ' + attachedFiles.length + ' / ' + promptLimits.maxFiles +
+                    ' · Size: ' + formatBytes(fileBytes) + ' / ' + formatBytes(promptLimits.maxTotalBytes);
+            }
+
+            function renderAttachedFiles() {
+                if (!promptFilesList) return;
+                if (!attachedFiles.length) {
+                    promptFilesList.innerHTML = '';
+                    updateBudget();
+                    return;
+                }
+                var html = '<ul style="margin:0; padding-left:1.2rem;">';
+                attachedFiles.forEach(function (f, idx) {
+                    html += '<li style="margin-bottom:0.25rem;">' +
+                        escapeHtml(f.originalName || 'file') +
+                        ' <span class="text-muted">(' + (f.wordCount || 0) + ' words, ' + formatBytes(f.byteSize || 0) + ')</span> ' +
+                        '<button type="button" class="btn btn-small btn-danger" data-remove-file="' + idx + '">Remove</button></li>';
+                });
+                html += '</ul>';
+                promptFilesList.innerHTML = html;
+                var buttons = promptFilesList.querySelectorAll('[data-remove-file]');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].addEventListener('click', function () {
+                        var idx = parseInt(this.getAttribute('data-remove-file'), 10);
+                        if (!isNaN(idx)) {
+                            attachedFiles.splice(idx, 1);
+                            renderAttachedFiles();
+                        }
+                    });
+                }
+                updateBudget();
+            }
+
+            function currentFilesPayload() {
+                return attachedFiles.map(function (f) {
+                    return {
+                        contentHash: f.contentHash,
+                        originalName: f.originalName,
+                        storedName: f.storedName,
+                        mimeType: f.mimeType,
+                        byteSize: f.byteSize,
+                        wordCount: f.wordCount
+                    };
+                });
+            }
+
+            function refreshSavedPrompts() {
+                if (!savedPromptsSelect) return;
+                fetch('/courses/' + courseId + '/prompts', { credentials: 'same-origin' })
+                    .then(function (r) { return r.json(); })
+                    .then(function (list) {
+                        var current = savedPromptsSelect.value;
+                        savedPromptsSelect.innerHTML = '<option value="">— Select a saved prompt —</option>';
+                        if (!Array.isArray(list)) return;
+                        list.forEach(function (p) {
+                            var opt = document.createElement('option');
+                            opt.value = p.id;
+                            var label = p.promptPreview || '(files only)';
+                            if (p.fileNames && p.fileNames.length) {
+                                label += ' [' + p.fileNames.length + ' file' + (p.fileNames.length === 1 ? '' : 's') + ']';
+                            }
+                            opt.textContent = label;
+                            savedPromptsSelect.appendChild(opt);
+                        });
+                        if (current) savedPromptsSelect.value = current;
+                    })
+                    .catch(function () { /* ignore */ });
             }
 
             function showTaskDetails(task) {
@@ -153,6 +293,144 @@
                 });
             }
 
+            if (additionalContextEl) {
+                additionalContextEl.addEventListener('input', updateBudget);
+            }
+
+            if (promptFileInput) {
+                promptFileInput.addEventListener('change', function () {
+                    var file = promptFileInput.files && promptFileInput.files[0];
+                    promptFileInput.value = '';
+                    if (!file) return;
+                    if (attachedFiles.length >= promptLimits.maxFiles) {
+                        showPromptStatus('Maximum of ' + promptLimits.maxFiles + ' files allowed.', true);
+                        return;
+                    }
+                    showPromptStatus('Uploading ' + file.name + '…');
+                    var formData = new FormData();
+                    formData.append('file', file);
+                    fetch('/courses/' + courseId + '/prompts/upload', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (body) {
+                                if (!r.ok) throw new Error(body.error || 'Upload failed');
+                                return body;
+                            });
+                        })
+                        .then(function (meta) {
+                            var exists = attachedFiles.some(function (f) { return f.contentHash === meta.contentHash; });
+                            if (!exists) attachedFiles.push(meta);
+                            renderAttachedFiles();
+                            showPromptStatus('Added ' + (meta.originalName || 'file') + '.');
+                        })
+                        .catch(function (err) {
+                            showPromptStatus(err.message || 'Upload failed.', true);
+                        });
+                });
+            }
+
+            if (savePromptBtn) {
+                savePromptBtn.addEventListener('click', function () {
+                    var promptText = (additionalContextEl && additionalContextEl.value) ? additionalContextEl.value.trim() : '';
+                    if (!promptText && !attachedFiles.length) {
+                        showPromptStatus('Add text or files before saving.', true);
+                        return;
+                    }
+                    savePromptBtn.disabled = true;
+                    fetch('/courses/' + courseId + '/prompts/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ promptText: promptText, files: currentFilesPayload() }),
+                        credentials: 'same-origin'
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (body) {
+                                if (!r.ok) throw new Error(body.error || 'Save failed');
+                                return body;
+                            });
+                        })
+                        .then(function () {
+                            showPromptStatus('Prompt saved for reuse.');
+                            refreshSavedPrompts();
+                        })
+                        .catch(function (err) {
+                            showPromptStatus(err.message || 'Save failed.', true);
+                        })
+                        .finally(function () { savePromptBtn.disabled = false; });
+                });
+            }
+
+            if (improvePromptBtn) {
+                improvePromptBtn.addEventListener('click', function () {
+                    var promptText = (additionalContextEl && additionalContextEl.value) ? additionalContextEl.value.trim() : '';
+                    if (!promptText) {
+                        showPromptStatus('Enter prompt text to improve.', true);
+                        return;
+                    }
+                    improvePromptBtn.disabled = true;
+                    showPromptStatus('Improving prompt…');
+                    fetch('/courses/' + courseId + '/prompts/improve', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ promptText: promptText, hasFiles: attachedFiles.length > 0 }),
+                        credentials: 'same-origin'
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (body) {
+                                if (!r.ok) throw new Error(body.error || 'Improve failed');
+                                return body;
+                            });
+                        })
+                        .then(function (body) {
+                            if (additionalContextEl && body.promptText) {
+                                additionalContextEl.value = body.promptText;
+                                updateBudget();
+                            }
+                            showPromptStatus('Prompt improved. Review and edit if needed.');
+                        })
+                        .catch(function (err) {
+                            showPromptStatus(err.message || 'Improve failed.', true);
+                        })
+                        .finally(function () { improvePromptBtn.disabled = false; });
+                });
+            }
+
+            if (loadPromptBtn && savedPromptsSelect) {
+                loadPromptBtn.addEventListener('click', function () {
+                    var id = savedPromptsSelect.value;
+                    if (!id) {
+                        showPromptStatus('Select a saved prompt first.', true);
+                        return;
+                    }
+                    loadPromptBtn.disabled = true;
+                    fetch('/courses/' + courseId + '/prompts/' + encodeURIComponent(id), {
+                        credentials: 'same-origin'
+                    })
+                        .then(function (r) {
+                            return r.json().then(function (body) {
+                                if (!r.ok) throw new Error(body.error || 'Load failed');
+                                return body;
+                            });
+                        })
+                        .then(function (body) {
+                            if (additionalContextEl) additionalContextEl.value = body.promptText || '';
+                            attachedFiles = Array.isArray(body.files) ? body.files.slice() : [];
+                            renderAttachedFiles();
+                            showPromptStatus('Loaded saved prompt.');
+                        })
+                        .catch(function (err) {
+                            showPromptStatus(err.message || 'Load failed.', true);
+                        })
+                        .finally(function () { loadPromptBtn.disabled = false; });
+                });
+            }
+
+            refreshSavedPrompts();
+            updateBudget();
+
             unitSelect.addEventListener('change', function () {
                 var unitId = unitSelect.value;
                 selectedTaskId = null;
@@ -204,11 +482,15 @@
                 loadingEl.style.display = 'block';
                 errorEl.style.display = 'none';
                 questionsContainer.innerHTML = '';
-                var additionalContext = (additionalContextEl && additionalContextEl.value) ? additionalContextEl.value.trim() : '';
+                var promptText = (additionalContextEl && additionalContextEl.value) ? additionalContextEl.value.trim() : '';
                 fetch('/courses/' + courseId + '/questions/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ taskId: selectedTaskId, additionalContext: additionalContext || undefined }),
+                    body: JSON.stringify({
+                        taskId: selectedTaskId,
+                        promptText: promptText || undefined,
+                        files: currentFilesPayload()
+                    }),
                     credentials: 'same-origin'
                 })
                     .then(function (r) {

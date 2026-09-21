@@ -179,6 +179,23 @@ app.get('/', isAuthenticated, (req, res) => {
 const teacherRouter = require('./routes/teacher');
 app.use(isAuthenticated, teacherRouter);
 
+const { cleanupUnusedGenerationPrompts, ensureUploadDir } = require('./lib/prompt-context');
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
+function runGenerationPromptCleanup() {
+    cleanupUnusedGenerationPrompts()
+        .then((result) => {
+            if (result && (result.deletedPrompts || result.deletedFiles)) {
+                console.log('[prompt-cleanup]', result);
+            }
+        })
+        .catch((err) => console.error('[prompt-cleanup] error:', err));
+}
+
+ensureUploadDir();
+setTimeout(runGenerationPromptCleanup, 15 * 1000);
+setInterval(runGenerationPromptCleanup, ONE_HOUR_MS);
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
