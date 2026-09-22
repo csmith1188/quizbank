@@ -27,7 +27,8 @@ const {
     upsertGenerationPrompt,
     touchPrompt,
     buildAdditionalContext,
-    normalizePromptText
+    normalizePromptText,
+    formatBytes
 } = require('../lib/prompt-context');
 const { improvePromptText } = require('../lib/prompt-improver');
 
@@ -396,7 +397,8 @@ const importStore = new Map();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 const promptUpload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: config.promptFileMaxBytes }
+    // Busboy emits `limit` at exactly fileSize bytes, so add 1 to accept files at the cap.
+    limits: { fileSize: config.promptFileMaxBytes + 1 }
 });
 const questionGenerateLimiter = createRateLimiter({
     windowMs: config.questionGenerateRateLimitWindowMs,
@@ -2068,7 +2070,9 @@ router.get('/courses/:courseId/questions', requireCourseOwner, async (req, res) 
 router.post('/courses/:courseId/prompts/upload', requireCourseOwner, (req, res, next) => {
     promptUpload.single('file')(req, res, (err) => {
         if (err) {
-            const msg = err.code === 'LIMIT_FILE_SIZE' ? 'File exceeds size limit.' : (err.message || 'Upload failed');
+            const msg = err.code === 'LIMIT_FILE_SIZE'
+                ? 'File exceeds the ' + formatBytes(config.promptFileMaxBytes) + ' size limit.'
+                : (err.message || 'Upload failed');
             return res.status(400).json({ error: msg });
         }
         next();
@@ -2083,7 +2087,9 @@ router.post('/courses/:courseId/prompts/upload', requireCourseOwner, (req, res, 
             return res.status(400).json({ error: 'Unsupported file type. Allowed: txt, md, csv, pdf, docx.' });
         }
         if (req.file.size > config.promptFileMaxBytes) {
-            return res.status(400).json({ error: 'File exceeds size limit.' });
+            return res.status(400).json({
+                error: 'File exceeds the ' + formatBytes(config.promptFileMaxBytes) + ' size limit.'
+            });
         }
         ensureUploadDir();
         let extractedText;

@@ -84,9 +84,9 @@
             var rootEl = document.getElementById('question-generator-root');
             var courseId = rootEl ? parseInt(rootEl.getAttribute('data-course-id'), 10) : null;
             var promptLimits = {
-                maxFileBytes: <%= (promptLimits && promptLimits.maxFileBytes) || 2097152 %>,
-                maxTotalBytes: <%= (promptLimits && promptLimits.maxTotalBytes) || 5242880 %>,
-                maxWords: <%= (promptLimits && promptLimits.maxWords) || 3000 %>,
+                maxFileBytes: <%= (promptLimits && promptLimits.maxFileBytes) || 52428800 %>,
+                maxTotalBytes: <%= (promptLimits && promptLimits.maxTotalBytes) || 52428800 %>,
+                maxWords: <%= (promptLimits && promptLimits.maxWords) || 10000 %>,
                 maxFiles: <%= (promptLimits && promptLimits.maxFiles) || 5 %>
             };
             var selectedTaskId = null;
@@ -304,6 +304,23 @@
                     if (!file) return;
                     if (attachedFiles.length >= promptLimits.maxFiles) {
                         showPromptStatus('Maximum of ' + promptLimits.maxFiles + ' files allowed.', true);
+                        return;
+                    }
+                    if (file.size > promptLimits.maxFileBytes) {
+                        showPromptStatus(
+                            'This file is ' + formatBytes(file.size) +
+                            ', which exceeds the ' + formatBytes(promptLimits.maxFileBytes) + ' per-file limit.',
+                            true
+                        );
+                        return;
+                    }
+                    var usedBytes = 0;
+                    attachedFiles.forEach(function (f) { usedBytes += f.byteSize || 0; });
+                    if (usedBytes + file.size > promptLimits.maxTotalBytes) {
+                        showPromptStatus(
+                            'Adding this file would exceed the ' + formatBytes(promptLimits.maxTotalBytes) + ' total size limit.',
+                            true
+                        );
                         return;
                     }
                     showPromptStatus('Uploading ' + file.name + '…');
