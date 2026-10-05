@@ -576,6 +576,100 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
     const results = [];
     const taskKeyToTaskId = new Map(); // user Task ID/Number from Course sheet -> DB task id
     const unitKeyToUnitId = new Map(); // user Unit ID/Number from Course sheet -> DB unit id
+    const taskResolveCache = new Map(); // task key -> DB task id (or null)
+    const unitResolveCache = new Map(); // unit key -> DB unit id (or null)
+
+    // Resolve a spreadsheet Task ID/Number/Name to a DB task id in this course.
+    // Prefer mappings created while importing the Course sheet; otherwise look up
+    // existing course tasks by task_number, DB id, sort_order, or name.
+    async function resolveTaskId(taskKeyRaw) {
+        const key = (taskKeyRaw || '').toString().trim();
+        if (!key) return null;
+        if (taskResolveCache.has(key)) return taskResolveCache.get(key);
+
+        const mapped = taskKeyToTaskId.get(key) || null;
+        if (mapped) {
+            taskResolveCache.set(key, mapped);
+            return mapped;
+        }
+
+        let row = null;
+        const n = parseInt(key, 10);
+        if (!Number.isNaN(n)) {
+            // Prefer user-facing task_number (what templates export as Task ID)
+            row = await get(
+                'SELECT id FROM tasks WHERE task_number = ? AND course_id = ?',
+                [n, req.courseId]
+            );
+            if (!row) {
+                row = await get(
+                    'SELECT id FROM tasks WHERE id = ? AND course_id = ?',
+                    [n, req.courseId]
+                );
+            }
+            if (!row) {
+                // Legacy: treat n as 1-based index mapped to sort_order
+                const sortOrder = n > 0 ? n - 1 : n;
+                row = await get(
+                    'SELECT id FROM tasks WHERE sort_order = ? AND course_id = ?',
+                    [sortOrder, req.courseId]
+                );
+            }
+        }
+
+        if (!row) {
+            row = await get(
+                'SELECT id FROM tasks WHERE name = ? AND course_id = ?',
+                [key, req.courseId]
+            );
+        }
+
+        const id = row ? row.id : null;
+        taskResolveCache.set(key, id);
+        return id;
+    }
+
+    // Resolve a spreadsheet Unit ID/Number/Name to a DB unit id in this course.
+    // Templates export Unit ID as visible unit number (sort_order + 1), not DB id.
+    async function resolveUnitId(unitKeyRaw) {
+        const key = (unitKeyRaw || '').toString().trim();
+        if (!key) return null;
+        if (unitResolveCache.has(key)) return unitResolveCache.get(key);
+
+        const mapped = unitKeyToUnitId.get(key) || null;
+        if (mapped) {
+            unitResolveCache.set(key, mapped);
+            return mapped;
+        }
+
+        let row = null;
+        const n = parseInt(key, 10);
+        if (!Number.isNaN(n)) {
+            // Prefer exported Unit Number (sort_order + 1)
+            const sortOrder = n > 0 ? n - 1 : n;
+            row = await get(
+                'SELECT id FROM units WHERE course_id = ? AND sort_order = ?',
+                [req.courseId, sortOrder]
+            );
+            if (!row) {
+                row = await get(
+                    'SELECT id FROM units WHERE course_id = ? AND id = ?',
+                    [req.courseId, n]
+                );
+            }
+        }
+
+        if (!row) {
+            row = await get(
+                'SELECT id FROM units WHERE course_id = ? AND name = ?',
+                [req.courseId, key]
+            );
+        }
+
+        const id = row ? row.id : null;
+        unitResolveCache.set(key, id);
+        return id;
+    }
 
     function addResultForType(type, name, status, stats) {
         results.push({
@@ -863,18 +957,16 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                 const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
                 const key = (taskKeyRaw || '').toString().trim();
                 if (key) {
-                    // When a task identifier is present on the vocab sheet, it should
-                    // correspond to a Task ID defined on the Course sheet (preferred)
-                    // or, if not present there, to an existing task name in the course.
-                    let taskId = taskKeyToTaskId.get(key) || null;
+                    // Prefer Course-sheet mapping; otherwise resolve against existing
+                    // tasks in this course (task_number / id / name).
+                    const taskId = await resolveTaskId(key);
                     if (!taskId) {
-                        // Fallback: interpret the key as a task name.
                         rowErrors.push({
                             rowNumber: r.rowNumber,
                             message:
                                 'Task identifier "' +
                                 key +
-                                '" does not match any Task ID from the Course sheet. It is treated as a label only for now.'
+                                '" does not match any task in this course.'
                         });
                     }
                 }
@@ -884,15 +976,10 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                 const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
                 const unitKey = (unitKeyRaw || '').toString().trim();
                 if (unitKey) {
-                    const mappedUnitId = unitKeyToUnitId.get(unitKey) || null;
-                    const byMapped = mappedUnitId
-                        ? await get('SELECT id FROM units WHERE course_id = ? AND id = ?', [req.courseId, mappedUnitId])
-                        : null;
-                    const byId = Number.isFinite(parseInt(unitKey, 10))
-                        ? await get('SELECT id FROM units WHERE course_id = ? AND id = ?', [req.courseId, parseInt(unitKey, 10)])
-                        : null;
-                    const byName = await get('SELECT id FROM units WHERE course_id = ? AND name = ?', [req.courseId, unitKey]);
-                    if (!byMapped && !byId && !byName) {
+                    // Prefer Course-sheet mapping; otherwise resolve against existing
+                    // units in this course (unit number / id / name).
+                    const unitId = await resolveUnitId(unitKey);
+                    if (!unitId) {
                         rowErrors.push({
                             rowNumber: r.rowNumber,
                             message: 'Unit reference "' + unitKey + '" does not match any unit in this course.'
@@ -947,37 +1034,22 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                     // Associate uploaded vocab to units.
                     // Priority:
                     // 1) Explicit unit reference columns (Unit ID/Unit Number/Unit Name)
-                    // 2) Unit(s) inferred from Task ID/Task Number mapping from Course sheet
+                    // 2) Unit(s) inferred from Task ID/Task Number against existing course tasks
                     if (vocabId) {
                         const unitIds = [];
 
                         const unitKeyRaw = getField(values, ['Unit ID', 'Unit Number', 'Unit Name']);
                         const unitKey = (unitKeyRaw || '').toString().trim();
                         if (unitKey) {
-                            const mappedUnitId = unitKeyToUnitId.get(unitKey) || null;
-                            if (mappedUnitId && !unitIds.includes(mappedUnitId)) {
-                                unitIds.push(mappedUnitId);
-                            }
-                            const unitIdNum = parseInt(unitKey, 10);
-                            if (!Number.isNaN(unitIdNum)) {
-                                const unitById = await get(
-                                    'SELECT id FROM units WHERE course_id = ? AND id = ?',
-                                    [req.courseId, unitIdNum]
-                                );
-                                if (unitById) unitIds.push(unitById.id);
-                            }
-                            const unitByName = await get(
-                                'SELECT id FROM units WHERE course_id = ? AND name = ?',
-                                [req.courseId, unitKey]
-                            );
-                            if (unitByName && !unitIds.includes(unitByName.id)) {
-                                unitIds.push(unitByName.id);
+                            const resolvedUnitId = await resolveUnitId(unitKey);
+                            if (resolvedUnitId && !unitIds.includes(resolvedUnitId)) {
+                                unitIds.push(resolvedUnitId);
                             }
                         } else {
                             const taskKeyRaw = getField(values, ['Task ID', 'Task Number']);
                             const taskKey = (taskKeyRaw || '').toString().trim();
                             if (taskKey) {
-                                const mappedTaskId = taskKeyToTaskId.get(taskKey) || null;
+                                const mappedTaskId = await resolveTaskId(taskKey);
                                 if (mappedTaskId) {
                                     const unitRows = await all(
                                         'SELECT unit_id FROM unit_tasks WHERE task_id = ? ORDER BY sort_order, unit_id',
@@ -1042,56 +1114,6 @@ router.post('/courses/:courseId/import/confirm', requireCourseOwner, async (req,
                 message: 'Required columns "Task ID/Task Number" and "Question" (or Prompt) are missing.'
             });
             return { status: 'failed', stats };
-        }
-
-        // Resolve a task from the user-provided task identifier.
-        // First, prefer Task IDs defined on the Course import sheet (taskKeyToTaskId).
-        // If not found there, treat the key as either a numeric DB id/1-based number
-        // or a task name within this course.
-        const taskCache = new Map();
-
-        async function resolveTaskId(taskKeyRaw) {
-            const key = (taskKeyRaw || '').toString().trim();
-            if (!key) return null;
-            if (taskCache.has(key)) return taskCache.get(key);
-
-            // Prefer mapping established from the Course sheet
-            let mapped = taskKeyToTaskId.get(key) || null;
-            if (mapped) {
-                taskCache.set(key, mapped);
-                return mapped;
-            }
-
-            let row = null;
-
-            // Try numeric interpretations first: DB id or sort_order-based "task number"
-            const n = parseInt(key, 10);
-            if (!Number.isNaN(n)) {
-                row = await get(
-                    'SELECT id FROM tasks WHERE id = ? AND course_id = ?',
-                    [n, req.courseId]
-                );
-                if (!row) {
-                    // Treat n as 1-based task number mapped to sort_order
-                    const sortOrder = n > 0 ? n - 1 : n;
-                    row = await get(
-                        'SELECT id FROM tasks WHERE sort_order = ? AND course_id = ?',
-                        [sortOrder, req.courseId]
-                    );
-                }
-            }
-
-            // Fallback: match by task name
-            if (!row) {
-                row = await get(
-                    'SELECT id FROM tasks WHERE name = ? AND course_id = ?',
-                    [key, req.courseId]
-                );
-            }
-
-            const id = row ? row.id : null;
-            taskCache.set(key, id);
-            return id;
         }
 
         const rowErrors = [];
